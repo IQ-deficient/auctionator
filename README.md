@@ -21,6 +21,7 @@ npm install
 - Run Database Migrations and Seeders
 ```bash
 cd back
+php artisan jwt:secret
 php artisan migrate:fresh --seed
 ```
 - Serve the application in terminal
