@@ -6,19 +6,17 @@
 
 <script>
 
-// import swal from "sweetalert2";
-
 export default {
   name: 'About',
   data: () => ({
   }),
   created() {
-    // swal.fire({
-    //   title: 'Error!',
-    //   text: 'Do you want to continue',
-    //   icon: 'error',
-    //   confirmButtonText: 'Cool'
-    // })
+    this.$swal({
+      title: 'Good job!',
+      text: 'Do you want to continue',
+      icon: 'error',
+      confirmButtonText: 'Cool'
+    })
   }
 }
 
