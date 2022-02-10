@@ -14,7 +14,10 @@ class CreateCountriesTable extends Migration
     public function up()
     {
         Schema::create('countries', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
+            $table->string('name', 64)->unique();   // There should be no countries with identical name
+            $table->string('code', 3)->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

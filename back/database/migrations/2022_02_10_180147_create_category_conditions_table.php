@@ -14,8 +14,14 @@ class CreateCategoryConditionsTable extends Migration
     public function up()
     {
         Schema::create('category_conditions', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
+            $table->string('category', 64);
+            $table->string('condition', 32);
             $table->timestamps();
+
+            // References
+            $table->foreign('category')->references('name')->on('categories');
+            $table->foreign('condition')->references('name')->on('conditions');
         });
     }
 

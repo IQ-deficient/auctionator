@@ -14,8 +14,16 @@ class CreateItemsTable extends Migration
     public function up()
     {
         Schema::create('items', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
+            $table->string('title', 64);
+            $table->text('description');                // We will see how this works and if it is safe
+            $table->string('category', 32);
+            $table->unsignedBigInteger('warehouse_id');
             $table->timestamps();
+
+            // References
+            $table->foreign('category')->references('name')->on('categories');
+            $table->foreign('warehouse_id')->references('id')->on('warehouses');
         });
     }
 

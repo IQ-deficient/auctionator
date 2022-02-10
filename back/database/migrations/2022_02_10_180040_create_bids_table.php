@@ -14,8 +14,14 @@ class CreateBidsTable extends Migration
     public function up()
     {
         Schema::create('bids', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
+            $table->unsignedDouble('value')->default(0); // Value in Euro
+            $table->string('username', 32);
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
+
+            // references
+            $table->foreign('username')->references('username')->on('users');
         });
     }
 

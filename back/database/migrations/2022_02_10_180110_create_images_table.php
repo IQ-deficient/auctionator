@@ -14,8 +14,12 @@ class CreateImagesTable extends Migration
     public function up()
     {
         Schema::create('images', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
+            $table->binary('image');    // This column type should do the trick
+            $table->unsignedBigInteger('item_id');
             $table->timestamps();
+
+            $table->foreign('item_id')->references('id')->on('items');
         });
     }
 

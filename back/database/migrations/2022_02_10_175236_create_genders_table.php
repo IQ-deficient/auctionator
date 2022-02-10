@@ -14,7 +14,9 @@ class CreateGendersTable extends Migration
     public function up()
     {
         Schema::create('genders', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
+            $table->string('name', 32)->unique();
+            $table->boolean('is_active')->default(true);  // bazirano haha funny laugh xd
             $table->timestamps();
         });
     }
