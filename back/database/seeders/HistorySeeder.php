@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class HistorySeeder extends Seeder
 {
@@ -13,6 +15,18 @@ class HistorySeeder extends Seeder
      */
     public function run()
     {
-        //
+        $seeds = [
+            [
+                'id' => 1,
+                'auction_id' => 4,
+                'username' => 'mirko',
+                'final_price' => 0.75,
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+
+            ],
+        ];
+
+        DB::table('histories')->insert($seeds);
     }
 }
