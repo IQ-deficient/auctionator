@@ -31,8 +31,6 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
 
-            $table->string('name'); // LEFT THIS IN BECAUSE I WAS SCARED AUTH WOULD NOT WORK FOR NOW !!!
-
             // References
             $table->foreign('gender')->references('name')->on('genders');
             $table->foreign('country')->references('name')->on('countries');
