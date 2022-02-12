@@ -21,11 +21,11 @@ class CreateAuctionsTable extends Migration
             $table->unsignedBigInteger('item_id');
             $table->unsignedBigInteger('bid_id')->nullable();
             $table->unsignedDouble('buyout');   // Value in Euro
-            $table->string('status', 32);
+            $table->string('status', 32);   // auction lifecycle
             $table->dateTime('start_datetime')->default(Carbon::now());
             $table->dateTime('end_datetime')->default(Carbon::now());
             $table->unsignedBigInteger('user_id');
-            $table->boolean('is_active')->default(true);
+            $table->boolean('is_active')->default(true);    // new or 'deleted' auctions
             $table->timestamps();
 
             // references

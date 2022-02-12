@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AuctionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,5 +28,16 @@ Route::group([
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
-    Route::get('/user-profile', [AuthController::class, 'userProfile']);
+    Route::get('/user', [AuthController::class, 'userProfile']);
 });
+
+Route::group([
+    'middleware' => 'api'
+], function () {
+   // not sure how to protect api calls with against unauthenticated users
+});
+
+Route::post('/auctions', [AuctionController::class, 'store']);
+Route::get('/auctions', [AuctionController::class, 'index']);
+Route::put('/auctions/{auction}', [AuctionController::class, 'update']);
+Route::delete('/auctions/{auction}', [AuctionController::class, 'destroy']);
