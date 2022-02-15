@@ -1,12 +1,39 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+  <v-app>
+<!--    Navigaciona traka sa definisanim rutama unutar njenih tagova-->
+    <Navbar>
+      <router-link to="/home"></router-link>
+      <router-link to="/about"></router-link>
+      <router-link to="/register"></router-link>
+      <router-link to="/login"></router-link>
+    </Navbar>
+    <div>
+          <router-view/>
     </div>
-    <router-view/>
-  </div>
+    <Footer></Footer>
+  </v-app>
+<!--  <div id="app">-->
+<!--    <div id="nav">-->
+<!--      <router-link to="/">Home</router-link> |-->
+<!--      <router-link to="/about">About</router-link>-->
+<!--    </div>-->
+<!--    <router-view/>-->
+<!--  </div>-->
 </template>
+
+<script>
+// Ovdje se definisu sve globalne Vue komponente
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+
+export default {
+  components: {Navbar, Footer},
+  data() {
+    return {};
+  },
+  methods: {},
+};
+</script>
 
 <style lang="scss">
 #app {
@@ -30,3 +57,5 @@
   }
 }
 </style>
+
+
