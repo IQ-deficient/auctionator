@@ -32,12 +32,14 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => 'api'
+    'middleware' => 'auth'
 ], function () {
-   // not sure how to protect api calls with against unauthenticated users
+    // not sure how to protect api calls against unauthenticated users
+    // update: This should do the trick, requires user being logged in and his JWT token to get access to this route
+    Route::get('/auctions', [AuctionController::class, 'index']);
 });
 
 Route::post('/auctions', [AuctionController::class, 'store']);
-Route::get('/auctions', [AuctionController::class, 'index']);
+
 Route::put('/auctions/{auction}', [AuctionController::class, 'update']);
 Route::delete('/auctions/{auction}', [AuctionController::class, 'destroy']);
