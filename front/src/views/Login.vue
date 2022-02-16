@@ -1,14 +1,17 @@
 <template>
-  <div style="margin-top: 10%">
+  <div style="margin-top: 8%">
     <v-card
         class="mx-auto"
         max-width="28%"
-        style="justify-content: end; padding: 20px"
+        style="justify-content: end"
     >
       <validation-observer
           ref="observer"
       >
-        <form @submit.prevent="submit">
+        <form @submit.prevent="submit"
+              style="height: 280px; width: 88%; margin: 0 auto"
+        class="pt-3">
+<!--          Polje za unos imejla-->
           <validation-provider
               v-slot="{ errors }"
               name="Email"
@@ -21,6 +24,7 @@
                 required
             ></v-text-field>
           </validation-provider>
+<!--          Polje za unos lozinke-->
           <validation-provider
               v-slot="{ errors }"
               name="Password"

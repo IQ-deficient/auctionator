@@ -1,14 +1,14 @@
 <template>
-  <div style="margin-top: 2.5%">
+  <div style="margin-top: 4%">
     <v-card
         class="mx-auto"
         max-width="38%"
-        style="justify-content: end; padding: 20px"
+        style="justify-content: end"
     >
       <validation-observer
           ref="observer"
       >
-        <form @submit.prevent="submit">
+        <form @submit.prevent="submit" style="height: 490px; width: 92%; margin: 0 auto">
           <v-row>
             <v-col cols="6">
 <!--          Polje za ime-->
@@ -135,12 +135,10 @@
                 label="Confirm password"
                 type="password"
                 required
-                class="mb-2"
             ></v-text-field>
           </validation-provider>
           <v-btn
               type="submit"
-              class="mb-2"
               color="primary"
           >
             Sign up
