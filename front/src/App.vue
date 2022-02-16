@@ -7,7 +7,7 @@
       <router-link to="/register"></router-link>
       <router-link to="/login"></router-link>
     </Navbar>
-    <div>
+    <div style="min-height: 90%; background-color: #4a5568">
           <router-view/>
     </div>
     <Footer></Footer>
