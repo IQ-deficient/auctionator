@@ -13,25 +13,26 @@ class Auction extends Model
         'title',
         'seller',
         'item_id',
-//        'bid_id',
+        'bid_id',
         'buyout',
         'status',
         'start_datetime',
         'end_datetime',
         'user_id',
         'is_active',
-        'is_active',
 
     ];
 
     protected $hidden = [
-        'created_at',
-        'updated_at',
-        'item_id',
+//        'created_at',
+//        'updated_at',
+//        'item_id',
     ];
 
     protected $casts = [
-//        'email_verified_at' => 'datetime',
+        'is_active' => 'boolean',
+        'buyout' => 'double',
+//        'start_datetime' => 'datetime',
     ];
 
     protected $appends = [
@@ -40,7 +41,7 @@ class Auction extends Model
 
     protected $with = [
         'item',
-//        'bid',
+        'bid',
     ];
 
 //    public function getFullNameAttribute()
@@ -53,9 +54,9 @@ class Auction extends Model
         return $this->belongsTo('App\Models\Item', 'item_id', 'id');
     }
 
-//    public function bid()
-//    {
-//        return $this->belongsTo('App\Models\Bid', 'bid_id', 'id');
-//    }
+    public function bid()
+    {
+        return $this->belongsTo('App\Models\Bid', 'bid_id', 'id');
+    }
 
 }
