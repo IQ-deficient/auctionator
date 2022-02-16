@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use DateTimeInterface;
 
 class Auction extends Model
 {
@@ -32,7 +33,7 @@ class Auction extends Model
     protected $casts = [
         'is_active' => 'boolean',
         'buyout' => 'double',
-//        'start_datetime' => 'datetime',
+//        'start_datetime' => 'dateTime',
     ];
 
     protected $appends = [
@@ -48,6 +49,11 @@ class Auction extends Model
 //    {
 //        return  null;
 //    }
+
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
+    }
 
     public function item()
     {

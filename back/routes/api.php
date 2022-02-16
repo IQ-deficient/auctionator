@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuctionController;
+use App\Http\Controllers\GenderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,7 +39,11 @@ Route::group([
     // update: This should do the trick, requires user being logged in and his JWT token to get access to this route
 });
 
+// Auctions
 Route::post('/auctions', [AuctionController::class, 'store']);
 Route::get('/auctions', [AuctionController::class, 'index']);
 Route::put('/auctions/{auction}', [AuctionController::class, 'update']);
 Route::delete('/auctions/{auction}', [AuctionController::class, 'destroy']);
+
+// Genders
+Route::get('/genders', [GenderController::class, 'index']);
