@@ -1,7 +1,5 @@
 <template>
-  <div style="position:absolute;
-  top: 0; bottom: 0; left: 0; right: 0; margin: auto;
-  height: 40%">
+  <div style="margin-top: 10%">
     <v-card
         class="mx-auto"
         max-width="28%"
@@ -63,7 +61,7 @@
         </form>
       </validation-observer>
     </v-card>
-    <div style="width: 27%; color: white; margin: 0 auto" class="mt-4">
+    <div style="width: 26%; color: white; margin: 0 auto" class="mt-4">
     <table width="100%">
       <tr>
         <td><hr/></td>

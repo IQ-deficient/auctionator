@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app style="background-color: #4a5568">
 <!--    Navigaciona traka sa definisanim rutama unutar njenih tagova-->
     <Navbar>
       <router-link to="/home"></router-link>
@@ -7,7 +7,7 @@
       <router-link to="/register"></router-link>
       <router-link to="/login"></router-link>
     </Navbar>
-    <div style="min-height: 90%; background-color: #4a5568">
+    <div style="min-height: 90%">
           <router-view/>
     </div>
     <Footer></Footer>

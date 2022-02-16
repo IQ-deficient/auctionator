@@ -16,16 +16,16 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('username', 32)->unique();
-            $table->string('password', 128);
-            $table->string('first_name', 32);
-            $table->string('last_name', 32);
-            $table->string('email', 254)->unique();
-            $table->string('phone_number', 15)->unique();
-            $table->string('gender', 32)->nullable();
-            $table->string('country', 32)->nullable();
-            $table->dateTime('birthdate')->nullable()->default(Carbon::now());
-            $table->binary('image')->nullable();    // User image   // Unsure if this works for the image storing
+            $table->string('username', 32)->unique(); //Obavezno
+            $table->string('password', 128); //Obavezno
+            $table->string('first_name', 32); //Obavezno
+            $table->string('last_name', 32); //Obavezno
+            $table->string('email', 254)->unique(); //Obavezno
+            $table->string('phone_number', 15)->unique(); //Obavezno
+            $table->string('gender', 32)->nullable(); //Opciono
+            $table->string('country', 32)->nullable(); //Obavezno
+            $table->dateTime('birthdate')->nullable()->default(Carbon::now()); //Opciono
+            $table->binary('image')->nullable();    // User image   // Unsure if this works for the image storing //Opciono
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->timestamp('email_verified_at')->nullable();
