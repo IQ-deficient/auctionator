@@ -21,6 +21,7 @@
                 v-model="firstName"
                 :error-messages="errors"
                 label="First name"
+                clearable
                 required
             ></v-text-field>
           </validation-provider>
@@ -37,6 +38,7 @@
                 :error-messages="errors"
                 label="Last name"
                 required
+                clearable
             ></v-text-field>
           </validation-provider>
             </v-col>
@@ -54,6 +56,7 @@
                 :error-messages="errors"
                 label="Username"
                 required
+                clearable
             ></v-text-field>
           </validation-provider>
           <v-row>
@@ -80,17 +83,17 @@
               v-slot="{ errors }"
               name="phoneNumber"
               :rules="{
-          required: true,
-          digits: 7,
-          regex: '^(71|72|74|76|81|82|84|85|86|87|88|89)\\d{5}$'
+          // required: true,
+          // digits: 7,
+          // regex: '^(71|72|74|76|81|82|84|85|86|87|88|89)\\d{5}$'
         }"
           >
             <v-text-field
                 v-model="phoneNumber"
-                :counter="7"
                 :error-messages="errors"
-                label="Phone Number"
+                label="Phone number"
                 required
+                clearable
             ></v-text-field>
           </validation-provider>
             </v-col>
@@ -106,6 +109,7 @@
                 :error-messages="errors"
                 label="E-mail"
                 required
+                clearable
             ></v-text-field>
           </validation-provider>
 <!--          Polje za lozinku-->
@@ -113,15 +117,21 @@
               v-slot="{ errors }"
               name="Password"
               rules="required"
+              clearable
           >
             <v-text-field
                 v-model="password"
                 :error-messages="errors"
                 label="Password"
-                type="password"
+                :type="showPassword ? 'text' : 'password'"
                 :counter="8"
                 required
-            ></v-text-field>
+                hint="Must be at least 8 characters."
+                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append="showPassword = !showPassword"
+                clearable
+            >
+            </v-text-field>
           </validation-provider>
 <!--          Polje za potvrdu lozinke-->
           <validation-provider
@@ -133,9 +143,13 @@
                 v-model="confirmPassword"
                 :error-messages="errors"
                 label="Confirm password"
-                type="password"
+                :type="showConfirmPass ? 'text' : 'password'"
                 required
-            ></v-text-field>
+                :append-icon="showConfirmPass ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append="showConfirmPass = !showConfirmPass"
+                clearable
+            >
+            </v-text-field>
           </validation-provider>
           <v-btn
               type="submit"
@@ -178,7 +192,7 @@ setInteractionMode('eager')
 
 extend('digits', {
   ...digits,
-  message: '{_field_} needs to be {length} digits. ({_value_})',
+  // message: '{_field_} needs to be {length} digits. ({_value_})',
 })
 
 extend('required', {
@@ -222,7 +236,9 @@ name: "Register",
     countries: [
         'Ukraine',
         'Russia',
-    ]
+    ],
+    showPassword: false,
+    showConfirmPass: false,
   }),
 
   methods: {

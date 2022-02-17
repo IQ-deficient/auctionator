@@ -21,6 +21,7 @@
                 v-model="email"
                 :error-messages="errors"
                 label="E-mail"
+                clearable
                 required
             ></v-text-field>
           </validation-provider>
@@ -34,8 +35,11 @@
                 v-model="password"
                 :error-messages="errors"
                 label="Password"
-                type="password"
+                :type="showPassword ? 'text' : 'password'"
                 required
+                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append="showPassword = !showPassword"
+                clearable
             ></v-text-field>
           </validation-provider>
           <validation-provider
@@ -134,6 +138,7 @@ name: "Login",
     email: '',
     password: '',
     checkbox: null,
+    showPassword: false,
   }),
 
   methods: {
