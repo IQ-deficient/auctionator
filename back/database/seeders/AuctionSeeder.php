@@ -30,7 +30,6 @@ class AuctionSeeder extends Seeder
                 'is_active' => true,
                 'created_at' => Carbon::yesterday()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
-
             ],
             [
                 'id' => 2,
@@ -46,7 +45,6 @@ class AuctionSeeder extends Seeder
                 'is_active' => true,
                 'created_at' => Carbon::yesterday()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
-
             ],
             [
                 'id' => 3,
@@ -62,7 +60,6 @@ class AuctionSeeder extends Seeder
                 'is_active' => true,
                 'created_at' => Carbon::yesterday()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
-
             ],
             [
                 'id' => 4,

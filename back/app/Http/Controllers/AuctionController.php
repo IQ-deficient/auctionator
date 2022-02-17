@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Auction;
 use App\Http\Requests\StoreAuctionRequest;
 use App\Http\Requests\UpdateAuctionRequest;
+use http\Env\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AuctionController extends Controller
 {
@@ -13,7 +15,13 @@ class AuctionController extends Controller
     {
 //        abort_if(Auth::user(), '422','jbg');
         // get all active auctions
-        return Auction::all()->where('is_active', '=', true);
+        return Auction::all();
+    }
+
+    public function getActive()
+    {
+//        return Auction::all()->where('is_active', true);
+        return Auction::where('is_active', true)->get();
     }
 
     /**
@@ -71,14 +79,24 @@ class AuctionController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\Models\Auction $auction
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Auction $auction)
     {
-        //
+        // Once deactivated, auction can not be reactivated and a new instance must be freshly made
+        // Status does not change because this already guarantees that auction is no longer in play
+        $auction->update([
+            'is_active' => false
+        ]);
+
+        // Last and only active bid for this auction will be deactivated
+        DB::table('bids')
+            ->where('is_active', true)
+            ->where('id', $auction->bid_id)
+            ->update([
+                'is_active' => false
+            ]);
+
+        // returning Model so it picks up all formatted data
+//        return DB::table('auctions')->where('id', $auction->id)->first();
+        return Auction::where('id', $auction->id)->first();
     }
 }

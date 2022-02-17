@@ -43,6 +43,7 @@ Route::group([
 // Auctions
 Route::post('/auctions', [AuctionController::class, 'store']);
 Route::get('/auctions', [AuctionController::class, 'index']);
+Route::get('/active_auctions', [AuctionController::class, 'getActive']);
 Route::put('/auctions/{auction}', [AuctionController::class, 'update']);
 Route::delete('/auctions/{auction}', [AuctionController::class, 'destroy']);
 

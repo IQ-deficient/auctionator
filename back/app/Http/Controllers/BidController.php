@@ -36,7 +36,9 @@ class BidController extends Controller
      */
     public function store(StoreBidRequest $request)
     {
-        //
+        // abort if the auction is no longer biddable (preventive)
+        // Once there is a new bid for a certain auction, the previous bid for the same should be deactivated
+        // New bid must be bigger than the previous one for that auction
     }
 
     /**
