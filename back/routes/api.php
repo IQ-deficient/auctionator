@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuctionController;
 use App\Http\Controllers\GenderController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,3 +48,6 @@ Route::delete('/auctions/{auction}', [AuctionController::class, 'destroy']);
 
 // Genders
 Route::get('/genders', [GenderController::class, 'index']);
+
+// Genders
+Route::get('/categories', [CategoryController::class, 'index']);
