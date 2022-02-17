@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuctionController;
 use App\Http\Controllers\GenderController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,8 +43,12 @@ Route::group([
 // Auctions
 Route::post('/auctions', [AuctionController::class, 'store']);
 Route::get('/auctions', [AuctionController::class, 'index']);
+Route::get('/active_auctions', [AuctionController::class, 'getActive']);
 Route::put('/auctions/{auction}', [AuctionController::class, 'update']);
 Route::delete('/auctions/{auction}', [AuctionController::class, 'destroy']);
 
 // Genders
 Route::get('/genders', [GenderController::class, 'index']);
+
+// Genders
+Route::get('/categories', [CategoryController::class, 'index']);
