@@ -1,15 +1,17 @@
 <template>
   <v-app style="background-color: #4a5568">
-<!--    Navigaciona traka sa definisanim rutama unutar njenih tagova-->
-    <Navbar>
-      <router-link to="/home"></router-link>
-      <router-link to="/about"></router-link>
-      <router-link to="/register"></router-link>
-      <router-link to="/login"></router-link>
-    </Navbar>
-    <div style="min-height: 90%">
-          <router-view/>
+    <div style="min-height: 100%">
+      <Navbar>
+        <router-link to="/home"></router-link>
+        <router-link to="/about"></router-link>
+        <router-link to="/register"></router-link>
+        <router-link to="/login"></router-link>
+      </Navbar>
+      <div>
+        <router-view/>
+      </div>
     </div>
+<!--    Navigaciona traka sa definisanim rutama unutar njenih tagova-->
     <Footer></Footer>
   </v-app>
 <!--  <div id="app">-->
