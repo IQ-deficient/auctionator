@@ -40,16 +40,16 @@ class AuctionController extends Controller
         $request->validate([
             'title' => 'required|string',
             'seller' => 'required|string',
-            'buyout' => 'required|numeric',
-            'start_datetime' => 'required',
-            'end_datetime' => 'required',
+            'buyout' => 'required|numeric|gt:0',    // x.xx > 0
+            'start_datetime' => 'required|date',
+            'end_datetime' => 'required|date|after:start_datetime',     // end date_time must be greater than start dt
 
             'title_item' => 'required|min:6|max:64',
             'description' => 'required|string',
             'category' => 'required|string|exists:categories,name',
             'warehouse_id' => 'required|integer|exists:warehouses,id',
 
-//            'condition' => 'required'
+//            'condition' => 'required|string|exists:conditions, name'
         ]);
 
         // Firstly make the item that should be formed into the auction
