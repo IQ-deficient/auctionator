@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Auction;
 use App\Http\Requests\StoreAuctionRequest;
 use App\Http\Requests\UpdateAuctionRequest;
-use http\Env\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -40,9 +40,35 @@ class AuctionController extends Controller
      * @param \App\Http\Requests\StoreAuctionRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreAuctionRequest $request)
+    public function store(Request $request)
     {
-        //
+        // Item should be first inserted and afterwards referenced while creating auction
+        // auction, item
+        
+         $request->validate([
+            'title' => 'required',
+            'seller' => 'required|string',
+//            'item_id' => '',
+//            'bid_id' => '',
+            'buyout' => 'required|numeric',
+//            'status' => '',
+            'start_datetime' => 'required',
+            'end_datetime' => 'required',
+        ]);
+
+        $auction = Auction::create([
+            'title' => $request->title,
+            'seller' => $request->seller,
+            'item_id' => 1,
+            'bid_id' => null,           // There is no bid by default
+            'buyout' => $request->buyout,
+            'status' => 'Created',          // Fresh auction
+            'start_datetime' => $request->start_datetime,
+            'end_datetime' => $request->end_datetime,
+            'user_id' => Auth::id(),
+        ]);
+
+        return Auction::where('id', $auction->id)->first();
     }
 
     /**
@@ -76,7 +102,7 @@ class AuctionController extends Controller
      */
     public function update(UpdateAuctionRequest $request, Auction $auction)
     {
-        //
+        // only auctions without a bid can be updated for certain parameters (category, name, ..)
     }
 
     public function destroy(Auction $auction)

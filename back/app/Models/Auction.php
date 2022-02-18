@@ -21,7 +21,6 @@ class Auction extends Model
         'end_datetime',
         'user_id',
         'is_active',
-
     ];
 
     protected $hidden = [

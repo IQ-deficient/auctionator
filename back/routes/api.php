@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuctionController;
 use App\Http\Controllers\GenderController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CountryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,8 +48,12 @@ Route::get('/active_auctions', [AuctionController::class, 'getActive']);
 Route::put('/auctions/{auction}', [AuctionController::class, 'update']);
 Route::delete('/auctions/{auction}', [AuctionController::class, 'destroy']);
 
+
+// Categories
+Route::get('/categories', [CategoryController::class, 'index']);
+
 // Genders
 Route::get('/genders', [GenderController::class, 'index']);
 
-// Genders
-Route::get('/categories', [CategoryController::class, 'index']);
+// Countries
+Route::get('/countries', [CountryController::class, 'index']);
