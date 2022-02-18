@@ -5,9 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\CategoryCondition;
 use App\Http\Requests\StoreCategoryConditionRequest;
 use App\Http\Requests\UpdateCategoryConditionRequest;
+use Illuminate\Http\Request;
 
 class CategoryConditionController extends Controller
 {
+
+    public function getConditionsForCategory(Request $request)
+    {
+        // This method should be used to return all active conditions that exist for the requested category from this mt
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -31,7 +38,7 @@ class CategoryConditionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreCategoryConditionRequest  $request
+     * @param \App\Http\Requests\StoreCategoryConditionRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreCategoryConditionRequest $request)
@@ -42,7 +49,7 @@ class CategoryConditionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\CategoryCondition  $categoryCondition
+     * @param \App\Models\CategoryCondition $categoryCondition
      * @return \Illuminate\Http\Response
      */
     public function show(CategoryCondition $categoryCondition)
@@ -53,7 +60,7 @@ class CategoryConditionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\CategoryCondition  $categoryCondition
+     * @param \App\Models\CategoryCondition $categoryCondition
      * @return \Illuminate\Http\Response
      */
     public function edit(CategoryCondition $categoryCondition)
@@ -64,8 +71,8 @@ class CategoryConditionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateCategoryConditionRequest  $request
-     * @param  \App\Models\CategoryCondition  $categoryCondition
+     * @param \App\Http\Requests\UpdateCategoryConditionRequest $request
+     * @param \App\Models\CategoryCondition $categoryCondition
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateCategoryConditionRequest $request, CategoryCondition $categoryCondition)
@@ -76,7 +83,7 @@ class CategoryConditionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\CategoryCondition  $categoryCondition
+     * @param \App\Models\CategoryCondition $categoryCondition
      * @return \Illuminate\Http\Response
      */
     public function destroy(CategoryCondition $categoryCondition)

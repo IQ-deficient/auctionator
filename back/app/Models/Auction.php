@@ -27,6 +27,7 @@ class Auction extends Model
 //        'created_at',
 //        'updated_at',
 //        'item_id',
+//        'bid_id',
     ];
 
     protected $casts = [
@@ -49,11 +50,6 @@ class Auction extends Model
 //        return  null;
 //    }
 
-    protected function serializeDate(DateTimeInterface $date)
-    {
-        return $date->format('Y-m-d H:i:s');
-    }
-
     public function item()
     {
         return $this->belongsTo('App\Models\Item', 'item_id', 'id');
@@ -62,6 +58,11 @@ class Auction extends Model
     public function bid()
     {
         return $this->belongsTo('App\Models\Bid', 'bid_id', 'id');
+    }
+
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
     }
 
 }

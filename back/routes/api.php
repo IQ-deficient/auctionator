@@ -7,6 +7,8 @@ use App\Http\Controllers\AuctionController;
 use App\Http\Controllers\GenderController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CountryController;
+use App\Http\Controllers\CategoryConditionController;
+use App\Http\Controllers\ItemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,3 +59,9 @@ Route::get('/genders', [GenderController::class, 'index']);
 
 // Countries
 Route::get('/countries', [CountryController::class, 'index']);
+
+// CategoryCondition
+Route::get('/category_conditions', [CategoryConditionController::class, 'getConditionsForCategory']);
+
+// Items
+Route::get('/items', [ItemController::class, 'index']);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Auction;
 use App\Http\Requests\StoreAuctionRequest;
 use App\Http\Requests\UpdateAuctionRequest;
+use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -34,32 +35,38 @@ class AuctionController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \App\Http\Requests\StoreAuctionRequest $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        // Item should be first inserted and afterwards referenced while creating auction
-        // auction, item
-        
-         $request->validate([
-            'title' => 'required',
+        $request->validate([
+            'title' => 'required|string',
             'seller' => 'required|string',
-//            'item_id' => '',
-//            'bid_id' => '',
             'buyout' => 'required|numeric',
-//            'status' => '',
             'start_datetime' => 'required',
             'end_datetime' => 'required',
+
+            'title_item' => 'required|min:6|max:64',
+            'description' => 'required|string',
+            'category' => 'required|string|exists:categories,name',
+            'warehouse_id' => 'required|integer|exists:warehouses,id',
+
+//            'condition' => 'required'
         ]);
 
+        // Firstly make the item that should be formed into the auction
+        $item = Item::create([
+            'title' => $request->title_item,
+            'description' => $request->description,
+            'category' => $request->category,
+            'warehouse_id' => $request->warehouse_id,
+        ]);
+
+        // TODO: insert condition for this item in category_condition table
+
+        // Lastly, make the auction with all required data and return it
         $auction = Auction::create([
             'title' => $request->title,
             'seller' => $request->seller,
-            'item_id' => 1,
+            'item_id' => $item->id,             // Here goes the ID of the item that was made before the auction for it
             'bid_id' => null,           // There is no bid by default
             'buyout' => $request->buyout,
             'status' => 'Created',          // Fresh auction
