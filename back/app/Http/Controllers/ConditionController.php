@@ -15,7 +15,7 @@ class ConditionController extends Controller
      */
     public function index()
     {
-        //
+        return Condition::all();
     }
 
     /**

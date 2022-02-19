@@ -53,6 +53,7 @@ Route::delete('/auctions/{auction}', [AuctionController::class, 'destroy']);
 
 // Categories
 Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/active_categories', [CategoryController::class, 'getActive']);
 
 // Genders
 Route::get('/genders', [GenderController::class, 'index']);
@@ -61,7 +62,7 @@ Route::get('/genders', [GenderController::class, 'index']);
 Route::get('/countries', [CountryController::class, 'index']);
 
 // CategoryCondition
-Route::get('/category_conditions', [CategoryConditionController::class, 'getConditionsForCategory']);
+Route::post('/category_conditions', [CategoryConditionController::class, 'getConditionsForCategory']);
 
 // Items
 Route::get('/items', [ItemController::class, 'index']);

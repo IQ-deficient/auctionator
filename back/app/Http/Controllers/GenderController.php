@@ -18,6 +18,11 @@ class GenderController extends Controller
         return Gender::all();
     }
 
+    public function getActive()
+    {
+        return Gender::where('is_active', true)->get();
+    }
+
     /**
      * Show the form for creating a new resource.
      *

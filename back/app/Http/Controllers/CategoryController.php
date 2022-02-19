@@ -18,6 +18,11 @@ class CategoryController extends Controller
         return Category::all();
     }
 
+    public function getActive()
+    {
+        return Category::where('is_active', true)->get();
+    }
+
     /**
      * Show the form for creating a new resource.
      *

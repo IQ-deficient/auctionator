@@ -15,7 +15,7 @@ class UserRoleController extends Controller
      */
     public function index()
     {
-        //
+        return UserRole::all();
     }
 
     /**

@@ -13,6 +13,11 @@ class CountryController extends Controller
         return Country::all();
     }
 
+    public function getActive()
+    {
+        return Country::where('is_active', true)->get();
+    }
+
     /**
      * Show the form for creating a new resource.
      *

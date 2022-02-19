@@ -8,10 +8,15 @@ use App\Http\Requests\UpdateItemRequest;
 
 class ItemController extends Controller
 {
-    
+
     public function index()
     {
         return Item::all();
+    }
+
+    public function getActive()
+    {
+        return Item::where('is_active', true)->get();
     }
 
     /**

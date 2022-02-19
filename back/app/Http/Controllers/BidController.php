@@ -15,7 +15,12 @@ class BidController extends Controller
      */
     public function index()
     {
-        //
+        return Bid::all();
+    }
+
+    public function getActive()
+    {
+        return Bid::where('is_active', true)->get();
     }
 
     /**

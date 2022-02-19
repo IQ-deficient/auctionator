@@ -15,7 +15,12 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+        return Role::all();
+    }
+
+    public function getActive()
+    {
+        return Role::where('is_active', true)->get();
     }
 
     /**
