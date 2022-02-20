@@ -13,7 +13,7 @@ class CategoryConditionController extends Controller
 
     public function getConditionsForCategory(Request $request)
     {
-        // This method should be used to return all active conditions that exist for the requested category from this mt
+        // This method should be used to return all active conditions that exist for the requested category
         $request->validate([
             'category' => 'required|exists:categories,name'
         ]);

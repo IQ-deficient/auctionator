@@ -49,6 +49,7 @@ Route::get('/auctions', [AuctionController::class, 'index']);
 Route::get('/active_auctions', [AuctionController::class, 'getActive']);
 Route::put('/auctions/{auction}', [AuctionController::class, 'update']);
 Route::delete('/auctions/{auction}', [AuctionController::class, 'destroy']);
+Route::get('/filtered_auctions', [AuctionController::class, 'getFiltered']);
 
 
 // Categories

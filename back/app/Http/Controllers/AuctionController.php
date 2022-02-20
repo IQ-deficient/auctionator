@@ -6,6 +6,7 @@ use App\Models\Auction;
 use App\Http\Requests\StoreAuctionRequest;
 use App\Http\Requests\UpdateAuctionRequest;
 use App\Models\Item;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +26,11 @@ class AuctionController extends Controller
         return Auction::where('is_active', true)->get();
     }
 
+    public function getFiltered(Request $request)
+    {
+        // todo: we will never be returning all auctions to customers, rather only the ones corresponding to certain category
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -36,6 +42,8 @@ class AuctionController extends Controller
     }
 
     public function store(Request $request)
+        // todo: figure out how we will handle roles or rather which user_role can access these actions
+        // todo: also functions that define which auctions can be seen by which users depending on 'status'
     {
         $request->validate([
             'title' => 'required|string',
@@ -43,7 +51,6 @@ class AuctionController extends Controller
             'buyout' => 'required|numeric|gt:0',    // x.xx > 0
             'start_datetime' => 'required|date',
             'end_datetime' => 'required|date|after:start_datetime',     // end date_time must be greater than start dt
-
             'title_item' => 'required|min:6|max:64',
             'description' => 'required|string',
             'category' => 'required|string|exists:categories,name',
@@ -73,7 +80,7 @@ class AuctionController extends Controller
             'status' => 'Created',          // Fresh auction
             'start_datetime' => $request->start_datetime,
             'end_datetime' => $request->end_datetime,
-            'user_id' => Auth::id(),
+            'user_id' => Auth::id(),            // Auctioneer that is responsible for creation of this auction
         ]);
 
         return Auction::where('id', $auction->id)->first();
@@ -101,16 +108,51 @@ class AuctionController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \App\Http\Requests\UpdateAuctionRequest $request
-     * @param \App\Models\Auction $auction
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateAuctionRequest $request, Auction $auction)
+    public function update(Request $request, Auction $auction)
     {
-        // only auctions without a bid can be updated for certain parameters (category, name, ..)
+        // Only the auction without a bid can be changed for certain parameters
+        abort_if($auction->bid_id != null, 412, 'Only auctions with no bid can be altered.');
+        // Deactivated auctions are no longer eligible for change
+        abort_if($auction->is_active == null, 422, 'This auction was deactivated.');
+
+        $request->validate([
+            'title' => 'required|string',
+            'seller' => 'required|string',
+            'buyout' => 'required|numeric|gt:0',
+            'start_datetime' => 'required|date',
+            'end_datetime' => 'required|date|after:start_datetime',
+            'title_item' => 'required|min:6|max:64',
+            'description' => 'required|string',
+            'category' => 'required|string|exists:categories,name',
+//            'condition' => 'required|string|exists:conditions, name',
+            'warehouse_id' => 'required|integer|exists:warehouses,id',
+        ]);
+
+        // Update the item that this auction was created for
+        DB::table('items')
+            ->where('id', $auction->item_id)
+            ->update([
+                'title' => $request->title_item,
+                'description' => $request->description,
+                'category' => $request->category,
+//            'condition' => $request->condition,
+                'warehouse_id' => $request->warehouse_id,
+                'updated_at' => Carbon::now(),
+            ]);
+
+        // Update the auction itself
+        $auction->update([
+            'title' => $request->title,
+            'seller' => $request->seller,
+//            'item_id' => $item->id,
+            'buyout' => $request->buyout,
+            'start_datetime' => $request->start_datetime,
+            'end_datetime' => $request->end_datetime,
+            'updated_at' => Carbon::now(),          // This is only updated if any other input is different from current ones
+        ]);
+
+//        return $auction;
+        return Auction::where('id', $auction->id)->first();
     }
 
     public function destroy(Auction $auction)
@@ -129,7 +171,7 @@ class AuctionController extends Controller
                 'is_active' => false
             ]);
 
-        // returning Model so it picks up all formatted data
+        // returning Model, so it picks up all formatted data
 //        return DB::table('auctions')->where('id', $auction->id)->first();
         return Auction::where('id', $auction->id)->first();
     }

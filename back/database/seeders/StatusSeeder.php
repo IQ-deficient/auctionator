@@ -43,7 +43,7 @@ class StatusSeeder extends Seeder
             ],
             [
                 'id' => 5,
-                'status' => 'N/A',  // Catastrophe or other issues
+                'status' => 'N/A',  // Catastrophe or other issues (just in case)
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
