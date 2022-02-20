@@ -6,6 +6,7 @@ use App\Models\CategoryCondition;
 use App\Http\Requests\StoreCategoryConditionRequest;
 use App\Http\Requests\UpdateCategoryConditionRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CategoryConditionController extends Controller
 {
@@ -17,7 +18,17 @@ class CategoryConditionController extends Controller
             'category' => 'required|exists:categories,name'
         ]);
 
+//        return collect(DB::select("
+//            select `condition`
+//            from category_conditions
+//            where category = ?
+//            ", [$request->category])
+//        );
 
+        // Find all available conditions that requested category can be represented as
+        return DB::table('category_conditions')
+            ->where('category', $request->category)
+            ->pluck('condition');
 
     }
 

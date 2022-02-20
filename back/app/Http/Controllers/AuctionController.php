@@ -47,9 +47,8 @@ class AuctionController extends Controller
             'title_item' => 'required|min:6|max:64',
             'description' => 'required|string',
             'category' => 'required|string|exists:categories,name',
+//            'condition' => 'required|string|exists:conditions, name',
             'warehouse_id' => 'required|integer|exists:warehouses,id',
-
-//            'condition' => 'required|string|exists:conditions, name'
         ]);
 
         // Firstly make the item that should be formed into the auction
@@ -57,10 +56,12 @@ class AuctionController extends Controller
             'title' => $request->title_item,
             'description' => $request->description,
             'category' => $request->category,
+//            'condition' => $request->condition,
             'warehouse_id' => $request->warehouse_id,
         ]);
 
         // TODO: insert condition for this item in category_condition table
+        // todo: update: ja sam jebeno mentalno retardiran, mada to je bilo vise nego ocigledno
 
         // Lastly, make the auction with all required data and return it
         $auction = Auction::create([
