@@ -20,7 +20,7 @@
             vertical
         ></v-divider>
         <v-row>
-          <v-col cols="12" md="5"><v-text-field
+          <v-col cols="12" md="4"><v-text-field
             v-model="search"
             append-icon="mdi-magnify"
             label="Search"

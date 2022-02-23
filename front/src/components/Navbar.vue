@@ -68,6 +68,7 @@
         >
           <v-icon>mdi-logout-variant</v-icon>
         </v-btn>
+        <router-link to="/user-profile">
         <v-btn
             fab
             dark
@@ -76,6 +77,7 @@
         >
           <v-icon>mdi-cogs</v-icon>
         </v-btn>
+        </router-link>
       </v-speed-dial>
     </v-toolbar>
 
