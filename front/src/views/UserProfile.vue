@@ -16,7 +16,7 @@
               </v-avatar>
             </div>
             <a href="#" style="text-decoration: none"><v-icon dark large>
-              mdi-pencil
+              mdi-pencil-outline
             </v-icon></a>
           </div>
         </v-col>
@@ -33,6 +33,7 @@
               <v-text-field style="text-align: center"
                   value="marc.thompson"
                   label="Username"
+                            append-icon="mdi-account-edit-outline"
                   solo-inverted
                   shaped
                   dark
@@ -73,6 +74,7 @@
               <v-text-field
                   value="marc.thompson@gmail.com"
                   label="Email"
+                  append-icon="mdi-email-edit-outline"
                   shaped
                   solo-inverted
                   dark
@@ -98,6 +100,7 @@
               <v-text-field
                   value="11/27/1998"
                   label="Birthday"
+                  append-icon="mdi-cake-variant-outline"
                   solo-inverted
                   dark
                   readonly
@@ -122,6 +125,7 @@
               <v-text-field
                   value="+38267816707"
                   label="Phone number"
+                  append-icon="mdi-phone-classic"
                   solo-inverted
                   dark
                   readonly
@@ -129,10 +133,11 @@
             </v-col>
           </v-row>
           <v-row style="margin: 0 auto; width: 90%">
+<!--            <hr style="width: 90%; margin: 0 auto" class="mb-3">-->
             <v-col
                 cols="12"
                 sm="12">
-              <v-btn color="primary"
+              <v-btn large color="primary"
               >Save</v-btn>
             </v-col>
             <v-col style="position: absolute; right: 0; bottom: 0;"

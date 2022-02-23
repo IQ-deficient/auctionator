@@ -75,7 +75,7 @@
             small
             color="primary"
         >
-          <v-icon>mdi-cogs</v-icon>
+          <v-icon>mdi-account-details</v-icon>
         </v-btn>
         </router-link>
       </v-speed-dial>
