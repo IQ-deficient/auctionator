@@ -10,6 +10,15 @@ class Image extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'image',
+        'item_id',
+    ];
+
+    protected $casts = [
+        'image' => 'blob',
+    ];
+
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');

@@ -10,6 +10,10 @@ class Status extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'status',
+    ];
+
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
