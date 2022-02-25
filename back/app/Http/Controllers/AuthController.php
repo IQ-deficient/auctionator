@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -21,18 +22,41 @@ class AuthController extends Controller
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
 
+    /**
+     * Return Users for management of User Profiles based on the Authenticated User Role
+     * @return array|Response
+     */
     public function index()
     {
-        return User::all();
-    }
-
-    public function propMethodForTesting()
-    {
+//        return User::all();
+//        return DB::table('users')->get();
         $roles = User::getUserRoles();
 
-        if (in_array('Manager', $roles)) {
-            return User::all();
+        // Get all active Users that fit the role of Manager and Auctioneer
+        $usernames = DB::table('user_roles')
+            ->whereIn('role', ['Manager', 'Auctioneer'])
+            ->pluck('username');
+        $managers_auctioneers = DB::table('users')
+            ->where('is_active', true)
+            ->whereIn('username', $usernames)
+            ->get();
+
+        // Get all active Users that fit the role of Client
+        $usernames = DB::table('user_roles')
+            ->where('role', 'Client')
+            ->pluck('username');
+        $clients = DB::table('users')
+            ->where('is_active', true)
+            ->whereIn('username', $usernames)
+            ->get();
+
+        // For Manager return Client Users, and for Administrator also compile Managers & Auctioneers in separate variable
+        if (in_array('Administrator', $roles)) {
+            return ['clients' => $clients, 'managers_auctioneers' => $managers_auctioneers];
+        } elseif (in_array('Manager', $roles)) {
+            return ['clients' => $clients];
         }
+        return response('Something went wrong while fetching users!', 400);
     }
 
     /**
