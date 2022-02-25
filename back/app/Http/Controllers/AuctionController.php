@@ -131,7 +131,7 @@ class AuctionController extends Controller
             'title_item' => 'required|min:6|max:64',
             'description' => 'required|string',
             'category' => 'required|string|exists:categories,name',
-//            'condition' => 'required|string|exists:conditions, name',
+            'condition' => 'required|string|exists:conditions,name',
             'warehouse_id' => 'required|integer|exists:warehouses,id',
         ]);
 
@@ -142,7 +142,7 @@ class AuctionController extends Controller
                 'title' => $request->title_item,
                 'description' => $request->description,
                 'category' => $request->category,
-//            'condition' => $request->condition,
+                'condition' => $request->condition,
                 'warehouse_id' => $request->warehouse_id,
                 'updated_at' => Carbon::now(),
             ]);
@@ -151,7 +151,6 @@ class AuctionController extends Controller
         $auction->update([
             'title' => $request->title,
             'seller' => $request->seller,
-//            'item_id' => $item->id,
             'buyout' => $request->buyout,
             'start_datetime' => $request->start_datetime,
             'end_datetime' => $request->end_datetime,

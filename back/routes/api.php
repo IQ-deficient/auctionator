@@ -9,6 +9,14 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CategoryConditionController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\BidController;
+use App\Http\Controllers\ConditionController;
+use App\Http\Controllers\ImageController;
+use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\StatusController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserRoleController;
+use App\Http\Controllers\WarehouseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +50,7 @@ Route::group([
     // not sure how to protect api calls against unauthenticated users
     // update: This should do the trick, requires user being logged in and his JWT token to get access to this route
 });
+//  TODO: appropriate middleware for routes (some must require being authenticated)
 
 // Auctions
 Route::post('/auctions', [AuctionController::class, 'store']);
@@ -51,19 +60,52 @@ Route::put('/auctions/{auction}', [AuctionController::class, 'update']);
 Route::delete('/auctions/{auction}', [AuctionController::class, 'destroy']);
 Route::get('/filtered_auctions', [AuctionController::class, 'getFiltered']);
 
+// Bids
+Route::get('/bids', [BidController::class, 'index']);
 
 // Categories
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/active_categories', [CategoryController::class, 'getActive']);
 
-// Genders
-Route::get('/genders', [GenderController::class, 'index']);
+// CategoryCondition
+Route::post('/category_conditions', [CategoryConditionController::class, 'getConditionsForCategory']);
+
+// Conditions
+Route::get('/conditions', [ConditionController::class, 'index']);
 
 // Countries
 Route::get('/countries', [CountryController::class, 'index']);
 
-// CategoryCondition
-Route::post('/category_conditions', [CategoryConditionController::class, 'getConditionsForCategory']);
+// Genders
+Route::get('/genders', [GenderController::class, 'index']);
+
+// Histories
+Route::get('/histories', [HistoryController::class, 'index']);
+
+// Images
+Route::get('/images', [ImageController::class, 'index']);
 
 // Items
 Route::get('/items', [ItemController::class, 'index']);
+
+// Roles
+Route::get('/roles', [RoleController::class, 'index']);
+
+// Statuses
+Route::get('/statuses', [StatusController::class, 'index']);
+
+// Users
+Route::get('/users', [AuthController::class, 'index']);
+
+// UserRoles
+Route::get('/user_roles', [UserRoleController::class, 'index']);
+
+// Warehouses
+Route::get('/warehouses', [WarehouseController::class, 'index']);
+
+
+
+
+
+
+
