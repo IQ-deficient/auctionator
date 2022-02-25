@@ -5,45 +5,52 @@ namespace App\Http\Controllers;
 use App\Models\Warehouse;
 use App\Http\Requests\StoreWarehouseRequest;
 use App\Http\Requests\UpdateWarehouseRequest;
+use Carbon\Carbon;
+use Illuminate\Http\Response;
+use Illuminate\Http\Request;
 
 class WarehouseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         return Warehouse::all();
     }
 
+    public function getActive()
+    {
+        return Warehouse::where('is_active', true)->get();
+    }
+
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreWarehouseRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreWarehouseRequest $request)
+    public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string',
+            'address' => 'required|string',
+        ]);
+
+        $warehouse = Warehouse::create([
+            'name' => $request->name,
+            'address' => $request->address
+        ]);
+
+        return Warehouse::where('id', $warehouse->id)->first();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Warehouse  $warehouse
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Warehouse $warehouse
+     * @return Response
      */
     public function show(Warehouse $warehouse)
     {
@@ -53,34 +60,36 @@ class WarehouseController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Warehouse  $warehouse
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Warehouse $warehouse
+     * @return Response
      */
     public function edit(Warehouse $warehouse)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateWarehouseRequest  $request
-     * @param  \App\Models\Warehouse  $warehouse
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateWarehouseRequest $request, Warehouse $warehouse)
+    public function update(Request $request, Warehouse $warehouse)
     {
-        //
+        $request->validate([
+            'name' => 'required|string',
+            'address' => 'required|string',
+        ]);
+
+        $warehouse->update([
+            'name' => $request->name,
+            'address' => $request->address,
+            'updated_at' => Carbon::now()
+        ]);
+
+        return Warehouse::where('id', $warehouse->id)->first();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Warehouse  $warehouse
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Warehouse $warehouse)
     {
-        //
+        $warehouse->update([
+            'is_active' => !$warehouse->is_active,
+        ]);
+
+        return Warehouse::where('id', $warehouse->id)->first();
     }
 }

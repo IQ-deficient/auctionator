@@ -100,8 +100,12 @@ Route::get('/users', [AuthController::class, 'index']);
 // UserRoles
 Route::get('/user_roles', [UserRoleController::class, 'index']);
 
-// Warehouses
+// Warehouses (Admin only)
+Route::post('/warehouses', [WarehouseController::class, 'store']);
 Route::get('/warehouses', [WarehouseController::class, 'index']);
+Route::get('/active_warehouses', [WarehouseController::class, 'getActive']);
+Route::put('/warehouses/{warehouse}', [WarehouseController::class, 'update']);
+Route::delete('/warehouses/{warehouse}', [WarehouseController::class, 'destroy']);
 
 
 
