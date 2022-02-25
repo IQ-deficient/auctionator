@@ -45,6 +45,20 @@ class UserRoleSeeder extends Seeder
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
             [
+                'id' => 12,
+                'username' => 'mirko',
+                'role' => 'Client',
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            ],
+//            [
+//                'id' => 13,
+//                'username' => 'mirko',
+//                'role' => 'Administrator',
+//                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+//                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+//            ],
+            [
                 'id' => 5,
                 'username' => 'kristijan.manager',
                 'role' => 'Manager',
@@ -89,13 +103,6 @@ class UserRoleSeeder extends Seeder
             [
                 'id' => 11,
                 'username' => 'nikola.123',
-                'role' => 'Client',
-                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
-            ],
-            [
-                'id' => 12,
-                'username' => 'mirko',
                 'role' => 'Client',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
