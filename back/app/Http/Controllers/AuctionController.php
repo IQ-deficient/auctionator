@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateAuctionRequest;
 use App\Models\Item;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -32,7 +33,12 @@ class AuctionController extends Controller
         return Auction::where('is_active', true)->get();
     }
 
-    // Client will know which auction he owns by ID given to them, Auctioneer can search auctions this way for ease of access
+    /**
+     * Client will know which auction he owns by ID given to them
+     * Auctioneer can search auctions this way for ease of access
+     * @param Request $request
+     * @return mixed
+     */
     public function getById(Request $request)
     {
         $request->validate([
@@ -46,6 +52,11 @@ class AuctionController extends Controller
         ])->get();
     }
 
+    /**
+     * Return Auctions based on some parameters and filter keywords
+     * @param Request $request
+     * @return mixed
+     */
     public function getFiltered(Request $request)
     {
         // todo: we will never be returning all auctions to customers, rather only the ones corresponding to certain category
@@ -74,6 +85,11 @@ class AuctionController extends Controller
         //
     }
 
+    /**
+     * Store a newly created resource in storage.
+     * @param Request $request
+     * @return mixed
+     */
     public function store(Request $request)
         // todo: figure out how we will handle roles or rather which user_role can access these actions
         // todo: also functions that define which auctions can be seen by which users depending on 'status'
@@ -141,6 +157,12 @@ class AuctionController extends Controller
         //
     }
 
+    /**
+     * Update the specified resource in storage.
+     * @param Request $request
+     * @param Auction $auction
+     * @return mixed
+     */
     public function update(Request $request, Auction $auction)
     {
         // Only the auction without a bid can be changed for certain parameters
@@ -188,6 +210,10 @@ class AuctionController extends Controller
         return Auction::where('id', $auction->id)->first();
     }
 
+    /**
+     * Remove the specified resource from storage.
+     * @return mixed
+     */
     public function destroy(Auction $auction)
     {
         // Once deactivated, auction can not be reactivated and a new instance must be freshly made

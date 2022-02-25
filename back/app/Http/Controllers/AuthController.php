@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -70,6 +71,13 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required|string|min:6',
         ]);
+
+        // Find a User that is trying to Authenticate and deny access if their User profile is inactive
+        $active_user = DB::table('users')
+            ->where('email', $request->email)
+            ->first();
+        abort_if($active_user->is_active != 1, '421', 'This user is inactive!');
+
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
