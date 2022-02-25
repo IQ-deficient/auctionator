@@ -14,6 +14,7 @@ class Item extends Model
         'title',
         'description',
         'category',
+        'condition',
         'warehouse_id',
     ];
 

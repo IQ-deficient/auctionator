@@ -18,7 +18,7 @@ class AuctionSeeder extends Seeder
         $seeds = [
             [
                 'id' => 1,
-                'title' => 'Auction 1',
+                'title' => 'Jako kul brutalica ludilica mutilica od aukcije',
                 'seller' => 'Vladimir Gazivoda',
                 'item_id' => 1,
                 'bid_id' => null,
@@ -33,7 +33,7 @@ class AuctionSeeder extends Seeder
             ],
             [
                 'id' => 2,
-                'title' => 'Auction 2',
+                'title' => 'Slava mu i milos, spokoj mu dusi',
                 'seller' => 'Saban Saulic',
                 'item_id' => 2,
                 'bid_id' => null,
@@ -48,7 +48,7 @@ class AuctionSeeder extends Seeder
             ],
             [
                 'id' => 3,
-                'title' => 'Auction 3',
+                'title' => 'Pi politika',
                 'seller' => 'Dritan Abazovic',
                 'item_id' => 3,
                 'bid_id' => 1,
@@ -63,7 +63,7 @@ class AuctionSeeder extends Seeder
             ],
             [
                 'id' => 4,
-                'title' => 'Auction 4',
+                'title' => 'Aj vise krsta mi svetoga i ostroga da ako se proda ovo magare vise',
                 'seller' => 'Zoran Kukulicic',
                 'item_id' => 4,
                 'bid_id' => 2,

@@ -18,6 +18,12 @@ class AuctionController extends Controller
 //        abort_if(Auth::user(), '422','jbg');
         // get all active auctions
         return Auction::all();
+//        return DB::table('auctions')->get();
+//        return DB::select("
+//            select a.*, i.title as item_title, i.description, i.category, i.`condition`, i.warehouse_id, b.value, b.username
+//            from auctions a, items i, bids b
+//            where a.item_id = i.id && a.bid_id = b.id
+//        ");
     }
 
     public function getActive()
@@ -29,6 +35,7 @@ class AuctionController extends Controller
     public function getFiltered(Request $request)
     {
         // todo: we will never be returning all auctions to customers, rather only the ones corresponding to certain category
+        // using query builder instead of eloquent for this is probably a must for longevity (and other stuff)
     }
 
     /**
@@ -54,7 +61,7 @@ class AuctionController extends Controller
             'title_item' => 'required|min:6|max:64',
             'description' => 'required|string',
             'category' => 'required|string|exists:categories,name',
-//            'condition' => 'required|string|exists:conditions, name',
+            'condition' => 'required|string|exists:conditions,name', // condition is based on category
             'warehouse_id' => 'required|integer|exists:warehouses,id',
         ]);
 
@@ -63,7 +70,7 @@ class AuctionController extends Controller
             'title' => $request->title_item,
             'description' => $request->description,
             'category' => $request->category,
-//            'condition' => $request->condition,
+            'condition' => $request->condition,
             'warehouse_id' => $request->warehouse_id,
         ]);
 
@@ -149,6 +156,7 @@ class AuctionController extends Controller
             'start_datetime' => $request->start_datetime,
             'end_datetime' => $request->end_datetime,
             'updated_at' => Carbon::now(),          // This is only updated if any other input is different from current ones
+            'user_id' => Auth::id(),            // Auctioneer that applies changes (in case its someone else than the creator)
         ]);
 
 //        return $auction;
@@ -159,8 +167,10 @@ class AuctionController extends Controller
     {
         // Once deactivated, auction can not be reactivated and a new instance must be freshly made
         // Status does not change because this already guarantees that auction is no longer in play
+        // Item is missing or any other colossal issue, and therefore we do not care if there is a bid
         $auction->update([
-            'is_active' => false
+            'is_active' => false,
+            'user_id' => Auth::id()         // Auctioneer that deleted the auction
         ]);
 
         // Last and only active bid for this auction will be deactivated
