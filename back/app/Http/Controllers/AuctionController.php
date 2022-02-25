@@ -211,7 +211,7 @@ class AuctionController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Alter activity status for the specified resource in storage.
      * @return mixed
      */
     public function destroy(Auction $auction)

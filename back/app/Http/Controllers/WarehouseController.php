@@ -31,6 +31,11 @@ class WarehouseController extends Controller
         //
     }
 
+    /**
+     * Store a newly created resource in storage.
+     * @param Request $request
+     * @return mixed
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -68,6 +73,12 @@ class WarehouseController extends Controller
         //
     }
 
+    /**
+     * Update the specified resource in storage.
+     * @param Request $request
+     * @param Warehouse $warehouse
+     * @return mixed
+     */
     public function update(Request $request, Warehouse $warehouse)
     {
         $request->validate([
@@ -84,6 +95,10 @@ class WarehouseController extends Controller
         return Warehouse::where('id', $warehouse->id)->first();
     }
 
+    /**
+     * Alter activity status for the specified resource in storage.
+     * @return mixed
+     */
     public function destroy(Warehouse $warehouse)
     {
         $warehouse->update([

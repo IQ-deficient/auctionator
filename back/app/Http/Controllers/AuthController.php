@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
@@ -158,5 +159,48 @@ class AuthController extends Controller
             'expires_in' => auth()->factory()->getTTL() * 60,
             'user' => auth()->user()
         ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     * @param Request $request
+     * @param User $user
+     * @return mixed
+     */
+    public function update(Request $request, User $user)
+    {
+        // todo: its gonna be a bit fucky to validate updated email because of unique property
+        $request->validate([
+            'username' => 'required|string|unique:users',
+            'password' => 'required|string|confirmed',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'email' => 'required|email:rfc,dns|unique:users',
+            'phone_number' => 'required|digits_between:6,15',
+            'gender' => 'required|string|exists:genders,name',
+            'country' => 'required|string|exists:countries,name',
+            'birthdate' => 'required|date',
+//            'image' => 'required|integer|exists:warehouses,id'
+        ]);
+
+        $user->update([
+            // todo
+            'updated_at' => Carbon::now()
+        ]);
+
+        return User::where('id', $user->id)->first();
+    }
+
+    /**
+     * Alter activity status for the specified resource in storage.
+     * @return mixed
+     */
+    public function destroy(User $user)
+    {
+        $user->update([
+            'is_active' => !$user->is_active,
+        ]);
+
+        return User::where('id', $user->id)->first();
     }
 }
