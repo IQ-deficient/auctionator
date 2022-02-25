@@ -32,10 +32,36 @@ class AuctionController extends Controller
         return Auction::where('is_active', true)->get();
     }
 
+    // Client will know which auction he owns by ID given to them, Auctioneer can search auctions this way for ease of access
+    public function getById(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|integer'
+        ]);
+
+        // Find Auction based on ID
+        return Auction::where([
+            ['is_active', true],
+            ['id', $request->id]
+        ])->get();
+    }
+
     public function getFiltered(Request $request)
     {
         // todo: we will never be returning all auctions to customers, rather only the ones corresponding to certain category
         // using query builder instead of eloquent for this is probably a must for longevity (and other stuff)
+
+        // Find IDs for searched auctions
+        $auction_ids = DB::table('auctions')
+            ->where('is_active', true)      // only active auctions
+//            ->where('status', )
+            ->pluck('id');
+
+        // Return Eloquent Model Auctions by found IDs because they include other data used on interface by default
+        $auctions = Auction::whereIn('id', $auction_ids)->get();
+
+        return $auctions;
+        // todo: this is about as functional as my brain on daily basis
     }
 
     /**

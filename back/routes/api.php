@@ -33,6 +33,7 @@ use App\Http\Controllers\WarehouseController;
 //    return $request->user();
 //});
 
+// Authentication Middleware Group
 Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'
@@ -44,8 +45,9 @@ Route::group([
     Route::get('/user', [AuthController::class, 'userProfile']);
 });
 
+// Middleware Group for Routes that require User to be Authenticated
 Route::group([
-    'middleware' => 'auth'
+    'middleware' => 'auth:api'
 ], function () {
     // not sure how to protect api calls against unauthenticated users
     // update: This should do the trick, requires user being logged in and his JWT token to get access to this route
@@ -56,6 +58,7 @@ Route::group([
 Route::post('/auctions', [AuctionController::class, 'store']);
 Route::get('/auctions', [AuctionController::class, 'index']);
 Route::get('/active_auctions', [AuctionController::class, 'getActive']);
+Route::get('/auction_by_id', [AuctionController::class, 'getById']);
 Route::put('/auctions/{auction}', [AuctionController::class, 'update']);
 Route::delete('/auctions/{auction}', [AuctionController::class, 'destroy']);
 Route::get('/filtered_auctions', [AuctionController::class, 'getFiltered']);
@@ -94,13 +97,13 @@ Route::get('/roles', [RoleController::class, 'index']);
 // Statuses
 Route::get('/statuses', [StatusController::class, 'index']);
 
-// Users
+// Users (Manager & Admin)
 Route::get('/users', [AuthController::class, 'index']);
 
 // UserRoles
 Route::get('/user_roles', [UserRoleController::class, 'index']);
 
-// Warehouses (Admin only)
+// Warehouses (Admin)
 Route::post('/warehouses', [WarehouseController::class, 'store']);
 Route::get('/warehouses', [WarehouseController::class, 'index']);
 Route::get('/active_warehouses', [WarehouseController::class, 'getActive']);
