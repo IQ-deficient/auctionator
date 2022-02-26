@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
@@ -10,14 +11,14 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
-use Validator;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 
 class AuthController extends Controller
 {
     /**
      * Create a new AuthController instance.
-     *
      * @return void
      */
     public function __construct()
@@ -64,15 +65,23 @@ class AuthController extends Controller
 
     /**
      * Get a JWT via given credentials.
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws ValidationException
      */
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required|string|min:6',
+            'email' => 'required|email:rfc,dns',
+            'password' => 'required|string|min:1',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        if (!$token = auth()->attempt($validator->validated())) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
 
         // Find a User that is trying to Authenticate and deny access if their User profile is inactive
         $active_user = DB::table('users')
@@ -80,22 +89,16 @@ class AuthController extends Controller
             ->first();
         abort_if($active_user->is_active != 1, '421', 'This user is inactive!');
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-        if (!$token = auth()->attempt($validator->validated())) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
         return $this->createNewToken($token);
     }
 
     /**
      * Register a User.
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function register(Request $request)
     {
+        // todo: this api will be also used by admins to make accounts for employees
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|between:2,100',
             'email' => 'required|string|email|max:100|unique:users',
@@ -116,8 +119,7 @@ class AuthController extends Controller
 
     /**
      * Log the user out (Invalidate the token).
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function logout()
     {
@@ -127,8 +129,7 @@ class AuthController extends Controller
 
     /**
      * Refresh a token.
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function refresh()
     {
@@ -137,8 +138,7 @@ class AuthController extends Controller
 
     /**
      * Get the authenticated User.
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function userProfile()
     {
@@ -147,10 +147,8 @@ class AuthController extends Controller
 
     /**
      * Get the token array structure.
-     *
      * @param string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     protected function createNewToken($token)
     {
@@ -172,7 +170,7 @@ class AuthController extends Controller
     {
         // todo: validate if the auth user has required roles to perform this action (this goes for other stuff asw but alas)
         // todo: This will also be used as edit profile for Clients
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             // Here we make sure that if User enters a different username, only then it is checked to be unique on users table
             'username' => ['required', 'string', Rule::when($request->username != $user->username, 'unique:users')],
             'password' => 'required|string|confirmed',
@@ -185,6 +183,10 @@ class AuthController extends Controller
             'birthdate' => 'nullable|date',
 //            'image' => 'required|integer|exists:warehouses,id'
         ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
 
         // Updating username here will result in cascading update of username in child rows because of onUpdate in migrations
         $user->update([

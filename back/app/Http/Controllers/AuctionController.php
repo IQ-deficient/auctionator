@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class AuctionController extends Controller
 {
@@ -41,9 +42,13 @@ class AuctionController extends Controller
      */
     public function getById(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'id' => 'required|integer'
         ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
 
         // Find Auction based on ID
         return Auction::where([
@@ -94,7 +99,7 @@ class AuctionController extends Controller
         // todo: figure out how we will handle roles or rather which user_role can access these actions
         // todo: also functions that define which auctions can be seen by which users depending on 'status'
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'title' => 'required|string',
             'seller' => 'required|string',
             'buyout' => 'required|numeric|gt:0',    // x.xx > 0
@@ -106,6 +111,10 @@ class AuctionController extends Controller
             'condition' => 'required|string|exists:conditions,name', // condition is based on category
             'warehouse_id' => 'required|integer|exists:warehouses,id',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
 
         // Firstly make the item that should be formed into the auction
         $item = Item::create([
@@ -170,7 +179,7 @@ class AuctionController extends Controller
         // Deactivated auctions are no longer eligible for change
         abort_if($auction->is_active == null, 422, 'This auction was deactivated.');
 
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'title' => 'required|string',
             'seller' => 'required|string',
             'buyout' => 'required|numeric|gt:0',
@@ -182,6 +191,10 @@ class AuctionController extends Controller
             'condition' => 'required|string|exists:conditions,name',
             'warehouse_id' => 'required|integer|exists:warehouses,id',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
 
         // Update the item that this auction was created for
         DB::table('items')

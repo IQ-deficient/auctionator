@@ -7,6 +7,7 @@ use App\Http\Requests\StoreCategoryConditionRequest;
 use App\Http\Requests\UpdateCategoryConditionRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class CategoryConditionController extends Controller
 {
@@ -14,9 +15,13 @@ class CategoryConditionController extends Controller
     public function getConditionsForCategory(Request $request)
     {
         // This method should be used to return all active conditions that exist for the requested category
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'category' => 'required|exists:categories,name'
         ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
 
 //        return collect(DB::select("
 //            select `condition`

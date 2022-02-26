@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateWarehouseRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class WarehouseController extends Controller
 {
@@ -38,10 +39,14 @@ class WarehouseController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string',
-            'address' => 'required|string',
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:64',
+            'address' => 'required|string|max:255',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
 
         $warehouse = Warehouse::create([
             'name' => $request->name,
@@ -81,10 +86,14 @@ class WarehouseController extends Controller
      */
     public function update(Request $request, Warehouse $warehouse)
     {
-        $request->validate([
-            'name' => 'required|string',
-            'address' => 'required|string',
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:64',
+            'address' => 'required|string|max:255',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
 
         $warehouse->update([
             'name' => $request->name,
