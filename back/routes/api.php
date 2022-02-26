@@ -99,6 +99,7 @@ Route::get('/statuses', [StatusController::class, 'index']);
 
 // Users (Manager & Admin)
 Route::get('/users', [AuthController::class, 'index']);
+Route::put('/users/{user}', [AuthController::class, 'update']);
 Route::delete('/users/{user}', [AuthController::class, 'destroy']);
 
 // UserRoles

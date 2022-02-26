@@ -9,6 +9,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Validator;
 
 
@@ -169,22 +170,34 @@ class AuthController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        // todo: its gonna be a bit fucky to validate updated email because of unique property
+        // todo: validate if the auth user has required roles to perform this action (this goes for other stuff asw but alas)
+        // todo: This will also be used as edit profile for Clients
         $request->validate([
-            'username' => 'required|string|unique:users',
+            // Here we make sure that if User enters a different username, only then it is checked to be unique on users table
+            'username' => ['required', 'string', Rule::when($request->username != $user->username, 'unique:users')],
             'password' => 'required|string|confirmed',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
-            'email' => 'required|email:rfc,dns|unique:users',
-            'phone_number' => 'required|digits_between:6,15',
-            'gender' => 'required|string|exists:genders,name',
-            'country' => 'required|string|exists:countries,name',
-            'birthdate' => 'required|date',
+            'email' => ['required', 'email:rfc,dns', Rule::when($request->email != $user->email, 'unique:users')],
+            'phone_number' => ['required', 'digits_between:6,15', Rule::when($request->phone_number != $user->phone_number, 'unique:users')],
+            'gender' => 'nullable|string|exists:genders,name',
+            'country' => 'nullable|string|exists:countries,name',
+            'birthdate' => 'nullable|date',
 //            'image' => 'required|integer|exists:warehouses,id'
         ]);
 
+        // Updating username here will result in cascading update of username in child rows because of onUpdate in migrations
         $user->update([
-            // todo
+            'username' => $request->username,
+            'password' => bcrypt($request->password),
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'phone_number' => $request->phone_number,
+            'gender' => $request->gender,
+            'country' => $request->country,
+            'birthdate' => $request->birthdate,     // todo: test if updating birthdate works (should work)
+//            'image' => $request->image,
             'updated_at' => Carbon::now()
         ]);
 

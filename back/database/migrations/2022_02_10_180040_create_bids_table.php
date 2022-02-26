@@ -21,7 +21,7 @@ class CreateBidsTable extends Migration
             $table->timestamps();
 
             // references
-            $table->foreign('username')->references('username')->on('users');
+            $table->foreign('username')->references('username')->on('users')->onUpdate('cascade');
         });
     }
 

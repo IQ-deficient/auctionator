@@ -21,7 +21,7 @@ class CreateHistoriesTable extends Migration
             $table->timestamps();
 
             $table->foreign('auction_id')->references('id')->on('auctions');
-            $table->foreign('username')->references('username')->on('users');
+            $table->foreign('username')->references('username')->on('users')->onUpdate('cascade');
         });
     }
 
