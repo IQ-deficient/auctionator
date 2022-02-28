@@ -21,16 +21,18 @@
 
       <v-toolbar-title style="margin-left: 28px">Auction House</v-toolbar-title>
       <v-spacer></v-spacer>
-      <router-link to="/login/" style="text-decoration: none">
-        <v-btn value="center"
-               color="primary" style="margin: 10px">
-          <span class="hidden-sm-and-down">Login</span>
-        </v-btn>
-      </router-link>
       <router-link to="/register/" style="text-decoration: none">
         <v-btn value="center"
-               color="primary">
-          <span class="hidden-sm-and-down">Register</span>
+               color="transparent" depressed>
+          <v-icon class="mr-2">mdi-pencil-box-outline</v-icon>
+          <span class="hidden-sm-and-down">Sign up</span>
+        </v-btn>
+      </router-link>
+      <router-link to="/login/" style="text-decoration: none">
+        <v-btn value="center"
+               color="primary" class="ml-2">
+          <v-icon class="mr-2">mdi-login-variant</v-icon>
+          <span class="hidden-sm-and-down">Sign in</span>
         </v-btn>
       </router-link>
 
