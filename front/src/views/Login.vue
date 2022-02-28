@@ -61,13 +61,20 @@
               class="mb-1"
               color="primary"
           >
-            Login
+            <v-icon left class="mr-2">mdi-login</v-icon>
+            Sign in
           </v-btn>
-<!--          <v-btn @click="clear">-->
-<!--            clear-->
-<!--          </v-btn>-->
         </form>
       </validation-observer>
+      <v-row>
+        <v-col cols="12" sm="6">
+          <router-link to="/" style="text-decoration: none">
+            <span><v-icon left class="pa-1">
+              mdi-lock-outline
+            </v-icon>Forgot password?</span>
+          </router-link>
+        </v-col>
+      </v-row>
     </v-card>
     <div style="width: 26%; color: white; margin: 0 auto" class="mt-4">
     <table width="100%">

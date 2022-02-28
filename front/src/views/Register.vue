@@ -154,8 +154,8 @@
           <v-btn
               type="submit"
               color="primary"
-          >
-            Sign up
+          ><v-icon left>mdi-account-plus</v-icon>
+            Create account
           </v-btn>
           <!--          <v-btn @click="clear">-->
           <!--            clear-->
@@ -177,7 +177,7 @@
       <v-btn
           color="accent"
           class="mt-4">
-        Sign in here
+        Sign in
       </v-btn>
     </router-link>
   </div>

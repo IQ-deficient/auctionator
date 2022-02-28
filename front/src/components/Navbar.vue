@@ -24,14 +24,14 @@
       <router-link to="/register/" style="text-decoration: none">
         <v-btn value="center"
                color="transparent" depressed>
-          <v-icon class="mr-2">mdi-pencil-box-outline</v-icon>
+          <v-icon left class="mr-2">mdi-pencil-box-outline</v-icon>
           <span class="hidden-sm-and-down">Sign up</span>
         </v-btn>
       </router-link>
       <router-link to="/login/" style="text-decoration: none">
         <v-btn value="center"
                color="primary" class="ml-2">
-          <v-icon class="mr-2">mdi-login-variant</v-icon>
+          <v-icon left class="mr-2">mdi-login-variant</v-icon>
           <span class="hidden-sm-and-down">Sign in</span>
         </v-btn>
       </router-link>
