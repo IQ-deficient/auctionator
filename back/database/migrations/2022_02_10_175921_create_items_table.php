@@ -16,7 +16,7 @@ class CreateItemsTable extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title', 64);
-            $table->text('description');                // We will see how this works and if it is safe
+            $table->string('description', 500);         // changed from text to string500
             $table->string('category', 64);
             $table->string('condition', 32);
             $table->unsignedBigInteger('warehouse_id');

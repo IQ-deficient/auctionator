@@ -7,6 +7,7 @@ use App\Http\Requests\StoreAuctionRequest;
 use App\Http\Requests\UpdateAuctionRequest;
 use App\Models\Item;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +16,10 @@ use Illuminate\Support\Facades\Validator;
 
 class AuctionController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     * @return Auction[]|Collection
+     */
     public function index()
     {
 //        abort_if(Auth::user(), '422','jbg');
@@ -28,6 +33,10 @@ class AuctionController extends Controller
 //        ");
     }
 
+    /**
+     * Display a listing of the resource only for active entities.
+     * @return Response
+     */
     public function getActive()
     {
 //        return Auction::all()->where('is_active', true);
@@ -83,7 +92,7 @@ class AuctionController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -100,15 +109,15 @@ class AuctionController extends Controller
         // todo: also functions that define which auctions can be seen by which users depending on 'status'
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string',
-            'seller' => 'required|string',
+            'title' => 'required|string|min:3|max:128',
+            'seller' => 'required|string|min:3|max:32',
             'buyout' => 'required|numeric|gt:0',    // x.xx > 0
             'start_datetime' => 'required|date',
             'end_datetime' => 'required|date|after:start_datetime',     // end date_time must be greater than start dt
-            'title_item' => 'required|min:6|max:64',
-            'description' => 'required|string',
-            'category' => 'required|string|exists:categories,name',
-            'condition' => 'required|string|exists:conditions,name', // condition is based on category
+            'title_item' => 'required|min:3|max:64',
+            'description' => 'required|string|min:3|max:500',
+            'category' => 'required|string|max:64|exists:categories,name',
+            'condition' => 'required|string|max:32|exists:conditions,name', // condition is based on category
             'warehouse_id' => 'required|integer|exists:warehouses,id',
         ]);
 
@@ -128,7 +137,7 @@ class AuctionController extends Controller
         // TODO: insert condition for this item in category_condition table
         // todo: update: ja sam jebeno mentalno retardiran, mada to je bilo vise nego ocigledno
 
-        // Lastly, make the auction with all required data and return it
+        // Lastly, make the auction with all required data together with item and return it
         $auction = Auction::create([
             'title' => $request->title,
             'seller' => $request->seller,
@@ -148,7 +157,7 @@ class AuctionController extends Controller
      * Display the specified resource.
      *
      * @param \App\Models\Auction $auction
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show(Auction $auction)
     {
@@ -159,7 +168,7 @@ class AuctionController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param \App\Models\Auction $auction
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit(Auction $auction)
     {
@@ -180,15 +189,15 @@ class AuctionController extends Controller
         abort_if($auction->is_active == null, 422, 'This auction was deactivated.');
 
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string',
-            'seller' => 'required|string',
+            'title' => 'required|string|min:3|max:128',
+            'seller' => 'required|string|min:3|max:32',
             'buyout' => 'required|numeric|gt:0',
             'start_datetime' => 'required|date',
             'end_datetime' => 'required|date|after:start_datetime',
-            'title_item' => 'required|min:6|max:64',
-            'description' => 'required|string',
-            'category' => 'required|string|exists:categories,name',
-            'condition' => 'required|string|exists:conditions,name',
+            'title_item' => 'required|min:3|max:64',
+            'description' => 'required|string|min:3|max:500',
+            'category' => 'required|string|max:64|exists:categories,name',
+            'condition' => 'required|string|max:32|exists:conditions,name',
             'warehouse_id' => 'required|integer|exists:warehouses,id',
         ]);
 

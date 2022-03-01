@@ -20,7 +20,6 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * The attributes that are mass assignable.
-     *
      * @var array<int, string>
      */
     protected $fillable = [
@@ -39,7 +38,6 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * The attributes that should be hidden for serialization.
-     *
      * @var array<int, string>
      */
     protected $hidden = [
@@ -57,7 +55,10 @@ class User extends Authenticatable implements JWTSubject
         'is_active' => 'boolean',
     ];
 
-    // Custom action used to find active roles that represent authenticated User
+    /**
+     * Custom action used to find active roles that represent authenticated User.
+     * @return array
+     */
     public static function getUserRoles()
     {
         $roles = DB::table('user_roles')
@@ -73,7 +74,6 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
-     *
      * @return mixed
      */
     public function getJWTIdentifier()
@@ -83,7 +83,6 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Return a key value array, containing any custom claims to be added to the JWT.
-     *
      * @return array
      */
     public function getJWTCustomClaims()
