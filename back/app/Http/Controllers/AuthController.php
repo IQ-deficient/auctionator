@@ -172,8 +172,8 @@ class AuthController extends Controller
         // todo: This will also be used as edit profile for Clients
         $validator = Validator::make($request->all(), [
             // Here we make sure that if User enters a different username, only then it is checked to be unique on users table
-            'username' => ['required', 'string', Rule::when($request->username != $user->username, 'unique:users')],
-            'password' => 'required|string|confirmed',
+            'username' => ['required', 'string', 'min:3', 'min:32', Rule::when($request->username != $user->username, 'unique:users')],
+            'password' => 'required|string|confirmed|min:8|max|128',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'email' => ['required', 'email:rfc,dns', Rule::when($request->email != $user->email, 'unique:users')],
