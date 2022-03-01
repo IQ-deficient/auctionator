@@ -231,6 +231,14 @@ class CategorySeeder extends Seeder
                 'is_active' => true,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            ],
+            [
+                'id' => 28,
+                'name' => 'Misc.',
+                'master_category_id' => 27,
+                'is_active' => true,
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ]
         ];
 

@@ -5,16 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\CategoryCondition;
 use App\Http\Requests\StoreCategoryConditionRequest;
 use App\Http\Requests\UpdateCategoryConditionRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class CategoryConditionController extends Controller
 {
 
+    /**
+     * This method should be used to return all active conditions that exist for the requested core category
+     * @param Request $request
+     * @return JsonResponse|Collection
+     */
     public function getConditionsForCategory(Request $request)
     {
-        // This method should be used to return all active conditions that exist for the requested category
         $validator = Validator::make($request->all(), [
             'category' => 'required|exists:categories,name'
         ]);
@@ -44,12 +50,10 @@ class CategoryConditionController extends Controller
         return DB::table('category_conditions')
             ->where('category', $parent_category)
             ->pluck('condition');
-
     }
 
     /**
      * Display a listing of the resource.
-     *
      * @return \Illuminate\Http\Response
      */
     public function index()
@@ -59,7 +63,6 @@ class CategoryConditionController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
      * @return \Illuminate\Http\Response
      */
     public function create()
@@ -69,7 +72,6 @@ class CategoryConditionController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
      * @param \App\Http\Requests\StoreCategoryConditionRequest $request
      * @return \Illuminate\Http\Response
      */
@@ -80,7 +82,6 @@ class CategoryConditionController extends Controller
 
     /**
      * Display the specified resource.
-     *
      * @param \App\Models\CategoryCondition $categoryCondition
      * @return \Illuminate\Http\Response
      */
@@ -91,7 +92,6 @@ class CategoryConditionController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
      * @param \App\Models\CategoryCondition $categoryCondition
      * @return \Illuminate\Http\Response
      */
@@ -102,7 +102,6 @@ class CategoryConditionController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
      * @param \App\Http\Requests\UpdateCategoryConditionRequest $request
      * @param \App\Models\CategoryCondition $categoryCondition
      * @return \Illuminate\Http\Response
@@ -114,7 +113,6 @@ class CategoryConditionController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
      * @param \App\Models\CategoryCondition $categoryCondition
      * @return \Illuminate\Http\Response
      */
