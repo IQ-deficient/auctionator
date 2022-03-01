@@ -36,7 +36,7 @@ class CategoryConditionController extends Controller
             ->first();
 
         $parent_category = DB::table('categories')
-            ->where('is_active' , true)
+            ->where('is_active', true)
             ->where('id', $category->master_category_id)
             ->pluck('name');
 
