@@ -23,6 +23,11 @@ class CategoryController extends Controller
         return Category::where('is_active', true)->get();
     }
 
+    public function getSubCategories()
+    {
+        return Category::where('is_active', true)->whereNotNull('master_category_id')->get();
+    }
+
     /**
      * Show the form for creating a new resource.
      *

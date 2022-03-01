@@ -20,7 +20,7 @@
             </div>
 <!--            <a href="#" style="text-decoration: none"></a>-->
             <v-dialog
-                transition="dialog-top-transition"
+                transition="scale-transition"
                 max-width="35%"
             >
               <template v-slot:activator="{ on, attrs }">
@@ -437,8 +437,6 @@ export default {
   },
 
 }
-
-
 
 </script>
 

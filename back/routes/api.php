@@ -69,6 +69,8 @@ Route::get('/bids', [BidController::class, 'index']);
 // Categories
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/active_categories', [CategoryController::class, 'getActive']);
+Route::get('/subcategories', [CategoryController::class, 'getSubCategories']);
+
 
 // CategoryCondition
 Route::post('/category_conditions', [CategoryConditionController::class, 'getConditionsForCategory']);

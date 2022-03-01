@@ -43,6 +43,7 @@ class Auction extends Model
     protected $with = [
         'item',
         'bid',
+        'user'
     ];
 
 //    public function getFullNameAttribute()
@@ -58,6 +59,11 @@ class Auction extends Model
     public function bid()
     {
         return $this->belongsTo('App\Models\Bid', 'bid_id', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User', 'user_id', 'id');
     }
 
     protected function serializeDate(DateTimeInterface $date)
