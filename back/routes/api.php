@@ -100,9 +100,10 @@ Route::get('/roles', [RoleController::class, 'index']);
 // Statuses
 Route::get('/statuses', [StatusController::class, 'index']);
 
-// Users (Manager & Admin)
+// Users
 Route::get('/users', [AuthController::class, 'index']);
-Route::put('/users/{user}', [AuthController::class, 'update']);
+Route::put('/users/{user}', [AuthController::class, 'update']);     // update all data but password
+Route::put('/change_password/{user}', [AuthController::class, 'changePassword']);       // update password
 Route::delete('/users/{user}', [AuthController::class, 'destroy']);
 
 // UserRoles

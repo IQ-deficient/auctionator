@@ -10,6 +10,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -87,7 +88,7 @@ class AuthController extends Controller
         $active_user = DB::table('users')
             ->where('email', $request->email)
             ->first();
-        abort_if($active_user->is_active != 1, '421', 'This user is inactive!');
+        abort_if($active_user->is_active != 1, 403, 'This user is inactive!');
 
         return $this->createNewToken($token);
     }
@@ -95,11 +96,13 @@ class AuthController extends Controller
     /**
      * Register a User.
      * @return JsonResponse
+     * @throws ValidationException
      */
     public function register(Request $request)
     {
         // todo: this api will be also used by admins to make accounts for employees
         $validator = Validator::make($request->all(), [
+            // we can use validation from update
             'name' => 'required|string|between:2,100',
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|confirmed|min:6',
@@ -161,7 +164,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource data in storage.
      * @param Request $request
      * @param User $user
      * @return mixed
@@ -172,16 +175,16 @@ class AuthController extends Controller
         // todo: This will also be used as edit profile for Clients
         $validator = Validator::make($request->all(), [
             // Here we make sure that if User enters a different username, only then it is checked to be unique on users table
-            'username' => ['required', 'string', 'min:3', 'min:32', Rule::when($request->username != $user->username, 'unique:users')],
-            'password' => 'required|string|confirmed|min:8|max|128',
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'email' => ['required', 'email:rfc,dns', Rule::when($request->email != $user->email, 'unique:users')],
+            'username' => ['required', 'string', 'min:3', 'max:32', Rule::when($request->username != $user->username, 'unique:users')],
+//            'password' => 'required|string|confirmed|min:8|max:128',
+            'first_name' => 'required|string|min:1|max:32',
+            'last_name' => 'required|string|min:1|max:32',
+            'email' => ['required', 'email:rfc,dns', 'min:10', 'max:254', Rule::when($request->email != $user->email, 'unique:users')],
             'phone_number' => ['required', 'digits_between:6,15', Rule::when($request->phone_number != $user->phone_number, 'unique:users')],
-            'gender' => 'nullable|string|exists:genders,name',
-            'country' => 'nullable|string|exists:countries,name',
+            'gender' => 'nullable|string|max:32|exists:genders,name',
+            'country' => 'nullable|string|max:32|exists:countries,name',
             'birthdate' => 'nullable|date',
-//            'image' => 'required|integer|exists:warehouses,id'
+//            'image' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -191,7 +194,7 @@ class AuthController extends Controller
         // Updating username here will result in cascading update of username in child rows because of onUpdate in migrations
         $user->update([
             'username' => $request->username,
-            'password' => bcrypt($request->password),
+//            'password' => bcrypt($request->password),
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
@@ -200,6 +203,35 @@ class AuthController extends Controller
             'country' => $request->country,
             'birthdate' => $request->birthdate,     // todo: test if updating birthdate works (should work)
 //            'image' => $request->image,
+            'updated_at' => Carbon::now()
+        ]);
+
+        return User::where('id', $user->id)->first();
+    }
+
+    /**
+     * Update the specified Users' password using old password confirmation.
+     * @param Request $request
+     * @param User $user
+     * @return mixed
+     */
+    public function changePassword(Request $request, User $user)
+    {
+        $validator = Validator::make($request->all(), [
+            'old_password' => 'required|min:8|max:128',
+            'password' => 'required|string|confirmed|min:8|max:128'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        // Old password from input must be same as the one already in database for change to occur
+        abort_if(!Hash::check($request->old_password, $user->password), 400, 'Old password is not correct.');
+
+        // Change the user password into hashed value and return User object
+        $user->update([
+            'password' => bcrypt($request->password),
             'updated_at' => Carbon::now()
         ]);
 

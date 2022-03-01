@@ -184,7 +184,7 @@ class AuctionController extends Controller
     public function update(Request $request, Auction $auction)
     {
         // Only the auction without a bid can be changed for certain parameters
-        abort_if($auction->bid_id != null, 412, 'Only auctions with no bid can be altered.');
+        abort_if($auction->bid_id != null, 422, 'Only auctions with no bid can be altered.');
         // Deactivated auctions are no longer eligible for change
         abort_if($auction->is_active == null, 422, 'This auction was deactivated.');
 
