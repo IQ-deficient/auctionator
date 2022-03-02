@@ -62,6 +62,29 @@ class CategoryController extends Controller
     }
 
     /**
+     * Get and format all categories to display in Menu.
+     * @return Collection
+     */
+    public function getMenu()
+    {
+        // First, drag out all master (parent) categories
+        $parents = DB::table('categories')
+            ->where('is_active', true)
+            ->where('master_category_id', null)
+            ->get();
+
+        // Go through each object in masters array and add reference to an array of children for that core category
+        foreach ($parents as $parent) {
+            $children = DB::table('categories')
+                ->where('is_active', true)
+                ->where('master_category_id', $parent->id)
+                ->get();
+            $parent->subcategories = $children;
+        }
+        return $parents;
+    }
+
+    /**
      * Display a listing of the resource.
      * @return Response
      */
