@@ -63,7 +63,7 @@ class AuctionController extends Controller
         return Auction::where([
             ['is_active', true],
             ['id', $request->id]
-        ])->get();
+        ])->first();
     }
 
     /**
@@ -73,6 +73,11 @@ class AuctionController extends Controller
      */
     public function getFiltered(Request $request)
     {
+        // BIG TODO: MANAGE HOW WE WILL HANDLE AUCTIONS THAT ARE FINISHED ONCE THE TIMER RUNS OUT
+        // basically every time we return auctions, check if any are expired and manage them??? i guess
+        // while returning auctions for clients check if they have run out of time and dont show those
+        // also dont show ones that have not yet been initiated (queued)
+
         // todo: we will never be returning all auctions to customers, rather only the ones corresponding to certain category
         // using query builder instead of eloquent for this is probably a must for longevity (and other stuff)
 

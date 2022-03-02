@@ -197,6 +197,7 @@ class AuthController extends Controller
          */
         // todo: validate if the auth user has required roles to perform this action (this goes for other stuff asw but alas)
         // todo: This will also be used as edit profile for Clients
+        // TODO: We should probably make it available for admin to alter the roles for select users (and select multiple)
         $validator = Validator::make($request->all(), [
             // Here we make sure that if User enters a different username, only then it is checked to be unique on users table
             'username' => ['required', 'string', 'between:3,32', Rule::when($request->username != $user->username, 'unique:users')],

@@ -64,6 +64,7 @@ Route::delete('/auctions/{auction}', [AuctionController::class, 'destroy']);
 Route::get('/filtered_auctions', [AuctionController::class, 'getFiltered']);
 
 // Bids
+Route::post('/bids', [BidController::class, 'store']);
 Route::get('/bids', [BidController::class, 'index']);
 
 // Categories

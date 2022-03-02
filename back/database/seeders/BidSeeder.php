@@ -27,7 +27,7 @@ class BidSeeder extends Seeder
             [
                 'id' => 2,
                 'value' => 0.75,
-                'username' => 'mirko',
+                'username' => 'lazar.123',
                 'is_active' => true,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),

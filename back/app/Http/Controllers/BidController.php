@@ -2,16 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Auction;
 use App\Models\Bid;
 use App\Http\Requests\StoreBidRequest;
 use App\Http\Requests\UpdateBidRequest;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class BidController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -26,7 +35,7 @@ class BidController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -34,23 +43,79 @@ class BidController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreBidRequest  $request
-     * @return \Illuminate\Http\Response
+     * Store a newly created Bid instance in storage referencing a given Auction.
+     * @param Request $request
+     * @return Response|JsonResponse
      */
-    public function store(StoreBidRequest $request)
+    public function store(Request $request)
     {
-        // abort if the auction is no longer biddable (preventive)
-        // Once there is a new bid for a certain auction, the previous bid for the same should be deactivated
-        // New bid must be bigger than the previous one for that auction
+        $validator = Validator::make($request->all(), [
+            'auction_id' => 'required|integer|exists:auctions,id',
+            'value' => 'required|numeric'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $roles = User::getUserRoles();
+
+        // Check if the currently authenticated user is registered as Client
+        abort_if(!in_array('Client', $roles), 403, 'Only Clients are allowed to place bids.');
+
+        // Get Auction Model Object that is active
+        $auction = Auction::where([
+            ['is_active', true],
+            ['id', $request->auction_id]
+        ])->first();
+//        DB::table('auctions')
+//            ->where('is_active', true)
+//            ->where('id', $request->auction_id)
+//            ->first();
+
+        // In case there is an attempt to bid on the unbindable auction, cancel further actions
+        // Since we only work with is_active==true entities here, there is no reason to check for that
+        $no_bid_statuses = ['Expired', 'Sold', 'N/A'];
+        abort_if(in_array($auction->status, $no_bid_statuses), 410, 'This auction is no longer eligible for bids.');
+
+        // Client should not be able to bid with value higher than one of the auction buyout as that really just makes buyout irrelevant
+        abort_if($request->value >= $auction->buyout, 400, "The bid value can't be greater than the buyout value.");
+
+        // When there is already existent bid_id for auction in question apply the following validations
+        if ($auction->bid_id) {
+            // Check if the input bid value is lower or equal to current bid value for this auction
+            abort_if($request->value <= $auction->bid->value, 400, "New bid value must be greater than current one.");
+            // When we clear out that we have a greater new value, we should invalidate the previous (current) bid
+            DB::table('bids')
+                ->where('is_active', true)
+                ->where('id', $auction->bid_id)
+                ->update([
+                    'is_active' => false,
+                    'updated_at' => Carbon::now()
+                ]);
+        }
+
+        // Make a new bid instance with input values and authenticated user (client)
+        $bid = Bid::create([
+            'value' => $request->value,
+            'username' => Auth::user()->username,
+        ]);
+
+        // Alter the auction we are bidding on with freshly created Bid and status
+        $auction->update([
+            'bid_id' => $bid->id,
+            'status' => 'Ongoing',
+            'updated_at' => Carbon::now()
+        ]);
+
+        return Bid::where('id', $bid->id)->first();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Bid  $bid
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Bid $bid
+     * @return Response
      */
     public function show(Bid $bid)
     {
@@ -60,8 +125,8 @@ class BidController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Bid  $bid
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Bid $bid
+     * @return Response
      */
     public function edit(Bid $bid)
     {
@@ -71,9 +136,9 @@ class BidController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateBidRequest  $request
-     * @param  \App\Models\Bid  $bid
-     * @return \Illuminate\Http\Response
+     * @param \App\Http\Requests\UpdateBidRequest $request
+     * @param \App\Models\Bid $bid
+     * @return Response
      */
     public function update(UpdateBidRequest $request, Bid $bid)
     {
@@ -83,8 +148,8 @@ class BidController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Bid  $bid
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Bid $bid
+     * @return Response
      */
     public function destroy(Bid $bid)
     {

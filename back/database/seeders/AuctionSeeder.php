@@ -33,7 +33,7 @@ class AuctionSeeder extends Seeder
             ],
             [
                 'id' => 2,
-                'title' => 'Slava mu i milos, spokoj mu dusi',
+                'title' => 'Slava mu i milost, spokoj mu dusi',
                 'seller' => 'Saban Saulic',
                 'item_id' => 2,
                 'bid_id' => null,
