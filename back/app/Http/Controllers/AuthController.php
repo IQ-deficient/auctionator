@@ -73,7 +73,7 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email:rfc,dns',
-            'password' => 'required|string|min:1',
+            'password' => 'required|string|between:8,128',
         ]);
 
         if ($validator->fails()) {
@@ -100,22 +100,37 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        // todo: this api will be also used by admins to make accounts for employees
+        // todo: this api will be also used by admins to make accounts for employees (how dfq do we do dis)
         $validator = Validator::make($request->all(), [
-            // we can use validation from update
-            'name' => 'required|string|between:2,100',
-            'email' => 'required|string|email|max:100|unique:users',
-            'password' => 'required|string|confirmed|min:6',
+            'username' => ['required', 'string', 'min:3', 'max:32', 'unique:users,username'],
+            /**
+             * The hash should always be 60 characters long, no matter what you input as the password.
+             * You can have a 500-character paragraph as a password, but when hashed, it will always be 60 characters long.
+             * Thus, it will be completely right to store the 128 character password.
+             */
+            'password' => 'required|string|confirmed|min:8|max:128',
+            'first_name' => 'required|string|between:1,32',
+            'last_name' => 'required|string|between:1,32',
+            'email' => ['required', 'email:rfc,dns', 'min:10', 'max:254', 'unique:users,email'],
+            'phone_number' => ['required', 'digits_between:6,15', 'unique:users,phone_number'],
+//            'gender' => 'nullable|string|max:32|exists:genders,name',
+            'country' => 'nullable|string|max:32|exists:countries,name',
+            'birthdate' => 'nullable|date',
+//            'image' => 'required'
         ]);
+
         if ($validator->fails()) {
-            return response()->json($validator->errors()->toJson(), 400);
+//            return response()->json($validator->errors()->toJson(), 400);
+            return response()->json($validator->errors(), 400);
         }
+
         $user = User::create(array_merge(
             $validator->validated(),
             ['password' => bcrypt($request->password)]
         ));
+
         return response()->json([
-            'message' => 'User successfully registered',
+            'message' => 'User successfully registered.',
             'user' => $user
         ], 201);
     }
@@ -171,15 +186,24 @@ class AuthController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        /**
+         * between:min,max -> The field under validation must have a size between the given min and max.
+         * Strings, numerics, arrays, and files are evaluated in the same fashion as the size rule.
+         * size:value -> The field under validation must have a size matching the given value.
+         * For string data, value corresponds to the number of characters.
+         * For numeric data, value corresponds to a given integer value.
+         * For an array, size corresponds to the count of the array.
+         * For files, size corresponds to the file size in kilobytes.
+         */
         // todo: validate if the auth user has required roles to perform this action (this goes for other stuff asw but alas)
         // todo: This will also be used as edit profile for Clients
         $validator = Validator::make($request->all(), [
             // Here we make sure that if User enters a different username, only then it is checked to be unique on users table
-            'username' => ['required', 'string', 'min:3', 'max:32', Rule::when($request->username != $user->username, 'unique:users')],
+            'username' => ['required', 'string', 'between:3,32', Rule::when($request->username != $user->username, 'unique:users')],
 //            'password' => 'required|string|confirmed|min:8|max:128',
-            'first_name' => 'required|string|min:1|max:32',
-            'last_name' => 'required|string|min:1|max:32',
-            'email' => ['required', 'email:rfc,dns', 'min:10', 'max:254', Rule::when($request->email != $user->email, 'unique:users')],
+            'first_name' => 'required|string|between:1,32',
+            'last_name' => 'required|string|between:1,32',
+            'email' => ['required', 'email:rfc,dns', 'between:10,254', Rule::when($request->email != $user->email, 'unique:users')],
             'phone_number' => ['required', 'digits_between:6,15', Rule::when($request->phone_number != $user->phone_number, 'unique:users')],
             'gender' => 'nullable|string|max:32|exists:genders,name',
             'country' => 'nullable|string|max:32|exists:countries,name',
@@ -218,8 +242,8 @@ class AuthController extends Controller
     public function changePassword(Request $request, User $user)
     {
         $validator = Validator::make($request->all(), [
-            'old_password' => 'required|min:8|max:128',
-            'password' => 'required|string|confirmed|min:8|max:128'
+            'old_password' => 'required|between:8,128',
+            'password' => 'required|string|confirmed|between:8,128'
         ]);
 
         if ($validator->fails()) {
@@ -244,6 +268,7 @@ class AuthController extends Controller
      */
     public function destroy(User $user)
     {
+        //TODO: what happens with disabled users' assets???
         $user->update([
             'is_active' => !$user->is_active,
         ]);

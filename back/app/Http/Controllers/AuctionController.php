@@ -109,13 +109,13 @@ class AuctionController extends Controller
         // todo: also functions that define which auctions can be seen by which users depending on 'status'
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|min:3|max:128',
-            'seller' => 'required|string|min:3|max:32',
+            'title' => 'required|string|between:3,12',
+            'seller' => 'required|string|between:3,32',
             'buyout' => 'required|numeric|gt:0',    // x.xx > 0
             'start_datetime' => 'required|date',
             'end_datetime' => 'required|date|after:start_datetime',     // end date_time must be greater than start dt
-            'title_item' => 'required|min:3|max:64',
-            'description' => 'required|string|min:3|max:500',
+            'title_item' => 'required|between:3,64',
+            'description' => 'required|string|between:3,500',
             'category' => 'required|string|max:64|exists:categories,name',
             'condition' => 'required|string|max:32|exists:conditions,name', // condition is based on category
             'warehouse_id' => 'required|integer|exists:warehouses,id',
@@ -189,13 +189,13 @@ class AuctionController extends Controller
         abort_if($auction->is_active == null, 422, 'This auction was deactivated.');
 
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|min:3|max:128',
-            'seller' => 'required|string|min:3|max:32',
+            'title' => 'required|string|between:3,128',
+            'seller' => 'required|string|between:3,32',
             'buyout' => 'required|numeric|gt:0',
             'start_datetime' => 'required|date',
             'end_datetime' => 'required|date|after:start_datetime',
-            'title_item' => 'required|min:3|max:64',
-            'description' => 'required|string|min:3|max:500',
+            'title_item' => 'required|between:3,64',
+            'description' => 'required|string|between:3,500',
             'category' => 'required|string|max:64|exists:categories,name',
             'condition' => 'required|string|max:32|exists:conditions,name',
             'warehouse_id' => 'required|integer|exists:warehouses,id',
