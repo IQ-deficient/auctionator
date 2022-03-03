@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import Login from "../views/Login.vue";
 import Register from "../views/Register";
 import AdminAuction from "../views/AdminAuction";
+import AdminUser from "../views/AdminUser";
 import UserProfile from "../views/UserProfile";
 
 Vue.use(VueRouter)
@@ -26,7 +27,8 @@ const routes = [
   {path: '/login', name: 'Login', component: Login},
   {path: '/register', name: 'Register', component: Register},
   {path: '/admin-auction', name: 'AdminAuction', component: AdminAuction},
-  {path: '/user-profile', name: 'UserProfile', component: UserProfile}
+  {path: '/admin-user', name: 'AdminUser', component: AdminUser},
+  {path: '/user-profile', name: 'UserProfile', component: UserProfile},
 ]
 
 const router = new VueRouter({
