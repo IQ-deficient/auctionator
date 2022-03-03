@@ -677,10 +677,10 @@ export default {
           })
     },
     getStatuses() {
-      axios.get('/statuses')
+      axios.get('/roles')
           .then(response => {
             if (response.data) {
-              this.statuses = response.data
+              this.roles = response.data
             }
           })
           .catch(error => {
