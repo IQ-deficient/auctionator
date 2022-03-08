@@ -114,7 +114,7 @@ class AuctionController extends Controller
         // todo: also functions that define which auctions can be seen by which users depending on 'status'
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|between:3,12',
+            'title' => 'required|string|between:3,128',
             'seller' => 'required|string|between:3,32',
             'buyout' => 'required|numeric|gt:0',    // x.xx > 0
             'start_datetime' => 'required|date',
@@ -160,13 +160,12 @@ class AuctionController extends Controller
 
     /**
      * Display the specified resource.
-     *
      * @param \App\Models\Auction $auction
-     * @return Response
+     * @return Auction
      */
     public function show(Auction $auction)
     {
-        //
+        return $auction;
     }
 
     /**

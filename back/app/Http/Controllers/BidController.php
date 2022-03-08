@@ -81,7 +81,7 @@ class BidController extends Controller
         // Client should not be able to bid with value higher than one of the auction buyout as that really just makes buyout irrelevant
         abort_if($request->value >= $auction->buyout, 400, "The bid value can't be greater than the buyout value.");
 
-        // When there is already existent bid_id for auction in question apply the following validations
+        // When there is already existent bid_id for auction in question apply the following actions
         if ($auction->bid_id) {
             // Check if the input bid value is lower or equal to current bid value for this auction
             abort_if($request->value <= $auction->bid->value, 400, "New bid value must be greater than current one.");

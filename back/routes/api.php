@@ -55,22 +55,22 @@ Route::group([
 //  TODO: appropriate middleware for routes (some must require being authenticated)
 
 // Auctions
-Route::post('/auctions', [AuctionController::class, 'store']);
+Route::post('/auction', [AuctionController::class, 'store']);
 Route::get('/auctions', [AuctionController::class, 'index']);
 Route::get('/active_auctions', [AuctionController::class, 'getActive']);
-Route::get('/auction_by_id', [AuctionController::class, 'getById']);
-Route::put('/auctions/{auction}', [AuctionController::class, 'update']);
-Route::delete('/auctions/{auction}', [AuctionController::class, 'destroy']);
-Route::get('/filtered_auctions', [AuctionController::class, 'getFiltered']);
+Route::get('/auction/{auction}', [AuctionController::class, 'show']);       // Show one specific Auction by ID
+Route::put('/auction/{auction}', [AuctionController::class, 'update']);
+Route::delete('/auction/{auction}', [AuctionController::class, 'destroy']);
+Route::get('/filtered_auctions', [AuctionController::class, 'getFiltered']);    //TODO: this shall be discussed
 
 // Bids
-Route::post('/bids', [BidController::class, 'store']);
+Route::post('/bid', [BidController::class, 'store']);      // Placing a Bid on the Auction
 Route::get('/bids', [BidController::class, 'index']);
 
 // Categories
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/active_categories', [CategoryController::class, 'getActive']);
-Route::get('/menu', [CategoryController::class, 'getMenu']);        // All categories formatted for Menu
+Route::get('/menu_categories', [CategoryController::class, 'getMenuCategories']);        // All categories formatted for Menu
 Route::get('/parent_categories', [CategoryController::class, 'getParentCategories']);       // core categories
 Route::post('/child_categories_conditions', [CategoryController::class, 'getChildCategoriesAndConditions']);
 //Route::get('/subcategories', [CategoryController::class, 'getSubCategories']);
@@ -105,19 +105,19 @@ Route::get('/statuses', [StatusController::class, 'index']);
 
 // Users
 Route::get('/users', [AuthController::class, 'index']);
-Route::put('/users/{user}', [AuthController::class, 'update']);     // update all data but password
+Route::put('/user/{user}', [AuthController::class, 'update']);     // update all data but password
 Route::put('/change_password/{user}', [AuthController::class, 'changePassword']);       // update password
-Route::delete('/users/{user}', [AuthController::class, 'destroy']);
+Route::delete('/user/{user}', [AuthController::class, 'destroy']);
 
 // UserRoles
 Route::get('/user_roles', [UserRoleController::class, 'index']);
 
 // Warehouses (Admin)
-Route::post('/warehouses', [WarehouseController::class, 'store']);
+Route::post('/warehouse', [WarehouseController::class, 'store']);
 Route::get('/warehouses', [WarehouseController::class, 'index']);
 Route::get('/active_warehouses', [WarehouseController::class, 'getActive']);
-Route::put('/warehouses/{warehouse}', [WarehouseController::class, 'update']);
-Route::delete('/warehouses/{warehouse}', [WarehouseController::class, 'destroy']);
+Route::put('/warehouse/{warehouse}', [WarehouseController::class, 'update']);
+Route::delete('/warehouse/{warehouse}', [WarehouseController::class, 'destroy']);
 
 
 

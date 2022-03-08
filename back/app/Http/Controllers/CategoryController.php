@@ -65,7 +65,7 @@ class CategoryController extends Controller
      * Get and format all categories to display in Menu.
      * @return Collection
      */
-    public function getMenu()
+    public function getMenuCategories()
     {
         // First, drag out all master (parent) categories
         $parents = DB::table('categories')
