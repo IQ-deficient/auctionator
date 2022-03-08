@@ -156,6 +156,7 @@ class AuctionController extends Controller
         ]);
 
         return Auction::where('id', $auction->id)->first();
+//        return $auction;
     }
 
     /**

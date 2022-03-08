@@ -54,6 +54,7 @@ Route::group([
 });
 //  TODO: appropriate middleware for routes (some must require being authenticated)
 
+// TODO: Middleware for Auctions to fiddle with expiry date validations and actions (Expired & Sold) ! ! !
 // Auctions
 Route::post('/auction', [AuctionController::class, 'store']);
 Route::get('/auctions', [AuctionController::class, 'index']);
@@ -89,7 +90,12 @@ Route::get('/countries', [CountryController::class, 'index']);
 Route::get('/genders', [GenderController::class, 'index']);
 
 // Histories
+Route::post('/history', [HistoryController::class, 'store']);   // buyout
 Route::get('/histories', [HistoryController::class, 'index']);
+Route::get('/user_histories', [HistoryController::class, 'getHistoriesForUser']);   // Auth User history
+Route::get('/history/{history}', [HistoryController::class, 'show']);
+//Route::put('/history/{history}', [HistoryController::class, 'update']);
+//Route::delete('/history/{history}', [HistoryController::class, 'destroy']);
 
 // Images
 Route::get('/images', [ImageController::class, 'index']);
@@ -107,7 +113,7 @@ Route::get('/statuses', [StatusController::class, 'index']);
 Route::get('/users', [AuthController::class, 'index']);
 Route::put('/user/{user}', [AuthController::class, 'update']);     // update all data but password
 Route::put('/change_password/{user}', [AuthController::class, 'changePassword']);       // update password
-Route::delete('/user/{user}', [AuthController::class, 'destroy']);
+Route::delete('/user/{user}', [AuthController::class, 'destroy']);      // deactivate user
 
 // UserRoles
 Route::get('/user_roles', [UserRoleController::class, 'index']);

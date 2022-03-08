@@ -60,7 +60,7 @@ class BidController extends Controller
 
         $roles = User::getUserRoles();
 
-        // Check if the currently authenticated user is registered as Client
+        // Check if the currently authenticated user is registered as Client    // todo: middleware?
         abort_if(!in_array('Client', $roles), 403, 'Only Clients are allowed to place bids.');
 
         // Get Auction Model Object that is active
@@ -113,7 +113,6 @@ class BidController extends Controller
 
     /**
      * Display the specified resource.
-     *
      * @param \App\Models\Bid $bid
      * @return Response
      */
