@@ -1,21 +1,21 @@
 <template>
   <div>
-<!--    Globalni tag navigacione trake -->
+    <!--    Globalni tag navigacione trake -->
     <v-toolbar
         light
         color="tertiary"
         height="75"
     >
-<!--      Fioka sa elementima kategorija i potkategorija-->
+      <!--      Fioka sa elementima kategorija i potkategorija-->
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" style="color: black; margin-left: 10px"></v-app-bar-nav-icon>
       <router-link to="/home">
-<!--        Logo aplikacije sa likom na /home-->
+        <!--        Logo aplikacije sa likom na /home-->
         <v-img src="../assets/architecture icon.svg"
-
                style="margin-left: 28px"
                max-height="60px"
                max-width="60px"
-        ></v-img></router-link>
+        ></v-img>
+      </router-link>
 
       <v-divider id="divider" vertical style="margin-left: 28px; border-right: 2px solid black"></v-divider>
 
@@ -36,7 +36,7 @@
         </v-btn>
       </router-link>
 
-<!--      Korisnikov avatar koji otvara funkcije odjavljivanja i azuriranja naloga-->
+      <!--      Korisnikov avatar koji otvara funkcije odjavljivanja i azuriranja naloga-->
       <v-speed-dial
           v-model="fab"
           :top="top"
@@ -71,20 +71,20 @@
           <v-icon>mdi-logout-variant</v-icon>
         </v-btn>
         <router-link to="/user-profile">
-        <v-btn
-            fab
-            dark
-            small
-            color="primary"
-        >
-          <v-icon>mdi-account-details</v-icon>
-        </v-btn>
+          <v-btn
+              fab
+              dark
+              small
+              color="primary"
+          >
+            <v-icon>mdi-account-details</v-icon>
+          </v-btn>
         </router-link>
       </v-speed-dial>
     </v-toolbar>
 
-<!--    Globalni tag fioke sa elementima kategorija i potkategorija-->
-    <v-navigation-drawer style="width: min-content"
+    <!------- Globalni tag fioke sa elementima kategorija i potkategorija ------->
+    <v-navigation-drawer style="min-width: 25%; width: fit-content"
                          v-model="drawer"
                          absolute
                          bottom
@@ -92,7 +92,6 @@
                          light
                          color="tertiary"
     >
-
       <v-list-item class="primary" style="height: 75px" dark>
         <v-list-item-content>
           <v-list-item-title class="text-h5" style="">
@@ -106,67 +105,66 @@
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
       </v-list-item>
+
       <v-list
           nav
           dense
       >
-        <v-list-item-group align="left"
-            v-model="group"
-            light
+<!--        <v-subheader>REPORTS</v-subheader>-->
+<!--        <v-list-item-group align="left"-->
+<!--                           v-model="selectedCategory"-->
+<!--                           light-->
+<!--        >-->
+<!--          <v-list-group-->
+<!--              :value="false"-->
+<!--              no-action-->
+<!--              sub-group>-->
+<!--            <template v-slot:activator>-->
+<!--              <v-list-item-content>-->
+<!--                <v-list-item-title id="category" class="text-h6" style="width: 240px">el</v-list-item-title>-->
+<!--              </v-list-item-content>-->
+<!--            </template>-->
+<!--            <v-list-item-->
+<!--                v-for="([title], i) in subcategories"-->
+<!--                :key="i"-->
+<!--                link-->
+<!--            >-->
+<!--              <v-list-item-title v-text="title" style="font-size: 15px"></v-list-item-title>-->
+<!--            </v-list-item>-->
+<!--          </v-list-group>-->
+<!--        </v-list-item-group>-->
+
+        <v-treeview
+        v-model="selectedCategory"
+        :open="false"
+        :items="categories"
+        activatable
+        item-key="name"
+        open-on-click
+        hoverable
+        transition
         >
-          <v-list-group
-              :value="false"
-              no-action
-              sub-group>
-            <template v-slot:activator>
-              <v-list-item-content>
-                <v-list-item-title class="text-h6" style="width: 240px">Electronics</v-list-item-title>
-              </v-list-item-content>
-            </template>
-            <v-list-item
-                v-for="([title], i) in electronics"
-                :key="i"
-                link
-            >
-              <v-list-item-title v-text="title" style="font-size: 15px"></v-list-item-title>
-            </v-list-item>
-          </v-list-group>
-
-          <v-divider style="margin-top: 8px"> </v-divider>
-
-          <v-list-group style="margin-top: 8px"
-                        :value="false"
-                        no-action
-                        sub-group>
-            <template v-slot:activator>
-              <v-list-item-content>
-                <v-list-item-title class="text-h6">Books, Movies & Music</v-list-item-title>
-              </v-list-item-content>
-            </template>
-            <v-list-item
-                v-for="([title, icon], i) in collectiblesandart"
-                :key="i"
-                link
-            >
-              <v-list-item-title v-text="title" style="font-size: 15px"></v-list-item-title>
-
-              <v-list-item-icon>
-                <v-icon v-text="icon"></v-icon>
-              </v-list-item-icon>
-            </v-list-item>
-          </v-list-group>
-        </v-list-item-group>
+<!--        <template v-slot:prepend="{ item, open }">-->
+<!--          <v-icon v-if="!item.file">-->
+<!--            {{ open ? 'mdi-folder-open' : 'mdi-folder' }}-->
+<!--          </v-icon>-->
+<!--          <v-icon v-else>-->
+<!--            {{ files[item.file] }}-->
+<!--          </v-icon>-->
+<!--        </template>-->
+        </v-treeview>
       </v-list>
 
-      <v-divider style="margin-bottom: 15px"> </v-divider>
 
     </v-navigation-drawer>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
-name: "Navbar",
+  name: "Navbar",
   data: () => ({
     drawer: false,
     group: null,
@@ -180,37 +178,62 @@ name: "Navbar",
     bottom: false,
     left: false,
     transition: 'slide-x-reverse-transition',
-    electronics: [
-      ['All'],
-      ['Computers, Tablets & Network Hardware'],
-      ['Cell Phones, Smart Watches & Accessories'],
-      ['TV, Video & Home Audio Electronics'],
-      ['Surveillance & Smart Home Electronics'],
-      ['Video Games & Consoles'],
-    ],
-    collectiblesandart: [
-      ['All'],
-      ['Collectibles'],
-      ['Sports Memorabilia, Fan Shop & Sports Cards'],
-      ['Antiques'],
-      ['Pottery & Glass'],
-      ['Art'],
-    ],
+    selectedCategory: [],
+    categories: [],
+    subcategories: [],
   }),
+
+  created() {
+    this.getCategories()
+  },
+
+  methods: {
+    getCategories() {
+      this.categories = []
+      axios.get('/menu_categories')
+          .then(response => {
+            if (response.data) {
+              // for (let i = 0; i < response.data.length; i++) {
+                this.categories = response.data;
+                console.log(response.data)
+              // }
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
+    },
+    getSubCategories() {
+      this.categories = []
+      axios.get('/active_categories')
+          .then(response => {
+            if (response.data) {
+              for (let i = 0; i < response.data.length; i++) {
+                this.categories = response.data;
+                console.log(response.data)
+              }
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
+    },
+  },
+
   watch: {
     // group() {
     //   this.drawer = false
     // },
-    top (val) {
+    top(val) {
       this.bottom = !val
     },
-    right (val) {
+    right(val) {
       this.left = !val
     },
-    bottom (val) {
+    bottom(val) {
       this.top = !val
     },
-    left (val) {
+    left(val) {
       this.right = !val
     },
   },

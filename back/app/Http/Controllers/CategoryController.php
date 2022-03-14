@@ -79,7 +79,7 @@ class CategoryController extends Controller
                 ->where('is_active', true)
                 ->where('master_category_id', $parent->id)
                 ->get();
-            $parent->subcategories = $children;
+            $parent->children = $children;
         }
         return $parents;
     }
