@@ -2,9 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Auction;
 use App\Models\History;
 use App\Http\Requests\StoreHistoryRequest;
 use App\Http\Requests\UpdateHistoryRequest;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class HistoryController extends Controller
 {
@@ -38,21 +46,62 @@ class HistoryController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     * @param \App\Http\Requests\StoreHistoryRequest $request
-     * @return \Illuminate\Http\Response
+     * Store a newly created resource in storage. Auction Buyout || Expired with Bid
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function store(StoreHistoryRequest $request)
+    public function store(Request $request)
     {
-        // todo: BUYOUT OR EXPIRE(latter might be middleware)
+        // TODO: Validation to check if the auction expired (just in case) make this check as model function
+        // When the client loads Auctions that are eligible for purchase he can still try to Buyout the auctions that might expire during his exploration and thus when he clicks on auction that has ended we can make sure it is stored as History and removed from browsed
+        // todo: BUYOUT OR EXPIRE(latter might be middleware/probably will be laravel scheduling)
 
-        // for buyout: (only clients can buyout naturally)
-        // change auction status to sold,
-        // deactivate last bid if there is any for that auction,
-        // use code from BidController,
-        // store an instance of History with that auction and logged-in user and final_price taken from auction buyout value,
-        // return that history obj
+        $validator = Validator::make($request->all(), [
+            'auction_id' => 'required|integer|exists:auctions,id'
+        ]);
 
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $roles = User::getUserRoles();
+
+        // Check if the currently authenticated user is registered as Client
+        abort_if(!in_array('Client', $roles), 403, 'Only Clients are allowed to buyout.');
+
+        // Get Auction Model Object that is active
+        $auction = Auction::query()
+            ->where('is_active', true)
+            ->where('id', $request->auction_id)
+            ->first();
+
+        // Check if auction can be bought out, we already know the auction is active from previous model query
+        $no_bid_statuses = ['Expired', 'Sold', 'N/A'];
+        abort_if(in_array($auction->status, $no_bid_statuses), 410, 'This auction is no longer eligible for buyout.');
+
+        // Invalidate the last and only bid for auction being bought out
+        DB::table('bids')
+            ->where('is_active', true)
+            ->where('id', $auction->bid_id)
+            ->update([
+                'is_active' => false,
+                'updated_at' => Carbon::now()
+            ]);
+
+        // Change the auction status to Sold (We are not removing the bid_id for this auction)
+        $auction->update([
+            'status' => 'Sold',
+            'updated_at' => Carbon::now(),
+        ]);
+
+        // Create new History instance for this auction
+        $history = History::create([
+            'auction_id' => $auction->id,
+            'username' => Auth::user()->username,
+            'final_price' => $auction->buyout
+        ]);
+
+        return History::where('id', $history->id)->first();
     }
 
     /**

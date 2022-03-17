@@ -67,19 +67,24 @@ class AuctionController extends Controller
     }
 
     /**
-     * Return Auctions based on some parameters and filter keywords
+     * Return Auctions based on some parameters and filter keywords for Clients
      * @param Request $request
      * @return mixed
      */
     public function getFiltered(Request $request)
     {
         // BIG TODO: MANAGE HOW WE WILL HANDLE AUCTIONS THAT ARE FINISHED ONCE THE TIMER RUNS OUT
+        // todo: this will be managed with laravel scheduling
+        // RETURN ONLY AUCTIONS THAT HAVE STARTED (START_DATETIME > NOW) because clients can ask for auctions to be scheduled
+
         // basically every time we return auctions, check if any are expired and manage them??? i guess
         // while returning auctions for clients check if they have run out of time and dont show those
         // also dont show ones that have not yet been initiated (queued)
 
-        // todo: we will never be returning all auctions to customers, rather only the ones corresponding to certain category
+        // todo: we will never be returning ALL auctions to customers, rather only the ones corresponding to certain category
         // using query builder instead of eloquent for this is probably a must for longevity (and other stuff)
+
+        // todo: also return as separate variable conditions for selected item category
 
         // Find IDs for searched auctions
         $auction_ids = DB::table('auctions')

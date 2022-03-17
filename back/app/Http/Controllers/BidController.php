@@ -49,6 +49,7 @@ class BidController extends Controller
      */
     public function store(Request $request)
     {
+        //TODO: Validation to check if the auction expired (just in case)
         $validator = Validator::make($request->all(), [
             'auction_id' => 'required|integer|exists:auctions,id',
             'value' => 'required|numeric'
@@ -85,7 +86,7 @@ class BidController extends Controller
         if ($auction->bid_id) {
             // Check if the input bid value is lower or equal to current bid value for this auction
             abort_if($request->value <= $auction->bid->value, 400, "New bid value must be greater than current one.");
-            // When we clear out that we have a greater new value, we should invalidate the previous (current) bid
+            // When we are sure that we have a greater new value, we should invalidate the previous (current) bid
             DB::table('bids')
                 ->where('is_active', true)
                 ->where('id', $auction->bid_id)
