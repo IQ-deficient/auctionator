@@ -73,7 +73,7 @@ Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/active_categories', [CategoryController::class, 'getActive']);
 Route::get('/menu_categories', [CategoryController::class, 'getMenuCategories']);        // All categories formatted for Menu
 Route::get('/parent_categories', [CategoryController::class, 'getParentCategories']);       // core categories
-Route::post('/child_categories_conditions', [CategoryController::class, 'getChildCategoriesAndConditions']);
+Route::post('/child_categories_conditions', [CategoryController::class, 'getChildCategoriesAndConditions']);    // for master category
 //Route::get('/subcategories', [CategoryController::class, 'getSubCategories']);
 
 // CategoryCondition

@@ -67,31 +67,57 @@ class AuctionController extends Controller
     }
 
     /**
-     * Return Auctions based on some parameters and filter keywords
+     * Return Auctions based on some parameters and filter keywords for Clients
+     * we will never be returning ALL auctions to customers, rather only the ones corresponding to certain category
      * @param Request $request
      * @return mixed
      */
     public function getFiltered(Request $request)
     {
         // BIG TODO: MANAGE HOW WE WILL HANDLE AUCTIONS THAT ARE FINISHED ONCE THE TIMER RUNS OUT
+        // todo: this will be managed with laravel scheduling
         // basically every time we return auctions, check if any are expired and manage them??? i guess
         // while returning auctions for clients check if they have run out of time and dont show those
-        // also dont show ones that have not yet been initiated (queued)
-
-        // todo: we will never be returning all auctions to customers, rather only the ones corresponding to certain category
         // using query builder instead of eloquent for this is probably a must for longevity (and other stuff)
 
-        // Find IDs for searched auctions
-        $auction_ids = DB::table('auctions')
-            ->where('is_active', true)      // only active auctions
-//            ->where('status', )
-            ->pluck('id');
+        $validator = Validator::make($request->all(), [
+            'category' => 'required|string|exists:categories,name', // It is critical that we only get auctions for certain category
+//            'title' => 'nullable|string|between:3,128',
+        ]);
 
-        // Return Eloquent Model Auctions by found IDs because they include other data used on interface by default
-        $auctions = Auction::whereIn('id', $auction_ids)->get();
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
 
-        return $auctions;
-        // todo: this is about as functional as my brain on daily basis
+        // Fetch all active Auctions whose item is of the category the Client selected
+        $auctions = Auction::query()
+            ->where('is_active', true)
+            ->whereIn(
+                'item_id',          // get item IDs for select category
+                DB::table('items')
+                    ->where('category', $request->category)
+                    ->pluck('id')
+            )
+            ->where('start_datetime', '<=', Carbon::now())      // only auctions that have started (because of queuing)
+            ->get();
+
+        // For selected category also get all conditions that exist for parent (master) category of that subcategory
+        $conditions = DB::table('category_conditions')
+            ->where(
+                'category',
+                DB::table('categories')
+                    ->where(
+                        'id',
+                        DB::table('categories')
+                            ->where('is_active', true)
+                            ->where('name', $request->category)
+                            ->value('master_category_id')
+                    )
+                    ->value('name')
+            )
+            ->pluck('condition');
+
+        return response(['auctions' => $auctions, 'conditions' => $conditions]);
     }
 
     /**
