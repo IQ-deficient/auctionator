@@ -6,6 +6,7 @@ import Register from "../views/Register";
 import AdminAuction from "../views/AdminAuction";
 import AdminUser from "../views/AdminUser";
 import UserProfile from "../views/UserProfile";
+import AuctionBrowse from "../views/AuctionBrowse";
 
 Vue.use(VueRouter)
 
@@ -29,6 +30,7 @@ const routes = [
   {path: '/admin-auction', name: 'AdminAuction', component: AdminAuction},
   {path: '/admin-user', name: 'AdminUser', component: AdminUser},
   {path: '/user-profile', name: 'UserProfile', component: UserProfile},
+  {path: '/auction-browse', name: 'AuctionBrowse', component: AuctionBrowse},
 ]
 
 const router = new VueRouter({

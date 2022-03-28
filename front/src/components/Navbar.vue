@@ -84,7 +84,7 @@
     </v-toolbar>
 
     <!------- Globalni tag fioke sa elementima kategorija i potkategorija ------->
-    <v-navigation-drawer style="min-width: 25%; width: fit-content"
+    <v-navigation-drawer style="min-width: 28%; width: fit-content"
                          v-model="drawer"
                          absolute
                          bottom
