@@ -434,8 +434,11 @@ export default {
             this.currentImage = undefined;
           });
     },
-  },
 
+  },
+  mounted() {
+    document.title = 'Edit Profile - Auction House'
+  }
 }
 
 </script>

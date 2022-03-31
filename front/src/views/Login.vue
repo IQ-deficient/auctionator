@@ -159,6 +159,10 @@ name: "Login",
       this.$refs.observer.reset()
     },
   },
+
+  mounted() {
+    document.title = 'Login - Auction House'
+  }
 }
 </script>
 

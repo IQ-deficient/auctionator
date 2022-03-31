@@ -13,6 +13,10 @@ export default {
   name: 'Home',
   components: {
     HelloWorld
+  },
+
+  mounted() {
+    // document.title = 'Auction House Home'
   }
 }
 </script>

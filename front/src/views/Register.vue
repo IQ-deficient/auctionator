@@ -252,6 +252,9 @@ name: "Register",
       this.$refs.observer.reset()
     },
   },
+  mounted() {
+    document.title = 'Register - Auction House'
+  }
 }
 </script>
 

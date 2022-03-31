@@ -314,6 +314,9 @@ export default {
 
   created() {
     this.showAuction();
+  },
+  mounted() {
+    document.title = 'Browse - Auction House'
   }
 }
 
