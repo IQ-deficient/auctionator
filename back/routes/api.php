@@ -38,8 +38,8 @@ Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'
 ], function ($router) {
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login'])->middleware('logged_in');
+    Route::post('/register', [AuthController::class, 'register'])->middleware('logged_in');
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/user', [AuthController::class, 'userProfile']);
@@ -110,8 +110,9 @@ Route::get('/roles', [RoleController::class, 'index']);
 Route::get('/statuses', [StatusController::class, 'index']);
 
 // Users
-Route::get('/users', [AuthController::class, 'index']);
-Route::put('/user/{user}', [AuthController::class, 'update']);     // update all data but password
+Route::get('/users', [AuthController::class, 'index']);     // Client and Employees
+Route::post('/employee', [AuthController::class, 'registerEmployee']);      // Administrator inserts new personnel
+Route::put('/user/{user}', [AuthController::class, 'update']);     // update all data but password for specified user
 Route::put('/change_password/{user}', [AuthController::class, 'changePassword']);       // update password
 Route::delete('/user/{user}', [AuthController::class, 'destroy']);      // deactivate user
 

@@ -16,7 +16,7 @@ export default {
   },
 
   mounted() {
-    // document.title = 'Auction House Home'
+    document.title = 'Auction House'
   }
 }
 </script>
