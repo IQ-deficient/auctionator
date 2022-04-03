@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Auction;
 use App\Http\Requests\StoreAuctionRequest;
 use App\Http\Requests\UpdateAuctionRequest;
+use App\Models\History;
 use App\Models\Item;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
@@ -88,6 +89,8 @@ class AuctionController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
+
+        // TODO: IF AUTH IS CLIENT RETURN ONLY STARTED AND ONGOING, OTHERWISE RETURN ALL?
 
         // Fetch all active Auctions whose item is of the category the Client selected
         $auctions = Auction::query()
@@ -225,7 +228,7 @@ class AuctionController extends Controller
             'buyout' => 'required|numeric|gt:0',
             'start_datetime' => 'required|date',
             'end_datetime' => 'required|date|after:start_datetime',
-            'title_item' => 'required|between:3,64',
+            'title_item' => 'required|string|between:3,64',
             'description' => 'required|string|between:3,500',
             'category' => 'required|string|max:64|exists:categories,name',
             'condition' => 'required|string|max:32|exists:conditions,name',
@@ -279,8 +282,8 @@ class AuctionController extends Controller
 
         // Last and only active bid for this auction will be deactivated
         DB::table('bids')
-            ->where('is_active', true)
             ->where('id', $auction->bid_id)
+            ->where('is_active', true)
             ->update([
                 'is_active' => false
             ]);

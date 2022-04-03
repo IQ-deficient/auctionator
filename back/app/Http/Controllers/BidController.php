@@ -74,6 +74,8 @@ class BidController extends Controller
 //            ->where('id', $request->auction_id)
 //            ->first();
 
+        // TODO: ANOTHER ABORT IF TO CHECK IF AUCTION HAS EXPIRED OR END_DATETIME <= CARBON:NOW
+
         // In case there is an attempt to bid on the unbindable auction, cancel further actions
         // Since we only work with is_active==true entities here, there is no reason to check for that
         $no_bid_statuses = ['Expired', 'Sold', 'N/A'];
