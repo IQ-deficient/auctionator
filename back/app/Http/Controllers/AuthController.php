@@ -182,6 +182,7 @@ class AuthController extends Controller
 
         // TODO: make input in user_roles table
 
+
         return response()->json([
             'message' => 'Employee successfully registered.',
             'user' => $user

@@ -49,7 +49,6 @@ class BidController extends Controller
      */
     public function store(Request $request)
     {
-        //TODO: Validation to check if the auction expired (just in case)
         $validator = Validator::make($request->all(), [
             'auction_id' => 'required|integer|exists:auctions,id',
             'value' => 'required|numeric'

@@ -54,7 +54,6 @@ Route::group([
 });
 //  TODO: appropriate middleware for routes (some must require being authenticated)
 
-// TODO: Middleware for Auctions to fiddle with expiry date validations and actions (Expired & Sold) ! ! !
 // Auctions
 Route::post('/auction', [AuctionController::class, 'store']);
 Route::get('/auctions', [AuctionController::class, 'index']);

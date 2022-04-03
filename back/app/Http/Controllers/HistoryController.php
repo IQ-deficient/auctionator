@@ -52,9 +52,7 @@ class HistoryController extends Controller
      */
     public function store(Request $request)
     {
-        // TODO: Validation to check if the auction expired (just in case) make this check as model function
         // When the client loads Auctions that are eligible for purchase he can still try to Buyout the auctions that might expire during his exploration and thus when he clicks on auction that has ended we can make sure it is stored as History and removed from browsed
-        // todo: BUYOUT OR EXPIRE(latter might be middleware/probably will be laravel scheduling)
 
         $validator = Validator::make($request->all(), [
             'auction_id' => 'required|integer|exists:auctions,id'
@@ -75,7 +73,7 @@ class HistoryController extends Controller
             ->where('is_active', true)
             ->first();
 
-        // TODO: ANOTHER ABORT IF TO CHECK IF AUCTION HAS EXPIRED OR END_DATETIME <= CARBON:NOW
+        // TODO: Validation to check if the auction expired (just in case) make this check as model function
 
         // Check if auction can be bought out, we already know the auction is active from previous model query
         $no_bid_statuses = ['Expired', 'Sold', 'N/A'];
