@@ -17,3 +17,11 @@ use Illuminate\Support\Facades\Artisan;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
+
+Artisan::command('initialize', function () {
+    Artisan::call('migrate:fresh');
+    Artisan::call('db:seed');
+    Artisan::call('serve');
+    Artisan::call('schedule:work');
+    $this->info("All system nominal!"); // todo: NOT
+})->purpose('Initialize all commands that run the application.');

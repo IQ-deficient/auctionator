@@ -730,6 +730,10 @@ export default {
     },
   },
 
+  mounted() {
+    document.title = 'Admin Auctions - Auction House'
+  }
+
 }
 </script>
 

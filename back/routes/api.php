@@ -38,8 +38,8 @@ Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'
 ], function ($router) {
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login'])->middleware('logged_in');
+    Route::post('/register', [AuthController::class, 'register'])->middleware('logged_in');
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/user', [AuthController::class, 'userProfile']);
@@ -54,7 +54,6 @@ Route::group([
 });
 //  TODO: appropriate middleware for routes (some must require being authenticated)
 
-// TODO: Middleware for Auctions to fiddle with expiry date validations and actions (Expired & Sold) ! ! !
 // Auctions
 Route::post('/auction', [AuctionController::class, 'store']);
 Route::get('/auctions', [AuctionController::class, 'index']);
@@ -62,7 +61,7 @@ Route::get('/active_auctions', [AuctionController::class, 'getActive']);
 Route::get('/auction/{auction}', [AuctionController::class, 'show']);       // Show one specific Auction by ID
 Route::put('/auction/{auction}', [AuctionController::class, 'update']);
 Route::delete('/auction/{auction}', [AuctionController::class, 'destroy']);
-Route::get('/filtered_auctions', [AuctionController::class, 'getFiltered']);    //TODO: this shall be discussed
+Route::post('/filtered_auctions', [AuctionController::class, 'getFiltered']);    //TODO: this shall be discussed
 
 // Bids
 Route::post('/bid', [BidController::class, 'store']);      // Placing a Bid on the Auction
@@ -110,8 +109,9 @@ Route::get('/roles', [RoleController::class, 'index']);
 Route::get('/statuses', [StatusController::class, 'index']);
 
 // Users
-Route::get('/users', [AuthController::class, 'index']);
-Route::put('/user/{user}', [AuthController::class, 'update']);     // update all data but password
+Route::get('/users', [AuthController::class, 'index']);     // Client and Employees
+Route::post('/employee', [AuthController::class, 'registerEmployee']);      // Administrator inserts new personnel
+Route::put('/user/{user}', [AuthController::class, 'update']);     // update all data but password for specified user
 Route::put('/change_password/{user}', [AuthController::class, 'changePassword']);       // update password
 Route::delete('/user/{user}', [AuthController::class, 'destroy']);      // deactivate user
 

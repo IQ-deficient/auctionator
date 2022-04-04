@@ -100,6 +100,8 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
+        // TODO MIDDLEWARE If there is an Auth User, it should not be able to access routes login and register until logged out
+
         // todo: this api will be also used by admins to make accounts for employees (how dfq do we do dis)
         $validator = Validator::make($request->all(), [
             'username' => ['required', 'string', 'min:3', 'max:32', 'unique:users,username'],
@@ -129,8 +131,60 @@ class AuthController extends Controller
             ['password' => bcrypt($request->password)]
         ));
 
+
+        // TODO: make input in user_roles table
+
         return response()->json([
             'message' => 'User successfully registered.',
+            'user' => $user
+        ], 201);
+    }
+
+    /**
+     * The Administration User is able to create an entry for Employee Users.
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function registerEmployee(Request $request)
+    {
+        $roles = User::getUserRoles();
+
+        // No personnel other than Admins can make User instances for the employed
+        abort_if(!in_array('Administrator', $roles), 403, 'Only Administrators are allowed to register employees.');
+
+        $validator = Validator::make($request->all(), [
+            'username' => ['required', 'string', 'min:3', 'max:32', 'unique:users,username'],
+            'password' => 'required|string|confirmed|min:8|max:128',
+            'first_name' => 'required|string|between:1,32',
+            'last_name' => 'required|string|between:1,32',
+            'email' => ['required', 'email:rfc,dns', 'min:10', 'max:254', 'unique:users,email'],
+            'phone_number' => ['required', 'digits_between:6,15', 'unique:users,phone_number'],
+//            'gender' => 'nullable|string|max:32|exists:genders,name',
+//            'country' => 'nullable|string|max:32|exists:countries,name',
+//            'birthdate' => 'nullable|date',
+//            'image' => 'required',
+            'roles' => 'required',
+            'roles.*' => 'string|distinct|exists:roles,name'       // Array validator
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        return $request->roles;
+
+        $user = User::create(array_merge(
+            $validator->validated(),
+            ['password' => bcrypt($request->password)]
+        ));
+
+
+
+        // TODO: make input in user_roles table
+
+
+        return response()->json([
+            'message' => 'Employee successfully registered.',
             'user' => $user
         ], 201);
     }

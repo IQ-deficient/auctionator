@@ -49,7 +49,6 @@ class BidController extends Controller
      */
     public function store(Request $request)
     {
-        //TODO: Validation to check if the auction expired (just in case)
         $validator = Validator::make($request->all(), [
             'auction_id' => 'required|integer|exists:auctions,id',
             'value' => 'required|numeric'
@@ -74,6 +73,8 @@ class BidController extends Controller
 //            ->where('id', $request->auction_id)
 //            ->first();
 
+        // TODO: ANOTHER ABORT IF TO CHECK IF AUCTION HAS EXPIRED OR END_DATETIME <= CARBON:NOW
+
         // In case there is an attempt to bid on the unbindable auction, cancel further actions
         // Since we only work with is_active==true entities here, there is no reason to check for that
         $no_bid_statuses = ['Expired', 'Sold', 'N/A'];
@@ -86,7 +87,12 @@ class BidController extends Controller
         if ($auction->bid_id) {
             // Check if the input bid value is lower or equal to current bid value for this auction
             abort_if($request->value <= $auction->bid->value, 400, "New bid value must be greater than current one.");
-            // When we are sure that we have a greater new value, we should invalidate the previous (current) bid
+
+            // Make sure new bid value is at least certain amount more than the previous Bid value
+            $compare_old_value = $auction->bid->value * 1.03;           // Currently, by agreement, we are using 3%
+            abort_if($compare_old_value >= $request->value, 400, "New bid value must be at least 3% more than current one.");
+
+            // When we are sure that we have a valid new value, we should invalidate the previous (current) bid
             DB::table('bids')
                 ->where('is_active', true)
                 ->where('id', $auction->bid_id)

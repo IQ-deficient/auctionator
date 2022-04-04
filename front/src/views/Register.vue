@@ -279,6 +279,9 @@ export default {
       this.getCountries();
     }
   },
+  mounted() {
+    document.title = 'Register - Auction House'
+  }
 }
 </script>
 

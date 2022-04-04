@@ -418,6 +418,9 @@ export default {
     },
   },
 
+  mounted() {
+    document.title = 'Administration - Auction House'
+  }
 }
 </script>
 
