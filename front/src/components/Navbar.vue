@@ -136,7 +136,6 @@
 
         <v-treeview
         v-model="selectedCategory"
-        :open="false"
         :items="categories"
         activatable
         item-key="name"

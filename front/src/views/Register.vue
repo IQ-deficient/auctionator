@@ -11,45 +11,45 @@
         <form @submit.prevent="submit" style="height: 490px; width: 92%; margin: 0 auto">
           <v-row>
             <v-col cols="6">
-<!--          Polje za ime-->
-          <validation-provider
-              v-slot="{ errors }"
-              name="firstName"
-              rules="required|max:32"
-          >
-            <v-text-field
-                v-model="firstName"
-                :error-messages="errors"
-                label="First name"
-                clearable
-                required
-            ></v-text-field>
-          </validation-provider>
+              <!--          Polje za ime-->
+              <validation-provider
+                  v-slot="{ errors }"
+                  name="firstName"
+                  rules="required|min:3|max:32"
+              >
+                <v-text-field
+                    v-model="firstName"
+                    :error-messages="errors"
+                    label="First name"
+                    clearable
+                    required
+                ></v-text-field>
+              </validation-provider>
             </v-col>
-<!--          Polje za prezime-->
+            <!--          Polje za prezime-->
             <v-col cols="6">
-            <validation-provider
-              v-slot="{ errors }"
-              name="lastName"
-              rules="required|max:32"
-          >
-            <v-text-field
-                v-model="lastName"
-                :error-messages="errors"
-                label="Last name"
-                required
-                clearable
-            ></v-text-field>
-          </validation-provider>
+              <validation-provider
+                  v-slot="{ errors }"
+                  name="lastName"
+                  rules="required|min:3|max:32"
+              >
+                <v-text-field
+                    v-model="lastName"
+                    :error-messages="errors"
+                    label="Last name"
+                    required
+                    clearable
+                ></v-text-field>
+              </validation-provider>
             </v-col>
           </v-row>
-<!--          Polje za korisnicko ime-->
+          <!--          Polje za korisnicko ime-->
           <v-row>
           </v-row>
           <validation-provider
               v-slot="{ errors }"
               name="username"
-              rules="required|max:32"
+              rules="required|min:3|max:32"
           >
             <v-text-field
                 v-model="username"
@@ -61,44 +61,45 @@
           </validation-provider>
           <v-row>
             <v-col cols="5">
-<!--          Padajuci meni za drzavu-->
-          <validation-provider
-              v-slot="{ errors }"
-              name="country"
-              rules="required"
-          >
-            <v-select
-                v-model="country"
-                :items="countries"
-                :error-messages="errors"
-                label="Country"
-                data-vv-name="select"
-                required
-            ></v-select>
-          </validation-provider>
+              <!--          Padajuci meni za drzavu-->
+              <validation-provider
+                  v-slot="{ errors }"
+                  name="country"
+                  rules="required"
+              >
+                <v-select
+                    v-model="selectCountry"
+                    :items="countries"
+                    :error-messages="errors"
+                    label="Country"
+                    data-vv-name="select"
+                    clearable
+                    required
+                ></v-select>
+              </validation-provider>
             </v-col>
-<!--          Polje za broj telefona-->
+            <!--          Polje za broj telefona-->
             <v-col cols="7">
-          <validation-provider
-              v-slot="{ errors }"
-              name="phoneNumber"
-              :rules="{
+              <validation-provider
+                  v-slot="{ errors }"
+                  name="phoneNumber"
+                  :rules="{
           // required: true,
           // digits: 7,
           // regex: '^(71|72|74|76|81|82|84|85|86|87|88|89)\\d{5}$'
         }"
-          >
-            <v-text-field
-                v-model="phoneNumber"
-                :error-messages="errors"
-                label="Phone number"
-                required
-                clearable
-            ></v-text-field>
-          </validation-provider>
+              >
+                <v-text-field
+                    v-model="phoneNumber"
+                    :error-messages="errors"
+                    label="Phone number"
+                    required
+                    clearable
+                ></v-text-field>
+              </validation-provider>
             </v-col>
           </v-row>
-<!--          Polje za imejl-->
+          <!--          Polje za imejl-->
           <validation-provider
               v-slot="{ errors }"
               name="Email"
@@ -112,7 +113,7 @@
                 clearable
             ></v-text-field>
           </validation-provider>
-<!--          Polje za lozinku-->
+          <!--          Polje za lozinku-->
           <validation-provider
               v-slot="{ errors }"
               name="Password"
@@ -133,7 +134,7 @@
             >
             </v-text-field>
           </validation-provider>
-<!--          Polje za potvrdu lozinke-->
+          <!--          Polje za potvrdu lozinke-->
           <validation-provider
               v-slot="{ errors }"
               name="confirmPassword"
@@ -154,7 +155,8 @@
           <v-btn
               type="submit"
               color="primary"
-          ><v-icon left>mdi-account-plus</v-icon>
+          >
+            <v-icon left>mdi-account-plus</v-icon>
             Create account
           </v-btn>
           <!--          <v-btn @click="clear">-->
@@ -166,9 +168,13 @@
     <div style="width: 36%; color: white; margin: 0 auto" class="mt-4">
       <table width="100%">
         <tr>
-          <td><hr/></td>
+          <td>
+            <hr/>
+          </td>
           <td style="width:1px; padding: 0 10px; white-space: nowrap;">Already have an account?</td>
-          <td><hr/></td>
+          <td>
+            <hr/>
+          </td>
         </tr>
       </table>
     </div>
@@ -184,10 +190,11 @@
 </template>
 
 <script>
-import { required, digits, email, max, regex } from 'vee-validate/dist/rules'
-import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
+import {required, digits, email, max, regex, min} from 'vee-validate/dist/rules'
+import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 
-// import axios from "axios";
+import axios from "axios";
+
 setInteractionMode('eager')
 
 extend('digits', {
@@ -201,9 +208,14 @@ extend('required', {
   message: 'Required.'
 })
 
+extend('min', {
+  ...min,
+  message: 'The {_field_} must be at least {length} characters.',
+})
+
 extend('max', {
   ...max,
-  message: '{_field_} may not be greater than {length} characters',
+  message: 'The {_field_} must not be greater than {length} characters.',
 })
 
 extend('regex', {
@@ -217,7 +229,7 @@ extend('email', {
 })
 
 export default {
-name: "Register",
+  name: "Register",
 
   components: {
     ValidationProvider,
@@ -229,28 +241,43 @@ name: "Register",
     lastName: '',
     username: '',
     email: '',
-    country: '',
+    selectCountry: '',
+    countries: [],
     phoneNumber: '',
     password: '',
     confirmPassword: '',
-    countries: [
-        'Ukraine',
-        'Russia',
-    ],
     showPassword: false,
     showConfirmPass: false,
   }),
 
   methods: {
-    submit () {
+    submit() {
       this.$refs.observer.validate()
     },
-    clear () {
+    clear() {
       this.email = ''
       this.password = ''
       this.checkbox = null
       this.$refs.observer.reset()
     },
+
+    getCountries() {
+      axios.get('/countries')
+          .then(response => {
+            if (response.data) {
+                // console.log(response.data)
+                this.countries = response.data
+                console.log(response.data);
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
+    },
+
+    created() {
+      this.getCountries();
+    }
   },
 }
 </script>

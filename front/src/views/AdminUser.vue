@@ -318,6 +318,8 @@ export default {
     addUserCountry: '',
     countries: [],
     addUserPhone: '',
+    closeDelete: '',
+    deleteItemConfirm: ''
   }),
 
   // computed: {

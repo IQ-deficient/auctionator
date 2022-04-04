@@ -271,6 +271,8 @@ export default {
       show: false,
       show1: false,
       auctions: [],
+      bidInput: '',
+
       dataLoading: false,
     }
   },

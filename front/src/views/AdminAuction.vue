@@ -86,8 +86,8 @@
                     <v-card class="pa-4">
                       <validation-provider
                           v-slot="{ errors }"
-                          name="itemTitle"
-                          rules="required"
+                          name="title"
+                          rules="required|min:3|max:64"
                           clearable
                       >
                         <v-text-field
@@ -101,17 +101,17 @@
                       </validation-provider>
                       <validation-provider
                           v-slot="{ errors }"
-                          name="addItemDescription"
-                          rules="required"
+                          name="description"
                           clearable
+                          rules="required|min:3|max:500"
                       >
                         <v-textarea
                             v-model="addItemDescription"
                             :error-messages="errors"
+                            :counter="500"
                             label="Item description"
                             auto-grow
                             solo
-                            required
                             clearable
                         >
                         </v-textarea>
@@ -294,8 +294,8 @@
                         <v-col cols="12" sm="12">
                           <validation-provider
                               v-slot="{ errors }"
-                              name="auctionTitle"
-                              rules="required"
+                              name="title"
+                              rules="required|min:3|max:64"
                               clearable
                           >
                             <v-text-field sty
@@ -311,31 +311,33 @@
                       </v-row>
                       <v-row>
                         <v-col cols="12" sm="3">
-                          <v-menu
-                              ref="menu1"
-                              v-model="menu1"
-                              :close-on-content-click="false"
-                              transition="scale-transition"
-                              offset-y
-                              max-width="290px"
-                              min-width="auto"
-                          >
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-text-field
-                                  v-model="dateFormatted"
-                                  label="Start date"
-                                  prepend-icon="mdi-calendar"
-                                  v-bind="attrs"
-                                  @blur="date = parseDate(dateFormatted)"
-                                  v-on="on"
-                              ></v-text-field>
-                            </template>
-                            <v-date-picker
-                                v-model="date"
-                                no-title
-                                @input="menu1 = false"
-                            ></v-date-picker>
-                          </v-menu>
+                          <validation-provider>
+                            <v-menu
+                                ref="menu1"
+                                v-model="menu1"
+                                :close-on-content-click="false"
+                                transition="scale-transition"
+                                offset-y
+                                max-width="290px"
+                                min-width="auto"
+                            >
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-text-field
+                                    v-model="dateFormatted"
+                                    label="Start date"
+                                    prepend-icon="mdi-calendar"
+                                    v-bind="attrs"
+                                    @blur="date = parseDate(dateFormatted)"
+                                    v-on="on"
+                                ></v-text-field>
+                              </template>
+                              <v-date-picker
+                                  v-model="date"
+                                  no-title
+                                  @input="menu1 = false"
+                              ></v-date-picker>
+                            </v-menu>
+                          </validation-provider>
                         </v-col>
                         <v-col cols="12" sm="2">
                           <v-menu
@@ -437,8 +439,8 @@
                         <v-col cols="12" sm="12">
                           <validation-provider
                               v-slot="{ errors }"
-                              name="addAuctionBuyout"
-                              rules="required"
+                              name="buyout"
+                              rules="required|min_value:1"
                               clearable
                           >
                             <v-text-field sty
@@ -455,9 +457,12 @@
                     </v-card>
                   </div>
                   <v-btn large
+                         dark
                          type="submit"
                          color="primary"
                          class="mt-6"
+                         :disabled="!addItemTitle || !addItemDescription || !addItemCategory || !addItemSubCategory ||
+                                    !addItemCondition || !addItemWarehouse || !addAuctionTitle || !addAuctionBuyout"
                   >
                     <v-icon left class="mr-1">mdi-pencil-plus-outline</v-icon>
                     Post
@@ -512,36 +517,30 @@
 
 <script>
 import axios from "axios";
-import {required, digits, email, max, regex} from 'vee-validate/dist/rules'
+import {required, min, max, min_value} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 import UploadService from "../services/UploadFilesService";
 
 setInteractionMode('eager')
 
-extend('digits', {
-  ...digits,
-  // message: '{_field_} needs to be {length} digits. ({_value_})',
-})
-
-extend('required', {
-  ...required,
-  // message: '{_field_} can not be empty',
-  message: 'Required.'
+extend('min', {
+  ...min,
+  message: 'The {_field_} must be at least {length} characters.',
 })
 
 extend('max', {
   ...max,
-  message: '{_field_} may not be greater than {length} characters',
+  message: 'The {_field_} must not be greater than {length} characters.'
 })
 
-extend('regex', {
-  ...regex,
-  message: '{_field_} {_value_} does not match {regex}',
+extend('min_value', {
+  ...min_value,
+  message: 'The {_field_} must be at least 1 euro.'
 })
 
-extend('email', {
-  ...email,
-  message: 'Must be a valid email.',
+extend('required', {
+  ...required,
+  message: 'The {_field_} is required.'
 })
 
 export default {
@@ -590,12 +589,15 @@ export default {
     conditions: [],
     addItemWarehouse: '',
     warehouses: [],
-
     currentImage: undefined,
     previewImage: undefined,
     progress: 0,
     message: "",
     imageInfos: [],
+    addAuctionTitle: '',
+    addAuctionBuyout: '',
+    closeDelete: '',
+    deleteItemConfirm: '',
 
   }),
 
@@ -640,7 +642,7 @@ export default {
     },
     upload() {
       if (!this.currentImage) {
-        this.message = "Please select an Image!";
+        this.message = "Please select an image!";
         return;
       }
       this.progress = 0;
@@ -677,10 +679,11 @@ export default {
           })
     },
     getStatuses() {
-      axios.get('/roles')
+      axios.get('/statuses')
           .then(response => {
             if (response.data) {
-              this.roles = response.data
+              this.statuses = response.data
+              console.log(response.data)
             }
           })
           .catch(error => {
