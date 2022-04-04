@@ -61,7 +61,7 @@ Route::get('/active_auctions', [AuctionController::class, 'getActive']);
 Route::get('/auction/{auction}', [AuctionController::class, 'show']);       // Show one specific Auction by ID
 Route::put('/auction/{auction}', [AuctionController::class, 'update']);
 Route::delete('/auction/{auction}', [AuctionController::class, 'destroy']);
-Route::post('/filtered_auctions', [AuctionController::class, 'getFiltered']);    //TODO: this shall be discussed
+Route::post('/filtered_auctions', [AuctionController::class, 'getFiltered']);    // this shall be discussed
 
 // Bids
 Route::post('/bid', [BidController::class, 'store']);      // Placing a Bid on the Auction
@@ -84,6 +84,7 @@ Route::get('/conditions', [ConditionController::class, 'index']);
 
 // Countries
 Route::get('/countries', [CountryController::class, 'index']);
+Route::get('/active_countries', [CountryController::class, 'getActive']);
 
 // Genders
 Route::get('/genders', [GenderController::class, 'index']);

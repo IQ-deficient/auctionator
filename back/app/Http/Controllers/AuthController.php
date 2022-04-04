@@ -153,7 +153,6 @@ class AuthController extends Controller
     /**
      * The Administration User is able to create an entry for Employee Users.
      * @return JsonResponse
-     * @throws ValidationException
      */
     public function registerEmployee(Request $request)
     {
