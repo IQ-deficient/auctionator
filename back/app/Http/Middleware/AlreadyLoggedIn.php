@@ -18,7 +18,7 @@ class AlreadyLoggedIn
     public function handle(Request $request, Closure $next)
     {
 
-        // If User is not already authenticated, meaning logged in, allow the use of /login and /register routes
+        // If User is not already authenticated, meaning they do not send a JWT token, allow the use of /login and /register routes
         if (!Auth::user()) {
             return $next($request);
         }

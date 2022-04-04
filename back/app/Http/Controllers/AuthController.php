@@ -65,6 +65,19 @@ class AuthController extends Controller
     }
 
     /**
+     * Get User Roles array with ones that are used for employees.
+     * @return Collection
+     */
+    public function getEmployeeRoles()
+    {
+        $nonEmployees = ['Administrator', 'Client'];
+        return DB::table('roles')
+            ->where('is_active', true)
+            ->whereNotIn('name', $nonEmployees)
+            ->get();
+    }
+
+    /**
      * Get a JWT via given credentials.
      * @return JsonResponse
      * @throws ValidationException
@@ -94,15 +107,12 @@ class AuthController extends Controller
     }
 
     /**
-     * Register a User.
+     * Register a User, in this case Client.
      * @return JsonResponse
      * @throws ValidationException
      */
     public function register(Request $request)
     {
-        // TODO MIDDLEWARE If there is an Auth User, it should not be able to access routes login and register until logged out
-
-        // todo: this api will be also used by admins to make accounts for employees (how dfq do we do dis)
         $validator = Validator::make($request->all(), [
             'username' => ['required', 'string', 'min:3', 'max:32', 'unique:users,username'],
             /**
@@ -177,7 +187,6 @@ class AuthController extends Controller
             $validator->validated(),
             ['password' => bcrypt($request->password)]
         ));
-
 
 
         // TODO: make input in user_roles table
