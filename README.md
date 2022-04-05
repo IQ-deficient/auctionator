@@ -17,10 +17,11 @@ cd..
 
 ## Setup
 - Make sure Apache & MySql are running (XAMPP)
-- Configure .env file DB_DATABASE variable as your local mysql database
+- Clone .env.example file into .env and configure: DB_DATABASE, MAIL_USERNAME, MAIL_PASSWORD, MAIL_FROM_ADDRESS
 ```bash
 cd back
 php artisan jwt:secret
+php artisan key:generate
 php artisan migrate:fresh --seed
 ```
 - Serve the application in Terminal
@@ -34,10 +35,9 @@ php artisan schedule:work
 ```
 
 ## Running the application interface
-- Open a fresh Terminal in project root
+- Open a fresh Terminal on project root
 ```bash
 cd front
 npm run serve
->click
 ```
-
+- Open given server IP in browser of choice
