@@ -18,8 +18,8 @@ class ItemSeeder extends Seeder
         $seeds = [
             [
                 'id' => 1,
-                'title' => 'Bakarni Dildo S Klasse',
-                'description' => 'Ovaj dildo ce vam promijeniti zivot. Necete samo morati da primite injekciju protiv tetanusa, iritacija na vasoj odabranoj povrsini nadrazavanja ce ostaviti neizbrisivu senzaciju kakvu do sada nikada niste osjetili zato sto vise necete moci da osjetite nista.',
+                'title' => 'Bakarni elektricni uredjaj S Klasse',
+                'description' => 'Ovaj strujni aparatus ce vam promijeniti zivot. Necete samo morati da primite injekciju protiv tetanusa, iritacija na vasoj odabranoj povrsini nadrazavanja ce ostaviti neizbrisivu senzaciju kakvu do sada nikada niste osjetili zato sto vise necete moci da osjetite nista.',
                 'category' => 'Antiques',
                 'condition' => 'Fair',
                 'warehouse_id' => 1,
@@ -29,7 +29,7 @@ class ItemSeeder extends Seeder
             [
                 'id' => 2,
                 'title' => 'Perika Sabana Saulica',
-                'description' => 'Perika legendarnog virtuoza i carobnjaka narodne muzike. Legenda kaze da on nije nosio periku. Naime, same vokalne moci ovog astralnog barda su bile dovoljne da isusuju i obnavljaju folikule dlake na njegovoj glavi. Mocno jebote.',
+                'description' => 'Perika legendarnog virtuoza i carobnjaka narodne muzike. Legenda kaze da on nije nosio periku. Naime, same vokalne moci ovog astralnog barda su bile dovoljne da isusuju i obnavljaju folikule dlake na njegovoj glavi. Mocno ostroga mi.',
                 'category' => "Men's Accessories",
                 'condition' => 'Worn',
                 'warehouse_id' => 1,

@@ -49,7 +49,7 @@ class AuctionSeeder extends Seeder
             [
                 'id' => 5,
                 'title' => 'Jos jedna za test',
-                'seller' => 'Neki fetus nzm',
+                'seller' => 'Neki krindz nzm',
                 'item_id' => 2,
                 'bid_id' => null,
                 'buyout' => 2.99,
