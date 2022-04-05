@@ -1,5 +1,6 @@
 <template>
   <v-app style="background-color: #4a5568">
+    <Loader></Loader>
     <div style="min-height: 100%">
       <Navbar>
         <router-link to="/home"></router-link>
@@ -27,9 +28,10 @@
 // Ovdje se definisu sve globalne Vue komponente
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Loader from "@/components/Loader";
 
 export default {
-  components: {Navbar, Footer},
+  components: {Navbar, Footer, Loader},
   data() {
     return {};
   },
