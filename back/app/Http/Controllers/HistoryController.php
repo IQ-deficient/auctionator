@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\MailNotification;
 use App\Models\Auction;
 use App\Models\History;
 use App\Http\Requests\StoreHistoryRequest;
 use App\Http\Requests\UpdateHistoryRequest;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class HistoryController extends Controller
@@ -46,13 +50,18 @@ class HistoryController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage. Auction Buyout
+     * Auction Buyout
      * @param Request $request
-     * @return JsonResponse
+     * @return Builder|Model|JsonResponse|object
      */
     public function store(Request $request)
     {
         // When the client loads Auctions that are eligible for purchase he can still try to Buyout the auctions that might expire during his exploration and thus when he clicks on auction that has ended we can make sure it is stored as History and removed from browsed
+
+        $roles = User::getUserRoles();
+
+        // Check if the currently authenticated user is registered as Client
+        abort_if(!in_array('Client', $roles), 403, 'Only Clients are allowed to buyout.');
 
         $validator = Validator::make($request->all(), [
             'auction_id' => 'required|integer|exists:auctions,id'
@@ -61,11 +70,6 @@ class HistoryController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
-
-        $roles = User::getUserRoles();
-
-        // Check if the currently authenticated user is registered as Client
-        abort_if(!in_array('Client', $roles), 403, 'Only Clients are allowed to buyout.');
 
         // Get Auction Model Object that is active
         $auction = Auction::query()
@@ -79,7 +83,7 @@ class HistoryController extends Controller
         $no_bid_statuses = ['Expired', 'Sold', 'N/A'];
         abort_if(in_array($auction->status, $no_bid_statuses), 410, 'This auction is no longer eligible for buyout.');
 
-        // Invalidate the last and only bid for auction being bought out
+        // Invalidate the last and only bid for auction being bought out if there is any
         DB::table('bids')
             ->where('id', $auction->bid_id)
             ->where('is_active', true)
@@ -88,7 +92,7 @@ class HistoryController extends Controller
                 'updated_at' => Carbon::now()
             ]);
 
-        // Change the auction status to Sold (We are not removing the bid_id for this auction)
+        // Change the auction status to Sold (We are not removing the bid_id for this Auction)
         $auction->update([
             'status' => 'Sold',
             'updated_at' => Carbon::now(),
@@ -101,7 +105,15 @@ class HistoryController extends Controller
             'final_price' => $auction->buyout
         ]);
 
-        return History::where('id', $history->id)->first();
+        // Finally, when we are sure Auction was purchased, send an email
+        Mail::to(User::query()->where('email', Auth::user()->email)->first())
+            ->send(new MailNotification(
+                'Congratulations. You now own the following Auction: "' . $auction->title . '". Please visit the History tab on our platform for additional information. Thanks.',
+                'You have won an Auction with ID:' . $auction->id
+            ));
+//        ->later(now()->addMinutes(10), new OrderShipped($order));
+
+        return History::query()->where('id', $history->id)->first();
     }
 
     /**
