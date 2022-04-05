@@ -2,7 +2,9 @@
 
 namespace App\Jobs;
 
+use App\Mail\MailNotification;
 use App\Models\History;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -10,7 +12,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class AuctionEnd implements ShouldQueue
 {
@@ -33,8 +37,6 @@ class AuctionEnd implements ShouldQueue
      */
     public function handle()
     {
-        // todo: send E-mail to person that won the auction
-
         $statuses = ['Created', 'Ongoing'];
 
         // Fetch all Auction instances that are active, with statuses that represent active auctions and that have ended
@@ -79,6 +81,12 @@ class AuctionEnd implements ShouldQueue
                     'username' => $bid->username,       // User that had the last (greatest) Bid wins this Auction
                     'final_price' => $bid->value       // Last Bid value
                 ]);
+                // Finally, when we are sure Auction was purchased, send an email
+                Mail::to(User::query()->where('username', $bid->username)->first())
+                    ->send(new MailNotification(
+                        'Congratulations. You now own the following Auction: "' . $auction->title . '". Please visit the History tab on our platform for additional information. Thanks.',
+                        'You have won an Auction with ID:' . $auction->id
+                    ));
             }
         }
     }

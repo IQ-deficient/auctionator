@@ -157,6 +157,20 @@ class UserSeeder extends Seeder
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
+            [
+                'id' => 11,
+                'username' => 'vladimir.123',
+                'password' => Hash::make('vladimir.123'),
+                'first_name' => 'Vladimir',
+                'last_name' => 'Gazivoda',
+                'email' => 'vladimircg98@gmail.com',
+                'phone_number' => '067336363',
+                'gender' => 'Male',
+                'country' => 'Yugoslavia',
+                'is_active' => true,
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            ],
         ];
 
         DB::table('users')->insert($seeds);
