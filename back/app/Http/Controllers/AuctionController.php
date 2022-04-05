@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateAuctionRequest;
 use App\Models\History;
 use App\Models\Item;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -36,12 +37,12 @@ class AuctionController extends Controller
 
     /**
      * Display a listing of the resource only for active entities.
-     * @return Response
+     * @return Collection|Builder[]
      */
     public function getActive()
     {
 //        return Auction::all()->where('is_active', true);
-        return Auction::where('is_active', true)->get();
+        return Auction::query()->where('is_active', true)->get();
     }
 
     /**

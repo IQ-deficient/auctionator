@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserRole;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -136,13 +137,17 @@ class AuthController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
+        // Generate a new User entry with validated given data, with password hashed appropriately
         $user = User::create(array_merge(
             $validator->validated(),
             ['password' => bcrypt($request->password)]
         ));
 
-
-        // TODO: make input in user_roles table
+        // Assign this User a role of Client
+        UserRole::create([
+            'username' => $user->username,
+            'role' => 'Client'
+        ]);
 
         return response()->json([
             'message' => 'User successfully registered.',
@@ -173,23 +178,25 @@ class AuthController extends Controller
 //            'birthdate' => 'nullable|date',
 //            'image' => 'required',
             'roles' => 'required',
-            'roles.*' => 'string|distinct|exists:roles,name'       // Array validator
+            'roles.*' => 'required|string|distinct|exists:roles,name'       // Array validator
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
 
-        return $request->roles;
-
         $user = User::create(array_merge(
             $validator->validated(),
             ['password' => bcrypt($request->password)]
         ));
 
-
-        // TODO: make input in user_roles table
-
+        // Assign this Employee the chosen Roles
+        foreach ($request->roles as $role) {
+            UserRole::create([
+                'username' => $user->username,
+                'role' => $role
+            ]);
+        }
 
         return response()->json([
             'message' => 'Employee successfully registered.',
