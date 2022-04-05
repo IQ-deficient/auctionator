@@ -16,7 +16,7 @@ class ItemController extends Controller
 
     public function getActive()
     {
-        return Item::where('is_active', true)->get();
+        return Item::query()->where('is_active', true)->get();
     }
 
     /**

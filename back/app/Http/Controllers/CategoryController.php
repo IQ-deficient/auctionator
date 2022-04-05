@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -86,7 +87,7 @@ class CategoryController extends Controller
 
     /**
      * Display a listing of the resource.
-     * @return Response
+     * @return Category[]|\Illuminate\Database\Eloquent\Collection
      */
     public function index()
     {
@@ -95,16 +96,16 @@ class CategoryController extends Controller
 
     /**
      * Display a listing of the resource only for active entities.
-     * @return Response
+     * @return Builder[]|\Illuminate\Database\Eloquent\Collection
      */
     public function getActive()
     {
-        return Category::where('is_active', true)->get();
+        return Category::query()->where('is_active', true)->get();
     }
 
     public function getSubCategories()
     {
-        return Category::where('is_active', true)->whereNotNull('master_category_id')->get();
+        return Category::query()->where('is_active', true)->whereNotNull('master_category_id')->get();
     }
 
     /**

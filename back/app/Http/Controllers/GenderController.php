@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Gender;
 use App\Http\Requests\StoreGenderRequest;
 use App\Http\Requests\UpdateGenderRequest;
+use Illuminate\Database\Eloquent\Collection;
 
 class GenderController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Collection|Gender[]
      */
     public function index()
     {
@@ -20,7 +21,7 @@ class GenderController extends Controller
 
     public function getActive()
     {
-        return Gender::where('is_active', true)->get();
+        return Gender::query()->where('is_active', true)->get();
     }
 
     /**

@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Http\Requests\StoreRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
+use Illuminate\Database\Eloquent\Collection;
 
 class RoleController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return Collection|Role[]
      */
     public function index()
     {
@@ -20,7 +20,7 @@ class RoleController extends Controller
 
     public function getActive()
     {
-        return Role::where('is_active', true)->get();
+        return Role::query()->where('is_active', true)->get();
     }
 
     /**

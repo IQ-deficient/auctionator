@@ -300,7 +300,7 @@ class AuthController extends Controller
             'updated_at' => Carbon::now()
         ]);
 
-        return User::where('id', $user->id)->first();
+        return User::query()->where('id', $user->id)->first();
     }
 
     /**
@@ -329,7 +329,7 @@ class AuthController extends Controller
             'updated_at' => Carbon::now()
         ]);
 
-        return User::where('id', $user->id)->first();
+        return User::query()->where('id', $user->id)->first();
     }
 
     /**
@@ -343,6 +343,6 @@ class AuthController extends Controller
             'is_active' => !$user->is_active,
         ]);
 
-        return User::where('id', $user->id)->first();
+        return User::query()->where('id', $user->id)->first();
     }
 }

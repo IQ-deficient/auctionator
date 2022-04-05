@@ -185,7 +185,7 @@ class AuctionController extends Controller
             'user_id' => Auth::id(),            // Auctioneer that is responsible for creation of this auction
         ]);
 
-        return Auction::where('id', $auction->id)->first();
+        return Auction::query()->where('id', $auction->id)->first();
 //        return $auction;
     }
 
@@ -264,7 +264,7 @@ class AuctionController extends Controller
         ]);
 
 //        return $auction;
-        return Auction::where('id', $auction->id)->first();
+        return Auction::query()->where('id', $auction->id)->first();
     }
 
     /**
@@ -291,6 +291,6 @@ class AuctionController extends Controller
 
         // returning Model, so it picks up all formatted data
 //        return DB::table('auctions')->where('id', $auction->id)->first();
-        return Auction::where('id', $auction->id)->first();
+        return Auction::query()->where('id', $auction->id)->first();
     }
 }

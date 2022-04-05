@@ -19,7 +19,7 @@ class WarehouseController extends Controller
 
     public function getActive()
     {
-        return Warehouse::where('is_active', true)->get();
+        return Warehouse::query()->where('is_active', true)->get();
     }
 
     /**
@@ -53,7 +53,7 @@ class WarehouseController extends Controller
             'address' => $request->address
         ]);
 
-        return Warehouse::where('id', $warehouse->id)->first();
+        return Warehouse::query()->where('id', $warehouse->id)->first();
     }
 
     /**
@@ -101,7 +101,7 @@ class WarehouseController extends Controller
             'updated_at' => Carbon::now()
         ]);
 
-        return Warehouse::where('id', $warehouse->id)->first();
+        return Warehouse::query()->where('id', $warehouse->id)->first();
     }
 
     /**
@@ -114,6 +114,6 @@ class WarehouseController extends Controller
             'is_active' => !$warehouse->is_active,
         ]);
 
-        return Warehouse::where('id', $warehouse->id)->first();
+        return Warehouse::query()->where('id', $warehouse->id)->first();
     }
 }

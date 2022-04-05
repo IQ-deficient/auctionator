@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\UserRole;
 use App\Http\Requests\StoreUserRoleRequest;
 use App\Http\Requests\UpdateUserRoleRequest;
+use Illuminate\Database\Eloquent\Collection;
 
 class UserRoleController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return Collection|UserRole[]
      */
     public function index()
     {

@@ -8,6 +8,9 @@ use App\Http\Requests\StoreBidRequest;
 use App\Http\Requests\UpdateBidRequest;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -20,7 +23,7 @@ class BidController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return Bid[]|Collection
      */
     public function index()
     {
@@ -29,7 +32,7 @@ class BidController extends Controller
 
     public function getActive()
     {
-        return Bid::where('is_active', true)->get();
+        return Bid::query()->where('is_active', true)->get();
     }
 
     /**
@@ -45,7 +48,7 @@ class BidController extends Controller
     /**
      * Store a newly created Bid instance in storage referencing a given Auction.
      * @param Request $request
-     * @return Response|JsonResponse
+     * @return Builder|JsonResponse|Model|object
      */
     public function store(Request $request)
     {
@@ -115,7 +118,7 @@ class BidController extends Controller
             'updated_at' => Carbon::now()
         ]);
 
-        return Bid::where('id', $bid->id)->first();
+        return Bid::query()->where('id', $bid->id)->first();
     }
 
     /**

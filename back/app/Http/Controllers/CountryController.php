@@ -15,7 +15,7 @@ class CountryController extends Controller
 
     public function getActive()
     {
-        return Country::where('is_active', true)->get();
+        return Country::query()->where('is_active', true)->get();
     }
 
     /**

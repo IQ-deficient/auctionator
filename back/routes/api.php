@@ -90,7 +90,7 @@ Route::get('/active_countries', [CountryController::class, 'getActive']);
 Route::get('/genders', [GenderController::class, 'index']);
 
 // Histories
-Route::post('/history', [HistoryController::class, 'store']);   // buyout
+Route::post('/history', [HistoryController::class, 'store']);   // Buyout
 Route::get('/histories', [HistoryController::class, 'index']);
 Route::get('/user_histories', [HistoryController::class, 'getHistoriesForUser']);   // Auth User history
 Route::get('/history/{history}', [HistoryController::class, 'show']);
