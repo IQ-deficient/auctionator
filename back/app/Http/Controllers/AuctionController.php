@@ -24,15 +24,7 @@ class AuctionController extends Controller
      */
     public function index()
     {
-//        abort_if(Auth::user(), '422','jbg');
-        // get all active auctions
         return Auction::all();
-//        return DB::table('auctions')->get();
-//        return DB::select("
-//            select a.*, i.title as item_title, i.description, i.category, i.`condition`, i.warehouse_id, b.value, b.username
-//            from auctions a, items i, bids b
-//            where a.item_id = i.id && a.bid_id = b.id
-//        ");
     }
 
     /**
@@ -76,12 +68,6 @@ class AuctionController extends Controller
      */
     public function getFiltered(Request $request)
     {
-        // BIG TODO: MANAGE HOW WE WILL HANDLE AUCTIONS THAT ARE FINISHED ONCE THE TIMER RUNS OUT
-        // todo: this will be managed with laravel scheduling
-        // basically every time we return auctions, check if any are expired and manage them??? i guess
-        // while returning auctions for clients check if they have run out of time and dont show those
-        // using query builder instead of eloquent for this is probably a must for longevity (and other stuff)
-
         $validator = Validator::make($request->all(), [
             'category' => 'required|string|exists:categories,name', // It is critical that we only get auctions for certain category
 //            'title' => 'nullable|string|between:3,128',
@@ -91,18 +77,18 @@ class AuctionController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        // TODO: IF AUTH IS CLIENT RETURN ONLY STARTED AND ONGOING, OTHERWISE RETURN ALL?
-
         // Fetch all active Auctions whose item is of the category the Client selected
         $auctions = Auction::query()
             ->where('is_active', true)
             ->whereIn(
-                'item_id',          // get item IDs for select category
+                'item_id',
                 DB::table('items')
-                    ->where('category', $request->category)
+                    ->where('category', $request->category)     // get item IDs for select category
                     ->pluck('id')
             )
+            ->where('status', '!=', 'N/A')
             ->where('start_datetime', '<=', Carbon::now())      // only auctions that have started (because of queuing)
+            ->where('end_datetime', '>=', Carbon::now())      // and NOT ended
             ->get();
 
         // For selected category also get all conditions that exist for parent (master) category of that subcategory
@@ -140,8 +126,6 @@ class AuctionController extends Controller
      * @return mixed
      */
     public function store(Request $request)
-        // todo: figure out how we will handle roles or rather which user_role can access these actions
-        // todo: also functions that define which auctions can be seen by which users depending on 'status'
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|between:3,128',
@@ -169,9 +153,6 @@ class AuctionController extends Controller
             'warehouse_id' => $request->warehouse_id,
         ]);
 
-        // TODO: insert condition for this item in category_condition table
-        // todo: update: ja sam jebeno mentalno retardiran, mada to je bilo vise nego ocigledno
-
         // Lastly, make the auction with all required data together with item and return it
         $auction = Auction::create([
             'title' => $request->title,
@@ -186,7 +167,6 @@ class AuctionController extends Controller
         ]);
 
         return Auction::query()->where('id', $auction->id)->first();
-//        return $auction;
     }
 
     /**
@@ -263,7 +243,6 @@ class AuctionController extends Controller
             'user_id' => Auth::id(),            // Auctioneer that applies changes (in case its someone else than the creator)
         ]);
 
-//        return $auction;
         return Auction::query()->where('id', $auction->id)->first();
     }
 
@@ -290,7 +269,6 @@ class AuctionController extends Controller
             ]);
 
         // returning Model, so it picks up all formatted data
-//        return DB::table('auctions')->where('id', $auction->id)->first();
         return Auction::query()->where('id', $auction->id)->first();
     }
 }
