@@ -67,6 +67,7 @@
             dark
             small
             color="primary"
+            @click="logout()"
         >
           <v-icon>mdi-logout-variant</v-icon>
         </v-btn>
@@ -202,6 +203,7 @@ export default {
             console.log(error)
           })
     },
+
     getSubCategories() {
       this.categories = []
       axios.get('/active_categories')
@@ -216,6 +218,37 @@ export default {
           .catch(error => {
             console.log(error)
           })
+    },
+
+    logout() {
+      const config = {
+        headers: {'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token')).access_token}
+      };
+      const bodyParameters = {
+        key: "token"
+      };
+
+      this.loading = true
+      axios.post('/auth/logout', bodyParameters, config)
+          .then(response => {
+                if (response) {
+                  localStorage.removeItem("token");
+                  this.$router.push('/');
+                  // console.log(response.data)
+                  this.loading = false;
+                }
+              }
+          )
+          .catch(error => {
+            console.log(error)
+            // console.log(JSON.parse(localStorage.getItem('token')).access_token);
+            this.loading = false
+            this.error = error.response.data.message;
+
+          })
+      // sessionStorage.removeItem("key");
+      // localStorage.removeItem("user");
+      // this.$router.push('/home');
     },
   },
 

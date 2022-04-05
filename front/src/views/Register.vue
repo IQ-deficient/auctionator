@@ -307,7 +307,7 @@ export default {
       })
           .then(response => {
                 if (response) {
-                  this.$router.push('/home');
+                  this.$router.push('/login');
                   this.loading = false;
                 }
               }

@@ -10,8 +10,8 @@
       >
         <form @submit.prevent="submit"
               style="height: 280px; width: 88%; margin: 0 auto"
-        class="pt-3">
-<!--          Polje za unos imejla-->
+              class="pt-3">
+          <!--          Polje za unos imejla-->
           <validation-provider
               v-slot="{ errors }"
               name="Email"
@@ -25,7 +25,7 @@
                 required
             ></v-text-field>
           </validation-provider>
-<!--          Polje za unos lozinke-->
+          <!--          Polje za unos lozinke-->
           <validation-provider
               v-slot="{ errors }"
               name="Password"
@@ -52,7 +52,6 @@
                 value="1"
                 label="Remember me"
                 type="checkbox"
-                required
             ></v-checkbox>
           </validation-provider>
 
@@ -60,6 +59,7 @@
               type="submit"
               class="mb-1"
               color="primary"
+              @click="login()"
           >
             <v-icon left class="mr-2">mdi-login</v-icon>
             Sign in
@@ -77,13 +77,17 @@
       </v-row>
     </v-card>
     <div style="width: 26%; color: white; margin: 0 auto" class="mt-4">
-    <table width="100%">
-      <tr>
-        <td><hr/></td>
-        <td style="width:1px; padding: 0 10px; white-space: nowrap;">New to our platform?</td>
-        <td><hr/></td>
-      </tr>
-    </table>
+      <table width="100%">
+        <tr>
+          <td>
+            <hr/>
+          </td>
+          <td style="width:1px; padding: 0 10px; white-space: nowrap;">New to our platform?</td>
+          <td>
+            <hr/>
+          </td>
+        </tr>
+      </table>
     </div>
 
     <router-link to="/register" style="text-decoration: none">
@@ -98,8 +102,9 @@
 
 <script>
 
-import { required, digits, email, max, regex } from 'vee-validate/dist/rules'
-import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
+import axios from "axios";
+import {required, digits, email, max, regex} from 'vee-validate/dist/rules'
+import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 
 // import axios from "axios";
 
@@ -134,7 +139,7 @@ extend('email', {
 
 
 export default {
-name: "Login",
+  name: "Login",
 
   components: {
     ValidationProvider,
@@ -149,14 +154,34 @@ name: "Login",
   }),
 
   methods: {
-    submit () {
+    submit() {
       this.$refs.observer.validate()
     },
-    clear () {
+    clear() {
       this.email = ''
       this.password = ''
       this.checkbox = null
       this.$refs.observer.reset()
+    },
+    login() {
+      this.loading = true
+      axios.post('/auth/login', {
+        email: this.email,
+        password: this.password,
+      },)
+          .then(response => {
+            if (response) {
+              localStorage.setItem("token", JSON.stringify(response.data));
+              this.$router.push('/');
+              this.loading = false;
+            }
+            return response.data;
+          })
+          .catch(error => {
+            console.log(error)
+            this.loading = false
+            this.error = error.response.data.message;
+          })
     },
   },
 
