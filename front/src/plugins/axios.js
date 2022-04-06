@@ -5,7 +5,7 @@ import axios from "axios";
 
 // Full config:  https://github.com/axios/axios#request-config
 axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || 'http://127.0.0.1:8000/api';
-axios.defaults.headers.common['Authorization'] = 'Bearer ' + JSON.parse(localStorage.getItem('token')).access_token;
+axios.defaults.headers.common['Authorization'] = 'Bearer ' + JSON.parse(localStorage.getItem('token'));
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 let config = {
@@ -13,7 +13,7 @@ let config = {
   // timeout: 60 * 1000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
 
-  // headers: {'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token')).access_token}
+  // headers: {'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))}
 };
 
 const _axios = axios.create(config);
@@ -21,9 +21,9 @@ const _axios = axios.create(config);
 _axios.interceptors.request.use(
   function(config) {
     // Do something before request is sent
-    config.headers.common['Authorization'] = 'Bearer ' + JSON.parse(localStorage.getItem('token')).access_token
+    config.headers.common['Authorization'] = 'Bearer ' + JSON.parse(localStorage.getItem('token'))
 
-    let token = JSON.parse(localStorage.getItem('token')).access_token;
+    let token = JSON.parse(localStorage.getItem('token'));
 
     if (token) {
       config.headers['Authorization'] = `Bearer ${ token }`;

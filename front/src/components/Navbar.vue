@@ -211,7 +211,7 @@ export default {
             if (response.data) {
               for (let i = 0; i < response.data.length; i++) {
                 this.categories = response.data;
-                console.log(response.data)
+                // console.log(response.data)
               }
             }
           })
@@ -222,7 +222,7 @@ export default {
 
     logout() {
       const config = {
-        headers: {'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token')).access_token}
+        headers: {'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))}
       };
       const bodyParameters = {
         key: "token"
