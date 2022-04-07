@@ -135,7 +135,7 @@ class AuctionSeeder extends Seeder
                 'item_id' => 5,
                 'bid_id' => null,
                 'buyout' => 4.99,
-                'status' => 'Ongoing',
+                'status' => 'Created',
                 'start_datetime' => Carbon::yesterday()->format('Y-m-d H:i:s'),
                 'end_datetime' => Carbon::tomorrow()->format('Y-m-d H:i:s'),
                 'user_id' => 6,

@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AuctionController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      * @return Auction[]|Collection
@@ -33,7 +34,6 @@ class AuctionController extends Controller
      */
     public function getActive()
     {
-//        return Auction::all()->where('is_active', true);
         return Auction::query()->where('is_active', true)->get();
     }
 
@@ -112,7 +112,6 @@ class AuctionController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
      * @return Response
      */
     public function create()
@@ -131,7 +130,7 @@ class AuctionController extends Controller
             'title' => 'required|string|between:3,128',
             'seller' => 'required|string|between:3,32',
             'buyout' => 'required|numeric|gt:0',    // x.xx > 0
-            'start_datetime' => 'required|date',
+            'start_datetime' => 'required|date|after:today',
             'end_datetime' => 'required|date|after:start_datetime',     // end date_time must be greater than start dt
             'title_item' => 'required|between:3,64',
             'description' => 'required|string|between:3,500',
@@ -181,7 +180,6 @@ class AuctionController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
      * @param \App\Models\Auction $auction
      * @return Response
      */
@@ -198,17 +196,18 @@ class AuctionController extends Controller
      */
     public function update(Request $request, Auction $auction)
     {
-        // Only the auction without a bid can be changed for certain parameters
-        abort_if($auction->bid_id != null, 422, 'Only auctions with no bid can be altered.');
         // Deactivated auctions are no longer eligible for change
         abort_if($auction->is_active == null, 422, 'This auction was deactivated.');
+        // Auctions with statuses Sold/Expired/Ongoing can not be updated
+        $no_update_statuses = ['Sold', 'Expired'];
+        abort_if(in_array($auction->status, $no_update_statuses), 410, 'This auction has ended and should therefore not be changed.');
+        // Only the auction without a bid can be changed for certain parameters
+        abort_if($auction->bid_id != null, 422, 'Only auctions with no bid can be altered.');
 
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|between:3,128',
             'seller' => 'required|string|between:3,32',
             'buyout' => 'required|numeric|gt:0',
-            'start_datetime' => 'required|date',
-            'end_datetime' => 'required|date|after:start_datetime',
             'title_item' => 'required|string|between:3,64',
             'description' => 'required|string|between:3,500',
             'category' => 'required|string|max:64|exists:categories,name',
@@ -271,4 +270,6 @@ class AuctionController extends Controller
         // returning Model, so it picks up all formatted data
         return Auction::query()->where('id', $auction->id)->first();
     }
+
+    // N/A i nazad na Ongoing/Created u odnosu na bid
 }
