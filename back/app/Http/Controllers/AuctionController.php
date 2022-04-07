@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Auction;
 use App\Http\Requests\StoreAuctionRequest;
 use App\Http\Requests\UpdateAuctionRequest;
+use App\Models\Category;
 use App\Models\History;
 use App\Models\Item;
 use Carbon\Carbon;
@@ -34,7 +35,9 @@ class AuctionController extends Controller
      */
     public function getActive()
     {
-        return Auction::query()->where('is_active', true)->get();
+        return Auction::query()
+            ->where('is_active', true)
+            ->get();
     }
 
     /**
@@ -91,21 +94,8 @@ class AuctionController extends Controller
             ->where('end_datetime', '>=', Carbon::now())      // and NOT ended
             ->get();
 
-        // For selected category also get all conditions that exist for parent (master) category of that subcategory
-        $conditions = DB::table('category_conditions')
-            ->where(
-                'category',
-                DB::table('categories')
-                    ->where(
-                        'id',
-                        DB::table('categories')
-                            ->where('is_active', true)
-                            ->where('name', $request->category)
-                            ->value('master_category_id')
-                    )
-                    ->value('name')
-            )
-            ->pluck('condition');
+        // Also...
+        $conditions = Category::getConditionsByCategory($request->category);
 
         return response(['auctions' => $auctions, 'conditions' => $conditions]);
     }
@@ -142,6 +132,10 @@ class AuctionController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
+
+        // Just in case Condition and Category from request do not work together
+        $proper_conditions = Category::getConditionsByCategory($request->category)->toArray();
+        abort_if(!in_array($request->condition, $proper_conditions), 400, 'Condition used is not applicable to selected Category.');
 
         // Firstly make the item that should be formed into the auction
         $item = Item::create([

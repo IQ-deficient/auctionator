@@ -100,12 +100,17 @@ class CategoryController extends Controller
      */
     public function getActive()
     {
-        return Category::query()->where('is_active', true)->get();
+        return Category::query()
+            ->where('is_active', true)
+            ->get();
     }
 
     public function getSubCategories()
     {
-        return Category::query()->where('is_active', true)->whereNotNull('master_category_id')->get();
+        return Category::query()
+            ->where('is_active', true)
+            ->whereNotNull('master_category_id')
+            ->get();
     }
 
     /**
