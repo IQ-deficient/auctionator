@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\MailNotification;
 use App\Models\Auction;
+use App\Models\Bid;
 use App\Models\History;
 use App\Http\Requests\StoreHistoryRequest;
 use App\Http\Requests\UpdateHistoryRequest;
@@ -84,13 +85,7 @@ class HistoryController extends Controller
         abort_if(in_array($auction->status, $no_bid_statuses), 410, 'This auction is no longer eligible for buyout.');
 
         // Invalidate the last and only bid for auction being bought out if there is any
-        DB::table('bids')
-            ->where('id', $auction->bid_id)
-            ->where('is_active', true)
-            ->update([
-                'is_active' => false,
-                'updated_at' => Carbon::now()
-            ]);
+        Bid::deactivateBid($auction->bid_id);
 
         // Change the auction status to Sold (We are not removing the bid_id for this Auction)
         $auction->update([

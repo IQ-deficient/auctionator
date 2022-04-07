@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Auction;
 use App\Http\Requests\StoreAuctionRequest;
 use App\Http\Requests\UpdateAuctionRequest;
+use App\Models\Bid;
 use App\Models\Category;
 use App\Models\History;
 use App\Models\Item;
@@ -247,23 +248,40 @@ class AuctionController extends Controller
     {
         // Once deactivated, auction can not be reactivated and a new instance must be freshly made
         // Status does not change because this already guarantees that auction is no longer in play
-        // Item is missing or any other colossal issue, and therefore we do not care if there is a bid
+        // Item is lost or any other colossal issue, and therefore we do not care if there is a bid
         $auction->update([
             'is_active' => false,
             'user_id' => Auth::id()         // Auctioneer that deleted the auction
         ]);
 
         // Last and only active bid for this auction will be deactivated
-        DB::table('bids')
-            ->where('id', $auction->bid_id)
-            ->where('is_active', true)
-            ->update([
-                'is_active' => false
-            ]);
+        Bid::deactivateBid($auction->bid_id);
+
+        // todo: mail the last bidder (Something unavoidable led to this auction being terminated. itd itd)
 
         // returning Model, so it picks up all formatted data
         return Auction::query()->where('id', $auction->id)->first();
     }
 
-    // N/A i nazad na Ongoing/Created u odnosu na bid
+    /**
+     * Some critical errors lead to Auctions being soft deleted, or rather being made Not Available (for a short time)
+     * This resets the auction to default settings meaning the duration and bid is reset
+     * @return mixed
+     */
+    public function softDestroy(Auction $auction){
+
+        // Change this auction to appropriate status for the present catastrophe
+        $auction->update([
+            'status' => 'N/A',
+            'user_id' => Auth::id()         // Auctioneer that altered the auction
+        ]);
+
+        // Nullify the last and only bid for this auction
+        Bid::deactivateBid($auction->bid_id);
+
+        // reset the timer
+        // mail the last bidder (Sorry for the inconvenience. jada jada ovo ono. You can visit our platform and place your bid once again.)
+
+    }
+
 }

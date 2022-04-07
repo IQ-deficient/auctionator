@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Mail\MailNotification;
+use App\Models\Bid;
 use App\Models\History;
 use App\Models\User;
 use Carbon\Carbon;
@@ -58,13 +59,8 @@ class AuctionEnd implements ShouldQueue
                     ]);
             } else {
                 //Invalidate the last and only bid for auction being bought out
-                DB::table('bids')
-                    ->where('id', $auction->bid_id)
-                    ->where('is_active', true)
-                    ->update([
-                        'is_active' => false,
-                        'updated_at' => Carbon::now()
-                    ]);
+                Bid::deactivateBid($auction->bid_id);
+
                 // For auctions with bids, mark them as Sold
                 DB::table('auctions')
                     ->where('id', $auction->id)

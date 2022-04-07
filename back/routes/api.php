@@ -61,6 +61,7 @@ Route::get('/active_auctions', [AuctionController::class, 'getActive']);
 Route::get('/auction/{auction}', [AuctionController::class, 'show']);       // Show one specific Auction by ID
 Route::put('/auction/{auction}', [AuctionController::class, 'update']);
 Route::delete('/auction/{auction}', [AuctionController::class, 'destroy']);
+Route::delete('/auction_soft/{auction}', [AuctionController::class, 'softDestroy']);     // N/A
 Route::post('/filtered_auctions', [AuctionController::class, 'getFiltered']);    // this shall be discussed
 
 // Bids

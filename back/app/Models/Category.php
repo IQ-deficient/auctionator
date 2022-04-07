@@ -33,7 +33,7 @@ class Category extends Model
     ];
 
     /**
-     * For selected category get all conditions that exist for parent (master) category of that subcategory
+     * For selected category get all conditions that exist for parent (master) category of that subcategory.
      * @return Collection
      */
     public static function getConditionsByCategory($category)
