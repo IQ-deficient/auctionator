@@ -274,23 +274,28 @@ class AuctionController extends Controller
      */
     public function softDestroy(Auction $auction)
     {
-        // inaktivnoj aukciji ne moze da se mijenja nista
-        // ako je expired ili sold ne moze da se mijenja (ove stvari isto vaze i za dosta drugih pa mozda policy?)
-        // ako je end_datetime > Carbon::now() pa logicno da se zavrsila i vise nema ovoga (isto za vise stvari ce da vazi ova provjera)
+        // Deactivated auctions are no longer eligible for change
+        abort_if($auction->is_active == null, 422, 'This auction was deactivated.');
+        // Auctions with statuses Sold/Expired/Ongoing can not be updated
+        $no_update_statuses = ['Sold', 'Expired'];
+        abort_if(in_array($auction->status, $no_update_statuses), 410, 'This auction has ended and should therefore not be changed.');
+
+
+        // todo: ako je end_datetime > Carbon::now() pa logicno da se zavrsila i vise nema ovoga (isto za vise stvari ce da vazi ova provjera)
 
         // Get the User that last placed the Bid on this Auction
 
         // If we are reverting the Auction to regular state, make it fresh by changing status and duration to reflect that
         if ($auction->status == 'NA') {
 
-            // todo reset the timer
-            return response($auction->start_datetime, $auction->end_datetime);
-
+            // Get the difference between start and end datetimes of this Auction before we update it
+            $diff = Carbon::createFromDate($auction->start_datetime)
+                ->diffInSeconds(Carbon::createFromDate($auction->end_datetime));
 
             $auction->update([
                 'status' => 'Created',
-                'start_datetime' => null,
-                'end_datetime' => null,
+                'start_datetime' => Carbon::now(),
+                'end_datetime' => Carbon::now()->addSeconds($diff),
                 'user_id' => Auth::id()
             ]);
 
