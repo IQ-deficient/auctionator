@@ -81,7 +81,7 @@ class HistoryController extends Controller
         // TODO: Validation to check if the auction expired (just in case) make this check as model function
 
         // Check if auction can be bought out, we already know the auction is active from previous model query
-        $no_bid_statuses = ['Expired', 'Sold', 'N/A'];
+        $no_bid_statuses = ['Expired', 'Sold', 'NA'];
         abort_if(in_array($auction->status, $no_bid_statuses), 410, 'This auction is no longer eligible for buyout.');
 
         // Invalidate the last and only bid for auction being bought out if there is any

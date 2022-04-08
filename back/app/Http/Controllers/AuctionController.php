@@ -10,8 +10,12 @@ use App\Models\Category;
 use App\Models\History;
 use App\Models\Item;
 use Carbon\Carbon;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -68,7 +72,7 @@ class AuctionController extends Controller
      * Return Auctions based on some parameters and filter keywords for Clients
      * we will never be returning ALL auctions to customers, rather only the ones corresponding to certain category
      * @param Request $request
-     * @return mixed
+     * @return Application|ResponseFactory|JsonResponse|Response
      */
     public function getFiltered(Request $request)
     {
@@ -90,7 +94,7 @@ class AuctionController extends Controller
                     ->where('category', $request->category)     // get item IDs for select category
                     ->pluck('id')
             )
-            ->where('status', '!=', 'N/A')
+            ->where('status', '!=', 'NA')
             ->where('start_datetime', '<=', Carbon::now())      // only auctions that have started (because of queuing)
             ->where('end_datetime', '>=', Carbon::now())      // and NOT ended
             ->get();
@@ -113,7 +117,7 @@ class AuctionController extends Controller
     /**
      * Store a newly created resource in storage.
      * @param Request $request
-     * @return mixed
+     * @return Builder|JsonResponse|Model|object|null
      */
     public function store(Request $request)
     {
@@ -187,7 +191,7 @@ class AuctionController extends Controller
      * Update the specified resource in storage.
      * @param Request $request
      * @param Auction $auction
-     * @return mixed
+     * @return Auction|JsonResponse
      */
     public function update(Request $request, Auction $auction)
     {
@@ -237,12 +241,12 @@ class AuctionController extends Controller
             'user_id' => Auth::id(),            // Auctioneer that applies changes (in case its someone else than the creator)
         ]);
 
-        return Auction::query()->where('id', $auction->id)->first();
+        return $auction;
     }
 
     /**
      * Alter activity status for the specified resource in storage.
-     * @return mixed
+     * @return Builder|Model|object|null
      */
     public function destroy(Auction $auction)
     {
@@ -264,24 +268,47 @@ class AuctionController extends Controller
     }
 
     /**
-     * Some critical errors lead to Auctions being soft deleted, or rather being made Not Available (for a short time)
-     * This resets the auction to default settings meaning the duration and bid is reset
-     * @return mixed
+     * Some critical errors lead to Auctions being soft deleted, or rather being made Not Available (for a short time).
+     * This resets the auction to default settings meaning the duration and bid is reset.
+     * @return Auction|Model
      */
-    public function softDestroy(Auction $auction){
+    public function softDestroy(Auction $auction)
+    {
+        // inaktivnoj aukciji ne moze da se mijenja nista
+        // ako je expired ili sold ne moze da se mijenja (ove stvari isto vaze i za dosta drugih pa mozda policy?)
+        // ako je end_datetime > Carbon::now() pa logicno da se zavrsila i vise nema ovoga (isto za vise stvari ce da vazi ova provjera)
 
-        // Change this auction to appropriate status for the present catastrophe
-        $auction->update([
-            'status' => 'N/A',
-            'user_id' => Auth::id()         // Auctioneer that altered the auction
-        ]);
+        // Get the User that last placed the Bid on this Auction
 
-        // Nullify the last and only bid for this auction
-        Bid::deactivateBid($auction->bid_id);
+        // If we are reverting the Auction to regular state, make it fresh by changing status and duration to reflect that
+        if ($auction->status == 'NA') {
 
-        // reset the timer
-        // mail the last bidder (Sorry for the inconvenience. jada jada ovo ono. You can visit our platform and place your bid once again.)
+            // todo reset the timer
+            return response($auction->start_datetime, $auction->end_datetime);
 
+
+            $auction->update([
+                'status' => 'Created',
+                'start_datetime' => null,
+                'end_datetime' => null,
+                'user_id' => Auth::id()
+            ]);
+
+            // Also mail the person that last owned the Auction (bid) that it is once again available
+            // TODO Sorry for the inconvenience. jada jada ovo ono. You can visit our platform and place your bid once again.
+        } else {
+            // And when we are making it Not Available, change status and nullify the last bid for that Auction
+            Bid::deactivateBid($auction->bid_id);
+            $auction->update([
+                'status' => 'NA',
+                'bid_id' => null,
+                'user_id' => Auth::id()         // Auctioneer that altered the auction
+            ]);
+
+            // todo: obavezno mailujemo osobu koja je imala bid da se nesto desava ali da ce biti obavijesteni kad se stvari poprave
+        }
+
+        return $auction;
     }
 
 }
