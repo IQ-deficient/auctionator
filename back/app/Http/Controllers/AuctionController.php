@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\MailNotification;
 use App\Models\Auction;
 use App\Http\Requests\StoreAuctionRequest;
 use App\Http\Requests\UpdateAuctionRequest;
@@ -9,6 +10,7 @@ use App\Models\Bid;
 use App\Models\Category;
 use App\Models\History;
 use App\Models\Item;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -20,6 +22,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class AuctionController extends Controller
@@ -197,9 +200,12 @@ class AuctionController extends Controller
     {
         // Deactivated auctions are no longer eligible for change
         abort_if($auction->is_active == null, 422, 'This auction was deactivated.');
-        // Auctions with statuses Sold/Expired/Ongoing can not be updated
+
+        // Auctions with statuses Sold/Expired/Ongoing can not be updated, also check for end_datetime just in case
         $no_update_statuses = ['Sold', 'Expired'];
-        abort_if(in_array($auction->status, $no_update_statuses), 410, 'This auction has ended and should therefore not be changed.');
+        abort_if(in_array($auction->status, $no_update_statuses) || Carbon::now() >= $auction->end_datetime,
+            410, 'This auction has ended and can therefore not be changed.');
+
         // Only the auction without a bid can be changed for certain parameters
         abort_if($auction->bid_id != null, 422, 'Only auctions with no bid can be altered.');
 
@@ -272,18 +278,20 @@ class AuctionController extends Controller
      * This resets the auction to default settings meaning the duration and bid is reset.
      * @return Auction|Model
      */
-    public function softDestroy(Auction $auction)
+    public function softDestroyAndRestore(Auction $auction)
     {
-        // Deactivated auctions are no longer eligible for change
+        // Non-active auctions can no longer be altered
         abort_if($auction->is_active == null, 422, 'This auction was deactivated.');
-        // Auctions with statuses Sold/Expired/Ongoing can not be updated
+
+        // Auctions with statuses Sold/Expired/Ongoing can not be updated, also check for end_datetime just in case
         $no_update_statuses = ['Sold', 'Expired'];
-        abort_if(in_array($auction->status, $no_update_statuses), 410, 'This auction has ended and should therefore not be changed.');
-
-
-        // todo: ako je end_datetime > Carbon::now() pa logicno da se zavrsila i vise nema ovoga (isto za vise stvari ce da vazi ova provjera)
+        abort_if(in_array($auction->status, $no_update_statuses) || Carbon::now() >= $auction->end_datetime,
+            410, 'This auction has ended and can therefore not be changed.');
 
         // Get the User that last placed the Bid on this Auction
+        $last_bidder = User::query()
+            ->where('username', $auction->bid->username)
+            ->first();
 
         // If we are reverting the Auction to regular state, make it fresh by changing status and duration to reflect that
         if ($auction->status == 'NA') {
@@ -294,23 +302,33 @@ class AuctionController extends Controller
 
             $auction->update([
                 'status' => 'Created',
+                'bid_id' => null,
                 'start_datetime' => Carbon::now(),
                 'end_datetime' => Carbon::now()->addSeconds($diff),
                 'user_id' => Auth::id()
             ]);
 
             // Also mail the person that last owned the Auction (bid) that it is once again available
-            // TODO Sorry for the inconvenience. jada jada ovo ono. You can visit our platform and place your bid once again.
+            Mail::to($last_bidder)
+                ->send(new MailNotification(
+                    'Great news! The Auction: "' . $auction->title . '" is up and running. You may place your bid once again.',
+                    'Good to go - Auction with ID:' . $auction->id
+                ));
+
         } else {
             // And when we are making it Not Available, change status and nullify the last bid for that Auction
             Bid::deactivateBid($auction->bid_id);
+
             $auction->update([
                 'status' => 'NA',
-                'bid_id' => null,
                 'user_id' => Auth::id()         // Auctioneer that altered the auction
             ]);
 
-            // todo: obavezno mailujemo osobu koja je imala bid da se nesto desava ali da ce biti obavijesteni kad se stvari poprave
+            Mail::to($last_bidder)
+                ->send(new MailNotification(
+                    'We wanted to let you know that the Auction: "' . $auction->title . '" you have had a bid on is currently Not Available. We are terribly sorry for the inconvenience. You will be notified once we figure this out.',
+                    'There is an issue with an auction with ID:' . $auction->id
+                ));
         }
 
         return $auction;
