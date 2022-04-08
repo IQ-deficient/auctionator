@@ -264,10 +264,15 @@ class AuctionController extends Controller
             'user_id' => Auth::id()         // Auctioneer that deleted the auction
         ]);
 
+        // Notifying the person that last bid on this Auction before we invalidate that Bid
+        Mail::to(User::query()->where('username', $auction->bid->username)->first())
+            ->send(new MailNotification(
+                'The Auction: "' . $auction->title . '", with an ID:' . $auction->id . ', is now terminated! Please contact our staff for additional information.',
+                'Something has gone wrong!'
+            ));
+
         // Last and only active bid for this auction will be deactivated
         Bid::deactivateBid($auction->bid_id);
-
-        // todo: mail the last bidder (Something unavoidable led to this auction being terminated. itd itd)
 
         // returning Model, so it picks up all formatted data
         return Auction::query()->where('id', $auction->id)->first();
