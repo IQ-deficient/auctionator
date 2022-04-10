@@ -234,6 +234,7 @@ export default {
                 if (response) {
                   localStorage.removeItem("token");
                   this.$router.push('/');
+                  this.$router.go(0)
                   // console.log(response.data)
                   this.loading = false;
                 }

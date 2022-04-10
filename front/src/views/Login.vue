@@ -173,6 +173,7 @@ export default {
             if (response) {
               localStorage.setItem("token", JSON.stringify(response.data.access_token));
               this.$router.push('/');
+              this.$router.go(0)
               this.loading = false;
             }
             return response.data;
