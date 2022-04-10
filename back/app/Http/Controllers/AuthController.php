@@ -34,15 +34,13 @@ class AuthController extends Controller
      */
     public function index()
     {
-//        return User::all();
-//        return DB::table('users')->get();
         $roles = User::getUserRoles();
 
         // Get all active Users that fit the role of Manager and Auctioneer
         $usernames = DB::table('user_roles')
             ->whereIn('role', ['Manager', 'Auctioneer'])
             ->pluck('username');
-        $managers_auctioneers = DB::table('users')
+        $managers_auctioneers = User::query()
             ->where('is_active', true)
             ->whereIn('username', $usernames)
             ->get();
@@ -51,7 +49,7 @@ class AuthController extends Controller
         $usernames = DB::table('user_roles')
             ->where('role', 'Client')
             ->pluck('username');
-        $clients = DB::table('users')
+        $clients = User::query()
             ->where('is_active', true)
             ->whereIn('username', $usernames)
             ->get();
@@ -62,7 +60,7 @@ class AuthController extends Controller
         } elseif (in_array('Manager', $roles)) {
             return ['clients' => $clients];
         }
-        return response('Something went wrong while fetching users!', 400);
+        return response('You do not have permissions for requested data!', 400);
     }
 
     /**
@@ -99,7 +97,7 @@ class AuthController extends Controller
         }
 
         // Find a User that is trying to Authenticate and deny access if their User profile is inactive
-        $active_user = DB::table('users')
+        $active_user = User::query()
             ->where('email', $request->email)
             ->first();
         abort_if($active_user->is_active != 1, 403, 'This user is inactive!');

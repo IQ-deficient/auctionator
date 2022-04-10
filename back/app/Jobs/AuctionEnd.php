@@ -38,9 +38,10 @@ class AuctionEnd implements ShouldQueue
      */
     public function handle()
     {
+        // We do not include Auctions with status 'NA' as these are not able to be finished until put back into play
         $statuses = ['Created', 'Ongoing'];
 
-        // Fetch all Auction instances that are active, with statuses that represent active auctions and that have ended
+        // Fetch all Auction instances that are active, with statuses that represent working auctions and that have ended
         $auctions = DB::table('auctions')
             ->where('is_active', true)
             ->whereIn('status', $statuses)

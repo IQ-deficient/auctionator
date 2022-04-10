@@ -80,7 +80,7 @@ class BidController extends Controller
 
         // In case there is an attempt to bid on the unbindable auction, cancel further actions
         // Since we only work with is_active==true entities here, there is no reason to check for that
-        $no_bid_statuses = ['Expired', 'Sold', 'N/A'];
+        $no_bid_statuses = ['Expired', 'Sold', 'NA'];
         abort_if(in_array($auction->status, $no_bid_statuses), 410, 'This auction is no longer eligible for bids.');
 
         // Client should not be able to bid with value higher than one of the auction buyout as that really just makes buyout irrelevant

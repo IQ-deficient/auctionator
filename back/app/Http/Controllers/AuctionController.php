@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\MailNotification;
 use App\Models\Auction;
 use App\Http\Requests\StoreAuctionRequest;
 use App\Http\Requests\UpdateAuctionRequest;
@@ -9,13 +10,19 @@ use App\Models\Bid;
 use App\Models\Category;
 use App\Models\History;
 use App\Models\Item;
+use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class AuctionController extends Controller
@@ -68,7 +75,7 @@ class AuctionController extends Controller
      * Return Auctions based on some parameters and filter keywords for Clients
      * we will never be returning ALL auctions to customers, rather only the ones corresponding to certain category
      * @param Request $request
-     * @return mixed
+     * @return Application|ResponseFactory|JsonResponse|Response
      */
     public function getFiltered(Request $request)
     {
@@ -90,7 +97,7 @@ class AuctionController extends Controller
                     ->where('category', $request->category)     // get item IDs for select category
                     ->pluck('id')
             )
-            ->where('status', '!=', 'N/A')
+            ->where('status', '!=', 'NA')
             ->where('start_datetime', '<=', Carbon::now())      // only auctions that have started (because of queuing)
             ->where('end_datetime', '>=', Carbon::now())      // and NOT ended
             ->get();
@@ -113,7 +120,7 @@ class AuctionController extends Controller
     /**
      * Store a newly created resource in storage.
      * @param Request $request
-     * @return mixed
+     * @return Builder|JsonResponse|Model|object|null
      */
     public function store(Request $request)
     {
@@ -187,15 +194,18 @@ class AuctionController extends Controller
      * Update the specified resource in storage.
      * @param Request $request
      * @param Auction $auction
-     * @return mixed
+     * @return Auction|JsonResponse
      */
     public function update(Request $request, Auction $auction)
     {
         // Deactivated auctions are no longer eligible for change
         abort_if($auction->is_active == null, 422, 'This auction was deactivated.');
-        // Auctions with statuses Sold/Expired/Ongoing can not be updated
+
+        // Auctions with statuses Sold/Expired/Ongoing can not be updated, also check for end_datetime just in case
         $no_update_statuses = ['Sold', 'Expired'];
-        abort_if(in_array($auction->status, $no_update_statuses), 410, 'This auction has ended and should therefore not be changed.');
+        abort_if(in_array($auction->status, $no_update_statuses) || Carbon::now() >= $auction->end_datetime,
+            410, 'This auction has ended and can therefore not be changed.');
+
         // Only the auction without a bid can be changed for certain parameters
         abort_if($auction->bid_id != null, 422, 'Only auctions with no bid can be altered.');
 
@@ -237,12 +247,12 @@ class AuctionController extends Controller
             'user_id' => Auth::id(),            // Auctioneer that applies changes (in case its someone else than the creator)
         ]);
 
-        return Auction::query()->where('id', $auction->id)->first();
+        return $auction;
     }
 
     /**
      * Alter activity status for the specified resource in storage.
-     * @return mixed
+     * @return Builder|Model|object|null
      */
     public function destroy(Auction $auction)
     {
@@ -254,34 +264,79 @@ class AuctionController extends Controller
             'user_id' => Auth::id()         // Auctioneer that deleted the auction
         ]);
 
+        // Notifying the person that last bid on this Auction before we invalidate that Bid
+        Mail::to(User::query()->where('username', $auction->bid->username)->first())
+            ->send(new MailNotification(
+                'The Auction: "' . $auction->title . '", with an ID:' . $auction->id . ', is now terminated! Please contact our staff for additional information.',
+                'Something has gone wrong!'
+            ));
+
         // Last and only active bid for this auction will be deactivated
         Bid::deactivateBid($auction->bid_id);
-
-        // todo: mail the last bidder (Something unavoidable led to this auction being terminated. itd itd)
 
         // returning Model, so it picks up all formatted data
         return Auction::query()->where('id', $auction->id)->first();
     }
 
     /**
-     * Some critical errors lead to Auctions being soft deleted, or rather being made Not Available (for a short time)
-     * This resets the auction to default settings meaning the duration and bid is reset
-     * @return mixed
+     * Some critical errors lead to Auctions being soft deleted, or rather being made Not Available (for a short time).
+     * This resets the auction to default settings meaning the duration and bid is reset.
+     * @return Auction|Model
      */
-    public function softDestroy(Auction $auction){
+    public function softDestroyAndRestore(Auction $auction)
+    {
+        // Non-active auctions can no longer be altered
+        abort_if($auction->is_active == null, 422, 'This auction was deactivated.');
 
-        // Change this auction to appropriate status for the present catastrophe
-        $auction->update([
-            'status' => 'N/A',
-            'user_id' => Auth::id()         // Auctioneer that altered the auction
-        ]);
+        // Auctions with statuses Sold/Expired/Ongoing can not be updated, also check for end_datetime just in case
+        $no_update_statuses = ['Sold', 'Expired'];
+        abort_if(in_array($auction->status, $no_update_statuses) || Carbon::now() >= $auction->end_datetime,
+            410, 'This auction has ended and can therefore not be changed.');
 
-        // Nullify the last and only bid for this auction
-        Bid::deactivateBid($auction->bid_id);
+        // Get the User that last placed the Bid on this Auction
+        $last_bidder = User::query()
+            ->where('username', $auction->bid->username)
+            ->first();
 
-        // reset the timer
-        // mail the last bidder (Sorry for the inconvenience. jada jada ovo ono. You can visit our platform and place your bid once again.)
+        // If we are reverting the Auction to regular state, make it fresh by changing status and duration to reflect that
+        if ($auction->status == 'NA') {
 
+            // Get the difference between start and end datetimes of this Auction before we update it
+            $diff = Carbon::createFromDate($auction->start_datetime)
+                ->diffInSeconds(Carbon::createFromDate($auction->end_datetime));
+
+            $auction->update([
+                'status' => 'Created',
+                'bid_id' => null,
+                'start_datetime' => Carbon::now(),
+                'end_datetime' => Carbon::now()->addSeconds($diff),
+                'user_id' => Auth::id()
+            ]);
+
+            // Also mail the person that last owned the Auction (bid) that it is once again available
+            Mail::to($last_bidder)
+                ->send(new MailNotification(
+                    'Great news! The Auction: "' . $auction->title . '" is up and running. You may place your bid once again.',
+                    'Good to go - Auction with ID:' . $auction->id
+                ));
+
+        } else {
+            // And when we are making it Not Available, change status and nullify the last bid for that Auction
+            Bid::deactivateBid($auction->bid_id);
+
+            $auction->update([
+                'status' => 'NA',
+                'user_id' => Auth::id()         // Auctioneer that altered the auction
+            ]);
+
+            Mail::to($last_bidder)
+                ->send(new MailNotification(
+                    'We wanted to let you know that the Auction: "' . $auction->title . '" you have had a bid on is currently Not Available. We are terribly sorry for the inconvenience. You will be notified once we figure this out.',
+                    'There is an issue with an auction with ID:' . $auction->id
+                ));
+        }
+
+        return $auction;
     }
 
 }

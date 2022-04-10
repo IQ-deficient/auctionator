@@ -97,7 +97,7 @@
                 </v-btn>
                 <v-card-text class="v-text-field--full-width">
                   <div v-if="auction.buyout != null"> {{ "Buyout price: " + auction.buyout + "€" }}</div>
-                  <div v-else> {{ "N/A" }}</div>
+                  <div v-else> {{ "NA" }}</div>
                 </v-card-text>
               </template>
               <template v-slot:default="dialog">
@@ -123,7 +123,7 @@
                       </v-card-text>
                       <v-card-text class="text-sm-h6" style="word-break: normal">
                         <div v-if="auction.buyout != null"> {{ "Buyout price: " + auction.buyout + "€" }}</div>
-                        <div v-else> {{ "N/A" }}</div>
+                        <div v-else> {{ "NA" }}</div>
                       </v-card-text>
                       <validation-provider
                           v-slot="{ errors }"

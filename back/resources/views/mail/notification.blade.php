@@ -14,7 +14,7 @@
     </p>
     <a href="http://localhost:8080">
         <p style="font-family: 'Comic Sans MS',serif; text-decoration: none; color: #C0A28D">
-            Click here for additional information.
+            Click here to visit our platform.
         </p>
     </a>
 </div>
