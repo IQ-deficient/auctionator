@@ -2,9 +2,9 @@
   <div>
     <!--    Globalni tag navigacione trake -->
     <v-toolbar
-        light
-        color="tertiary"
-        height="75"
+      light
+      color="tertiary"
+      height="75"
     >
       <!--      Fioka sa elementima kategorija i potkategorija-->
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" style="color: black; margin-left: 10px"></v-app-bar-nav-icon>
@@ -40,21 +40,21 @@
       </div>
       <div v-else>
         <v-speed-dial
-            v-model="fab"
-            :top="top"
-            :bottom="bottom"
-            :right="right"
-            :left="left"
-            :direction="direction"
-            :open-on-hover="hover"
-            :transition="transition"
+          v-model="fab"
+          :top="top"
+          :bottom="bottom"
+          :right="right"
+          :left="left"
+          :direction="direction"
+          :open-on-hover="hover"
+          :transition="transition"
         >
           <template v-slot:activator>
             <v-btn
-                v-model="fab"
-                color="accent"
-                dark
-                fab
+              v-model="fab"
+              color="accent"
+              dark
+              fab
             >
               <v-icon v-if="fab">
                 mdi-close
@@ -65,20 +65,20 @@
             </v-btn>
           </template>
           <v-btn
-              fab
-              dark
-              small
-              color="primary"
-              @click="logout()"
+            fab
+            dark
+            small
+            color="primary"
+            @click="logout()"
           >
             <v-icon>mdi-logout-variant</v-icon>
           </v-btn>
           <router-link to="/user-profile">
             <v-btn
-                fab
-                dark
-                small
-                color="primary"
+              fab
+              dark
+              small
+              color="primary"
             >
               <v-icon>mdi-account-details</v-icon>
             </v-btn>
@@ -105,8 +105,8 @@
           </v-list-item-title>
         </v-list-item-content>
         <v-btn
-            icon
-            @click.stop="drawer = !drawer"
+          icon
+          @click.stop="drawer = !drawer"
         >
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
@@ -142,14 +142,19 @@
         <!--        </v-list-item-group>-->
 
         <v-treeview
-            v-model="selectedCategory"
-            :items="categories"
-            activatable
-            item-key="name"
-            open-on-click
-            hoverable
-            transition
+          activatable
+          open-on-click
+          hoverable
+          transition
+          return-object
+          :items="categories"
+          item-key="name"
+          :active.sync="selectedCategory"
+          @update:active="browseAuctionsByCategory()"
         >
+          <!--          <template v-slot:label="{ item }">-->
+          <!--            <a @click="updateSearchCategory(item)">{{ item.name }}</a>-->
+          <!--          </template>-->
           <!--        <template v-slot:prepend="{ item, open }">-->
           <!--          <v-icon v-if="!item.file">-->
           <!--            {{ open ? 'mdi-folder-open' : 'mdi-folder' }}-->
@@ -159,6 +164,7 @@
           <!--          </v-icon>-->
           <!--        </template>-->
         </v-treeview>
+
       </v-list>
       <div v-if="token">
         <v-list class="d-flex flex-column"
@@ -270,6 +276,7 @@ export default {
     left: false,
     transition: 'slide-x-reverse-transition',
     selectedCategory: [],
+    selectedMaster: [],
     categories: [],
     subcategories: [],
     user_roles: [],
@@ -282,36 +289,35 @@ export default {
   },
 
   methods: {
+
+    browseAuctionsByCategory() {
+      // First, store the selected category in localstorage
+      localStorage.setItem("search_category", this.selectedCategory[0].name);
+
+      // Then, redirect to Auction Browse page, which will load data using the Category string we previously stored
+      this.drawer = false
+      if (this.$router.currentRoute.path !== '/auction-browse') {
+        this.$router.push('/auction-browse')
+      } else {
+        this.$router.go(0)
+      }
+
+    },
+
     getCategories() {
       this.categories = []
       axios.get('/menu_categories')
-          .then(response => {
-            if (response.data) {
-              // for (let i = 0; i < response.data.length; i++) {
-              this.categories = response.data;
-              // console.log(response.data)
-              // }
-            }
-          })
-          .catch(error => {
-            console.log(error)
-          })
-    },
-
-    getSubCategories() {
-      this.categories = []
-      axios.get('/active_categories')
-          .then(response => {
-            if (response.data) {
-              for (let i = 0; i < response.data.length; i++) {
-                this.categories = response.data;
-                // console.log(response.data)
-              }
-            }
-          })
-          .catch(error => {
-            console.log(error)
-          })
+        .then(response => {
+          if (response.data) {
+            // for (let i = 0; i < response.data.length; i++) {
+            this.categories = response.data;
+            // console.log(response.data)
+            // }
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
 
     logout() {
@@ -325,23 +331,24 @@ export default {
 
       this.loading = true
       axios.post('/auth/logout', config)
-          .then(response => {
-                if (response) {
-                  localStorage.clear();
-                  this.$router.push('/home');
-                  this.$router.go(0)
-                  // console.log(response.data)
-                  this.loading = false;
-                }
-              }
-          )
-          .catch(error => {
-            console.log(error)
-            // console.log(JSON.parse(localStorage.getItem('token')).access_token);
-            this.loading = false
-            this.error = error.response.data.message;
+        .then(response => {
+            if (response) {
+              localStorage.clear();
+              this.$router.push('/home');
+              // todo: vidi moze li bez ovoga ikako (najbolje i bez onog istog smeca u login)
+              this.$router.go(0)
+              // console.log(response.data)
+              this.loading = false;
+            }
+          }
+        )
+        .catch(error => {
+          console.log(error)
+          // console.log(JSON.parse(localStorage.getItem('token')).access_token);
+          this.loading = false
+          this.error = error.response.data.message;
 
-          })
+        })
       // sessionStorage.removeItem("key");
       // localStorage.removeItem("user");
       // this.$router.push('/home');

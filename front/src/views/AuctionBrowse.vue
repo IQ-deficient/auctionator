@@ -299,7 +299,7 @@ export default {
           href: 'breadcrumbs_link_1',
         },
         {
-          text: 'Sub category placeholder',
+          text: localStorage.getItem('search_category'),
           disabled: true,
           href: 'breadcrumbs_link_2',
         },
@@ -312,7 +312,7 @@ export default {
       auctions: [],
       bidInput: '',
       dataLoading: false,
-      category: "Men's Accessories",
+      category: "",
       conditions: [],
     }
   },
@@ -358,7 +358,13 @@ export default {
   },
 
   created() {
-    this.showAuction();
+    // Local Storage variable used to update the category a user searches by from Menu (Navbar.vue)
+    this.category = localStorage.getItem('search_category')
+    console.log(this.category, 'xd')
+    if (this.category == '' || this.category == null) {
+      this.$router.push('/home')
+    }
+    this.showAuction()
   },
 
   mounted() {
