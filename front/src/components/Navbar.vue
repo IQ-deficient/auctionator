@@ -344,6 +344,8 @@ export default {
         )
         .catch(error => {
           console.log(error)
+          localStorage.clear();
+          this.$router.go(0)
           // console.log(JSON.parse(localStorage.getItem('token')).access_token);
           this.loading = false
           this.error = error.response.data.message;

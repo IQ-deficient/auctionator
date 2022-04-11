@@ -362,7 +362,7 @@ export default {
     this.category = localStorage.getItem('search_category')
     console.log(this.category, 'xd')
     if (this.category == '' || this.category == null) {
-      this.$router.push('/home')
+      this.$router.push('/pageNotFound')
     }
     this.showAuction()
   },

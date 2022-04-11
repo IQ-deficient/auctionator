@@ -9,61 +9,63 @@ axios.defaults.headers.common['Authorization'] = 'Bearer ' + JSON.parse(localSto
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 let config = {
-  // baseURL: process.env.baseURL || process.env.apiUrl || ""
-  // timeout: 60 * 1000, // Timeout
-  // withCredentials: true, // Check cross-site Access-Control
+    // baseURL: process.env.baseURL || process.env.apiUrl || ""
+    // timeout: 60 * 1000, // Timeout
+    // withCredentials: true, // Check cross-site Access-Control
 
-  // headers: {'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))}
+    // headers: {'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))}
 };
 
 const _axios = axios.create(config);
 
 _axios.interceptors.request.use(
-  function(config) {
-    // Do something before request is sent
-    config.headers.common['Authorization'] = 'Bearer ' + JSON.parse(localStorage.getItem('token'))
+    function (config) {
+        // Do something before request is sent
+        config.headers.common['Authorization'] = 'Bearer ' + JSON.parse(localStorage.getItem('token'))
 
-    let token = JSON.parse(localStorage.getItem('token'));
+        let token = JSON.parse(localStorage.getItem('token'));
 
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${ token }`;
+        if (token) {
+            config.headers['Authorization'] = `Bearer ${token}`;
+        }
+        return config;
+    },
+    function (error) {
+        // Do something with request error
+        localStorage.clear();
+        this.$router.go(0)
+        return Promise.reject(error);
     }
-    return config;
-  },
-  function(error) {
-    // Do something with request error
-    return Promise.reject(error);
-  }
 );
 
 // Add a response interceptor
 _axios.interceptors.response.use(
-  function(response) {
-    // Do something with response data
-    return response;
-  },
-  function(error) {
-    // Do something with response error
-    return Promise.reject(error);
-  }
+    function (response) {
+        // Do something with response data
+        return response;
+    },
+    function (error) {
+        // Do something with response error
+        return Promise.reject(error);
+    }
 );
 
 // Plugin.install = function(Vue, options) {
-Plugin.install = function(Vue) {
-  Vue.axios = _axios;
-  window.axios = _axios;
-  Object.defineProperties(Vue.prototype, {
-    axios: {
-      get() {
-        return _axios;
-      }
-    },
-    $axios: {
-      get() {
-        return _axios;
-      }
-    },
-  });
+Plugin.install = function (Vue) {
+    Vue.axios = _axios;
+    window.axios = _axios;
+    Object.defineProperties(Vue.prototype, {
+        axios: {
+            get() {
+                return _axios;
+            }
+        },
+        $axios: {
+            get() {
+                return _axios;
+            }
+        },
+    });
 };
 
 Vue.use(Plugin)

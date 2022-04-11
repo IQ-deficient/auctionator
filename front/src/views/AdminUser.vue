@@ -429,8 +429,8 @@ export default {
               this.user_roles = response.data
             }
             // todo: KOMENTAR
-            if (this.user_roles.includes('Administrator')){
-              this.$router.push('/home')
+            if (!this.user_roles.includes('Administrator')){
+              this.$router.push('/pageNotFound')
               // todo: dodati message u swal2
             }
           })
