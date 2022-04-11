@@ -21,67 +21,71 @@
 
       <v-toolbar-title style="margin-left: 28px">Auction House</v-toolbar-title>
       <v-spacer></v-spacer>
-      <router-link to="/register/" style="text-decoration: none">
-        <v-btn value="center"
-               color="transparent" depressed>
-          <v-icon left class="mr-2">mdi-pencil-box-outline</v-icon>
-          <span class="hidden-sm-and-down">Sign up</span>
-        </v-btn>
-      </router-link>
-      <router-link to="/login/" style="text-decoration: none">
-        <v-btn value="center"
-               color="primary" class="ml-2">
-          <v-icon left class="mr-2">mdi-login-variant</v-icon>
-          <span class="hidden-sm-and-down">Sign in</span>
-        </v-btn>
-      </router-link>
-
-      <!--      Korisnikov avatar koji otvara funkcije odjavljivanja i azuriranja naloga-->
-      <v-speed-dial
-          v-model="fab"
-          :top="top"
-          :bottom="bottom"
-          :right="right"
-          :left="left"
-          :direction="direction"
-          :open-on-hover="hover"
-          :transition="transition"
-      >
-        <template v-slot:activator>
-          <v-btn
-              v-model="fab"
-              color="accent"
-              dark
-              fab
-          >
-            <v-icon v-if="fab">
-              mdi-close
-            </v-icon>
-            <v-icon v-else>
-              mdi-account-circle
-            </v-icon>
+      <div v-if="storage == null">
+        <router-link to="/register/" style="text-decoration: none">
+          <v-btn value="center"
+                 color="transparent" depressed>
+            <v-icon left class="mr-2">mdi-pencil-box-outline</v-icon>
+            <span class="hidden-sm-and-down">Sign up</span>
           </v-btn>
-        </template>
-        <v-btn
-            fab
-            dark
-            small
-            color="primary"
-            @click="logout()"
+        </router-link>
+
+        <router-link to="/login/" style="text-decoration: none">
+          <v-btn value="center"
+                 color="primary" class="ml-2">
+            <v-icon left class="mr-2">mdi-login-variant</v-icon>
+            <span class="hidden-sm-and-down">Sign in</span>
+          </v-btn>
+        </router-link>
+      </div>
+      <div v-else>
+        <v-speed-dial
+            v-model="fab"
+            :top="top"
+            :bottom="bottom"
+            :right="right"
+            :left="left"
+            :direction="direction"
+            :open-on-hover="hover"
+            :transition="transition"
         >
-          <v-icon>mdi-logout-variant</v-icon>
-        </v-btn>
-        <router-link to="/user-profile">
+          <template v-slot:activator>
+            <v-btn
+                v-model="fab"
+                color="accent"
+                dark
+                fab
+            >
+              <v-icon v-if="fab">
+                mdi-close
+              </v-icon>
+              <v-icon v-else>
+                mdi-account-circle
+              </v-icon>
+            </v-btn>
+          </template>
           <v-btn
               fab
               dark
               small
               color="primary"
+              @click="logout()"
           >
-            <v-icon>mdi-account-details</v-icon>
+            <v-icon>mdi-logout-variant</v-icon>
           </v-btn>
-        </router-link>
-      </v-speed-dial>
+          <router-link to="/user-profile">
+            <v-btn
+                fab
+                dark
+                small
+                color="primary"
+            >
+              <v-icon>mdi-account-details</v-icon>
+            </v-btn>
+          </router-link>
+        </v-speed-dial>
+      </div>
+      <!--      Korisnikov avatar koji otvara funkcije odjavljivanja i azuriranja naloga-->
     </v-toolbar>
 
     <!------- Globalni tag fioke sa elementima kategorija i potkategorija ------->
@@ -181,9 +185,12 @@ export default {
     selectedCategory: [],
     categories: [],
     subcategories: [],
+    user_roles: [],
+    storage: localStorage.getItem('token'),
   }),
 
   created() {
+    this.isAuth()
     this.getCategories()
   },
 
@@ -220,20 +227,42 @@ export default {
           })
     },
 
+    isAuth() {
+      this.user_roles = []
+
+      axios.get('/auth_roles')
+          .then(response => {
+            if (response.data) {
+              this.user_roles = response.data
+              console.log(response.data)
+            }
+            // todo: KOMENTAR
+            // if (this.user_roles.includes('Administrator')){
+            //   // this.$router.push('/home')
+            //
+            //   // todo: dodati message u swal2
+            // }
+          })
+          .catch(error => {
+            console.log(error)
+          })
+    },
+
     logout() {
       const config = {
-        headers: {'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))}
-      };
-      const bodyParameters = {
+        headers: {'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))},
         key: "token"
       };
+      // const bodyParameters = {
+      //   key: "token"
+      // };
 
       this.loading = true
-      axios.post('/auth/logout', bodyParameters, config)
+      axios.post('/auth/logout', config)
           .then(response => {
                 if (response) {
                   localStorage.removeItem("token");
-                  this.$router.push('/');
+                  this.$router.push('/home');
                   this.$router.go(0)
                   // console.log(response.data)
                   this.loading = false;

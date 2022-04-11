@@ -106,6 +106,7 @@ Route::get('/items', [ItemController::class, 'index']);
 
 // Roles
 Route::get('/roles', [RoleController::class, 'index']);
+Route::get('/auth_roles', [RoleController::class, 'getAuthUserRoles']);
 
 // Statuses
 Route::get('/statuses', [StatusController::class, 'index']);

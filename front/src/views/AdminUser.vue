@@ -319,7 +319,8 @@ export default {
     countries: [],
     addUserPhone: '',
     closeDelete: '',
-    deleteItemConfirm: ''
+    deleteItemConfirm: '',
+    user_roles: [],
   }),
 
   // computed: {
@@ -340,9 +341,12 @@ export default {
   created() {
     this.getUsers()
     this.getRoles()
-    this.getCountries();
+    this.getCountries()
+
+
     // this.getParentCategories()
     // this.getWarehouse()
+
   },
 
   methods: {
@@ -373,7 +377,7 @@ export default {
     },
 
     getRoles() {
-      this.users = []
+      this.roles = []
       axios.get('/roles')
           .then(response => {
             if (response.data) {
@@ -387,7 +391,7 @@ export default {
     },
 
     getCountries() {
-      this.users = []
+      this.countries = []
       axios.get('/countries')
           .then(response => {
             if (response.data) {
@@ -416,9 +420,29 @@ export default {
       console.log(this.addItemCategory)
 
     },
+
+    getUserRoles() {
+      this.user_roles = []
+      axios.get('/auth_roles')
+          .then(response => {
+            if (response.data) {
+              this.user_roles = response.data
+            }
+            // todo: KOMENTAR
+            if (this.user_roles.includes('Administrator')){
+              this.$router.push('/home')
+              // todo: dodati message u swal2
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
+    },
   },
 
   mounted() {
+    this.getUserRoles()
+
     document.title = 'Administration - Auction House'
   }
 }

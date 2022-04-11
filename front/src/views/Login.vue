@@ -164,15 +164,20 @@ export default {
       this.$refs.observer.reset()
     },
     login() {
+      const config = {
+        headers: {'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))},
+        key: "token"
+      };
+
       this.loading = true
       axios.post('/auth/login', {
         email: this.email,
         password: this.password,
-      },)
+      }, config)
           .then(response => {
             if (response) {
               localStorage.setItem("token", JSON.stringify(response.data.access_token));
-              this.$router.push('/');
+              this.$router.push('/home');
               this.$router.go(0)
               this.loading = false;
             }
