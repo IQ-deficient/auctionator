@@ -177,6 +177,7 @@ export default {
           .then(response => {
             if (response) {
               localStorage.setItem("token", JSON.stringify(response.data.access_token));
+              localStorage.setItem("user_roles", response.data.user_roles);
               this.$router.push('/home');
               this.$router.go(0)
               this.loading = false;

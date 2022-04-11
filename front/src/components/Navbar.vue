@@ -21,7 +21,7 @@
 
       <v-toolbar-title style="margin-left: 28px">Auction House</v-toolbar-title>
       <v-spacer></v-spacer>
-      <div v-if="storage == null">
+      <div v-if="token == null">
         <router-link to="/register/" style="text-decoration: none">
           <v-btn value="center"
                  color="transparent" depressed>
@@ -95,9 +95,10 @@
                          bottom
                          temporary
                          light
+                         height="100vh"
                          color="tertiary"
     >
-      <v-list-item class="primary" style="height: 75px" dark>
+      <v-list-item class="primary" style="height: 75px;" dark>
         <v-list-item-content>
           <v-list-item-title class="text-h5" style="">
             Browse
@@ -111,55 +112,141 @@
         </v-btn>
       </v-list-item>
 
-      <v-list
-          nav
-          dense
+      <v-list class="d-flex flex-column"
+              nav
+              dense
+              min-height="65%"
       >
-<!--        <v-subheader>REPORTS</v-subheader>-->
-<!--        <v-list-item-group align="left"-->
-<!--                           v-model="selectedCategory"-->
-<!--                           light-->
-<!--        >-->
-<!--          <v-list-group-->
-<!--              :value="false"-->
-<!--              no-action-->
-<!--              sub-group>-->
-<!--            <template v-slot:activator>-->
-<!--              <v-list-item-content>-->
-<!--                <v-list-item-title id="category" class="text-h6" style="width: 240px">el</v-list-item-title>-->
-<!--              </v-list-item-content>-->
-<!--            </template>-->
-<!--            <v-list-item-->
-<!--                v-for="([title], i) in subcategories"-->
-<!--                :key="i"-->
-<!--                link-->
-<!--            >-->
-<!--              <v-list-item-title v-text="title" style="font-size: 15px"></v-list-item-title>-->
-<!--            </v-list-item>-->
-<!--          </v-list-group>-->
-<!--        </v-list-item-group>-->
+        <!--        <v-subheader>REPORTS</v-subheader>-->
+        <!--        <v-list-item-group align="left"-->
+        <!--                           v-model="selectedCategory"-->
+        <!--                           light-->
+        <!--        >-->
+        <!--          <v-list-group-->
+        <!--              :value="false"-->
+        <!--              no-action-->
+        <!--              sub-group>-->
+        <!--            <template v-slot:activator>-->
+        <!--              <v-list-item-content>-->
+        <!--                <v-list-item-title id="category" class="text-h6" style="width: 240px">el</v-list-item-title>-->
+        <!--              </v-list-item-content>-->
+        <!--            </template>-->
+        <!--            <v-list-item-->
+        <!--                v-for="([title], i) in subcategories"-->
+        <!--                :key="i"-->
+        <!--                link-->
+        <!--            >-->
+        <!--              <v-list-item-title v-text="title" style="font-size: 15px"></v-list-item-title>-->
+        <!--            </v-list-item>-->
+        <!--          </v-list-group>-->
+        <!--        </v-list-item-group>-->
 
         <v-treeview
-        v-model="selectedCategory"
-        :items="categories"
-        activatable
-        item-key="name"
-        open-on-click
-        hoverable
-        transition
+            v-model="selectedCategory"
+            :items="categories"
+            activatable
+            item-key="name"
+            open-on-click
+            hoverable
+            transition
         >
-<!--        <template v-slot:prepend="{ item, open }">-->
-<!--          <v-icon v-if="!item.file">-->
-<!--            {{ open ? 'mdi-folder-open' : 'mdi-folder' }}-->
-<!--          </v-icon>-->
-<!--          <v-icon v-else>-->
-<!--            {{ files[item.file] }}-->
-<!--          </v-icon>-->
-<!--        </template>-->
+          <!--        <template v-slot:prepend="{ item, open }">-->
+          <!--          <v-icon v-if="!item.file">-->
+          <!--            {{ open ? 'mdi-folder-open' : 'mdi-folder' }}-->
+          <!--          </v-icon>-->
+          <!--          <v-icon v-else>-->
+          <!--            {{ files[item.file] }}-->
+          <!--          </v-icon>-->
+          <!--        </template>-->
         </v-treeview>
       </v-list>
+      <div v-if="token">
+        <v-list class="d-flex flex-column"
+                nav
+                dense
+        >
+          <div v-if="role == 'Client'">
+            <router-link to="/bids" style="text-decoration: none">
+              <v-btn style="float: left"
+                     color="transparent"
+                     depressed
+                     class="ma-1"
+              >
+                <v-icon left class="mr-2">mdi-alarm-multiple</v-icon>
+                <span class="hidden-sm-and-down">Bids</span>
+              </v-btn>
+            </router-link>
+          </div>
+          <div v-if="role == 'Client'">
+            <hr>
+            <router-link to="/history" style="text-decoration: none">
+              <v-btn style="float: left"
+                     color="transparent"
+                     depressed
+                     class="ma-1"
 
+              >
+                <v-icon left class="mr-2">mdi-history</v-icon>
+                <span class="hidden-sm-and-down">History</span>
+              </v-btn>
+            </router-link>
+          </div>
+          <div v-if="role == 'Administrator' || role == 'Auctioneer'">
+            <router-link to="/admin-auction" style="text-decoration: none">
+              <v-btn style="float: left"
+                     color="transparent"
+                     depressed
+                     class="ma-1"
 
+              >
+                <v-icon left class="mr-2">mdi-store-search-outline</v-icon>
+                <span class="hidden-sm-and-down">Auctions</span>
+              </v-btn>
+            </router-link>
+          </div>
+          <div v-if="role == 'Administrator' || role == 'Manager'">
+            <hr>
+            <router-link to="/admin-auction" style="text-decoration: none">
+              <v-btn style="float: left"
+                     color="transparent"
+                     depressed
+                     class="ma-1"
+
+              >
+                <v-icon left class="mr-2">mdi-account-search-outline</v-icon>
+                <span class="hidden-sm-and-down">Users</span>
+              </v-btn>
+            </router-link>
+          </div>
+          <hr>
+          <router-link to="/user-profile" style="text-decoration: none">
+            <v-btn style="float: left"
+                   color="transparent"
+                   depressed
+                   class="ma-1"
+            >
+              <v-icon left class="mr-2">mdi-account-cog-outline</v-icon>
+              <span class="hidden-sm-and-down">Account settings</span>
+            </v-btn>
+          </router-link>
+          <div>
+
+          </div>
+          <v-btn value="center" width="100%" style="text-decoration: none"
+                 color="info"
+                 depressed
+                 @click="logout()"
+          >
+            <v-icon left class="mr-2">mdi-logout-variant</v-icon>
+            <span class="hidden-sm-and-down">Logout</span>
+          </v-btn>
+        </v-list>
+      </div>
+
+      <!--      <div class="mt-auto">-->
+      <!--        <hr>-->
+      <!--        -->
+      <!--      </div>-->
     </v-navigation-drawer>
   </div>
 </template>
@@ -186,11 +273,11 @@ export default {
     categories: [],
     subcategories: [],
     user_roles: [],
-    storage: localStorage.getItem('token'),
+    token: localStorage.getItem('token'),
+    role: localStorage.getItem('user_roles'),
   }),
 
   created() {
-    this.isAuth()
     this.getCategories()
   },
 
@@ -201,8 +288,8 @@ export default {
           .then(response => {
             if (response.data) {
               // for (let i = 0; i < response.data.length; i++) {
-                this.categories = response.data;
-                // console.log(response.data)
+              this.categories = response.data;
+              // console.log(response.data)
               // }
             }
           })
@@ -227,27 +314,6 @@ export default {
           })
     },
 
-    isAuth() {
-      this.user_roles = []
-
-      axios.get('/auth_roles')
-          .then(response => {
-            if (response.data) {
-              this.user_roles = response.data
-              console.log(response.data)
-            }
-            // todo: KOMENTAR
-            // if (this.user_roles.includes('Administrator')){
-            //   // this.$router.push('/home')
-            //
-            //   // todo: dodati message u swal2
-            // }
-          })
-          .catch(error => {
-            console.log(error)
-          })
-    },
-
     logout() {
       const config = {
         headers: {'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))},
@@ -255,13 +321,13 @@ export default {
       };
       // const bodyParameters = {
       //   key: "token"
-      // };
+      // };f
 
       this.loading = true
       axios.post('/auth/logout', config)
           .then(response => {
                 if (response) {
-                  localStorage.removeItem("token");
+                  localStorage.clear();
                   this.$router.push('/home');
                   this.$router.go(0)
                   // console.log(response.data)
