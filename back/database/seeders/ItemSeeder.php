@@ -37,7 +37,7 @@ class ItemSeeder extends Seeder
             [
                 'title' => 'Zdravko Krivokapic antitijela bath water',
                 'description' => 'For all you thirsty gamer boys. UwU',
-                'category' => "Miscellaneous",
+                'category' => "Misc.",
                 'condition' => '--',
                 'warehouse_id' => 1,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),

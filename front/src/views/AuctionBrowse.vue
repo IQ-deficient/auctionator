@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-toolbar
-        dark
-        color="accent"
+      dark
+      color="accent"
     >
       <v-toolbar-title>Looking for something specific?</v-toolbar-title>
       <v-autocomplete style="width: 50%"
@@ -23,8 +23,8 @@
     </v-toolbar>
     <v-app-bar dark style="background-color: #1a202c">
       <v-breadcrumbs
-          :items="items"
-          large
+        :items="items"
+        large
       >
         <template v-slot:divider>
           <v-icon>mdi-chevron-right</v-icon>
@@ -41,15 +41,15 @@
     <validation-observer>
       <v-row style="justify-content: center">
         <v-card
-            v-for="auction in auctions" :key="auction.id"
-            class="ma-5 card-body d-flex flex-column h-100"
-            max-width="22%"
-            color="tertiary"
+          v-for="auction in auctions" :key="auction.id"
+          class="ma-5 card-body d-flex flex-column h-100"
+          max-width="22%"
+          color="tertiary"
         >
           <v-img
-              src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-              class="h-50"
-              height="200px"
+            src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+            class="h-50"
+            height="200px"
           ></v-img>
 
           <v-card-title style="word-break: normal">
@@ -72,21 +72,21 @@
             <!--          >-->
             <!--            <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>-->
             <!--          </v-btn>-->
-<!--            ⠀⠀⠀⠀⠀⢰⡿⠋⠁⠀⠀⠈⠉⠙⠻⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀-->
-<!--            ⠀⠀⠀⠀⢀⣿⠇⠀⢀⣴⣶⡾⠿⠿⠿⢿⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀-->
-<!--            ⠀⠀⣀⣀⣸⡿⠀⠀⢸⣿⣇⠀⠀⠀⠀⠀⠀⠙⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀-->
-<!--            ⠀⣾⡟⠛⣿⡇⠀⠀⢸⣿⣿⣷⣤⣤⣤⣤⣶⣶⣿⠇⠀⠀⠀⠀⠀⠀⠀⣀⠀⠀-->
-<!--            ⢀⣿⠀⢀⣿⡇⠀⠀⠀⠻⢿⣿⣿⣿⣿⣿⠿⣿⡏⠀⠀⠀⠀⢴⣶⣶⣿⣿⣿⣆-->
-<!--            ⢸⣿⠀⢸⣿⡇⠀⠀⠀⠀⠀⠈⠉⠁⠀⠀⠀⣿⡇⣀⣠⣴⣾⣮⣝⠿⠿⠿⣻⡟-->
-<!--            ⢸⣿⠀⠘⣿⡇⠀⠀⠀⠀⠀⠀⠀⣠⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠁⠉⠀-->
-<!--            ⠸⣿⠀⠀⣿⡇⠀⠀⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠉⠀⠀⠀⠀-->
-<!--            ⠀⠻⣷⣶⣿⣇⠀⠀⠀⢠⣼⣿⣿⣿⣿⣿⣿⣿⣛⣛⣻⠉⠁⠀⠀⠀⠀⠀⠀⠀-->
-<!--            ⠀⠀⠀⠀⢸⣿⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀-->
-<!--            ⠀⠀⠀⠀⢸⣿⣀⣀⣀⣼⡿⢿⣿⣿⣿⣿⣿⡿⣿⣿⡿-->
+            <!--            ⠀⠀⠀⠀⠀⢰⡿⠋⠁⠀⠀⠈⠉⠙⠻⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀-->
+            <!--            ⠀⠀⠀⠀⢀⣿⠇⠀⢀⣴⣶⡾⠿⠿⠿⢿⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀-->
+            <!--            ⠀⠀⣀⣀⣸⡿⠀⠀⢸⣿⣇⠀⠀⠀⠀⠀⠀⠙⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀-->
+            <!--            ⠀⣾⡟⠛⣿⡇⠀⠀⢸⣿⣿⣷⣤⣤⣤⣤⣶⣶⣿⠇⠀⠀⠀⠀⠀⠀⠀⣀⠀⠀-->
+            <!--            ⢀⣿⠀⢀⣿⡇⠀⠀⠀⠻⢿⣿⣿⣿⣿⣿⠿⣿⡏⠀⠀⠀⠀⢴⣶⣶⣿⣿⣿⣆-->
+            <!--            ⢸⣿⠀⢸⣿⡇⠀⠀⠀⠀⠀⠈⠉⠁⠀⠀⠀⣿⡇⣀⣠⣴⣾⣮⣝⠿⠿⠿⣻⡟-->
+            <!--            ⢸⣿⠀⠘⣿⡇⠀⠀⠀⠀⠀⠀⠀⣠⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠁⠉⠀-->
+            <!--            ⠸⣿⠀⠀⣿⡇⠀⠀⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠉⠀⠀⠀⠀-->
+            <!--            ⠀⠻⣷⣶⣿⣇⠀⠀⠀⢠⣼⣿⣿⣿⣿⣿⣿⣿⣛⣛⣻⠉⠁⠀⠀⠀⠀⠀⠀⠀-->
+            <!--            ⠀⠀⠀⠀⢸⣿⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀-->
+            <!--            ⠀⠀⠀⠀⢸⣿⣀⣀⣀⣼⡿⢿⣿⣿⣿⣿⣿⡿⣿⣿⡿-->
             <v-spacer></v-spacer>
             <v-dialog
-                transition="dialog-bottom-transition"
-                max-width="35%"
+              transition="dialog-bottom-transition"
+              max-width="35%"
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-btn class="mx-1"
@@ -106,9 +106,9 @@
                     <div class="pa-4">
                       <v-carousel hide-delimiters style="height: 300px">
                         <v-carousel-item
-                            v-for="(item,i) in pictures"
-                            :key="i"
-                            :src="item.src"
+                          v-for="(item,i) in pictures"
+                          :key="i"
+                          :src="item.src"
                         ></v-carousel-item>
                       </v-carousel>
                       <div>
@@ -118,7 +118,7 @@
                         <hr>
                       </div>
                       <v-card-text class="text-sm-h6" style="word-break: normal; justify-content: start">
-                        <div v-if="auction.bid != null"> {{ "Current bid: " + auction.bid.value + "€"}}</div>
+                        <div v-if="auction.bid != null"> {{ "Current bid: " + auction.bid.value + "€" }}</div>
                         <div style="color: #42b983" v-else> {{ "No bids on this item!" }}</div>
                       </v-card-text>
                       <v-card-text class="text-sm-h6" style="word-break: normal">
@@ -126,55 +126,55 @@
                         <div v-else> {{ "NA" }}</div>
                       </v-card-text>
                       <validation-provider
-                          v-slot="{ errors }"
-                          name="bidInput"
-                          clearable
+                        v-slot="{ errors }"
+                        name="bidInput"
+                        clearable
                       >
                         <v-row>
                           <v-card-title style="word-break: normal" class="mb-4">
                             Your bid:
                           </v-card-title>
                           <v-text-field
-                              v-model="bidInput"
-                              :error-messages="errors"
-                              hint="*Must be at least 3% higher than the current value."
-                              clearable
+                            v-model="bidInput"
+                            :error-messages="errors"
+                            hint="*Must be at least 3% higher than the current value."
+                            clearable
                           >
                           </v-text-field>
                         </v-row>
                       </validation-provider>
                     </div>
                     <div>
-                        <v-btn large
-                               type="submit"
-                               color="primary"
-                               class="mr-4"
-                        >
-                          <v-icon left class="mr-1">mdi-gavel</v-icon>
-                          Place bid
-                        </v-btn>
-                        <v-btn large
-                               type="submit"
-                               color="success"
-                        >
-                          <v-icon left class="mr-1">mdi-cash-multiple</v-icon>
-                          Buyout
-                        </v-btn>
+                      <v-btn large
+                             type="submit"
+                             color="primary"
+                             class="mr-4"
+                      >
+                        <v-icon left class="mr-1">mdi-gavel</v-icon>
+                        Place bid
+                      </v-btn>
+                      <v-btn large
+                             type="submit"
+                             color="success"
+                      >
+                        <v-icon left class="mr-1">mdi-cash-multiple</v-icon>
+                        Buyout
+                      </v-btn>
 
                     </div>
 
                   </v-card-text>
                   <v-card-actions class="justify-end">
                     <v-btn
-                        icon
-                        @click="show1 = !show1"
+                      icon
+                      @click="show1 = !show1"
                     >
                       <v-icon>{{ show1 ? 'mdi-chevron-right' : 'mdi-chevron-left' }}</v-icon>
                     </v-btn>
                     <v-spacer></v-spacer>
                     <v-btn
-                        text
-                        @click="dialog.value = false"
+                      text
+                      @click="dialog.value = false"
                     >Close
                     </v-btn>
                   </v-card-actions>
@@ -286,12 +286,13 @@ export default {
           src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
         },
       ],
-
-      items: [{
-        text: 'Home',
-        disabled: false,
-        href: '/home',
-      },
+      items: [
+        {
+          text: 'Home',
+          disabled: false,
+          // svudje dje su vue router linkovi mora ova tarabica za root rute jer onaj history mod nesto smrdunja
+          href: '#/home',
+        },
         {
           text: 'Main category placeholder',
           disabled: true,
@@ -310,10 +311,12 @@ export default {
       show1: false,
       auctions: [],
       bidInput: '',
-
       dataLoading: false,
+      category: "Men's Accessories",
+      conditions: [],
     }
   },
+
   watch: {
     search(val) {
       val && val !== this.select && this.querySelections(val)
@@ -321,7 +324,6 @@ export default {
   },
 
   methods: {
-
     querySelections(v) {
       this.loading = true
       setTimeout(() => {
@@ -335,29 +337,34 @@ export default {
     showAuction() {
       this.dataLoading = true
       this.auctions = []
-      axios.get('/auctions')
-          .then(response => {
-            if (response.data) {
-              this.auctions = response.data
-              // for (let i = 0; i < response.data.length; i++) {
-              //   // console.log(response.data)//   this.auctions = response.data
-              // }
-            }
-            this.dataLoading = false
-          })
-          .catch(error => {
-            console.log(error)
-            this.dataLoading = false
-          })
+      axios.post('/filtered_auctions', {
+        category: this.category
+      })
+        .then(response => {
+          if (response.data) {
+            this.auctions = response.data.auctions
+            this.conditions = response.data.conditions
+            // for (let i = 0; i < response.data.length; i++) {
+            //   // console.log(response.data)//   this.auctions = response.data
+            // }
+          }
+          this.dataLoading = false
+        })
+        .catch(error => {
+          console.log(error)
+          this.dataLoading = false
+        })
     },
   },
 
   created() {
     this.showAuction();
   },
+
   mounted() {
     document.title = 'Browse - Auction House'
   }
+
 }
 
 </script>

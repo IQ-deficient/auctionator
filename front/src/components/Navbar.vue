@@ -321,7 +321,7 @@ export default {
       };
       // const bodyParameters = {
       //   key: "token"
-      // };f
+      // };
 
       this.loading = true
       axios.post('/auth/logout', config)
