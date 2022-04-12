@@ -8,6 +8,9 @@ import AdminUser from "../views/AdminUser";
 import UserProfile from "../views/UserProfile";
 import AuctionBrowse from "../views/AuctionBrowse";
 import PageNotFound from "../views/PageNotFound";
+import Bids from '../views/Bids';
+import History from '../views/History';
+
 
 Vue.use(VueRouter)
 
@@ -32,6 +35,8 @@ const routes = [
     {path: '/admin-user', name: 'AdminUser', component: AdminUser},
     {path: '/user-profile', name: 'UserProfile', component: UserProfile},
     {path: '/auction-browse', name: 'AuctionBrowse', component: AuctionBrowse},
+    {path: '/bids', name: 'Bids', component: Bids},
+    {path: '/history', name: 'History', component: History},
     {path: '/:catchAll(.*)', name: 'NotFound', component: PageNotFound},
 ]
 
