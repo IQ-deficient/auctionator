@@ -51,13 +51,15 @@ class HistoryController extends Controller
     }
 
     /**
-     * Auction Buyout
+     * Auction Buyout.
      * @param Request $request
      * @return Builder|Model|JsonResponse|object
      */
     public function store(Request $request)
     {
-        // When the client loads Auctions that are eligible for purchase he can still try to Buyout the auctions that might expire during his exploration and thus when he clicks on auction that has ended we can make sure it is stored as History and removed from browsed
+        // todo: When the client loads Auctions that are eligible for purchase he can still try to Buyout the auctions that might
+        //  expire during his exploration and thus when he clicks on auction that has ended we can make sure it is stored as History
+        //  and removed from browsed
 
         $roles = User::getUserRoles();
 
@@ -78,11 +80,10 @@ class HistoryController extends Controller
             ->where('is_active', true)
             ->first();
 
-        // TODO: Validation to check if the auction expired (just in case) make this check as model function
-
         // Check if auction can be bought out, we already know the auction is active from previous model query
         $no_bid_statuses = ['Expired', 'Sold', 'NA'];
-        abort_if(in_array($auction->status, $no_bid_statuses), 410, 'This auction is no longer eligible for buyout.');
+        abort_if(in_array($auction->status, $no_bid_statuses) || Carbon::now() >= $auction->end_datetime,
+            410, 'This auction is no longer eligible for buyout.');
 
         // Invalidate the last and only bid for auction being bought out if there is any
         Bid::deactivateBid($auction->bid_id);

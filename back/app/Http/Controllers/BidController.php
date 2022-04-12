@@ -71,17 +71,12 @@ class BidController extends Controller
             ['is_active', true],
             ['id', $request->auction_id]
         ])->first();
-//        DB::table('auctions')
-//            ->where('is_active', true)
-//            ->where('id', $request->auction_id)
-//            ->first();
-
-        // TODO: ANOTHER ABORT IF TO CHECK IF AUCTION HAS EXPIRED OR END_DATETIME <= CARBON:NOW
 
         // In case there is an attempt to bid on the unbindable auction, cancel further actions
         // Since we only work with is_active==true entities here, there is no reason to check for that
         $no_bid_statuses = ['Expired', 'Sold', 'NA'];
-        abort_if(in_array($auction->status, $no_bid_statuses), 410, 'This auction is no longer eligible for bids.');
+        abort_if(in_array($auction->status, $no_bid_statuses) || Carbon::now() >= $auction->end_datetime,
+            410, 'This auction is no longer eligible for bids.');
 
         // Client should not be able to bid with value higher than one of the auction buyout as that really just makes buyout irrelevant
         abort_if($request->value >= $auction->buyout, 400, "The bid value can't be greater than the buyout value.");
