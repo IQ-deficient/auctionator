@@ -22,7 +22,6 @@ class BidController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
      * @return Bid[]|Collection
      */
     public function index()
@@ -46,7 +45,7 @@ class BidController extends Controller
     }
 
     /**
-     * Store a newly created Bid instance in storage referencing a given Auction.
+     * Create a new Bid for the given Auction and deactivate previous one if present.
      * @param Request $request
      * @return Builder|JsonResponse|Model|object
      */
@@ -63,7 +62,8 @@ class BidController extends Controller
 
         $roles = User::getUserRoles();
 
-        // Check if the currently authenticated user is registered as Client    // todo: middleware?
+        // todo: policy?
+        // Check if the currently authenticated user is registered as Client
         abort_if(!in_array('Client', $roles), 403, 'Only Clients are allowed to place bids.');
 
         // Get Auction Model Object that is active

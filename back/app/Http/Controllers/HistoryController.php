@@ -57,10 +57,6 @@ class HistoryController extends Controller
      */
     public function store(Request $request)
     {
-        // todo: When the client loads Auctions that are eligible for purchase he can still try to Buyout the auctions that might
-        //  expire during his exploration and thus when he clicks on auction that has ended we can make sure it is stored as History
-        //  and removed from browsed
-
         $roles = User::getUserRoles();
 
         // Check if the currently authenticated user is registered as Client

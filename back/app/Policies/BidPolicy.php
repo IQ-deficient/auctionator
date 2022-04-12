@@ -22,6 +22,16 @@ class BidPolicy
     }
 
     /**
+     * Determine whether the user can store database entries.
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function store(User $user)
+    {
+        //
+    }
+
+    /**
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user

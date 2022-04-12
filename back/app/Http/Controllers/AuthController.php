@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\UserRole;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -156,6 +158,7 @@ class AuthController extends Controller
     /**
      * The Administration User is able to create an entry for Employee Users.
      * @return JsonResponse
+     * @throws ValidationException
      */
     public function registerEmployee(Request $request)
     {
@@ -247,10 +250,9 @@ class AuthController extends Controller
     }
 
     /**
-     * Update the specified resource data in storage.
-     * @param Request $request
+     * Change all User data other than Password.
      * @param User $user
-     * @return mixed
+     * @return Builder|JsonResponse|Model|object|null
      */
     public function update(Request $request, User $user)
     {
@@ -264,8 +266,8 @@ class AuthController extends Controller
          * For files, size corresponds to the file size in kilobytes.
          */
         // todo: validate if the auth user has required roles to perform this action (this goes for other stuff asw but alas)
-        // todo: This will also be used as edit profile for Clients
-        // TODO: We should probably make it available for admin to alter the roles for select users (and select multiple)
+        //  This will also be used as edit profile for Clients
+        //  We should probably make it available for admin to alter the roles for select users (and select multiple)
         $validator = Validator::make($request->all(), [
             // Here we make sure that if User enters a different username, only then it is checked to be unique on users table
             'username' => ['required', 'string', 'between:3,32', Rule::when($request->username != $user->username, 'unique:users')],
@@ -306,7 +308,7 @@ class AuthController extends Controller
      * Update the specified Users' password using old password confirmation.
      * @param Request $request
      * @param User $user
-     * @return mixed
+     * @return Builder|JsonResponse|Model|object|null
      */
     public function changePassword(Request $request, User $user)
     {
@@ -332,14 +334,17 @@ class AuthController extends Controller
     }
 
     /**
-     * Alter activity status for the specified resource in storage.
-     * @return mixed
+     * Deactivate or reactivate User by changing their is_active status.
+     * @param User $user
+     * @return Builder|Model|object|null
      */
     public function destroy(User $user)
     {
         // TODO: what happens with disabled users' assets???
         //  also, this user will still be able to perform actions if logged in so either invalidate token here
         //  OR create a middleware that checks if the user is active
+        //  ORRRRRRRRRRRRRRRRRRRRRRRRRRRRRR!!! CREATE A GATE
+        // Gates are simply closures that determine if a user is authorized to perform a given action.
         //  upomoc
 
         $user->update([
