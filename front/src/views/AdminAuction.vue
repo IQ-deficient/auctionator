@@ -298,12 +298,12 @@
                               rules="required|min:3|max:64"
                               clearable
                           >
-                            <v-text-field sty
-                                          v-model="addAuctionTitle"
-                                          :error-messages="errors"
-                                          label="Auction title"
-                                          required
-                                          clearable
+                            <v-text-field
+                                v-model="addAuctionTitle"
+                                :error-messages="errors"
+                                label="Auction title"
+                                required
+                                clearable
                             >
                             </v-text-field>
                           </validation-provider>
@@ -443,12 +443,12 @@
                               rules="required|min_value:1"
                               clearable
                           >
-                            <v-text-field sty
-                                          v-model="addAuctionBuyout"
-                                          :error-messages="errors"
-                                          label="Buyout"
-                                          required
-                                          clearable
+                            <v-text-field
+                                v-model="addAuctionBuyout"
+                                :error-messages="errors"
+                                label="Buyout"
+                                required
+                                clearable
                             >
                             </v-text-field>
                           </validation-provider>
