@@ -337,7 +337,11 @@ class AuthController extends Controller
      */
     public function destroy(User $user)
     {
-        //TODO: what happens with disabled users' assets???
+        // TODO: what happens with disabled users' assets???
+        //  also, this user will still be able to perform actions if logged in so either invalidate token here
+        //  OR create a middleware that checks if the user is active
+        //  upomoc
+
         $user->update([
             'is_active' => !$user->is_active,
         ]);

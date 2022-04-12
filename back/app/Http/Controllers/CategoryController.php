@@ -42,6 +42,8 @@ class CategoryController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
+        // todo if given category is not a Mater Category return error
+
         // Get an object of master category based on input category name
         $parent = DB::table('categories')
             ->where('is_active', true)
