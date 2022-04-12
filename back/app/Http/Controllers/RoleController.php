@@ -29,7 +29,7 @@ class RoleController extends Controller
 
     /**
      * Return roles for a given user token.
-     * @return Application|ResponseFactory|Response
+     * @return array
      */
     public function getAuthUserRoles()
     {

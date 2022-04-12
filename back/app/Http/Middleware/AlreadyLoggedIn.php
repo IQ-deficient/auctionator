@@ -22,7 +22,7 @@ class AlreadyLoggedIn
         if (!Auth::user()) {
             return $next($request);
         }
-
+        // Otherwise...
         return response('You are already authenticated.', 400);
     }
 }

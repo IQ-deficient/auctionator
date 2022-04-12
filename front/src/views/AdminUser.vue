@@ -392,7 +392,7 @@ export default {
 
     getCountries() {
       this.countries = []
-      axios.get('/countries')
+      axios.get('/active_countries')
           .then(response => {
             if (response.data) {
               // console.log(response.data)

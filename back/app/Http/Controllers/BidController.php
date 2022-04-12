@@ -22,7 +22,6 @@ class BidController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
      * @return Bid[]|Collection
      */
     public function index()
@@ -46,7 +45,7 @@ class BidController extends Controller
     }
 
     /**
-     * Store a newly created Bid instance in storage referencing a given Auction.
+     * Create a new Bid for the given Auction and deactivate previous one if present.
      * @param Request $request
      * @return Builder|JsonResponse|Model|object
      */
@@ -63,7 +62,8 @@ class BidController extends Controller
 
         $roles = User::getUserRoles();
 
-        // Check if the currently authenticated user is registered as Client    // todo: middleware?
+        // todo: policy?
+        // Check if the currently authenticated user is registered as Client
         abort_if(!in_array('Client', $roles), 403, 'Only Clients are allowed to place bids.');
 
         // Get Auction Model Object that is active
@@ -71,17 +71,12 @@ class BidController extends Controller
             ['is_active', true],
             ['id', $request->auction_id]
         ])->first();
-//        DB::table('auctions')
-//            ->where('is_active', true)
-//            ->where('id', $request->auction_id)
-//            ->first();
-
-        // TODO: ANOTHER ABORT IF TO CHECK IF AUCTION HAS EXPIRED OR END_DATETIME <= CARBON:NOW
 
         // In case there is an attempt to bid on the unbindable auction, cancel further actions
         // Since we only work with is_active==true entities here, there is no reason to check for that
         $no_bid_statuses = ['Expired', 'Sold', 'NA'];
-        abort_if(in_array($auction->status, $no_bid_statuses), 410, 'This auction is no longer eligible for bids.');
+        abort_if(in_array($auction->status, $no_bid_statuses) || Carbon::now() >= $auction->end_datetime,
+            410, 'This auction is no longer eligible for bids.');
 
         // Client should not be able to bid with value higher than one of the auction buyout as that really just makes buyout irrelevant
         abort_if($request->value >= $auction->buyout, 400, "The bid value can't be greater than the buyout value.");

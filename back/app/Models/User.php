@@ -56,7 +56,7 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     /**
-     * Custom action used to find active roles that represent authenticated User.
+     * Custom method used to find active roles that represent authenticated User.
      * @return array
      */
     public static function getUserRoles()
