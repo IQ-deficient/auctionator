@@ -82,6 +82,7 @@ Route::group([
 
     // Countries
     Route::get('/countries', [CountryController::class, 'index']);
+    Route::get('/country/{country}', [CountryController::class, 'show']);
 
     // Genders
     Route::get('/genders', [GenderController::class, 'index']);

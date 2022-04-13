@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Country;
 use App\Http\Requests\StoreCountryRequest;
 use App\Http\Requests\UpdateCountryRequest;
+use http\Client\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CountryController extends Controller
 {
@@ -15,6 +17,19 @@ class CountryController extends Controller
 
     public function getActive()
     {
+        return Country::query()->where('is_active', true)->get();
+    }
+
+    public function getPhoneCode(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'country' => 'required|string|exists:countries,name'
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+
         return Country::query()->where('is_active', true)->get();
     }
 
@@ -47,7 +62,7 @@ class CountryController extends Controller
      */
     public function show(Country $country)
     {
-        //
+        return $country;
     }
 
     /**
