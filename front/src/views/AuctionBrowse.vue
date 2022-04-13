@@ -253,8 +253,7 @@ export default {
         {
           text: 'Home',
           disabled: false,
-          // svudje dje su vue router linkovi mora ova tarabica za root rute jer onaj history mod nesto smrdunja
-          href: '#/home',
+          href: '/home',
         },
         {
           text: 'Main category placeholder',

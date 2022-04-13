@@ -270,17 +270,14 @@ class AuthController extends Controller
         //  This will also be used as edit profile for Clients
         //  We should probably make it available for admin to alter the roles for select users (and select multiple)
         $validator = Validator::make($request->all(), [
-            // Here we make sure that if User enters a different username, only then it is checked to be unique on users table
-            'username' => ['required', 'string', 'between:3,32', Rule::when($request->username != $user->username, 'unique:users')],
-//            'password' => 'required|string|confirmed|min:8|max:128',
+//            'username' => ['required', 'string', 'between:3,32', Rule::when($request->username != $user->username, 'unique:users')],
             'first_name' => 'required|string|between:1,32',
             'last_name' => 'required|string|between:1,32',
-            'email' => ['required', 'email:rfc,dns', 'between:10,254', Rule::when($request->email != $user->email, 'unique:users')],
+//            'email' => ['required', 'email:rfc,dns', 'between:10,254', Rule::when($request->email != $user->email, 'unique:users')],
             'phone_number' => ['required', 'digits_between:6,15', Rule::when($request->phone_number != $user->phone_number, 'unique:users')],
             'gender' => 'nullable|string|max:32|exists:genders,name',
             'country' => 'nullable|string|max:32|exists:countries,name',
             'birthdate' => 'nullable|date',
-//            'image' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -289,16 +286,12 @@ class AuthController extends Controller
 
         // Updating username here will result in cascading update of username in child rows because of onUpdate in migrations
         $user->update([
-            'username' => $request->username,
-//            'password' => bcrypt($request->password),
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
-            'email' => $request->email,
             'phone_number' => $request->phone_number,
             'gender' => $request->gender,
             'country' => $request->country,
-            'birthdate' => $request->birthdate,     // todo: test if updating birthdate works (should work)
-//            'image' => $request->image,
+            'birthdate' => $request->birthdate,
             'updated_at' => Carbon::now()
         ]);
 
@@ -306,7 +299,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Update the specified Users' password using old password confirmation.
+     * Update the specified Users' Password using old password confirmation.
      * @param Request $request
      * @param User $user
      * @return Builder|JsonResponse|Model|object|null
@@ -328,6 +321,32 @@ class AuthController extends Controller
         // Change the user password into hashed value and return User object
         $user->update([
             'password' => bcrypt($request->password),
+            'updated_at' => Carbon::now()
+        ]);
+
+        return User::query()->where('id', $user->id)->first();
+    }
+
+    /**
+     * Update the specified Users' Profile Image.
+     * @param Request $request
+     * @param User $user
+     * @return Builder|JsonResponse|Model|object|null
+     */
+    public function changeUserImage(Request $request, User $user)
+    {
+        $validator = Validator::make($request->all(), [
+            'image' => 'required'
+        ]);
+
+        // TODO: do
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $user->update([
+            'image' => $request->image,
             'updated_at' => Carbon::now()
         ]);
 
