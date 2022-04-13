@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('email', 254)->unique();
             $table->string('phone_number', 15)->unique();
             $table->string('gender', 32)->nullable();
-            $table->string('country', 32)->nullable();
+            $table->string('country', 80)->nullable();
             $table->dateTime('birthdate')->nullable()->default(null);
             $table->binary('image')->nullable();    // User image   // Unsure if this works for the image storing
             $table->boolean('is_active')->default(true);

@@ -15,8 +15,12 @@ class CreateCountriesTable extends Migration
     {
         Schema::create('countries', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name', 64)->unique();   // There should be no countries with identical name
-            $table->string('code', 3)->nullable();
+            $table->string('iso3', 3  )->nullable();
+            $table->string('name', 80)->unique();
+            $table->unsignedBigInteger('phone_code');
+            $table->string('caps_name', 80)->unique();
+            $table->string('iso', 2);
+            $table->unsignedBigInteger('num_code')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
