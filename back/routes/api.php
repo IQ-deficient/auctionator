@@ -113,7 +113,8 @@ Route::group([
     Route::post('/employee', [AuthController::class, 'registerEmployee']);      // Administrator inserts new personnel
     Route::get('/employees', [AuthController::class, 'getEmployeeRoles']);      // Worker roles
     Route::put('/user/{user}', [AuthController::class, 'update']);     // update all data but password for specified user
-    Route::put('/change_password/{user}', [AuthController::class, 'changePassword']);       // update password
+    Route::put('/password/{user}', [AuthController::class, 'changePassword']);       // update password
+    Route::put('/image/{user}', [AuthController::class, 'changeUserImage']);       // update password
     Route::delete('/user/{user}', [AuthController::class, 'destroy']);      // deactivate user
 
     // UserRoles
