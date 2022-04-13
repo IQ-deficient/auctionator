@@ -16,6 +16,10 @@ Vue.use(VueRouter)
 
 const routes = [
     {
+        path: '/',
+        redirect: '/home'
+    },
+    {
         path: '/home',
         name: 'Home',
         component: Home
@@ -41,7 +45,8 @@ const routes = [
 ]
 
 const router = new VueRouter({
-    // mode: "history",
+    // This now somehow works without any server configuration defined in documentation
+    mode: 'history',
     routes
 })
 

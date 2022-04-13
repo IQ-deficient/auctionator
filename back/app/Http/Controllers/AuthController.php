@@ -250,8 +250,9 @@ class AuthController extends Controller
     }
 
     /**
-     * Change all User data other than Password.
+     * Change all User data other than Password and Image.
      * @param User $user
+     * @param Request $request
      * @return Builder|JsonResponse|Model|object|null
      */
     public function update(Request $request, User $user)
