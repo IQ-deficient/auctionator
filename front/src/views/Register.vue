@@ -140,7 +140,7 @@
           <!--          Polje za potvrdu lozinke-->
           <validation-provider
               v-slot="{ errors }"
-              name="confirmPassword"
+              name="Password confirmation"
               rules="required"
           >
             <v-text-field
@@ -222,7 +222,7 @@ extend('required', {
 
 extend('min', {
   ...min,
-  message: 'The {_field_} must be at least {length} characters.',
+  message: '{_field_} must be at least {length} characters.',
 })
 
 extend('max', {

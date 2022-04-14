@@ -10,7 +10,7 @@
     >
       <v-card width="50%"
               style="margin: 0 auto; position: relative" color="info">
-        <v-row >
+        <v-row>
           <v-col cols="12" sm="10">
             <div style="position: relative; width: 0; height: 0; margin: 0 auto">
               <div style="position: absolute; top: -120px">
@@ -148,7 +148,7 @@
                 <validation-provider
                     v-slot="{ errors }"
                     name="First name"
-                    rules="required|min:3|max:64"
+                    rules="required|min:3|max:32"
                     clearable
                 >
                   <v-text-field
@@ -158,7 +158,7 @@
                       required
                       dark
                       :disabled="edit"
-                      :solo-inverted="edit"
+                      solo-inverted
                   ></v-text-field>
                 </validation-provider>
               </v-col>
@@ -169,7 +169,7 @@
                 <validation-provider
                     v-slot="{ errors }"
                     name="Last name"
-                    rules="required|min:3|max:64"
+                    rules="required|min:3|max:32"
                     clearable
                 >
                   <v-text-field
@@ -179,7 +179,7 @@
                       required
                       dark
                       :disabled="edit"
-                      :solo-inverted="edit"
+                      solo-inverted
                   ></v-text-field>
                 </validation-provider>
               </v-col>
@@ -209,13 +209,14 @@
                     clearable
                 >
                   <v-select
-                      v-model="gender"
+                      v-model="selectGender"
                       :items="genders"
                       :error-messages="errors"
+                      item-text="name"
                       label="Gender"
                       dark
                       :disabled="edit"
-                      :solo-inverted="edit"
+                      solo-inverted
                   ></v-select>
                 </validation-provider>
               </v-col>
@@ -227,15 +228,47 @@
                     name="Birth date"
                     clearable
                 >
-                  <v-text-field
-                      v-model="birthdate"
-                      :error-messages="errors"
-                      label="Birthday"
-                      append-icon="mdi-cake-variant-outline"
-                      dark
-                      :disabled="edit"
-                      :solo-inverted="edit"
-                  ></v-text-field>
+                  <v-dialog
+                      ref="dialog"
+                      v-model="modal"
+                      :return-value.sync="date"
+                      persistent
+                      width="290px"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                          v-model="birthdate"
+                          :error-messages="errors"
+                          label="Pick a date"
+                          append-icon="mdi-cake-variant-outline"
+                          dark
+                          :disabled="edit"
+                          solo-inverted
+                          v-bind="attrs"
+                          v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                        v-model="birthdate"
+                        scrollable
+                    >
+                      <v-spacer></v-spacer>
+                      <v-btn
+                          text
+                          color="primary"
+                          @click="modal = false"
+                      >
+                        Cancel
+                      </v-btn>
+                      <v-btn
+                          text
+                          color="primary"
+                          @click="$refs.dialog.save(date)"
+                      >
+                        OK
+                      </v-btn>
+                    </v-date-picker>
+                  </v-dialog>
                 </validation-provider>
               </v-col>
             </v-row>
@@ -250,14 +283,16 @@
                     clearable
                 >
                   <v-select
-                      v-model="selectCountry "
+                      v-model="selectCountry"
                       :items="countries"
                       item-text="name"
                       :error-messages="errors"
                       label="Country"
                       dark
                       :disabled="edit"
-                      :solo-inverted="edit"
+                      solo-inverted
+                      return-object
+                      @change="updateCountryCode()"
                   ></v-select>
                 </validation-provider>
               </v-col>
@@ -267,17 +302,18 @@
                 <validation-provider
                     v-slot="{ errors }"
                     name="Phone number"
-                    rules="required|min:1|max:15"
+                    rules="required|min:8|max:15"
                     clearable
                 >
                   <v-text-field
+                      :prefix="'(' + phoneCode + ')'"
                       v-model="phoneNumber"
                       :error-messages="errors"
                       label="Phone number"
                       append-icon="mdi-phone-classic"
                       dark
                       :disabled="edit"
-                      :solo-inverted="edit"
+                      solo-inverted
                   ></v-text-field>
                 </validation-provider>
               </v-col>
@@ -308,11 +344,10 @@
                               clearable
                           >
                             <v-text-field
-                                v-model="oldPassword"
+                                v-model="old_password"
                                 :error-messages="errors"
                                 label="Old password"
                                 :type="showOldPassword ? 'text' : 'password'"
-                                :counter="8"
                                 required
                                 hint="Must be at least 8 characters."
                                 :append-icon="showOldPassword ? 'mdi-eye' : 'mdi-eye-off'"
@@ -323,8 +358,8 @@
                           </validation-provider>
                           <validation-provider
                               v-slot="{ errors }"
-                              name="newPassword"
-                              rules="required"
+                              name="New password"
+                              rules="required|min:8|max:128"
                               clearable
                           >
                             <v-text-field
@@ -332,7 +367,7 @@
                                 :error-messages="errors"
                                 label="New password"
                                 :type="showNewPassword ? 'text' : 'password'"
-                                :counter="8"
+                                counter
                                 required
                                 hint="Must be at least 8 characters."
                                 :append-icon="showNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
@@ -343,8 +378,8 @@
                           </validation-provider>
                           <validation-provider
                               v-slot="{ errors }"
-                              name="confirmNewPassword"
-                              rules="required"
+                              name="Password confirmation"
+                              rules="required|min:8|max:128|password:@New password"
                               clearable
                           >
                             <v-text-field
@@ -352,7 +387,7 @@
                                 :error-messages="errors"
                                 label="Confirm new password"
                                 :type="showConfirmNewPassword ? 'text' : 'password'"
-                                :counter="8"
+                                counter
                                 required
                                 hint="Must be at least 8 characters."
                                 :append-icon="showConfirmNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
@@ -365,6 +400,7 @@
                         <v-btn large
                                type="submit"
                                color="primary"
+                               @click="updatePassword()"
                         >
                           <v-icon left class="mr-1">mdi-lock-check</v-icon>
                           Update password
@@ -388,7 +424,11 @@
                     cols="12"
                     sm="12"
                 >
-                  <v-btn large color="primary"
+                  <v-btn dark
+                         large color="primary"
+                         :disabled="!firstName || !lastName || !selectCountry ||
+                                    !phoneNumber"
+                         @click="updateProfile()"
                   >
                     <v-icon left>mdi-check</v-icon>
                     Save
@@ -404,7 +444,7 @@
 </template>
 
 <script>
-import {required, digits, email, max, regex} from 'vee-validate/dist/rules'
+import {required, digits, max,} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 import UploadService from "../services/UploadFilesService";
 
@@ -428,15 +468,22 @@ extend('max', {
   message: '{_field_} may not be greater than {length} characters',
 })
 
-extend('regex', {
-  ...regex,
-  message: '{_field_} {_value_} does not match {regex}',
-})
+extend('password', {params: ['target'], validate(value, { target }) {
+    return value === target;
+  },
+  message: 'Passwords do not match'
+});
 
-extend('email', {
-  ...email,
-  message: 'Must be a valid email.',
-})
+
+// extend('regex', {
+//   ...regex,
+//   message: '{_field_} {_value_} does not match {regex}',
+// })
+
+// extend('email', {
+//   ...email,
+//   message: 'Must be a valid email.',
+// })
 
 export default {
   name: "UserProfile",
@@ -447,21 +494,26 @@ export default {
   },
 
   data: () => ({
+    loggedUser: '',
     edit: true,
     username: '',
     firstName: '',
     lastName: '',
     email: '',
-    gender: '',
-    genders: [
-      'Male',
-      'Female'
-    ],
+    selectGender: '',
+    genders: [],
     birthdate: '',
+
+    date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+    menu: false,
+    modal: false,
+    menu2: false,
+
     selectCountry: '',
     countries: [],
+    phoneCode: '',
     phoneNumber: '',
-    oldPassword: '',
+    old_password: '',
     newPassword: '',
     confirmNewPassword: '',
     showOldPassword: false,
@@ -482,6 +534,115 @@ export default {
       this.password = ''
       this.checkbox = null
       this.$refs.observer.reset()
+    },
+
+    getGenders() {
+      axios.get('/genders')
+          .then(response => {
+            if (response.data) {
+              this.genders = response.data
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
+    },
+
+    getCountries() {
+      axios.get('/active_countries')
+          .then(response => {
+            if (response.data) {
+              this.countries = response.data
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
+    },
+
+    updateCountryCode() {
+      this.phoneCode = this.selectCountry.phone_code
+    },
+
+    getLoggedUser() {
+      axios.get('/auth/user')
+          .then(response => {
+            if (response.data) {
+              this.username = response.data.username
+              this.firstName = response.data.first_name
+              this.lastName = response.data.last_name
+              this.email = response.data.email
+              this.selectGender = response.data.gender
+              this.birthdate = response.data.birthdate
+              this.selectCountry = response.data.country
+              this.phoneNumber = response.data.phone_number
+              this.loggedUser = response.data
+              console.log(this.loggedUser.id)
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
+    },
+
+    updateProfile() {
+      this.loading = true
+      axios.get('/auth/user')
+          .then(response => {
+            if (response.data) {
+              axios.put('/user/' + response.data.id, {
+                first_name: this.firstName,
+                last_name: this.lastName,
+                gender: this.selectGender,
+                birthdate: this.birthdate,
+                country: this.selectCountry.name,
+                phone_number: this.phoneNumber,
+              })
+                  .then(response => {
+                        if (response) {
+                          window.alert('bravo kretenu nemas sweetalert')
+                          this.loading = false;
+                        }
+                      }
+                  )
+                  .catch(error => {
+                    console.log(error)
+                    this.loading = false
+                    this.error = error.response.data.message;
+                  })
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
+
+    },
+    updatePassword() {
+      this.loading = true
+      axios.get('/auth/user')
+          .then(response => {
+            if (response.data) {
+              axios.put('/password/' + response.data.id, {
+                password: this.newPassword,
+              })
+                  .then(response => {
+                        if (response) {
+                          window.alert('bravo kretenu nemas sweetalert')
+                          this.loading = false;
+                        }
+                      }
+                  )
+                  .catch(error => {
+                    console.log(error)
+                    this.loading = false
+                    this.error = error.response.data.message;
+                  })
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
+
     },
 
     selectImage(image) {
@@ -512,44 +673,13 @@ export default {
             this.currentImage = undefined;
           });
     },
-    getCountries() {
-      axios.get('/active_countries')
-          .then(response => {
-            if (response.data) {
-              this.countries = response.data
-              // console.log(response.data);
-            }
-          })
-          .catch(error => {
-            console.log(error)
-          })
-    },
-
-    getLoggedUser() {
-      axios.get('/auth/user')
-          .then(response => {
-            if (response.data) {
-              this.username = response.data.username
-              this.firstName = response.data.first_name
-              this.lastName = response.data.last_name
-              this.email = response.data.email
-              this.gender = response.data.gender
-              this.birthdate = response.data.birthdate
-              this.selectCountry = response.data.country
-              this.phoneNumber = response.data.phone_number
-              console.log(response.data)
-            }
-          })
-          .catch(error => {
-            console.log(error)
-          })
-    }
 
   },
   mounted() {
     document.title = 'Edit Profile - Auction House'
   },
   created() {
+    this.getGenders();
     this.getCountries();
     this.getLoggedUser();
   }

@@ -86,7 +86,7 @@
                     <v-card class="pa-4">
                       <validation-provider
                           v-slot="{ errors }"
-                          name="title"
+                          name="Title"
                           rules="required|min:3|max:64"
                           clearable
                       >
@@ -101,7 +101,7 @@
                       </validation-provider>
                       <validation-provider
                           v-slot="{ errors }"
-                          name="description"
+                          name="Description"
                           clearable
                           rules="required|min:3|max:500"
                       >
@@ -120,7 +120,7 @@
                         <v-col cols="12" sm="6">
                           <validation-provider
                               v-slot="{ errors }"
-                              name="itemWarehouse"
+                              name="Warehouse information"
                               rules="required"
                           >
                             <v-select
@@ -138,7 +138,7 @@
                         <v-col cols="12" sm="6">
                           <validation-provider
                               v-slot="{ errors }"
-                              name="itemCategory"
+                              name="Item category"
                               rules="required"
                           >
                             <v-select
@@ -159,7 +159,7 @@
                         <v-col cols="12" sm="7">
                           <validation-provider
                               v-slot="{ errors }"
-                              name="itemSubCategory"
+                              name="Item subcategory"
                               rules="required"
                           >
                             <v-select
@@ -178,7 +178,7 @@
                         <v-col cols="12" sm="5">
                           <validation-provider
                               v-slot="{ errors }"
-                              name="itemCondition"
+                              name="Item condition"
                               rules="required"
                           >
                             <v-select
@@ -525,22 +525,22 @@ setInteractionMode('eager')
 
 extend('min', {
   ...min,
-  message: 'The {_field_} must be at least {length} characters.',
+  message: '{_field_} must be at least {length} characters.',
 })
 
 extend('max', {
   ...max,
-  message: 'The {_field_} must not be greater than {length} characters.'
+  message: '{_field_} must not be greater than {length} characters.'
 })
 
 extend('min_value', {
   ...min_value,
-  message: 'The {_field_} must be at least 1 euro.'
+  message: '{_field_} must be at least 1 euro.'
 })
 
 extend('required', {
   ...required,
-  message: 'The {_field_} is required.'
+  message: '{_field_} is required.'
 })
 
 export default {
