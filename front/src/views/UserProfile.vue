@@ -468,7 +468,8 @@ extend('max', {
   message: '{_field_} may not be greater than {length} characters',
 })
 
-extend('password', {params: ['target'], validate(value, { target }) {
+extend('password', {
+  params: ['target'], validate(value, {target}) {
     return value === target;
   },
   message: 'Passwords do not match'
@@ -555,7 +556,7 @@ export default {
               this.countries = response.data
             }
             for (let i = 0; i < this.countries.length; i++) {
-              if (this.countries[i].name == this.selectCountry){
+              if (this.countries[i].name == this.selectCountry) {
                 this.selectCountry = this.countries[i]
               }
             }
@@ -593,63 +594,66 @@ export default {
 
     updateProfile() {
       this.loading = true
-      axios.get('/auth/user')
+      // axios.get('/auth/user')
+      //     .then(response => {
+      //       if (response.data) {
+      axios.put('/user/' + this.loggedUser.id, {
+        first_name: this.firstName,
+        last_name: this.lastName,
+        gender: this.selectGender,
+        birthdate: this.birthdate,
+        country: this.selectCountry.name,
+        phone_number: this.phoneNumber,
+      })
           .then(response => {
-            if (response.data) {
-              axios.put('/user/' + response.data.id, {
-                first_name: this.firstName,
-                last_name: this.lastName,
-                gender: this.selectGender,
-                birthdate: this.birthdate,
-                country: this.selectCountry.name,
-                phone_number: this.phoneNumber,
-              })
-                  .then(response => {
-                        if (response) {
-                          window.alert('bravo kretenu nemas sweetalert')
-                          this.loading = false;
-                        }
-                      }
-                  )
-                  .catch(error => {
-                    console.log(error)
-                    this.loading = false
-                    this.error = error.response.data.message;
-                  })
-            }
-          })
+                if (response) {
+                  window.alert('bravo kretenu nemas sweetalert')
+                  this.loading = false;
+                }
+              }
+          )
           .catch(error => {
             console.log(error)
+            this.loading = false
+            this.error = error.response.data.message;
           })
-
     },
+    // })
+    // .catch(error => {
+    //   console.log(error)
+    // })
+
+    // },
     updatePassword() {
       this.loading = true
-      axios.get('/auth/user')
+      // axios.get('/auth/user')
+      //     .then(response => {
+      //       if (response.data) {
+      axios.put('/password/' + this.loggedUser.id, {
+        old_password: this.old_password,
+        password: this.newPassword,
+        password_confirmation: this.confirmNewPassword
+      })
           .then(response => {
-            if (response.data) {
-              axios.put('/password/' + response.data.id, {
-                password: this.newPassword,
-              })
-                  .then(response => {
-                        if (response) {
-                          window.alert('bravo kretenu nemas sweetalert')
-                          this.loading = false;
-                        }
-                      }
-                  )
-                  .catch(error => {
-                    console.log(error)
-                    this.loading = false
-                    this.error = error.response.data.message;
-                  })
-            }
-          })
+                if (response) {
+                  window.alert('bravo kretenu nemas sweetalert')
+                  this.loading = false;
+                  //todo: zatvori dialog (Odnosno false)
+                }
+              }
+          )
           .catch(error => {
             console.log(error)
+            this.loading = false
+            this.error = error.response.data.message;
           })
-
     },
+    //       })
+    //       .catch(error => {
+    //         console.log(error)
+    //       })
+    //
+    // },
 
     selectImage(image) {
       this.currentImage = image;

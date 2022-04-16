@@ -339,6 +339,7 @@ export default {
   // },
 
   created() {
+    this.getUserRoles()
     this.getUsers()
     this.getRoles()
     this.getCountries()
@@ -441,8 +442,9 @@ export default {
   },
 
   mounted() {
-    this.getUserRoles()
-
+    if (!window.localStorage.user_roles.includes('Administrator')){
+      this.$router.push('/pageNotFound')
+    }
     document.title = 'Administration - Auction House'
   }
 }
