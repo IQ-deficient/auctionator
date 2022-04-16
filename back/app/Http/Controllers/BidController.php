@@ -72,6 +72,9 @@ class BidController extends Controller
             ['id', $request->auction_id]
         ])->first();
 
+        // Just in case someone tries to bid on an inactive auction (previous query did not find it)
+        abort_if(!$auction, 404, 'This auction no longer exists.');
+
         // In case there is an attempt to bid on the unbindable auction, cancel further actions
         // Since we only work with is_active==true entities here, there is no reason to check for that
         $no_bid_statuses = ['Expired', 'Sold', 'NA'];

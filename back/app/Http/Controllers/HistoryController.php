@@ -76,6 +76,9 @@ class HistoryController extends Controller
             ->where('is_active', true)
             ->first();
 
+        // Just in case someone tries to buyout an inactive auction (previous query did not find it)
+        abort_if(!$auction, 404, 'This auction no longer exists.');
+
         // Check if auction can be bought out, we already know the auction is active from previous model query
         $no_bid_statuses = ['Expired', 'Sold', 'NA'];
         abort_if(in_array($auction->status, $no_bid_statuses) || Carbon::now() >= $auction->end_datetime,
