@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\AlreadyLoggedIn;
+use App\Http\Middleware\EnsureUserIsActive;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -65,5 +66,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'logged_in' => AlreadyLoggedIn::class,      // Restrict access for User that is already authenticated
+        'check_user' => EnsureUserIsActive::class,      // Verify that the User is active
     ];
 }

@@ -51,7 +51,7 @@ class HistoryController extends Controller
     }
 
     /**
-     * Auction Buyout.
+     * Auction Buyout - Store a History instance.
      * @param Request $request
      * @return Builder|Model|JsonResponse|object
      */

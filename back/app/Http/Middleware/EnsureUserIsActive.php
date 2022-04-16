@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
-class AlreadyLoggedIn
+class EnsureUserIsActive
 {
     /**
      * Handle an incoming request.
@@ -20,11 +20,11 @@ class AlreadyLoggedIn
     public function handle(Request $request, Closure $next)
     {
 
-        // If User is not already authenticated, meaning they do not send a JWT token, allow the use of /login and /register routes
-        if (!Auth::user()) {
+        // Authenticated User is active, so continue with request
+        if (Auth::user()->is_active) {
             return $next($request);
         }
-        // Otherwise...
-        return response('You are already authenticated.', 400);
+        // Or when the user would have been deactivated by superior roles
+        return response('This account has been suspended.', 403);
     }
 }

@@ -52,7 +52,7 @@ Route::get('/active_countries', [CountryController::class, 'getActive']);  // Us
 
 // This Middleware should require User being Authenticated and his JWT token to be granted access to these routes
 Route::group([
-    'middleware' => 'auth:api'
+    'middleware' => ['auth:api', 'check_user']
 ], function () {
 
     // Auctions
