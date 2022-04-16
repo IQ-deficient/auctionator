@@ -2,7 +2,7 @@
   <v-data-table
       style="width: 95%; margin: 0 auto; padding-top: 6px"
       :headers="headers"
-      :items="users"
+      :items="tableData"
       :search="search"
       sort-by="title"
       class="elevation-1; rounded-card; mt-10"
@@ -43,6 +43,7 @@
                 item-text="name"
                 label="Roles"
                 clearable
+                @change="updateTableData()"
             ></v-select>
           </v-col>
         </v-row>
@@ -309,7 +310,10 @@ export default {
     ],
     search: '',
     selectRole: '',
-    roles: [],
+    roles: [
+        'Clients',
+        'Employees'
+    ],
     users: [],
     addUserUsername: '',
     addUserFirstName: '',
@@ -321,6 +325,7 @@ export default {
     closeDelete: '',
     deleteItemConfirm: '',
     user_roles: [],
+    tableData: [],
   }),
 
   // computed: {
@@ -341,7 +346,7 @@ export default {
   created() {
     this.getUserRoles()
     this.getUsers()
-    this.getRoles()
+    // this.getRoles()
     this.getCountries()
 
 
@@ -351,6 +356,13 @@ export default {
   },
 
   methods: {
+    updateTableData(){
+      if (this.selectRole == 'Clients'){
+        this.tableData = this.users.clients
+      } else{
+        this.tableData = this.users.managers_auctioneers
+      }
+    },
     submit() {
       this.$refs.observer.validate()
     },
@@ -366,11 +378,13 @@ export default {
       axios.get('/users')
           .then(response => {
             if (response.data) {
-              for (let i = 0; i < response.data.length; i++) {
+              // for (let i = 0; i < response.data.length; i++) {
                 // console.log(response.data)
                 this.users = response.data
-              }
+                this.tableData = response.data.clients
+              // }
             }
+            this.selectRole = this.roles[0]
           })
           .catch(error => {
             console.log(error)

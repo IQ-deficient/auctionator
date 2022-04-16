@@ -1,4 +1,5 @@
 <template>
+  <v-div>
   <v-data-table
       style="width: 95%; margin: 0 auto; padding-top: 6px"
       :headers="headers"
@@ -494,25 +495,32 @@
 
       </v-toolbar>
     </template>
-    <!--    <template v-slot:item.actions="{ item }">-->
-    <!--      <v-icon-->
-    <!--          class="mr-2"-->
-    <!--      >-->
-    <!--        mdi-magnify-->
-    <!--      </v-icon>-->
-    <!--      <v-icon-->
-    <!--          class="mr-2"-->
-    <!--          @click="editItem(item)"-->
-    <!--      >-->
-    <!--        mdi-pencil-->
-    <!--      </v-icon>-->
-    <!--      <v-icon-->
-    <!--          @click="deleteItem(item)"-->
-    <!--      >-->
-    <!--        mdi-delete-->
-    <!--      </v-icon>-->
-    <!--    </template>-->
+        <template v-slot:item.actions="{ item }">
+<!--          <v-icon-->
+<!--              class="mr-2"-->
+<!--          >-->
+<!--            mdi-magnify-->
+<!--          </v-icon>-->
+          <v-icon
+              class="mr-2"
+              @click="editAuction(item)"
+          >
+            mdi-pencil
+          </v-icon>
+<!--          <v-icon-->
+<!--              @click="deleteItem(item)"-->
+<!--          >-->
+<!--            mdi-delete-->
+<!--          </v-icon>-->
+        </template>
   </v-data-table>
+  <edit-auction
+      v-if="editAuctionDialog"
+      @close="editAuctionDialog = false"
+      :show-dialog="editAuctionDialog"
+      :auction="chosenAuction"
+  />
+  </v-div>
 </template>
 
 <script>
@@ -520,6 +528,7 @@ import axios from "axios";
 import {required, min, max, min_value} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 import UploadService from "../services/UploadFilesService";
+import EditAuctionDialog from "../components/EditAuctionDialog";
 
 setInteractionMode('eager')
 
@@ -549,6 +558,7 @@ export default {
   components: {
     ValidationProvider,
     ValidationObserver,
+    'edit-auction': EditAuctionDialog,
   },
 
   data: () => ({
@@ -598,6 +608,8 @@ export default {
     addAuctionBuyout: '',
     closeDelete: '',
     deleteItemConfirm: '',
+    editAuctionDialog: false,
+    chosenAuction: '',
 
   }),
 
@@ -627,6 +639,10 @@ export default {
     // text: item => item.name + ' — ' + item.address,
     submit() {
       this.$refs.observer.validate()
+    },
+    editAuction(item) {
+      this.editAuctionDialog = true
+      this.chosenAuction = item
     },
     clear() {
       this.email = ''
