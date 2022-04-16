@@ -286,7 +286,7 @@ class AuctionController extends Controller
     public function softDestroyAndRestore(Auction $auction)
     {
         // Non-active auctions can no longer be altered
-        abort_if($auction->is_active == null, 422, 'This auction was deactivated.');
+        abort_if(!$auction->is_active, 422, 'This auction was deactivated.');
 
         // Auctions with statuses Sold/Expired/Ongoing can not be updated, also check for end_datetime just in case
         $no_update_statuses = ['Sold', 'Expired'];
