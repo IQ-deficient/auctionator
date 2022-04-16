@@ -554,6 +554,12 @@ export default {
             if (response.data) {
               this.countries = response.data
             }
+            for (let i = 0; i < this.countries.length; i++) {
+              if (this.countries[i].name == this.selectCountry){
+                this.selectCountry = this.countries[i]
+              }
+            }
+            this.phoneCode = this.selectCountry.phone_code
           })
           .catch(error => {
             console.log(error)
@@ -680,8 +686,8 @@ export default {
   },
   created() {
     this.getGenders();
-    this.getCountries();
     this.getLoggedUser();
+    this.getCountries();
   }
 }
 
