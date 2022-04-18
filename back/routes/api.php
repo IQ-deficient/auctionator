@@ -58,7 +58,7 @@ Route::group([
     // Auctions
     Route::post('/auction', [AuctionController::class, 'store']);
     Route::get('/auctions', [AuctionController::class, 'index']);
-    Route::get('/active_auctions', [AuctionController::class, 'getActive']);
+//    Route::get('/active_auctions', [AuctionController::class, 'getActive']);
     Route::get('/auction/{auction}', [AuctionController::class, 'show']);       // Show one specific Auction by ID
     Route::put('/auction/{auction}', [AuctionController::class, 'update']);
     Route::delete('/auction/{auction}', [AuctionController::class, 'destroy']);
@@ -126,7 +126,6 @@ Route::group([
     Route::get('/active_warehouses', [WarehouseController::class, 'getActive']);
     Route::put('/warehouse/{warehouse}', [WarehouseController::class, 'update']);
     Route::delete('/warehouse/{warehouse}', [WarehouseController::class, 'destroy']);
-
 });
 
 

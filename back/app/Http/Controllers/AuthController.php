@@ -367,6 +367,8 @@ class AuthController extends Controller
         // When User is being deactivated, all their bids are also permanently deactivated
         // todo: can we actually do this?
 
+        // figure it out, expired, sold++++
+
         $user->update([
             'is_active' => !$user->is_active,
         ]);
