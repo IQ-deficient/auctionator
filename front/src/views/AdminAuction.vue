@@ -1,9 +1,9 @@
 <template>
-  <v-div>
+  <div>
   <v-data-table
       style="width: 95%; margin: 0 auto; padding-top: 6px"
       :headers="headers"
-      :items="auctions"
+      :items="tableData"
       :search="search"
       sort-by="title"
       class="elevation-1; rounded-card; mt-10"
@@ -44,6 +44,7 @@
                 item-text="status"
                 label="Status"
                 clearable
+                @change="updateTableData()"
             ></v-select>
           </v-col>
         </v-row>
@@ -520,7 +521,7 @@
       :show-dialog="editAuctionDialog"
       :auction="chosenAuction"
   />
-  </v-div>
+  </div>
 </template>
 
 <script>
@@ -565,12 +566,7 @@ export default {
     dialog: false,
     dialogDelete: false,
     headers: [
-      {
-        text: '',
-        align: 'start',
-        sortable: false,
-        value: 'title',
-      },
+      {text: '', align: 'start', sortable: false, value: 'title'},
       {text: 'Seller', value: 'seller'},
       {text: 'Highest bidder', value: '.bid.username'},
       {text: 'Bid amount (€)', value: '.bid.value'},
@@ -610,7 +606,7 @@ export default {
     deleteItemConfirm: '',
     editAuctionDialog: false,
     chosenAuction: '',
-
+    tableData: [],
   }),
 
   // computed: {
@@ -637,6 +633,28 @@ export default {
 
   methods: {
     // text: item => item.name + ' — ' + item.address,
+    updateTableData(){
+      if (this.selectStatus == 'Created'){
+        console.log(this.auctions)
+        this.tableData = this.auctions
+      }
+      else if (this.selectStatus == 'Ongoing'){
+        this.tableData = this.auctions
+      }
+      else if (this.selectStatus == 'Expired'){
+        this.tableData = this.auctions
+      }
+      else if (this.selectStatus == 'Sold'){
+        this.tableData = this.auctions
+      }
+      else if (this.selectStatus == 'NA'){
+        this.tableData = this.auctions
+      }
+      else{
+        this.tableData = this.auctions
+      }
+    },
+
     submit() {
       this.$refs.observer.validate()
     },
@@ -684,16 +702,19 @@ export default {
       axios.get('/auctions')
           .then(response => {
             if (response.data) {
-              for (let i = 0; i < response.data.length; i++) {
+              // for (let i = 0; i < response.data.length; i++) {
                 // console.log(response.data)
                 this.auctions = response.data
-              }
+              this.tableData = response.data.na
+              // }
             }
+            this.selectStatus = this.statuses[0]
           })
           .catch(error => {
             console.log(error)
           })
     },
+
     getStatuses() {
       axios.get('/statuses')
           .then(response => {
@@ -701,6 +722,7 @@ export default {
               this.statuses = response.data
               console.log(response.data)
             }
+            this.selectStatus = this.statuses[0]
           })
           .catch(error => {
             console.log(error)

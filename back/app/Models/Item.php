@@ -29,9 +29,21 @@ class Item extends Model
 
     protected $with = [
 //        'category_all',
+        'warehouse',
+        'category'
     ];
 
     public function category_all()
+    {
+        return $this->belongsTo('App\Models\Category', 'category', 'name');
+    }
+
+    public function warehouse()
+    {
+        return $this->belongsTo('App\Models\Warehouse', 'warehouse_id', 'id');
+    }
+
+    public function category()
     {
         return $this->belongsTo('App\Models\Category', 'category', 'name');
     }

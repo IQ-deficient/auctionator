@@ -212,7 +212,7 @@
           </div>
           <div v-if="role == 'Administrator' || role == 'Manager'">
             <hr>
-            <router-link to="/admin-auction" style="text-decoration: none">
+            <router-link to="/admin-user" style="text-decoration: none">
               <v-btn style="float: left"
                      color="transparent"
                      depressed
