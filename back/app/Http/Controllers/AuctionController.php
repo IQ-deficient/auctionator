@@ -30,11 +30,40 @@ class AuctionController extends Controller
 
     /**
      * Display a listing of the resource.
-     * @return Auction[]|Collection
+     * @return array[]|Application|ResponseFactory|Response
      */
     public function index()
     {
-        return Auction::all();
+        $roles = User::getUserRoles();
+        $auctions = Auction::all();
+        $created = $started = $sold = $expired = $na = [];      // init return variables
+
+        // Go through each Auction no matter if active and return them separated by status
+        foreach ($auctions as $auction) {
+            switch ($auction->status) {
+                case "Created":
+                    array_push($created, $auction);
+                    break;
+                case "Started":
+                    array_push($started, $auction);
+                    break;
+                case "Sold":
+                    array_push($sold, $auction);
+                    break;
+                case "Expired":
+                    array_push($expired, $auction);
+                    break;
+                case "NA":
+                    array_push($na, $auction);
+                    break;
+            }
+        }
+
+        // Only if Administrator or Manager is currently logged in return desired data
+        if (in_array('Administrator', $roles) || in_array('Manager', $roles))
+            return ['created' => $created, 'started' => $started, 'sold' => $sold, 'expired' => $expired, 'na' => $na];
+
+        return response('You do not have permissions for requested data!', 400);
     }
 
     /**
