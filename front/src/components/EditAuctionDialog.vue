@@ -1,23 +1,11 @@
 <template>
   <v-container>
-    <validation-observer>
+    <validation-observer ref="observer" v-slot="{ invalid }" tag="form" @submit.prevent="submit()">
       <v-dialog
           v-model="showDialog"
           max-width="60%"
           persistent
       >
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-              color="primary"
-              dark
-              class="mb-2"
-              v-bind="attrs"
-              v-on="on"
-          >
-            <v-icon left>mdi-plus-circle-multiple-outline</v-icon>
-            Create auction
-          </v-btn>
-        </template>
         <template v-slot:default="dialog">
           <v-card color="#2c3e50">
             <v-card-text>
@@ -104,7 +92,6 @@
                             required
                             clearable
                             @change="getSubCategoriesAndConditions()"
-                            return-object
                         >
                         </v-select>
                       </validation-provider>
@@ -290,8 +277,9 @@
                      type="submit"
                      color="primary"
                      class="mt-6"
-                     :disabled="!addItemTitle || !addItemDescription || !addItemCategory || !addItemSubCategory ||
+                     :disabled="invalid || !addItemTitle || !addItemDescription || !addItemCategory || !addItemSubCategory ||
                                     !addItemCondition || !addItemWarehouse || !addAuctionTitle || !addAuctionBuyout"
+                     @click="updateAuction()"
               >
                 <v-icon left class="mr-1">mdi-pencil-plus-outline</v-icon>
                 Post
@@ -407,6 +395,7 @@ export default {
             console.log(error)
           })
     },
+
     getSubCategoriesAndConditions() {
       axios.post('/child_categories_conditions', {
         category: this.addItemCategory
@@ -421,8 +410,8 @@ export default {
             console.log(error)
           })
       console.log(this.addItemCategory)
-
     },
+
     getWarehouse() {
       axios.get('/warehouses')
           .then(response => {
@@ -434,6 +423,34 @@ export default {
             console.log(error)
           })
     },
+
+    updateAuction() {
+      axios.put('/auction/' + this.auction.id, {
+        title: this.addAuctionTitle,
+        buyout: this.addAuctionBuyout,
+        title_item: this.addItemTitle,
+        description: this.addItemDescription,
+        category: this.addItemCategory,
+        condition: this.addItemCondition,
+        warehouse_id: this.addItemWarehouse,
+      })
+          .then(response => {
+                if (response) {
+                  window.alert('bravo kretenu nemas sweetalert')
+                  this.loading = false;
+                }
+              }
+          )
+          .catch(error => {
+            console.log(error)
+            this.loading = false
+            this.error = error.response.data.message;
+          })
+    },
+
+    getAuction() {
+      console.log(this.auction.id)
+    }
   }
 
   //todo : ovdje ide logika methods() i axios

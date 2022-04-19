@@ -584,7 +584,7 @@ export default {
               this.selectCountry = response.data.country
               this.phoneNumber = response.data.phone_number
               this.loggedUser = response.data
-              console.log(this.loggedUser.id)
+              // console.log(this.loggedUser.id)
             }
           })
           .catch(error => {

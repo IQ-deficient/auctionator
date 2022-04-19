@@ -44,7 +44,7 @@ class AuctionController extends Controller
                 case "Created":
                     array_push($created, $auction);
                     break;
-                case "Started":
+                case "Ongoing":
                     array_push($started, $auction);
                     break;
                 case "Sold":

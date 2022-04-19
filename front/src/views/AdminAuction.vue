@@ -635,20 +635,19 @@ export default {
     // text: item => item.name + ' — ' + item.address,
     updateTableData(){
       if (this.selectStatus == 'Created'){
-        console.log(this.auctions)
-        this.tableData = this.auctions
+        this.tableData = this.auctions.created
       }
       else if (this.selectStatus == 'Ongoing'){
-        this.tableData = this.auctions
+        this.tableData = this.auctions.started
       }
       else if (this.selectStatus == 'Expired'){
-        this.tableData = this.auctions
+        this.tableData = this.auctions.expired
       }
       else if (this.selectStatus == 'Sold'){
-        this.tableData = this.auctions
+        this.tableData = this.auctions.sold
       }
       else if (this.selectStatus == 'NA'){
-        this.tableData = this.auctions
+        this.tableData = this.auctions.na
       }
       else{
         this.tableData = this.auctions
@@ -720,7 +719,7 @@ export default {
           .then(response => {
             if (response.data) {
               this.statuses = response.data
-              console.log(response.data)
+              // console.log(response.data)
             }
             this.selectStatus = this.statuses[0]
           })
@@ -752,7 +751,7 @@ export default {
           .catch(error => {
             console.log(error)
           })
-      console.log(this.addItemCategory)
+      // console.log(this.addItemCategory)
 
     },
     getWarehouse() {
