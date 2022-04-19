@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <validation-observer ref="observer" v-slot="{ invalid }" tag="form" @submit.prevent="submit()">
+    <validation-observer ref="observer" v-slot="{ invalid }" tag="form" @submit.prevent="updateAuction()">
       <v-dialog
           v-model="showDialog"
           max-width="60%"
@@ -296,17 +296,17 @@
           </v-card>
         </template>
       </v-dialog>
-      <v-dialog v-model="dialogDelete" max-width="35%">
-        <v-card>
-          <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-            <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
-            <v-spacer></v-spacer>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+<!--      <v-dialog v-model="dialogDelete" max-width="35%">-->
+<!--        <v-card>-->
+<!--          <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>-->
+<!--          <v-card-actions>-->
+<!--            <v-spacer></v-spacer>-->
+<!--            <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>-->
+<!--            <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>-->
+<!--            <v-spacer></v-spacer>-->
+<!--          </v-card-actions>-->
+<!--        </v-card>-->
+<!--      </v-dialog>-->
     </validation-observer>
 
   </v-container>
@@ -377,7 +377,6 @@ export default {
     this.addItemDescription = this.auction.item.description
     this.addItemWarehouse = this.auction.item.warehouse.name
     this.addItemCategory = this.auction.item.category.name
-    console.log(this.auction.item.category.name)
     this.addAuctionTitle = this.auction.title
     this.addAuctionBuyout = this.auction.buyout
 
@@ -447,10 +446,6 @@ export default {
             this.error = error.response.data.message;
           })
     },
-
-    getAuction() {
-      console.log(this.auction.id)
-    }
   }
 
   //todo : ovdje ide logika methods() i axios

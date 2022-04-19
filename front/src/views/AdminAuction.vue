@@ -486,8 +486,8 @@
               <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
+<!--                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>-->
+<!--                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>-->
                 <v-spacer></v-spacer>
               </v-card-actions>
             </v-card>
@@ -497,11 +497,6 @@
       </v-toolbar>
     </template>
         <template v-slot:item.actions="{ item }">
-<!--          <v-icon-->
-<!--              class="mr-2"-->
-<!--          >-->
-<!--            mdi-magnify-->
-<!--          </v-icon>-->
           <v-icon
               class="mr-2"
               @click="editAuction(item)"
@@ -509,7 +504,7 @@
             mdi-pencil
           </v-icon>
 <!--          <v-icon-->
-<!--              @click="deleteItem(item)"-->
+<!--              @click="deleteAuction(item)"-->
 <!--          >-->
 <!--            mdi-delete-->
 <!--          </v-icon>-->
@@ -602,8 +597,8 @@ export default {
     imageInfos: [],
     addAuctionTitle: '',
     addAuctionBuyout: '',
-    closeDelete: '',
-    deleteItemConfirm: '',
+    // closeDelete: '',
+    // deleteItemConfirm: '',
     editAuctionDialog: false,
     chosenAuction: '',
     tableData: [],

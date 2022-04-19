@@ -5,11 +5,10 @@
         src="../assets/Mercy.png"
     >
     </v-parallax>
-    <validation-observer
-        ref="observer"
+    <validation-observer validation-observer ref="observer" v-slot="{ invalid }" tag="form" @submit.prevent="updateProfile()"
     >
       <v-card width="50%"
-              style="margin: 0 auto; position: relative" color="info">
+              style="margin: 0 auto; position: relative" color="info" class="pa-4">
         <v-row>
           <v-col cols="12" sm="10">
             <div style="position: relative; width: 0; height: 0; margin: 0 auto">
@@ -34,9 +33,9 @@
                   </a>
                 </template>
                 <template v-slot:default="dialog">
-                  <v-card>
+                  <v-card class="pa-4">
                     <v-card-text>
-                      <div class="pa-4">
+                      <div>
                         <v-row no-gutters justify="center" align="center">
                           <v-col cols="8">
                             <v-file-input
@@ -125,7 +124,7 @@
                 </div>
               </v-col>
             </v-row>
-            <v-row style="margin: 0 auto">
+            <v-row style="">
               <v-col cols="12"
                      sm="5"
                      style="margin: 0 auto">
@@ -140,7 +139,7 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-            <v-row style="margin: 0 auto">
+            <v-row style="">
               <v-col
                   cols="12"
                   sm="6"
@@ -184,7 +183,7 @@
                 </validation-provider>
               </v-col>
             </v-row>
-            <v-row style="margin: 0 auto">
+            <v-row style="">
               <v-col style="margin: 0 auto"
                      cols="12"
                      sm="7">
@@ -199,7 +198,7 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-            <v-row style="margin: 0 auto">
+            <v-row style="">
               <v-col
                   cols="12"
                   sm="5">
@@ -272,7 +271,7 @@
                 </validation-provider>
               </v-col>
             </v-row>
-            <v-row style="margin: 0 auto">
+            <v-row style="">
               <v-col
                   cols="12"
                   sm="5">
@@ -302,7 +301,7 @@
                 <validation-provider
                     v-slot="{ errors }"
                     name="Phone number"
-                    rules="required|min:8|max:15"
+                    rules="required|digits|min:8|max:15"
                     clearable
                 >
                   <v-text-field
@@ -318,7 +317,7 @@
                 </validation-provider>
               </v-col>
             </v-row>
-            <v-row style="margin: 0 auto">
+            <v-row style="">
               <v-col cols="12" sm="5"
                      style="margin: 0 auto">
                 <v-dialog
@@ -334,9 +333,9 @@
                     </v-btn>
                   </template>
                   <template v-slot:default="dialog">
-                    <v-card>
+                    <v-card class="pa-4">
                       <v-card-text>
-                        <div class="pa-4">
+                        <div>
                           <validation-provider
                               v-slot="{ errors }"
                               name="oldPassword"
@@ -426,7 +425,7 @@
                 >
                   <v-btn dark
                          large color="primary"
-                         :disabled="!firstName || !lastName || !selectCountry ||
+                         :disabled=" invalid || !firstName || !lastName || !selectCountry ||
                                     !phoneNumber"
                          @click="updateProfile()"
                   >
@@ -454,7 +453,7 @@ setInteractionMode('eager')
 
 extend('digits', {
   ...digits,
-  // message: '{_field_} needs to be {length} digits. ({_value_})',
+  message: '{_field_} needs to be a digit.',
 })
 
 extend('required', {
@@ -467,6 +466,13 @@ extend('max', {
   ...max,
   message: '{_field_} may not be greater than {length} characters',
 })
+
+extend('password', {
+  params: ['target'], validate(value, {target}) {
+    return value === target;
+  },
+  message: 'Passwords do not match'
+});
 
 extend('password', {
   params: ['target'], validate(value, {target}) {
@@ -594,9 +600,6 @@ export default {
 
     updateProfile() {
       this.loading = true
-      // axios.get('/auth/user')
-      //     .then(response => {
-      //       if (response.data) {
       axios.put('/user/' + this.loggedUser.id, {
         first_name: this.firstName,
         last_name: this.lastName,
@@ -618,17 +621,9 @@ export default {
             this.error = error.response.data.message;
           })
     },
-    // })
-    // .catch(error => {
-    //   console.log(error)
-    // })
 
-    // },
     updatePassword() {
       this.loading = true
-      // axios.get('/auth/user')
-      //     .then(response => {
-      //       if (response.data) {
       axios.put('/password/' + this.loggedUser.id, {
         old_password: this.old_password,
         password: this.newPassword,
@@ -648,12 +643,6 @@ export default {
             this.error = error.response.data.message;
           })
     },
-    //       })
-    //       .catch(error => {
-    //         console.log(error)
-    //       })
-    //
-    // },
 
     selectImage(image) {
       this.currentImage = image;
@@ -661,6 +650,7 @@ export default {
       this.progress = 0;
       this.message = "";
     },
+
     upload() {
       if (!this.currentImage) {
         this.message = "Please select an Image!";
