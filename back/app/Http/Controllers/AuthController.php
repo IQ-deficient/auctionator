@@ -173,6 +173,7 @@ class AuthController extends Controller
             'first_name' => 'required|string|between:1,32',
             'last_name' => 'required|string|between:1,32',
             'email' => ['required', 'email:rfc,dns', 'min:10', 'max:254', 'unique:users,email'],
+            'country' => 'nullable|string|max:32|exists:countries,name',
             'phone_number' => ['required', 'digits_between:6,15', 'unique:users,phone_number'],
 //            'gender' => 'nullable|string|max:32|exists:genders,name',
 //            'country' => 'nullable|string|max:32|exists:countries,name',

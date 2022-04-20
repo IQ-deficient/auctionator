@@ -50,7 +50,7 @@
           </v-row>
 
           <v-spacer></v-spacer>
-          <validation-observer>
+          <validation-observer ref="observer" v-slot="{ invalid }" tag="form" @submit.prevent="createUser()">
             <v-dialog
                 v-model="dialog"
                 max-width="60%"
@@ -88,115 +88,209 @@
                         </table>
                       </v-toolbar-title>
                       <v-card class="pa-4">
-                        <validation-provider
-                            v-slot="{ errors }"
-                            name="Username"
-                            rules="required"
-                            clearable
-                        >
-                          <v-text-field
-                              v-model="addUserUsername"
-                              :error-messages="errors"
-                              label="Username"
-                              required
-                              clearable
-                          >
-                          </v-text-field>
-                        </validation-provider>
                         <v-row>
-                          <v-col cols="12" sm="6">
+                          <v-col cols="12" sm="12">
                             <validation-provider
                                 v-slot="{ errors }"
-                                name="First name"
-                                rules="required"
+                                name="Username"
+                                rules="required|min:3|max:32"
                                 clearable
                             >
                               <v-text-field
-                                  v-model="addUserFirstName"
+                                  v-model="username"
+                                  :error-messages="errors"
+                                  label="Username"
+                                  required
+                              ></v-text-field>
+                            </validation-provider>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col
+                              cols="12"
+                              sm="6"
+                          >
+                            <validation-provider
+                                v-slot="{ errors }"
+                                name="First name"
+                                rules="required|min:3|max:32"
+                                clearable
+                            >
+                              <v-text-field
+                                  v-model="firstName"
                                   :error-messages="errors"
                                   label="First name"
                                   required
+                              ></v-text-field>
+                            </validation-provider>
+                          </v-col>
+                          <v-col
+                              cols="12"
+                              sm="6"
+                          >
+                            <validation-provider
+                                v-slot="{ errors }"
+                                name="Last name"
+                                rules="required|min:3|max:32"
+                                clearable
+                            >
+                              <v-text-field
+                                  v-model="lastName"
+                                  :error-messages="errors"
+                                  label="Last name"
+                                  required
+                              ></v-text-field>
+                            </validation-provider>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="12" sm="12">
+                            <validation-provider
+                                v-slot="{ errors }"
+                                name="Email"
+                                rules="required|email|min:3|max:254"
+                                clearable
+                            >
+                              <v-text-field
+                                  v-model="email"
+                                  :error-messages="errors"
+                                  label="Email"
+                                  required
+                              ></v-text-field>
+                            </validation-provider>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col
+                              cols="12"
+                              sm="5">
+                            <validation-provider
+                                v-slot="{ errors }"
+                                name="Country"
+                                rules="required"
+                                clearable
+                            >
+                              <v-select
+                                  v-model="selectCountry"
+                                  :items="countries"
+                                  item-text="name"
+                                  :error-messages="errors"
+                                  label="Country"
+                                  return-object
+                                  @change="updateCountryCode()"
+                              ></v-select>
+                            </validation-provider>
+                          </v-col>
+                          <v-col
+                              cols="12"
+                              sm="7">
+                            <validation-provider
+                                v-slot="{ errors }"
+                                name="Phone number"
+                                rules="required|min:8|max:15"
+                                clearable
+                            >
+                              <v-text-field v-if="phoneCode != null"
+                                  :prefix="'(' + phoneCode + ')'"
+                                  v-model="phoneNumber"
+                                  :error-messages="errors"
+                                  label="Phone number"
+                                  append-icon="mdi-phone-classic"
+                              ></v-text-field>
+                              <v-text-field v-else
+                                            v-model="phoneNumber"
+                                            :error-messages="errors"
+                                            label="Phone number"
+                                            append-icon="mdi-phone-classic"
+                              ></v-text-field>
+                            </validation-provider>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col
+                              cols="12"
+                              sm="12">
+                            <validation-provider
+                                v-slot="{ errors }"
+                                name="Password"
+                                rules="required|min:8|max:128"
+                                clearable
+                            >
+                              <v-text-field
+                                  v-model="password"
+                                  :error-messages="errors"
+                                  label="Password"
+                                  :type="showPassword ? 'text' : 'password'"
+                                  counter
+                                  required
+                                  hint="Must be at least 8 characters."
+                                  :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                  @click:append="showPassword = !showPassword"
                                   clearable
                               >
                               </v-text-field>
                             </validation-provider>
-                          </v-col>
-                          <v-col cols="12" sm="6">
+                            </v-col >
+                          </v-row>
+                        <v-row>
+                          <v-col
+                              cols="12"
+                              sm="12">
                             <validation-provider
                                 v-slot="{ errors }"
-                                name="Last name"
-                                rules="required"
+                                name="Password confirmation"
+                                rules="required|min:8|max:128|password:@Password"
                                 clearable
                             >
                               <v-text-field
-                                  v-model="addUserLastName"
+                                  v-model="confirmPassword"
                                   :error-messages="errors"
-                                  label="Last name"
+                                  label="Confirm password"
+                                  :type="showConfirmPassword ? 'text' : 'password'"
+                                  counter
                                   required
+                                  hint="Must be at least 8 characters."
+                                  :append-icon="showConfirmPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                  @click:append="showConfirmPassword = !showConfirmPassword"
                                   clearable
                               >
                               </v-text-field>
                             </validation-provider>
                           </v-col>
                         </v-row>
-                        <validation-provider
-                            v-slot="{ errors }"
-                            name="Email"
-                            rules="required"
-                            clearable
-                        >
-                          <v-text-field
-                              v-model="addUserEmail"
-                              :error-messages="errors"
-                              label="Email"
-                              required
-                              clearable
-                          >
-                          </v-text-field>
-                        </validation-provider>
                         <v-row>
-                          <v-col cols="12" sm="6">
+                          <v-col
+                              cols="12"
+                              sm="12">
                             <validation-provider
                                 v-slot="{ errors }"
                                 name="Country"
                                 rules="required"
-                            >
-                              <v-select
-                                  v-model="addUserCountry"
-                                  :error-messages="errors"
-                                  label="Country"
-                                  :items="countries"
-                                  item-text="name"
-                                  required
-                                  clearable
-                              >
-                              </v-select>
-                            </validation-provider>
-                          </v-col>
-                          <v-col cols="12" sm="6">
-                            <validation-provider
-                                v-slot="{ errors }"
-                                name="Phone"
-                                rules="required"
                                 clearable
                             >
-                              <v-text-field
-                                  v-model="addUserPhone"
-                                  :error-messages="errors"
-                                  label="Phone number"
-                                  required
-                                  clearable
-                              >
-                              </v-text-field>
+                              <v-select
+                                v-model="selectEmployeeRoles"
+                                :error-messages="errors"
+                                :items="employee_roles"
+                                label="Choose role"
+                                multiple
+                                chips
+                                persistent-hint
+                                @change="logujNesto()"
+                            ></v-select>
                             </validation-provider>
                           </v-col>
                         </v-row>
                       </v-card>
                     </div>
                     <v-btn large
+                           dark
                            type="submit"
                            color="primary"
                            class="mt-6"
+                           :disabled="invalid || !username || !lastName || !email ||
+                                    !selectCountry || !phoneNumber || !password || !confirmPassword"
+                           @click="createUser()"
                     >
                       <v-icon left class="mr-1">mdi-account-plus-outline</v-icon>
                       Create
@@ -253,16 +347,16 @@
 
 <script>
 import axios from "axios";
-import {required, digits, email, max, regex} from 'vee-validate/dist/rules'
+import {required, digits, email, max} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 import EditUserDialog from "../components/EditUserDialog";
 // import UploadService from "../services/UploadFilesService";
 
 setInteractionMode('eager')
 
-extend('digits', {
+extend('digit', {
   ...digits,
-  // message: '{_field_} needs to be {length} digits. ({_value_})',
+  message: '{_field_} needs to be a digit.',
 })
 
 extend('required', {
@@ -273,18 +367,22 @@ extend('required', {
 
 extend('max', {
   ...max,
-  message: '{_field_} may not be greater than {length} characters',
+  message: '{_field_} may not be greater than {length} characters.',
 })
 
-extend('regex', {
-  ...regex,
-  message: '{_field_} {_value_} does not match {regex}',
-})
+extend('password', {
+  params: ['target'], validate(value, {target}) {
+    return value === target;
+  },
+  message: 'Passwords do not match.'
+});
 
 extend('email', {
   ...email,
   message: 'Must be a valid email.',
 })
+
+
 
 export default {
   name: "AdminUser",
@@ -320,19 +418,29 @@ export default {
         'Employees'
     ],
     users: [],
-    addUserUsername: '',
-    addUserFirstName: '',
-    addUserLastName: '',
-    addUserEmail: '',
-    addUserCountry: '',
+    username: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    selectCountry: '',
     countries: [],
-    addUserPhone: '',
+    phoneCode: '',
+    phoneNumber: '',
     // closeDelete: '',
     // deleteItemConfirm: '',
+    password: '',
+    confirmPassword: '',
+    showPassword: false,
+    showConfirmPassword: false,
     user_roles: [],
     tableData: [],
     editUserDialogue: false,
-    chosenUser: ''
+    chosenUser: '',
+    selectEmployeeRoles: '',
+    employee_roles: [
+        'Manager',
+        'Auctioneer'
+    ]
   }),
 
   // computed: {
@@ -358,6 +466,11 @@ export default {
   },
 
   methods: {
+
+    logujNesto() {
+      console.log(this.selectEmployeeRoles);
+    },
+
     updateTableData(){
       if (this.selectRole == 'Clients'){
         this.tableData = this.users.clients
@@ -386,11 +499,8 @@ export default {
       axios.get('/users')
           .then(response => {
             if (response.data) {
-              // for (let i = 0; i < response.data.length; i++) {
-                // console.log(response.data)
                 this.users = response.data
                 this.tableData = response.data.clients
-              // }
             }
             this.selectRole = this.roles[0]
           })
@@ -414,17 +524,25 @@ export default {
     },
 
     getCountries() {
-      this.countries = []
       axios.get('/active_countries')
           .then(response => {
             if (response.data) {
-              // console.log(response.data)
               this.countries = response.data
             }
+            for (let i = 0; i < this.countries.length; i++) {
+              if (this.countries[i].name == this.selectCountry) {
+                this.selectCountry = this.countries[i]
+              }
+            }
+            this.phoneCode = this.selectCountry.phone_code
           })
           .catch(error => {
             console.log(error)
           })
+    },
+
+    updateCountryCode() {
+      this.phoneCode = this.selectCountry.phone_code
     },
 
     getUserRoles() {
@@ -442,6 +560,34 @@ export default {
           })
           .catch(error => {
             console.log(error)
+          })
+    },
+
+    createUser() {
+      this.loading = true
+      axios.post('employee', {
+        username: this.username,
+        first_name: this.firstName,
+        last_name: this.lastName,
+        email: this.email,
+        country: this.selectCountry.name,
+        phone_number: this.phoneNumber,
+        password: this.password,
+        password_confirmation: this.confirmPassword,
+        roles: this.selectEmployeeRoles
+
+      })
+          .then(response => {
+                if (response) {
+                  this.$router.push('/login');
+                  this.loading = false;
+                }
+              }
+          )
+          .catch(error => {
+            console.log(error)
+            this.loading = false
+            this.error = error.response.data.message;
           })
     },
   },

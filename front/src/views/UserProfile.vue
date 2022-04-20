@@ -304,7 +304,7 @@
                     rules="required|digits|min:8|max:15"
                     clearable
                 >
-                  <v-text-field
+                  <v-text-field v-if="phoneCode != null"
                       :prefix="'(' + phoneCode + ')'"
                       v-model="phoneNumber"
                       :error-messages="errors"
@@ -313,6 +313,15 @@
                       dark
                       :disabled="edit"
                       solo-inverted
+                  ></v-text-field>
+                  <v-text-field v-else
+                                v-model="phoneNumber"
+                                :error-messages="errors"
+                                label="Phone number"
+                                append-icon="mdi-phone-classic"
+                                dark
+                                :disabled="edit"
+                                solo-inverted
                   ></v-text-field>
                 </validation-provider>
               </v-col>
@@ -473,14 +482,6 @@ extend('password', {
   },
   message: 'Passwords do not match'
 });
-
-extend('password', {
-  params: ['target'], validate(value, {target}) {
-    return value === target;
-  },
-  message: 'Passwords do not match'
-});
-
 
 // extend('regex', {
 //   ...regex,
