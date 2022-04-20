@@ -633,7 +633,7 @@ export default {
         this.tableData = this.auctions.created
       }
       else if (this.selectStatus == 'Ongoing'){
-        this.tableData = this.auctions.started
+        this.tableData = this.auctions.ongoing
       }
       else if (this.selectStatus == 'Expired'){
         this.tableData = this.auctions.expired

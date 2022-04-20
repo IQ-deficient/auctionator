@@ -36,7 +36,7 @@ class AuctionController extends Controller
     {
         $roles = User::getUserRoles();
         $auctions = Auction::all();
-        $created = $started = $sold = $expired = $na = [];      // init return variables
+        $created = $ongoing = $sold = $expired = $na = [];      // init return variables
 
         // Go through each Auction no matter if active and return them separated by status
         foreach ($auctions as $auction) {
@@ -45,7 +45,7 @@ class AuctionController extends Controller
                     array_push($created, $auction);
                     break;
                 case "Ongoing":
-                    array_push($started, $auction);
+                    array_push($ongoing, $auction);
                     break;
                 case "Sold":
                     array_push($sold, $auction);
@@ -61,7 +61,7 @@ class AuctionController extends Controller
 
         // Only if Administrator or Manager is currently logged in return desired data
         if (in_array('Administrator', $roles) || in_array('Manager', $roles))
-            return ['created' => $created, 'started' => $started, 'sold' => $sold, 'expired' => $expired, 'na' => $na];
+            return ['created' => $created, 'ongoing' => $ongoing, 'sold' => $sold, 'expired' => $expired, 'na' => $na];
 
         return response('You do not have permissions for requested data!', 400);
     }
