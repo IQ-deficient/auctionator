@@ -36,7 +36,7 @@ class AuthController extends Controller
      */
     public function index()
     {
-        $roles = User::getUserRoles();
+        $roles = User::getUserRoles(Auth::user()->username);
 
         // Get all active Users that fit the role of Manager and Auctioneer
         $usernames = DB::table('user_roles')
@@ -162,7 +162,7 @@ class AuthController extends Controller
      */
     public function registerEmployee(Request $request)
     {
-        $roles = User::getUserRoles();
+        $roles = User::getUserRoles(Auth::user()->username);
 
         // No personnel other than Admins can make User instances for the employed
         abort_if(!in_array('Administrator', $roles), 403, 'Only Administrators are allowed to register employees.');
@@ -245,7 +245,7 @@ class AuthController extends Controller
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 120,
             'user' => auth()->user(),
-            'user_roles' => User::getUserRoles()
+            'user_roles' => User::getUserRoles(Auth::user()->username)
         ]);
     }
 
@@ -260,7 +260,7 @@ class AuthController extends Controller
         $auth = Auth::user();
 
         // Confirm that the User being Updated from api route is the one that is Authenticated
-        abort_if($auth->id != $user->id, 409, 'Authenticated User does not match the User being edited.    ');
+        abort_if($auth->id != $user->id, 409, 'Authenticated User does not match the User being edited.');
 
         /**
          * between:min,max -> The field under validation must have a size between the given min and max.
@@ -287,6 +287,59 @@ class AuthController extends Controller
         }
 
         // Updating username here will result in cascading update of username in child rows because of onUpdate in migrations
+        $user->update([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'phone_number' => $request->phone_number,
+            'gender' => $request->gender,
+            'country' => $request->country,
+            'birthdate' => $request->birthdate,
+        ]);
+
+        return User::query()->where('id', $user->id)->first();
+    }
+
+    /**
+     * Manage other User Profiles.
+     * @param User $user
+     * @param Request $request
+     * @return Builder|JsonResponse|Model|object|null
+     */
+    public function manage(Request $request, User $user)
+    {
+        $auth = Auth::user();
+        $auth_roles = User::getUserRoles($auth->username);
+        $edit_user_roles = User::getUserRoles($user->username);
+
+        // Manager is allowed to only Update Clients
+        if (in_array('Manager', $auth_roles)) {
+            abort_if(!in_array('Client', $edit_user_roles), 405, 'The User you are trying to edit is not a Client');
+        } // Administrator can Update any User that is not an Admin
+        elseif ((in_array('Administrator', $auth_roles))) {
+            abort_if(in_array('Administrator', $edit_user_roles), 405, 'You are not allowed to edit other Administrators');
+        }  // Finally, any other Role gets an error, and we abort this action
+        else {
+            abort(403, 'You do not own permissions to perform this action.');
+        }
+
+        // todo: Separate VALIDATORS AND UPDATE LOGIC depending on the Roles for User we are updating
+
+        $validator = Validator::make($request->all(), [
+//            'username' => ['required', 'string', 'between:3,32', Rule::when($request->username != $user->username, 'unique:users')],
+            'first_name' => 'required|string|between:1,32',
+            'last_name' => 'required|string|between:1,32',
+//            'email' => ['required', 'email:rfc,dns', 'between:10,254', Rule::when($request->email != $user->email, 'unique:users')],
+            'country' => 'required|string|max:32|exists:countries,name',
+            'phone_number' => ['required', 'digits_between:6,15', Rule::when($request->phone_number != $user->phone_number, 'unique:users')],
+            'gender' => 'nullable|string|max:32|exists:genders,name',
+            'birthdate' => 'nullable|date',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        // Updating username here will result in cascadinummjhg update of username in child rows because of onUpdate in migrations
         $user->update([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
@@ -364,6 +417,8 @@ class AuthController extends Controller
         // auth()->logout();
 
         // later: When User is being deactivated, all their bids are also permanently deactivated (and restored to previous on on auctions  )
+
+        // todo: check if user performing this is admin
 
         $user->update([
             'is_active' => !$user->is_active,
