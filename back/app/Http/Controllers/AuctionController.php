@@ -272,7 +272,6 @@ class AuctionController extends Controller
             'buyout' => $request->buyout,
             'start_datetime' => $request->start_datetime,
             'end_datetime' => $request->end_datetime,
-            'updated_at' => Carbon::now(),          // This is only updated if any other input is different from current ones
             'user_id' => Auth::id(),            // Auctioneer that applies changes (in case its someone else than the creator)
         ]);
 

@@ -97,8 +97,7 @@ class WarehouseController extends Controller
 
         $warehouse->update([
             'name' => $request->name,
-            'address' => $request->address,
-            'updated_at' => Carbon::now()
+            'address' => $request->address
         ]);
 
         return Warehouse::query()->where('id', $warehouse->id)->first();

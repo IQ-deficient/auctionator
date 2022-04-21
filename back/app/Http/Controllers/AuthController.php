@@ -125,11 +125,11 @@ class AuthController extends Controller
             'first_name' => 'required|string|between:1,32',
             'last_name' => 'required|string|between:1,32',
             'email' => ['required', 'email:rfc,dns', 'min:10', 'max:254', 'unique:users,email'],
-            'phone_number' => ['required', 'digits_between:6,15', 'unique:users,phone_number'],
-//            'gender' => 'nullable|string|max:32|exists:genders,name',
-            'country' => 'nullable|string|max:32|exists:countries,name',
+            'country' => 'required|string|max:32|exists:countries,name',
             'birthdate' => 'nullable|date',
 //            'image' => 'required'
+//            'gender' => 'nullable|string|max:32|exists:genders,name',
+            'phone_number' => ['required', 'digits_between:6,15', 'unique:users,phone_number'],
         ]);
 
         if ($validator->fails()) {
@@ -250,13 +250,18 @@ class AuthController extends Controller
     }
 
     /**
-     * Change all User data other than Password and Image.
+     * Change all User data (Update Profile for self) other than Password and Image.
      * @param User $user
      * @param Request $request
      * @return Builder|JsonResponse|Model|object|null
      */
     public function update(Request $request, User $user)
     {
+        $auth = Auth::user();
+
+        // Confirm that the User being Updated from api route is the one that is Authenticated
+        abort_if($auth->id != $user->id, 409, 'Authenticated User does not match the User being edited.    ');
+
         /**
          * between:min,max -> The field under validation must have a size between the given min and max.
          * Strings, numerics, arrays, and files are evaluated in the same fashion as the size rule.
@@ -266,17 +271,14 @@ class AuthController extends Controller
          * For an array, size corresponds to the count of the array.
          * For files, size corresponds to the file size in kilobytes.
          */
-        // todo: validate if the auth user has required roles to perform this action (this goes for other stuff asw but alas)
-        //  This will also be used as edit profile for Clients
-        //  We should probably make it available for admin to alter the roles for select users (and select multiple)
         $validator = Validator::make($request->all(), [
 //            'username' => ['required', 'string', 'between:3,32', Rule::when($request->username != $user->username, 'unique:users')],
             'first_name' => 'required|string|between:1,32',
             'last_name' => 'required|string|between:1,32',
 //            'email' => ['required', 'email:rfc,dns', 'between:10,254', Rule::when($request->email != $user->email, 'unique:users')],
+            'country' => 'required|string|max:32|exists:countries,name',
             'phone_number' => ['required', 'digits_between:6,15', Rule::when($request->phone_number != $user->phone_number, 'unique:users')],
             'gender' => 'nullable|string|max:32|exists:genders,name',
-            'country' => 'nullable|string|max:32|exists:countries,name',
             'birthdate' => 'nullable|date',
         ]);
 
@@ -292,7 +294,6 @@ class AuthController extends Controller
             'gender' => $request->gender,
             'country' => $request->country,
             'birthdate' => $request->birthdate,
-            'updated_at' => Carbon::now()
         ]);
 
         return User::query()->where('id', $user->id)->first();
@@ -320,8 +321,7 @@ class AuthController extends Controller
 
         // Change the user password into hashed value and return User object
         $user->update([
-            'password' => bcrypt($request->password),
-            'updated_at' => Carbon::now()
+            'password' => bcrypt($request->password)
         ]);
 
         return User::query()->where('id', $user->id)->first();
@@ -346,8 +346,7 @@ class AuthController extends Controller
         }
 
         $user->update([
-            'image' => $request->image,
-            'updated_at' => Carbon::now()
+            'image' => $request->image
         ]);
 
         return User::query()->where('id', $user->id)->first();
@@ -364,10 +363,7 @@ class AuthController extends Controller
         //  but in any case we should invalidate token for that user [which is on frontend so that will be a problem]
         // auth()->logout();
 
-        // When User is being deactivated, all their bids are also permanently deactivated
-        // todo: can we actually do this?
-
-        // figure it out, expired, sold++++
+        // later: When User is being deactivated, all their bids are also permanently deactivated (and restored to previous on on auctions  )
 
         $user->update([
             'is_active' => !$user->is_active,

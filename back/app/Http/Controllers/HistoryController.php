@@ -89,8 +89,7 @@ class HistoryController extends Controller
 
         // Change the auction status to Sold (We are not removing the bid_id for this Auction)
         $auction->update([
-            'status' => 'Sold',
-            'updated_at' => Carbon::now(),
+            'status' => 'Sold'
         ]);
 
         // Create new History instance for this auction
