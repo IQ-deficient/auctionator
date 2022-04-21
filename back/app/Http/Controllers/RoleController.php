@@ -10,6 +10,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class RoleController extends Controller
 {
@@ -33,7 +34,7 @@ class RoleController extends Controller
      */
     public function getAuthUserRoles()
     {
-        return User::getUserRoles();
+        return User::getUserRoles(Auth::user()->username);
     }
 
     /**

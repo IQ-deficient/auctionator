@@ -34,7 +34,7 @@ class AuctionController extends Controller
      */
     public function index()
     {
-        $roles = User::getUserRoles();
+        $roles = User::getUserRoles(Auth::user()->username);
         $auctions = Auction::all();
         $created = $ongoing = $sold = $expired = $na = [];      // init return variables
 

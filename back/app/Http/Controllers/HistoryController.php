@@ -57,7 +57,7 @@ class HistoryController extends Controller
      */
     public function store(Request $request)
     {
-        $roles = User::getUserRoles();
+        $roles = User::getUserRoles(Auth::user()->username);
 
         // Check if the currently authenticated user is registered as Client
         abort_if(!in_array('Client', $roles), 403, 'Only Clients are allowed to buyout.');
