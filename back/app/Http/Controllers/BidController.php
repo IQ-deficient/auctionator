@@ -60,7 +60,7 @@ class BidController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
-        $roles = User::getUserRoles();
+        $roles = User::getUserRoles(Auth::user()->username);
 
         // todo: policy?
         // Check if the currently authenticated user is registered as Client

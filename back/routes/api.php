@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -109,13 +110,14 @@ Route::group([
     Route::get('/statuses', [StatusController::class, 'index']);
 
     // Users
-    Route::get('/users', [AuthController::class, 'index']);     // Client and Employees
-    Route::post('/employee', [AuthController::class, 'registerEmployee']);      // Administrator inserts new personnel
-    Route::get('/employees', [AuthController::class, 'getEmployeeRoles']);      // Worker roles
-    Route::put('/user/{user}', [AuthController::class, 'update']);     // update all data but password for specified user
-    Route::put('/password/{user}', [AuthController::class, 'changePassword']);       // update password
-    Route::put('/image/{user}', [AuthController::class, 'changeUserImage']);       // update image
-    Route::delete('/user/{user}', [AuthController::class, 'destroy']);      // deactivate user
+    Route::get('/users', [UserController::class, 'index']);     // Client and Employees
+    Route::post('/employee', [UserController::class, 'registerEmployee']);      // Administrator inserts new personnel
+    Route::get('/employees', [UserController::class, 'getEmployeeRoles']);      // Worker roles
+    Route::put('/user/{user}', [UserController::class, 'update']);     // update profile auth user
+    Route::put('/manage/{user}', [UserController::class, 'manage']);     // manage user profiles
+    Route::put('/password/{user}', [UserController::class, 'changePassword']);       // update password
+    Route::put('/image/{user}', [UserController::class, 'changeUserImage']);       // update image
+    Route::delete('/user/{user}', [UserController::class, 'destroy']);      // deactivate user
 
     // UserRoles
     Route::get('/user_roles', [UserRoleController::class, 'index']);

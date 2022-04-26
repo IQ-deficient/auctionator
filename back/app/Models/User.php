@@ -56,13 +56,13 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     /**
-     * Custom method used to find active roles that represent authenticated User.
+     * Custom method used to find active roles that represent passed User.
      * @return array
      */
-    public static function getUserRoles()
+    public static function getUserRoles($username)
     {
         $roles = DB::table('user_roles')
-            ->where('username', Auth::user()->username)
+            ->where('username', $username)
             ->pluck('role');
 
         return DB::table('roles')

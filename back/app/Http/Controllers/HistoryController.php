@@ -57,7 +57,7 @@ class HistoryController extends Controller
      */
     public function store(Request $request)
     {
-        $roles = User::getUserRoles();
+        $roles = User::getUserRoles(Auth::user()->username);
 
         // Check if the currently authenticated user is registered as Client
         abort_if(!in_array('Client', $roles), 403, 'Only Clients are allowed to buyout.');
@@ -89,8 +89,7 @@ class HistoryController extends Controller
 
         // Change the auction status to Sold (We are not removing the bid_id for this Auction)
         $auction->update([
-            'status' => 'Sold',
-            'updated_at' => Carbon::now(),
+            'status' => 'Sold'
         ]);
 
         // Create new History instance for this auction

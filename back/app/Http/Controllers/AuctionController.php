@@ -34,9 +34,9 @@ class AuctionController extends Controller
      */
     public function index()
     {
-        $roles = User::getUserRoles();
+        $roles = User::getUserRoles(Auth::user()->username);
         $auctions = Auction::all();
-        $created = $started = $sold = $expired = $na = [];      // init return variables
+        $created = $ongoing = $sold = $expired = $na = [];      // init return variables
 
         // Go through each Auction no matter if active and return them separated by status
         foreach ($auctions as $auction) {
@@ -45,7 +45,7 @@ class AuctionController extends Controller
                     array_push($created, $auction);
                     break;
                 case "Ongoing":
-                    array_push($started, $auction);
+                    array_push($ongoing, $auction);
                     break;
                 case "Sold":
                     array_push($sold, $auction);
@@ -61,7 +61,7 @@ class AuctionController extends Controller
 
         // Only if Administrator or Manager is currently logged in return desired data
         if (in_array('Administrator', $roles) || in_array('Manager', $roles))
-            return ['created' => $created, 'started' => $started, 'sold' => $sold, 'expired' => $expired, 'na' => $na];
+            return ['created' => $created, 'ongoing' => $ongoing, 'sold' => $sold, 'expired' => $expired, 'na' => $na];
 
         return response('You do not have permissions for requested data!', 400);
     }
@@ -272,7 +272,6 @@ class AuctionController extends Controller
             'buyout' => $request->buyout,
             'start_datetime' => $request->start_datetime,
             'end_datetime' => $request->end_datetime,
-            'updated_at' => Carbon::now(),          // This is only updated if any other input is different from current ones
             'user_id' => Auth::id(),            // Auctioneer that applies changes (in case its someone else than the creator)
         ]);
 
