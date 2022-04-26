@@ -50,7 +50,7 @@ class ItemSeeder extends Seeder
                 'id' => 4,
                 'title' => 'Nemanja Kukulicic',
                 'description' => 'Udomi me pls i ja zasluzujem krov nad glavom i topli krevet.',
-                'category' => "Women's Accessories",
+                'category' => "Men's Accessories",
                 'condition' => 'Worn',
                 'warehouse_id' => 2,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),

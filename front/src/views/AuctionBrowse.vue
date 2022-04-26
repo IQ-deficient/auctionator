@@ -92,7 +92,7 @@
                 <template v-slot:default="dialog">
                   <v-card>
                     <v-card-text>
-                      <div class="pa-4">
+                      <div class="pt-5">
                         <v-carousel hide-delimiters style="height: 300px">
                           <v-carousel-item
                               v-for="(item,i) in pictures"
