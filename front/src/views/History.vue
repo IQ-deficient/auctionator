@@ -48,20 +48,20 @@
         v-if="showAuctionDialog"
         @close="showAuctionDialog = false"
         :show-dialog="showAuctionDialog"
-        :history="chosenAuction"
+        :auction_data="chosenAuction"
     />
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import ShowAuctionDialog from "../components/ShowAuctionDialog";
+import showAuctionDialog from "../components/ShowAuctionDialog";
 
 export default {
   name: "History",
 
   components: {
-    'show-auction': ShowAuctionDialog,
+    'show-auction': showAuctionDialog,
 
   },
 

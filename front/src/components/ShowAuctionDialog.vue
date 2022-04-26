@@ -45,7 +45,7 @@
                     <v-row>
                       <v-col cols="12" sm="12">
                         <v-card-title
-                        >Title:<v-spacer></v-spacer>{{ history.auction.item.title }}
+                        >Title:<v-spacer></v-spacer>{{ auction_data.auction.item.title }}
                         </v-card-title>
                       </v-col>
                     </v-row>
@@ -55,7 +55,7 @@
                     <v-row>
                       <v-col cols="12" sm="12">
                         <v-card-text
-                        >{{ history.auction.item.description }}
+                        >{{ auction_data.auction.item.description }}
                         </v-card-text>
                       </v-col>
                     </v-row>
@@ -66,7 +66,7 @@
                     <v-row>
                       <v-col cols="12" sm="12">
                         <v-card-title
-                        >Warehouse:<v-spacer></v-spacer>{{ history.auction.item.warehouse.name }}
+                        >Warehouse:<v-spacer></v-spacer>{{ auction_data.auction.item.warehouse.name }}
                         </v-card-title>
                       </v-col>
                     </v-row>
@@ -76,7 +76,7 @@
                     <v-row>
                       <v-col cols="12" sm="12">
                         <v-card-title
-                        >Category:<v-spacer></v-spacer>{{ history.auction.item.category.name }}
+                        >Category:<v-spacer></v-spacer>{{ auction_data.auction.item.category.name }}
                         </v-card-title>
                       </v-col>
                     </v-row>
@@ -86,7 +86,7 @@
                     <v-row>
                       <v-col cols="12" sm="12">
                         <v-card-title
-                        >Condition:<v-spacer></v-spacer>{{ history.auction.item.condition }}
+                        >Condition:<v-spacer></v-spacer>{{ auction_data.auction.item.condition }}
                         </v-card-title>
                       </v-col>
                     </v-row>
@@ -121,7 +121,7 @@ export default {
       type: Boolean,
       default: false
     },
-    history: null
+    auction_data: null
   },
 
   data: () => ({
