@@ -5,7 +5,7 @@
         src="../assets/Mercy.png"
     >
     </v-parallax>
-    <validation-observer validation-observer ref="observer" v-slot="{ invalid }" tag="form" @submit.prevent="updateProfile()"
+    <validation-observer ref="observer" v-slot="{ invalid }" tag="form" @submit.prevent="updateProfile()"
     >
       <v-card width="50%"
               style="margin: 0 auto; position: relative" color="info" class="pa-4">
@@ -301,7 +301,7 @@
                 <validation-provider
                     v-slot="{ errors }"
                     name="Phone number"
-                    rules="required|digits|min:8|max:15"
+                    rules="required|numeric|min:8|max:15"
                     clearable
                 >
                   <v-text-field v-if="phoneCode != null"

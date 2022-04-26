@@ -159,7 +159,7 @@
                       <validation-provider
                           v-slot="{ errors }"
                           name="Phone number"
-                          rules="required|digits|min:8|max:15"
+                          rules="required|numeric|min:8|max:15"
                           clearable
                       >
                         <v-text-field

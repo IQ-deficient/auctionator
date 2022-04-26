@@ -187,7 +187,7 @@
                             <validation-provider
                                 v-slot="{ errors }"
                                 name="Phone number"
-                                rules="required|min:8|max:15"
+                                rules="required|numeric|min:8|max:15"
                                 clearable
                             >
                               <v-text-field v-if="phoneCode != null"
@@ -276,7 +276,6 @@
                                 multiple
                                 chips
                                 persistent-hint
-                                @change="logujNesto()"
                             ></v-select>
                             </validation-provider>
                           </v-col>
@@ -466,10 +465,6 @@ export default {
   },
 
   methods: {
-
-    logujNesto() {
-      console.log(this.selectEmployeeRoles);
-    },
 
     updateTableData(){
       if (this.selectRole == 'Clients'){

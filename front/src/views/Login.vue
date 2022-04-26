@@ -5,8 +5,7 @@
       max-width="28%"
       style="justify-content: end"
     >
-      <validation-observer
-        ref="observer"
+      <validation-observer ref="observer" v-slot="{ invalid }" tag="form" @submit.prevent="login()"
       >
         <form @submit.prevent="submit"
               style="height: 280px; width: 88%; margin: 0 auto"
@@ -22,21 +21,19 @@
               :error-messages="errors"
               label="E-mail"
               clearable
-              required
             ></v-text-field>
           </validation-provider>
           <!--          Polje za unos lozinke-->
           <validation-provider
             v-slot="{ errors }"
             name="Password"
-            rules="required"
+            rules="required|min:8|max:128"
           >
             <v-text-field
               v-model="password"
               :error-messages="errors"
               label="Password"
               :type="showPassword ? 'text' : 'password'"
-              required
               :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
               @click:append="showPassword = !showPassword"
               clearable
@@ -60,6 +57,7 @@
             class="mb-1"
             color="primary"
             @click="login()"
+            @submit.prevent="invalid"
           >
             <v-icon left class="mr-2">mdi-login</v-icon>
             Sign in
@@ -108,8 +106,7 @@
 import axios from "axios";
 import {required, digits, email, max, regex} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
-
-// import axios from "axios";
+import Swal from "sweetalert2";
 
 setInteractionMode('eager')
 
@@ -188,9 +185,16 @@ export default {
           return response.data;
         })
         .catch(error => {
-          console.log(error)
           this.loading = false
           this.error = error.response.data.message;
+          if(error.response.data.error == "Unauthorized"){
+            Swal.fire(
+                'Oops!',
+                'Email and password don\'t match.',
+                'error'
+            )
+          }
+          // console.log(error.response.data)
         })
     },
   },

@@ -1,19 +1,18 @@
 <template>
   <div style="margin-top: 4%">
-<!--    <v-progress-linear-->
-<!--        :active="loading"-->
-<!--        :indeterminate="loading"-->
-<!--        absolute-->
-<!--        top-->
-<!--        color="primary"-->
-<!--    ></v-progress-linear>-->
+    <!--    <v-progress-linear-->
+    <!--        :active="loading"-->
+    <!--        :indeterminate="loading"-->
+    <!--        absolute-->
+    <!--        top-->
+    <!--        color="primary"-->
+    <!--    ></v-progress-linear>-->
     <v-card
         class="mx-auto"
         max-width="38%"
         style="justify-content: end"
     >
-      <validation-observer
-          ref="observer"
+      <validation-observer ref="observer" tag="form" @submit.prevent="register()"
       >
         <form @submit.prevent="submit" style="height: 490px; width: 92%; margin: 0 auto">
           <v-row>
@@ -21,30 +20,29 @@
               <!--          Polje za ime-->
               <validation-provider
                   v-slot="{ errors }"
-                  name="firstName"
-                  rules="required|min:3|max:32"
+                  name="First name"
+                  rules="required|min:1|max:32"
               >
                 <v-text-field
                     v-model="firstName"
                     :error-messages="errors"
                     label="First name"
                     clearable
-                    required
                 ></v-text-field>
               </validation-provider>
+
             </v-col>
             <!--          Polje za prezime-->
             <v-col cols="6">
               <validation-provider
                   v-slot="{ errors }"
-                  name="lastName"
-                  rules="required|min:3|max:32"
+                  name="Last name"
+                  rules="required|min:1|max:32"
               >
                 <v-text-field
                     v-model="lastName"
                     :error-messages="errors"
                     label="Last name"
-                    required
                     clearable
                 ></v-text-field>
               </validation-provider>
@@ -55,24 +53,25 @@
           </v-row>
           <validation-provider
               v-slot="{ errors }"
-              name="username"
+              name="Username"
               rules="required|min:3|max:32"
           >
             <v-text-field
                 v-model="username"
                 :error-messages="errors"
                 label="Username"
-                required
                 clearable
             ></v-text-field>
+            <span>{{ errors[0] }}</span>
           </validation-provider>
           <v-row>
             <v-col cols="5">
               <!--          Padajuci meni za drzavu-->
               <validation-provider
                   v-slot="{ errors }"
-                  name="country"
+                  name="Country"
                   rules="required"
+                  clearable
               >
                 <v-select
                     v-model="selectCountry"
@@ -80,9 +79,8 @@
                     item-text="name"
                     :error-messages="errors"
                     label="Country"
-                    data-vv-name="select"
-                    clearable
-                    required
+                    return-object
+                    @change="updateCountryCode()"
                 ></v-select>
               </validation-provider>
             </v-col>
@@ -90,14 +88,22 @@
             <v-col cols="7">
               <validation-provider
                   v-slot="{ errors }"
-                  name="phoneNumber"
+                  name="Phone number"
+                  rules="required|numeric|min:8|max:15"
+                  clearable
               >
-                <v-text-field
-                    v-model="phoneNumber"
-                    :error-messages="errors"
-                    label="Phone number"
-                    required
-                    clearable
+                <v-text-field v-if="phoneCode != null"
+                              :prefix="'(' + phoneCode + ')'"
+                              v-model="phoneNumber"
+                              :error-messages="errors"
+                              label="Phone number"
+                              append-icon="mdi-phone-classic"
+                ></v-text-field>
+                <v-text-field v-else
+                              v-model="phoneNumber"
+                              :error-messages="errors"
+                              label="Phone number"
+                              append-icon="mdi-phone-classic"
                 ></v-text-field>
               </validation-provider>
             </v-col>
@@ -106,13 +112,12 @@
           <validation-provider
               v-slot="{ errors }"
               name="Email"
-              rules="required|email"
+              rules="required|email|min:10|max:254"
           >
             <v-text-field
                 v-model="email"
                 :error-messages="errors"
-                label="E-mail"
-                required
+                label="Email"
                 clearable
             ></v-text-field>
           </validation-provider>
@@ -129,7 +134,6 @@
                 label="Password"
                 :type="showPassword ? 'text' : 'password'"
                 :counter="8"
-                required
                 hint="Must be at least 8 characters."
                 :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                 @click:append="showPassword = !showPassword"
@@ -148,7 +152,6 @@
                 :error-messages="errors"
                 label="Confirm password"
                 :type="showConfirmPass ? 'text' : 'password'"
-                required
                 :append-icon="showConfirmPass ? 'mdi-eye' : 'mdi-eye-off'"
                 @click:append="showConfirmPass = !showConfirmPass"
                 clearable
@@ -164,11 +167,8 @@
                 left
             >mdi-account-plus
             </v-icon>
-            Create account
+            Register
           </v-btn>
-          <!--          <v-btn @click="clear">-->
-          <!--            clear-->
-          <!--          </v-btn>-->
         </form>
       </validation-observer>
     </v-card>
@@ -193,25 +193,20 @@
         Sign in
       </v-btn>
     </router-link>
-    <v-btn
-        color="accent"
-        class="mt-4"
-        @click="testLoad()">
-      Load
-    </v-btn>
   </div>
 </template>
 
 <script>
-import {required, digits, email, max, regex, min} from 'vee-validate/dist/rules'
+import {required, numeric, email, max, min} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 import axios from "axios";
+// import Swal from "sweetalert2";
 
 setInteractionMode('eager')
 
-extend('digits', {
-  ...digits,
-  // message: '{_field_} needs to be {length} digits. ({_value_})',
+extend('numeric', {
+  ...numeric,
+  message: '{_field_} must be a number.',
 })
 
 extend('required', {
@@ -227,18 +222,32 @@ extend('min', {
 
 extend('max', {
   ...max,
-  message: 'The {_field_} must not be greater than {length} characters.',
+  message: '{_field_} may not be greater than {length} characters.',
 })
 
-extend('regex', {
-  ...regex,
-  message: '{_field_} {_value_} does not match {regex}',
+extend('password', {
+  params: ['target'], validate(value, {target}) {
+    return value === target;
+  },
+  message: 'Passwords do not match.'
+});
+
+extend('email', {
+  ...email,
+  message: 'Must be a valid email.',
 })
 
 extend('email', {
   ...email,
   message: 'Must be a valid email.',
 })
+
+// extend('taken', {
+//   message: "{_field _} already taken.",
+//   validate: value => {
+//     return "Condition that evaluates to true of false"
+//   }
+// })
 
 export default {
   name: "Register",
@@ -255,6 +264,7 @@ export default {
     selectCountry: '',
     countries: [],
     phoneNumber: '',
+    phoneCode: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -287,13 +297,26 @@ export default {
             if (response.data) {
               this.countries = response.data
             }
+            for (let i = 0; i < this.countries.length; i++) {
+              if (this.countries[i].name == this.selectCountry) {
+                this.selectCountry = this.countries[i]
+              }
+            }
+            this.phoneCode = this.selectCountry.phone_code
           })
           .catch(error => {
             console.log(error)
           })
     },
 
+    updateCountryCode() {
+      this.phoneCode = this.selectCountry.phone_code
+    },
+
     register() {
+      // this.$refs.observer.setErrors({
+      //   username: ['The username has already been taken.']
+      // });
       this.loading = true
       axios.post('auth/register', {
         first_name: this.firstName,
@@ -310,12 +333,13 @@ export default {
                   this.$router.push('/login');
                   this.loading = false;
                 }
-              }
-          )
+            return response.data;
+          })
           .catch(error => {
-            console.log(error)
+            console.log(error.response.data)
             this.loading = false
             this.error = error.response.data.message;
+            this.$refs.observer.setErrors(error.response.data)
           })
     },
   },
