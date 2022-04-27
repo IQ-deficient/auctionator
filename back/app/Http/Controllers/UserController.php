@@ -180,12 +180,11 @@ class UserController extends Controller
         $auth_roles = User::getUserRoles($auth->username);
         $edit_user_roles = User::getUserRoles($user->username);
 
-        return ('testing');
         // Manager is allowed to only Update Clients
         if (in_array('Manager', $auth_roles)) {
+
             abort_if(!in_array('Client', $edit_user_roles), 405, 'The User you are trying to edit is not a Client');
 
-            return('manager logika - validacija');
             $validator = Validator::make($request->all(), [
                 'first_name' => 'required|string|between:1,32',
                 'last_name' => 'required|string|between:1,32',
@@ -199,7 +198,6 @@ class UserController extends Controller
                 return response()->json($validator->errors(), 422);
             }
 
-            // Updating username here will result in cascadinummjhg update of username in child rows because of onUpdate in migrations
             $user->update([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
@@ -209,11 +207,12 @@ class UserController extends Controller
                 'birthdate' => $request->birthdate,
             ]);
 
-        } // Administrator can Update any User that is not an Admin
-        elseif ((in_array('Administrator', $auth_roles))) {
+        } elseif ((in_array('Administrator', $auth_roles))) {
+            // Administrator can Update any User that is not an Admin
             abort_if(in_array('Administrator', $edit_user_roles), 405, 'You are not allowed to edit other Administrators');
 
-            return('admin logika - validacija');
+            // todo: if admin is updating manager or client
+            return ('admin logika - validacija');
 
         }  // Finally, any other Role gets an error, and we abort this action
         else {

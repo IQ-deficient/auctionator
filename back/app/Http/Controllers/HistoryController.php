@@ -11,9 +11,11 @@ use App\Http\Requests\UpdateHistoryRequest;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -24,7 +26,7 @@ class HistoryController extends Controller
 
     /**
      * Display a listing of the resource.
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -33,17 +35,23 @@ class HistoryController extends Controller
 
     /**
      * Display a listing of the resource that references authenticated User only.
-     * @return \Illuminate\Http\Response
+     * @return Builder[]|Collection
      */
     public function getHistoriesForUser()
     {
-        // comment of the method explains it
-    }
+        $username = Auth::user()->username;
+        $roles = User::getUserRoles($username);
+        abort_if(!in_array('Client', $roles), 403, 'Only Clients can preview the history of their purchases.');
 
+        // Return all History instances for this user meaning any Auction that has finished, and they now own
+        return History::query()
+            ->where('username', $username)
+            ->get();
+    }
 
     /**
      * Show the form for creating a new resource.
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -122,7 +130,7 @@ class HistoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      * @param \App\Models\History $history
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit(History $history)
     {
@@ -133,7 +141,7 @@ class HistoryController extends Controller
      * Update the specified resource in storage.
      * @param \App\Http\Requests\UpdateHistoryRequest $request
      * @param \App\Models\History $history
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(UpdateHistoryRequest $request, History $history)
     {
@@ -143,7 +151,7 @@ class HistoryController extends Controller
     /**
      * Remove the specified resource from storage.
      * @param \App\Models\History $history
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy(History $history)
     {

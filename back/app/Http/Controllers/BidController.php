@@ -29,6 +29,39 @@ class BidController extends Controller
         return Bid::all();
     }
 
+    /**
+     * Display a listing of the resource that references authenticated User only.
+     * @return array
+     */
+    public function getBidsForUser()
+    {
+
+        $username = Auth::user()->username;
+        $roles = User::getUserRoles($username);
+        abort_if(!in_array('Client', $roles), 403, 'Only Clients can preview the history of their purchases.');
+
+        // Find all the bids this User has made
+        $user_bids = Bid::query()
+            ->where('username', $username)
+            ->get();
+
+        $bids = [];
+
+        // For each Bid we've found, add an Auction that has this bid as bid_id and add whole object to return array if this auction is functional
+        foreach ($user_bids as $bid) {
+            $auction = Auction::query()
+                ->where('is_active', true)
+                ->where('bid_id', $bid->id)
+                ->whereIn('status', ['Created', 'Ongoing'])
+                ->first();
+            $bid->auction = $auction;
+            if ($auction) $bids[] = $bid;
+        }
+
+        return $bids;
+
+    }
+
     public function getActive()
     {
         return Bid::query()->where('is_active', true)->get();

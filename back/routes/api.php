@@ -68,6 +68,7 @@ Route::group([
     // Bids
     Route::post('/bid', [BidController::class, 'store']);      // Placing a Bid on the Auction
     Route::get('/bids', [BidController::class, 'index']);
+    Route::get('/user_bids', [BidController::class, 'getBidsForUser']);     // Auth User bids
 
     // Categories
     Route::get('/categories', [CategoryController::class, 'index']);
