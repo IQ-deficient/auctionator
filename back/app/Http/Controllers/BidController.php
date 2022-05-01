@@ -35,7 +35,6 @@ class BidController extends Controller
      */
     public function getBidsForUser()
     {
-
         $username = Auth::user()->username;
         $roles = User::getUserRoles($username);
         abort_if(!in_array('Client', $roles), 403, 'Only Clients can preview the history of their purchases.');
@@ -84,6 +83,10 @@ class BidController extends Controller
      */
     public function store(Request $request)
     {
+        $roles = User::getUserRoles(Auth::user()->username);
+        // Check if the currently authenticated user is registered as Client
+        abort_if(!in_array('Client', $roles), 403, 'Only Clients are allowed to place bids.');
+
         $validator = Validator::make($request->all(), [
             'auction_id' => 'required|integer|exists:auctions,id',
             'value' => 'required|numeric'
@@ -92,12 +95,6 @@ class BidController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
-
-        $roles = User::getUserRoles(Auth::user()->username);
-
-        // todo: policy?
-        // Check if the currently authenticated user is registered as Client
-        abort_if(!in_array('Client', $roles), 403, 'Only Clients are allowed to place bids.');
 
         // Get Auction Model Object that is active
         $auction = Auction::where([

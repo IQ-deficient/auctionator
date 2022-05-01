@@ -42,19 +42,19 @@ class AuctionController extends Controller
         foreach ($auctions as $auction) {
             switch ($auction->status) {
                 case "Created":
-                    array_push($created, $auction);
+                    $created[] = $auction;
                     break;
                 case "Ongoing":
-                    array_push($ongoing, $auction);
+                    $ongoing[] = $auction;
                     break;
                 case "Sold":
-                    array_push($sold, $auction);
+                    $sold[] = $auction;
                     break;
                 case "Expired":
-                    array_push($expired, $auction);
+                    $expired[] = $auction;
                     break;
                 case "NA":
-                    array_push($na, $auction);
+                    $na[] = $auction;
                     break;
             }
         }
@@ -153,6 +153,11 @@ class AuctionController extends Controller
      */
     public function store(Request $request)
     {
+        $roles = User::getUserRoles(Auth::user()->username);
+        abort_if(!(in_array('Auctioneer', $roles) || in_array('Administrator', $roles)),
+            400,
+            'Only Auctioneers and Admins are allowed to create Auctions.');
+
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|between:3,128',
             'seller' => 'required|string|between:3,32',
@@ -227,6 +232,11 @@ class AuctionController extends Controller
      */
     public function update(Request $request, Auction $auction)
     {
+        $roles = User::getUserRoles(Auth::user()->username);
+        abort_if(!(in_array('Auctioneer', $roles) || in_array('Administrator', $roles)),
+            400,
+            'Only Auctioneers and Admins are allowed to update Auctions.');
+
         // Deactivated auctions are no longer eligible for change
         abort_if($auction->is_active == null, 422, 'This auction was deactivated.');
 
@@ -284,6 +294,11 @@ class AuctionController extends Controller
      */
     public function destroy(Auction $auction)
     {
+        $roles = User::getUserRoles(Auth::user()->username);
+        abort_if(!(in_array('Auctioneer', $roles) || in_array('Administrator', $roles)),
+            400,
+            'Only Auctioneers and Admins are allowed to permanently delete Auctions.');
+
         // Once deactivated, auction can not be reactivated and a new instance must be freshly made
         // Status does not change because this already guarantees that auction is no longer in play
         // Item is lost or any other colossal issue, and therefore we do not care if there is a bid
@@ -313,6 +328,11 @@ class AuctionController extends Controller
      */
     public function softDestroyAndRestore(Auction $auction)
     {
+        $roles = User::getUserRoles(Auth::user()->username);
+        abort_if(!(in_array('Auctioneer', $roles) || in_array('Administrator', $roles)),
+            400,
+            'Only Auctioneers and Admins are allowed to update Auctions.');
+
         // Non-active auctions can no longer be altered
         abort_if(!$auction->is_active, 422, 'This auction was deactivated.');
 

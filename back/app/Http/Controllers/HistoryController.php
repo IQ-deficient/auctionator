@@ -26,7 +26,7 @@ class HistoryController extends Controller
 
     /**
      * Display a listing of the resource.
-     * @return Response
+     * @return Collection|History[]
      */
     public function index()
     {
@@ -66,7 +66,6 @@ class HistoryController extends Controller
     public function store(Request $request)
     {
         $roles = User::getUserRoles(Auth::user()->username);
-
         // Check if the currently authenticated user is registered as Client
         abort_if(!in_array('Client', $roles), 403, 'Only Clients are allowed to buyout.');
 
@@ -119,7 +118,7 @@ class HistoryController extends Controller
 
     /**
      * Display the specified resource.
-     * @param \App\Models\History $history
+     * @param History $history
      * @return History
      */
     public function show(History $history)
@@ -129,7 +128,7 @@ class HistoryController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     * @param \App\Models\History $history
+     * @param History $history
      * @return Response
      */
     public function edit(History $history)
@@ -140,7 +139,7 @@ class HistoryController extends Controller
     /**
      * Update the specified resource in storage.
      * @param \App\Http\Requests\UpdateHistoryRequest $request
-     * @param \App\Models\History $history
+     * @param History $history
      * @return Response
      */
     public function update(UpdateHistoryRequest $request, History $history)
@@ -150,7 +149,7 @@ class HistoryController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     * @param \App\Models\History $history
+     * @param History $history
      * @return Response
      */
     public function destroy(History $history)

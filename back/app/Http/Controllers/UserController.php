@@ -351,9 +351,12 @@ class UserController extends Controller
         //  but in any case we should invalidate token for that user [which is on frontend so that will be a problem]
         // auth()->logout();
 
-        // later: When User is being deactivated, all their bids are also permanently deactivated (and restored to previous on on auctions  )
+        // later: When User is being deactivated, all their bids are also permanently deactivated (and restored to previous on on auctions)
 
-        // todo: check if user performing this is admin
+        $roles = User::getUserRoles(Auth::user()->username);
+        abort_if(!(in_array('Manager', $roles) || in_array('Administrator', $roles)),
+            400,
+            'Only Managers and Admins are allowed to update User activity status.');
 
         $user->update([
             'is_active' => !$user->is_active,
