@@ -13,6 +13,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -324,17 +325,32 @@ class UserController extends Controller
     public function changeUserImage(Request $request, User $user)
     {
         $validator = Validator::make($request->all(), [
-            'image' => 'required'
+            'image' => 'required|mimes:jpeg,png,jpg|max:2048'  // Check laravel max validation for filesize
         ]);
-
-        // TODO: do
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
+        // Delete previous image from storage if it exists
+        $array = explode('/', $user->image);
+        $image_name = end($array);
+        Storage::disk('my_files')->delete("user_images/" . $image_name);
+
+        // Format the name for image being stored
+        $originalName = explode(
+            ".",
+            preg_replace("/[^A-Za-z0-9.!?]/", '', $request->image->getClientOriginalName()), 2)[0];
+        $extension = $request->image->getClientOriginalExtension();
+        $time = now()->getTimestamp();
+        $filename = "{$originalName}-{$time}.{$extension}";
+
+        // Store the image in specified folder
+        $dest_path = '/storage/user_images/' . $filename;
+        $request->image->storeAs('/user_images', $filename, ['disk' => 'my_files']);
+
         $user->update([
-            'image' => $request->image
+            'image' => $dest_path
         ]);
 
         return User::query()->where('id', $user->id)->first();

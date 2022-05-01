@@ -25,7 +25,7 @@ class CreateUsersTable extends Migration
             $table->string('gender', 32)->nullable();
             $table->string('country', 80);      // Not nullable because of Phone Number prefix
             $table->dateTime('birthdate')->nullable()->default(null);
-            $table->binary('image')->nullable();    // User image   // Unsure if this works for the image storing
+            $table->string('image')->nullable();    // User image   // Unsure if this works for the image storing
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->timestamp('email_verified_at')->nullable();
