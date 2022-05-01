@@ -180,9 +180,12 @@ class UserController extends Controller
         $auth_roles = User::getUserRoles($auth->username);
         $edit_user_roles = User::getUserRoles($user->username);
 
-        // Manager is allowed to only Update Clients
+        // Confirm that the User being Updated from api route is NOT the one that is Authenticated
+        abort_if($auth->id == $user->id, 409, 'Please update your own profile through user profile page.');
+
         if (in_array('Manager', $auth_roles)) {
 
+            // Manager is allowed to only Update Clients
             abort_if(!in_array('Client', $edit_user_roles), 405, 'The User you are trying to edit is not a Client');
 
             $validator = Validator::make($request->all(), [
@@ -208,14 +211,76 @@ class UserController extends Controller
             ]);
 
         } elseif ((in_array('Administrator', $auth_roles))) {
-            // Administrator can Update any User that is not an Admin
-            abort_if(in_array('Administrator', $edit_user_roles), 405, 'You are not allowed to edit other Administrators');
 
-            // todo: if admin is updating manager or client
-            return ('admin logika - validacija');
+            // Client and Employee Users have separate logic where dedicated personnel change their data
+            if (in_array('Client', $edit_user_roles)) {
 
-        }  // Finally, any other Role gets an error, and we abort this action
-        else {
+                $validator = Validator::make($request->all(), [
+                    'first_name' => 'required|string|between:1,32',
+                    'last_name' => 'required|string|between:1,32',
+                    'country' => 'required|string|max:32|exists:countries,name',
+                    'phone_number' => ['required', 'digits_between:6,15', Rule::when($request->phone_number != $user->phone_number, 'unique:users,phone_number')],
+                    'gender' => 'nullable|string|max:32|exists:genders,name',
+                    'birthdate' => 'nullable|date',
+                ]);
+
+                if ($validator->fails()) {
+                    return response()->json($validator->errors(), 422);
+                }
+
+                $user->update([
+                    'first_name' => $request->first_name,
+                    'last_name' => $request->last_name,
+                    'phone_number' => $request->phone_number,
+                    'gender' => $request->gender,
+                    'country' => $request->country,
+                    'birthdate' => $request->birthdate,
+                ]);
+
+            } elseif (in_array('Manager', $edit_user_roles) || in_array('Auctioneer', $edit_user_roles)) {
+
+                $validator = Validator::make($request->all(), [
+                    'first_name' => 'required|string|between:1,32',
+                    'last_name' => 'required|string|between:1,32',
+                    'country' => 'required|string|max:32|exists:countries,name',
+                    'phone_number' => ['required', 'digits_between:6,15', Rule::when($request->phone_number != $user->phone_number, 'unique:users,phone_number')],
+                    'gender' => 'nullable|string|max:32|exists:genders,name',
+                    'birthdate' => 'nullable|date',
+                    'roles' => 'required',
+                    'roles.*' => 'required|string|distinct|exists:roles,name'       // Array validator
+                ]);
+
+                if ($validator->fails()) {
+                    return response()->json($validator->errors(), 422);
+                }
+
+                // Remove all present roles assigned to the User being updated
+                UserRole::query()
+                    ->where('username', $user->username)
+                    ->delete();
+
+                // Give them new roles based on the input
+                foreach ($request->roles as $role) {
+                    UserRole::create([
+                        'username' => $user->username,
+                        'role' => $role
+                    ]);
+                }
+
+                $user->update([
+                    'first_name' => $request->first_name,
+                    'last_name' => $request->last_name,
+                    'phone_number' => $request->phone_number,
+                    'gender' => $request->gender,
+                    'country' => $request->country,
+                    'birthdate' => $request->birthdate,
+                ]);
+
+            } // Administrator can Update any User that is not an Admin
+            else abort(405, 'You are not allowed to edit other Administrators');
+
+        } else {
+            // Finally, any other Role gets an error, and we abort this action
             abort(403, 'You do not own permissions to perform this action.');
         }
 
