@@ -51,6 +51,8 @@ Route::post('/filtered_auctions', [AuctionController::class, 'getFiltered']);   
 Route::get('/menu_categories', [CategoryController::class, 'getMenuCategories']);   // All Categories formatted for Menu
 Route::get('/active_countries', [CountryController::class, 'getActive']);  // Used in registration
 
+Route::put('/image/{user}', [UserController::class, 'changeUserImage'])->name('upomoc');       // update image
+
 // This Middleware should require User being Authenticated and his JWT token to be granted access to these routes
 Route::group([
     'middleware' => ['auth:api', 'check_user']
@@ -117,7 +119,7 @@ Route::group([
     Route::put('/user/{user}', [UserController::class, 'update']);     // update profile auth user
     Route::put('/manage/{user}', [UserController::class, 'manage']);     // manage user profiles
     Route::put('/password/{user}', [UserController::class, 'changePassword']);       // update password
-    Route::put('/image/{user}', [UserController::class, 'changeUserImage']);       // update image
+
     Route::delete('/user/{user}', [UserController::class, 'destroy']);      // deactivate user
 
     // UserRoles
