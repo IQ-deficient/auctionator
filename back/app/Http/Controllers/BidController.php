@@ -83,7 +83,8 @@ class BidController extends Controller
      */
     public function store(Request $request)
     {
-        $roles = User::getUserRoles(Auth::user()->username);
+        $username = Auth::user()->username;
+        $roles = User::getUserRoles($username);
         // Check if the currently authenticated user is registered as Client
         abort_if(!in_array('Client', $roles), 403, 'Only Clients are allowed to place bids.');
 
@@ -116,6 +117,13 @@ class BidController extends Controller
 
         // When there is already existent bid_id for auction in question apply the following actions
         if ($auction->bid_id) {
+            // Check if the user trying to bid already owns the leading bid value
+            $current_bid_user = DB::table('bids')
+                ->where('id', $auction->bid_id)
+                ->where('is_active', true)
+                ->value('username');
+            abort_if($username == $current_bid_user, 400, "You already own the highest bid for this auction.");
+
             // Check if the input bid value is lower or equal to current bid value for this auction
             abort_if($request->value <= $auction->bid->value, 400, "New bid value must be greater than current one.");
 
