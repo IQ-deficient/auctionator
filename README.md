@@ -1,5 +1,5 @@
 # Auction House Web Application
-Real estate auctioning app made to satisfy the bare minimum required to get my bachelors degree.
+Auction (english style) web app formerly made to satisfy the bare minimum required to get my bachelors degree, currently serving to improve my knowledge in web development.
 
 ## Features
 - Laravel 8.x
