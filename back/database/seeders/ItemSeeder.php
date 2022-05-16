@@ -18,8 +18,8 @@ class ItemSeeder extends Seeder
         $seeds = [
             [
                 'id' => 1,
-                'title' => 'Bakarni elektricni uredjaj S Klasse',
-                'description' => 'Ovaj strujni aparatus ce vam promijeniti zivot. Necete samo morati da primite injekciju protiv tetanusa, iritacija na vasoj odabranoj povrsini nadrazavanja ce ostaviti neizbrisivu senzaciju kakvu do sada nikada niste osjetili zato sto vise necete moci da osjetite nista.',
+                'title' => 'Victorian style chair',
+                'description' => 'A very old, possibly a few hundred years old sitting chair with gilded legs.',
                 'category' => 'Antiques',
                 'condition' => 'Fair',
                 'warehouse_id' => 1,
@@ -28,8 +28,8 @@ class ItemSeeder extends Seeder
             ],
             [
                 'id' => 2,
-                'title' => 'Perika Sabana Saulica',
-                'description' => 'Perika legendarnog virtuoza i carobnjaka narodne muzike. Legenda kaze da on nije nosio periku. Naime, same vokalne moci ovog astralnog barda su bile dovoljne da isusuju i obnavljaju folikule dlake na njegovoj glavi. Mocno ostroga mi.',
+                'title' => 'Red leather coat',
+                'description' => 'A thick, robust looking red leather coat, seemingly worn out from use.',
                 'category' => "Men's Accessories",
                 'condition' => 'Worn',
                 'warehouse_id' => 1,
@@ -38,8 +38,8 @@ class ItemSeeder extends Seeder
             ],
             [
                 'id' => 3,
-                'title' => 'Zdravko Krivokapic antitijela bath water',
-                'description' => 'For all you thirsty gamer boys. UwU',
+                'title' => 'Full stack developer.',
+                'description' => 'A literal human being, being sold on an auction. Using the term human being is generous to say the least, and developer is a term being used too broadly.',
                 'category' => "Misc.",
                 'condition' => '--',
                 'warehouse_id' => 1,
@@ -48,9 +48,9 @@ class ItemSeeder extends Seeder
             ],
             [
                 'id' => 4,
-                'title' => 'Nemanja Kukulicic',
-                'description' => 'Udomi me pls i ja zasluzujem krov nad glavom i topli krevet.',
-                'category' => "Men's Accessories",
+                'title' => 'Vintage Chanel handbag',
+                'description' => 'A black lacquered Chanel handbag, assumed to be from the 1960s collection.',
+                'category' => "Women's Accessories",
                 'condition' => 'Worn',
                 'warehouse_id' => 2,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
