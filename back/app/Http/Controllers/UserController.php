@@ -335,7 +335,7 @@ class UserController extends Controller
         // Delete previous image from storage if it exists
         $array = explode('/', $user->image);
         $image_name = end($array);
-        Storage::disk('my_files')->delete("user_images/" . $image_name);
+        Storage::disk('public')->delete("user_images/" . $image_name);
 
         // Format the name for image being stored
         $originalName = explode(
@@ -346,8 +346,8 @@ class UserController extends Controller
         $filename = "{$originalName}-{$time}.{$extension}";
 
         // Store the image in specified folder
-        $dest_path = '/storage/user_images/' . $filename;
-        $request->image->storeAs('/user_images', $filename, ['disk' => 'my_files']);
+        $dest_path = 'storage/user_images/' . $filename;
+        $request->image->storeAs('/user_images', $filename, ['disk' => 'public']);
 
         $user->update([
             'image' => $dest_path

@@ -31,11 +31,11 @@ class BidPolicy
      */
     public function store(Request $request)
     {
-        $roles = User::getUserRoles(Auth::user()->username);
-
-        return in_array('Client', $roles)
-            ? Response::allow()
-            : Response::deny('xd');
+//        $roles = User::getUserRoles(Auth::user()->username);
+//
+//        return in_array('Client', $roles)
+//            ? Response::allow()
+//            : Response::deny('xd');
     }
 
     /**

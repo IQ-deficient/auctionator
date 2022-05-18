@@ -16,12 +16,13 @@
                 <v-avatar size="145px">
                   <img
                     v-if="userImage"
-                    alt="UserImage"
-                    :src="userImage">
+                    :src="userImage"
+                    :alt="loggedUser.first_name">
                   <img
                     v-else
-                    alt="AltUserImage"
-                    src="../assets/Marc.png">
+                    src="../assets/DefaultProfileImage.png"
+                    alt="Default User Image">
+                  <!--                  src="../storage/user_images/45364356-1652435259.png">-->
                 </v-avatar>
               </div>
               <!--            <a href="#" style="text-decoration: none"></a>-->
@@ -599,10 +600,9 @@ export default {
             this.selectCountry = response.data.country
             this.phoneNumber = response.data.phone_number
             this.loggedUser = response.data
-            // TODO !!!
-            this.userImage = "../back" + response.data.image
-            console.log(response.data.image)
-            console.log(this.userImage, 'USER IMAGES VARIABLE')
+            if (response.data.image) this.userImage = "" + response.data.image
+            console.log(response.data.image, 'RESPONSE DATA IMAGE')
+            console.log(this.userImage, 'USER IMAGE VARIABLE')
           }
         })
         .catch(error => {
