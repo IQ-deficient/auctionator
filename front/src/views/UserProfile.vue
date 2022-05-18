@@ -16,8 +16,9 @@
                 <v-avatar size="145px">
                   <img
                     v-if="userImage"
-                    :src="userImage"
+                    :src="require('../../../back/public/' + userImage)"
                     :alt="loggedUser.first_name">
+                  <!-- TODO: LOADING FOR IMAGE AND OTHER FILLABLE FIELDS -->
                   <img
                     v-else
                     src="../assets/DefaultProfileImage.png"
@@ -540,7 +541,8 @@ export default {
     progress: 0,
     message: "",
     imageInfos: [],
-    userImage: ""
+    userImage: "",
+    pageLoading: false
   }),
   methods: {
     submit() {
@@ -566,6 +568,7 @@ export default {
     },
 
     getCountries() {
+      this.pageLoading = true
       axios.get('/active_countries')
         .then(response => {
           if (response.data) {
@@ -577,9 +580,11 @@ export default {
             }
           }
           this.phoneCode = this.selectCountry.phone_code
+          this.pageLoading = false
         })
         .catch(error => {
           console.log(error)
+          this.pageLoading = false
         })
     },
 
@@ -588,6 +593,7 @@ export default {
     },
 
     getLoggedUser() {
+      this.pageLoading = true
       axios.get('/auth/user')
         .then(response => {
           if (response.data) {
@@ -600,13 +606,15 @@ export default {
             this.selectCountry = response.data.country
             this.phoneNumber = response.data.phone_number
             this.loggedUser = response.data
-            if (response.data.image) this.userImage = "" + response.data.image
+            if (response.data.image) this.userImage = response.data.image
             console.log(response.data.image, 'RESPONSE DATA IMAGE')
             console.log(this.userImage, 'USER IMAGE VARIABLE')
+            this.pageLoading = false
           }
         })
         .catch(error => {
           console.log(error)
+          this.pageLoading = false
         })
     },
 
