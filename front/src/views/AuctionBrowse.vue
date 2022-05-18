@@ -38,24 +38,33 @@
       <v-icon>mdi-arrow-down-thin</v-icon>
 
     </v-app-bar>
-    <div v-if="auctions == ''">
+
+    <div v-if="dataLoading" class="mt-16">
+      <v-progress-circular
+        :size="100"
+        :width="7"
+        color="white"
+        indeterminate
+      ></v-progress-circular>
+    </div>
+    <div v-else-if="auctions == ''">
       <v-img dark class="mt-16" style="width: 18%; height: 18%;
-                        margin: 0 auto" src="../assets/no_items.svg"></v-img>
+                            margin: 0 auto" src="../assets/no_items.svg"></v-img>
       <v-card-text class="text-lg-h2" style="color: black">No items found</v-card-text>
     </div>
     <div v-else>
       <validation-observer>
         <v-row style="justify-content: center">
           <v-card
-              v-for="auction in auctions" :key="auction.id"
-              class="ma-5 card-body d-flex flex-column h-100"
-              max-width="22%"
-              color="tertiary"
+            v-for="auction in auctions" :key="auction.id"
+            class="ma-5 card-body d-flex flex-column h-100"
+            max-width="22%"
+            color="tertiary"
           >
             <v-img
-                src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-                class="h-50"
-                height="200px"
+              src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+              class="h-50"
+              height="200px"
             ></v-img>
 
             <v-card-title style="word-break: normal">
@@ -74,8 +83,8 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-dialog
-                  transition="dialog-bottom-transition"
-                  max-width="35%"
+                transition="dialog-bottom-transition"
+                max-width="35%"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn v-if="role == 'Client'"
@@ -96,9 +105,9 @@
                       <div class="pt-5">
                         <v-carousel hide-delimiters style="height: 300px">
                           <v-carousel-item
-                              v-for="(item,i) in pictures"
-                              :key="i"
-                              :src="item.src"
+                            v-for="(item,i) in pictures"
+                            :key="i"
+                            :src="item.src"
                           ></v-carousel-item>
                         </v-carousel>
                         <div>
@@ -116,19 +125,19 @@
                           <div v-else> {{ "NA" }}</div>
                         </v-card-text>
                         <validation-provider
-                            v-slot="{ errors }"
-                            name="bidInput"
-                            clearable
+                          v-slot="{ errors }"
+                          name="bidInput"
+                          clearable
                         >
                           <v-row>
                             <v-card-title style="word-break: normal" class="mb-4">
                               Your bid:
                             </v-card-title>
                             <v-text-field
-                                v-model="bidInput"
-                                :error-messages="errors"
-                                hint="*Must be at least 3% higher than the current value."
-                                clearable
+                              v-model="bidInput"
+                              :error-messages="errors"
+                              hint="*Must be at least 3% higher than the current value."
+                              clearable
                             >
                             </v-text-field>
                           </v-row>
@@ -156,15 +165,15 @@
                     </v-card-text>
                     <v-card-actions class="justify-end">
                       <v-btn
-                          icon
-                          @click="show1 = !show1"
+                        icon
+                        @click="show1 = !show1"
                       >
                         <v-icon>{{ show1 ? 'mdi-chevron-right' : 'mdi-chevron-left' }}</v-icon>
                       </v-btn>
                       <v-spacer></v-spacer>
                       <v-btn
-                          text
-                          @click="dialog.value = false"
+                        text
+                        @click="dialog.value = false"
                       >Close
                       </v-btn>
                     </v-card-actions>
@@ -207,7 +216,7 @@ setInteractionMode('eager')
 
 extend('digits', {
   ...digits,
-  })
+})
 
 extend('required', {
   ...required,
