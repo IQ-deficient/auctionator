@@ -78,7 +78,8 @@
                   max-width="35%"
               >
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn class="mx-1"
+                  <v-btn v-if="role == 'Client'"
+                      class="mx-1"
                          color="primary"
                          v-bind="attrs"
                          v-on="on"
@@ -276,6 +277,7 @@ export default {
       dataLoading: false,
       category: "",
       conditions: [],
+      role: localStorage.getItem('user_roles')
     }
   },
 
