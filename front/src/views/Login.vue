@@ -186,15 +186,15 @@ export default {
         })
         .catch(error => {
           this.loading = false
-          this.error = error.response.data.message;
-          if(error.response.data.error == "Unauthorized"){
+          this.error = error.response.data;
+          // console.log(this.error)
+          if(error.response.data.error == "Something went wrong."){
             Swal.fire(
                 'Oops!',
                 'Email and password don\'t match.',
                 'error'
             )
           }
-          // console.log(error.response.data)
         })
     },
   },
