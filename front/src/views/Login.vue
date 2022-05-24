@@ -1,9 +1,9 @@
 <template>
   <div style="margin-top: 8%">
     <v-card
-      class="mx-auto"
-      max-width="28%"
-      style="justify-content: end"
+        class="mx-auto"
+        max-width="28%"
+        style="justify-content: end"
     >
       <validation-observer ref="observer" v-slot="{ invalid }" tag="form" @submit.prevent="login()"
       >
@@ -12,52 +12,52 @@
               class="pt-3">
           <!--          Polje za unos imejla-->
           <validation-provider
-            v-slot="{ errors }"
-            name="Email"
-            rules="required|email"
+              v-slot="{ errors }"
+              name="Email"
+              rules="required|email"
           >
             <v-text-field
-              v-model="email"
-              :error-messages="errors"
-              label="E-mail"
-              clearable
+                v-model="email"
+                :error-messages="errors"
+                label="E-mail"
+                clearable
             ></v-text-field>
           </validation-provider>
           <!--          Polje za unos lozinke-->
           <validation-provider
-            v-slot="{ errors }"
-            name="Password"
-            rules="required|min:8|max:128"
+              v-slot="{ errors }"
+              name="Password"
+              rules="required|min:8|max:128"
           >
             <v-text-field
-              v-model="password"
-              :error-messages="errors"
-              label="Password"
-              :type="showPassword ? 'text' : 'password'"
-              :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-              @click:append="showPassword = !showPassword"
-              clearable
+                v-model="password"
+                :error-messages="errors"
+                label="Password"
+                :type="showPassword ? 'text' : 'password'"
+                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append="showPassword = !showPassword"
+                clearable
             ></v-text-field>
           </validation-provider>
           <validation-provider
-            v-slot="{ errors }"
-            name="checkbox"
+              v-slot="{ errors }"
+              name="checkbox"
           >
             <v-checkbox
-              v-model="checkbox"
-              :error-messages="errors"
-              value="1"
-              label="Remember me"
-              type="checkbox"
+                v-model="checkbox"
+                :error-messages="errors"
+                value="1"
+                label="Remember me"
+                type="checkbox"
             ></v-checkbox>
           </validation-provider>
 
           <v-btn
-            type="submit"
-            class="mb-1"
-            color="primary"
-            @click="login()"
-            @submit.prevent="invalid"
+              type="submit"
+              class="mb-1"
+              color="primary"
+              @click="login()"
+              @submit.prevent="invalid"
           >
             <v-icon left class="mr-2">mdi-login</v-icon>
             Sign in
@@ -93,8 +93,8 @@
 
     <router-link to="/register" style="text-decoration: none">
       <v-btn
-        color="accent"
-        class="mt-4">
+          color="accent"
+          class="mt-4">
         Create your account
       </v-btn>
     </router-link>
@@ -174,28 +174,28 @@ export default {
         email: this.email,
         password: this.password,
       }, config)
-        .then(response => {
-          if (response) {
-            localStorage.setItem("token", JSON.stringify(response.data.access_token));
-            localStorage.setItem("user_roles", response.data.user_roles);
-            this.$router.push('/home');
-            this.$router.go(0)
-            this.loading = false;
-          }
-          return response.data;
-        })
-        .catch(error => {
-          this.loading = false
-          this.error = error.response.data;
-          // console.log(this.error)
-          if(error.response.data.error == "Something went wrong."){
-            Swal.fire(
-                'Oops!',
-                'Email and password don\'t match.',
-                'error'
-            )
-          }
-        })
+          .then(response => {
+            if (response) {
+              localStorage.setItem("token", JSON.stringify(response.data.access_token));
+              localStorage.setItem("user_roles", response.data.user_roles);
+              this.$router.push('/home');
+              this.$router.go(0)
+              this.loading = false;
+            }
+            return response.data;
+          })
+          .catch(error => {
+            this.loading = false
+            this.error = error.response.data;
+            // console.log(this.error)
+            if (error.response.data.error == "Something went wrong.") {
+              Swal.fire(
+                  'Oops!',
+                  'Email and password don\'t match.',
+                  'error'
+              )
+            }
+          })
     },
   },
 

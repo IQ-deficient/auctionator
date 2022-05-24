@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-parallax
-      height="325"
-      src="../assets/Mercy.png"
+        height="325"
+        src="../assets/Mercy.png"
     >
     </v-parallax>
     <validation-observer ref="observer" v-slot="{ invalid }" tag="form" @submit.prevent="updateProfile()"
@@ -15,26 +15,26 @@
               <div style="position: absolute; top: -120px">
                 <v-avatar size="145px">
                   <img
-                    v-if="userImage"
-                    :src="require('../../../back/public/' + userImage)"
-                    :alt="loggedUser.first_name">
+                      v-if="userImage"
+                      :src="require('../../../back/public/' + userImage)"
+                      :alt="loggedUser.first_name">
                   <!-- TODO: LOADING FOR IMAGE AND OTHER FILLABLE FIELDS -->
                   <img
-                    v-else
-                    src="../assets/DefaultProfileImage.png"
-                    alt="Default User Image">
+                      v-else
+                      src="../assets/DefaultProfileImage.png"
+                      alt="Default User Image">
                   <!--                  src="../storage/user_images/45364356-1652435259.png">-->
                 </v-avatar>
               </div>
               <!--            <a href="#" style="text-decoration: none"></a>-->
               <v-dialog
-                transition="scale-transition"
-                max-width="35%"
+                  transition="scale-transition"
+                  max-width="35%"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <a
-                    v-bind="attrs"
-                    v-on="on"
+                      v-bind="attrs"
+                      v-on="on"
                   >
                     <v-icon dark large>
                       mdi-pencil-outline
@@ -48,10 +48,10 @@
                         <v-row no-gutters justify="center" align="center">
                           <v-col cols="8">
                             <v-file-input
-                              show-size
-                              label="Select Image"
-                              accept="image/*"
-                              @change="selectImage"
+                                show-size
+                                label="Select Image"
+                                accept="image/*"
+                                @change="selectImage"
                             ></v-file-input>
                           </v-col>
                           <v-col cols="4" class="pl-2">
@@ -64,10 +64,10 @@
                         <div v-if="progress">
                           <div>
                             <v-progress-linear
-                              v-model="progress"
-                              color="light-blue"
-                              height="25"
-                              reactive
+                                v-model="progress"
+                                color="light-blue"
+                                height="25"
+                                reactive
                             >
                               <strong>{{ progress }} %</strong>
                             </v-progress-linear>
@@ -98,8 +98,8 @@
                     </v-card-text>
                     <v-card-actions class="justify-end">
                       <v-btn
-                        text
-                        @click="dialog.value = false"
+                          text
+                          @click="dialog.value = false"
                       >Close
                       </v-btn>
                     </v-card-actions>
@@ -115,8 +115,8 @@
               <v-col cols="12" sm="2">
                 <div v-if="edit">
                   <v-btn
-                    color="accent"
-                    @click="edit = !edit">
+                      color="accent"
+                      @click="edit = !edit">
 
                     <v-icon left>mdi-pencil</v-icon>
                     Edit
@@ -124,8 +124,8 @@
                 </div>
                 <div v-else>
                   <v-btn
-                    color="accent"
-                    @click="edit = !edit">
+                      color="accent"
+                      @click="edit = !edit">
 
                     <v-icon left>mdi-close</v-icon>
                     Cancel
@@ -150,44 +150,44 @@
             </v-row>
             <v-row style="">
               <v-col
-                cols="12"
-                sm="6"
+                  cols="12"
+                  sm="6"
               >
                 <validation-provider
-                  v-slot="{ errors }"
-                  name="First name"
-                  rules="required|min:3|max:32"
-                  clearable
+                    v-slot="{ errors }"
+                    name="First name"
+                    rules="required|min:3|max:32"
+                    clearable
                 >
                   <v-text-field
-                    v-model="firstName"
-                    :error-messages="errors"
-                    label="First name"
-                    required
-                    dark
-                    :disabled="edit"
-                    solo-inverted
+                      v-model="firstName"
+                      :error-messages="errors"
+                      label="First name"
+                      required
+                      dark
+                      :disabled="edit"
+                      solo-inverted
                   ></v-text-field>
                 </validation-provider>
               </v-col>
               <v-col
-                cols="12"
-                sm="6"
+                  cols="12"
+                  sm="6"
               >
                 <validation-provider
-                  v-slot="{ errors }"
-                  name="Last name"
-                  rules="required|min:3|max:32"
-                  clearable
+                    v-slot="{ errors }"
+                    name="Last name"
+                    rules="required|min:3|max:32"
+                    clearable
                 >
                   <v-text-field
-                    v-model="lastName"
-                    :error-messages="errors"
-                    label="Last name"
-                    required
-                    dark
-                    :disabled="edit"
-                    solo-inverted
+                      v-model="lastName"
+                      :error-messages="errors"
+                      label="Last name"
+                      required
+                      dark
+                      :disabled="edit"
+                      solo-inverted
                   ></v-text-field>
                 </validation-provider>
               </v-col>
@@ -197,81 +197,81 @@
                      cols="12"
                      sm="7">
                 <v-text-field
-                  v-model="email"
-                  label="Email"
-                  append-icon="mdi-email-edit-outline"
-                  shaped
-                  dark
-                  disabled
-                  solo-inverted
+                    v-model="email"
+                    label="Email"
+                    append-icon="mdi-email-edit-outline"
+                    shaped
+                    dark
+                    disabled
+                    solo-inverted
                 ></v-text-field>
               </v-col>
             </v-row>
             <v-row style="">
               <v-col
-                cols="12"
-                sm="5">
+                  cols="12"
+                  sm="5">
                 <validation-provider
-                  v-slot="{ errors }"
-                  name="Gender"
-                  clearable
+                    v-slot="{ errors }"
+                    name="Gender"
+                    clearable
                 >
                   <v-select
-                    v-model="selectGender"
-                    :items="genders"
-                    :error-messages="errors"
-                    item-text="name"
-                    label="Gender"
-                    dark
-                    :disabled="edit"
-                    solo-inverted
+                      v-model="selectGender"
+                      :items="genders"
+                      :error-messages="errors"
+                      item-text="name"
+                      label="Gender"
+                      dark
+                      :disabled="edit"
+                      solo-inverted
                   ></v-select>
                 </validation-provider>
               </v-col>
               <v-col
-                cols="12"
-                sm="7">
+                  cols="12"
+                  sm="7">
                 <validation-provider
-                  v-slot="{ errors }"
-                  name="Birth date"
-                  clearable
+                    v-slot="{ errors }"
+                    name="Birth date"
+                    clearable
                 >
                   <v-dialog
-                    ref="dialog"
-                    v-model="modal"
-                    :return-value.sync="date"
-                    persistent
-                    width="290px"
+                      ref="dialog"
+                      v-model="modal"
+                      :return-value.sync="date"
+                      persistent
+                      width="290px"
                   >
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
-                        v-model="birthdate"
-                        :error-messages="errors"
-                        label="Pick a date"
-                        append-icon="mdi-cake-variant-outline"
-                        dark
-                        :disabled="edit"
-                        solo-inverted
-                        v-bind="attrs"
-                        v-on="on"
+                          v-model="birthdate"
+                          :error-messages="errors"
+                          label="Pick a date"
+                          append-icon="mdi-cake-variant-outline"
+                          dark
+                          :disabled="edit"
+                          solo-inverted
+                          v-bind="attrs"
+                          v-on="on"
                       ></v-text-field>
                     </template>
                     <v-date-picker
-                      v-model="birthdate"
-                      scrollable
+                        v-model="birthdate"
+                        scrollable
                     >
                       <v-spacer></v-spacer>
                       <v-btn
-                        text
-                        color="primary"
-                        @click="modal = false"
+                          text
+                          color="primary"
+                          @click="modal = false"
                       >
                         Cancel
                       </v-btn>
                       <v-btn
-                        text
-                        color="primary"
-                        @click="$refs.dialog.save(date)"
+                          text
+                          color="primary"
+                          @click="$refs.dialog.save(date)"
                       >
                         OK
                       </v-btn>
@@ -282,36 +282,36 @@
             </v-row>
             <v-row style="">
               <v-col
-                cols="12"
-                sm="5">
+                  cols="12"
+                  sm="5">
                 <validation-provider
-                  v-slot="{ errors }"
-                  name="Country"
-                  rules="required"
-                  clearable
+                    v-slot="{ errors }"
+                    name="Country"
+                    rules="required"
+                    clearable
                 >
                   <v-select
-                    v-model="selectCountry"
-                    :items="countries"
-                    item-text="name"
-                    :error-messages="errors"
-                    label="Country"
-                    dark
-                    :disabled="edit"
-                    solo-inverted
-                    return-object
-                    @change="updateCountryCode()"
+                      v-model="selectCountry"
+                      :items="countries"
+                      item-text="name"
+                      :error-messages="errors"
+                      label="Country"
+                      dark
+                      :disabled="edit"
+                      solo-inverted
+                      return-object
+                      @change="updateCountryCode()"
                   ></v-select>
                 </validation-provider>
               </v-col>
               <v-col
-                cols="12"
-                sm="7">
+                  cols="12"
+                  sm="7">
                 <validation-provider
-                  v-slot="{ errors }"
-                  name="Phone number"
-                  rules="required|numeric|min:8|max:15"
-                  clearable
+                    v-slot="{ errors }"
+                    name="Phone number"
+                    rules="required|numeric|min:8|max:15"
+                    clearable
                 >
                   <v-text-field v-if="phoneCode != null"
                                 :prefix="'(' + phoneCode + ')'"
@@ -339,8 +339,8 @@
               <v-col cols="12" sm="5"
                      style="margin: 0 auto">
                 <v-dialog
-                  transition="dialog-bottom-transition"
-                  max-width="35%"
+                    transition="dialog-bottom-transition"
+                    max-width="35%"
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn large
@@ -355,61 +355,61 @@
                       <v-card-text>
                         <div>
                           <validation-provider
-                            v-slot="{ errors }"
-                            name="oldPassword"
-                            rules="required"
-                            clearable
+                              v-slot="{ errors }"
+                              name="oldPassword"
+                              rules="required"
+                              clearable
                           >
                             <v-text-field
-                              v-model="old_password"
-                              :error-messages="errors"
-                              label="Old password"
-                              :type="showOldPassword ? 'text' : 'password'"
-                              required
-                              hint="Must be at least 8 characters."
-                              :append-icon="showOldPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                              @click:append="showOldPassword = !showOldPassword"
-                              clearable
+                                v-model="old_password"
+                                :error-messages="errors"
+                                label="Old password"
+                                :type="showOldPassword ? 'text' : 'password'"
+                                required
+                                hint="Must be at least 8 characters."
+                                :append-icon="showOldPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                @click:append="showOldPassword = !showOldPassword"
+                                clearable
                             >
                             </v-text-field>
                           </validation-provider>
                           <validation-provider
-                            v-slot="{ errors }"
-                            name="New password"
-                            rules="required|min:8|max:128"
-                            clearable
+                              v-slot="{ errors }"
+                              name="New password"
+                              rules="required|min:8|max:128"
+                              clearable
                           >
                             <v-text-field
-                              v-model="newPassword"
-                              :error-messages="errors"
-                              label="New password"
-                              :type="showNewPassword ? 'text' : 'password'"
-                              counter
-                              required
-                              hint="Must be at least 8 characters."
-                              :append-icon="showNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                              @click:append="showNewPassword = !showNewPassword"
-                              clearable
+                                v-model="newPassword"
+                                :error-messages="errors"
+                                label="New password"
+                                :type="showNewPassword ? 'text' : 'password'"
+                                counter
+                                required
+                                hint="Must be at least 8 characters."
+                                :append-icon="showNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                @click:append="showNewPassword = !showNewPassword"
+                                clearable
                             >
                             </v-text-field>
                           </validation-provider>
                           <validation-provider
-                            v-slot="{ errors }"
-                            name="Password confirmation"
-                            rules="required|min:8|max:128|password:@New password"
-                            clearable
+                              v-slot="{ errors }"
+                              name="Password confirmation"
+                              rules="required|min:8|max:128|password:@New password"
+                              clearable
                           >
                             <v-text-field
-                              v-model="confirmNewPassword"
-                              :error-messages="errors"
-                              label="Confirm new password"
-                              :type="showConfirmNewPassword ? 'text' : 'password'"
-                              counter
-                              required
-                              hint="Must be at least 8 characters."
-                              :append-icon="showConfirmNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                              @click:append="showConfirmNewPassword = !showConfirmNewPassword"
-                              clearable
+                                v-model="confirmNewPassword"
+                                :error-messages="errors"
+                                label="Confirm new password"
+                                :type="showConfirmNewPassword ? 'text' : 'password'"
+                                counter
+                                required
+                                hint="Must be at least 8 characters."
+                                :append-icon="showConfirmNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                @click:append="showConfirmNewPassword = !showConfirmNewPassword"
+                                clearable
                             >
                             </v-text-field>
                           </validation-provider>
@@ -425,8 +425,8 @@
                       </v-card-text>
                       <v-card-actions class="justify-end">
                         <v-btn
-                          text
-                          @click="dialog.value = false"
+                            text
+                            @click="dialog.value = false"
                         >Close
                         </v-btn>
                       </v-card-actions>
@@ -438,8 +438,8 @@
             <div v-if="!edit">
               <v-row class="ma-1">
                 <v-col
-                  cols="12"
-                  sm="12"
+                    cols="12"
+                    sm="12"
                 >
                   <v-btn dark
                          large color="primary"
@@ -466,6 +466,7 @@ import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from
 import UploadService from "../services/UploadFilesService";
 
 import axios from "axios";
+import Swal from "sweetalert2";
 
 setInteractionMode('eager')
 
@@ -557,35 +558,35 @@ export default {
 
     getGenders() {
       axios.get('/genders')
-        .then(response => {
-          if (response.data) {
-            this.genders = response.data
-          }
-        })
-        .catch(error => {
-          console.log(error)
-        })
+          .then(response => {
+            if (response.data) {
+              this.genders = response.data
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
     },
 
     getCountries() {
       this.pageLoading = true
       axios.get('/active_countries')
-        .then(response => {
-          if (response.data) {
-            this.countries = response.data
-          }
-          for (let i = 0; i < this.countries.length; i++) {
-            if (this.countries[i].name == this.selectCountry) {
-              this.selectCountry = this.countries[i]
+          .then(response => {
+            if (response.data) {
+              this.countries = response.data
             }
-          }
-          this.phoneCode = this.selectCountry.phone_code
-          this.pageLoading = false
-        })
-        .catch(error => {
-          console.log(error)
-          this.pageLoading = false
-        })
+            for (let i = 0; i < this.countries.length; i++) {
+              if (this.countries[i].name == this.selectCountry) {
+                this.selectCountry = this.countries[i]
+              }
+            }
+            this.phoneCode = this.selectCountry.phone_code
+            this.pageLoading = false
+          })
+          .catch(error => {
+            console.log(error)
+            this.pageLoading = false
+          })
     },
 
     updateCountryCode() {
@@ -595,27 +596,27 @@ export default {
     getLoggedUser() {
       this.pageLoading = true
       axios.get('/auth/user')
-        .then(response => {
-          if (response.data) {
-            this.username = response.data.username
-            this.firstName = response.data.first_name
-            this.lastName = response.data.last_name
-            this.email = response.data.email
-            this.selectGender = response.data.gender
-            this.birthdate = response.data.birthdate
-            this.selectCountry = response.data.country
-            this.phoneNumber = response.data.phone_number
-            this.loggedUser = response.data
-            if (response.data.image) this.userImage = response.data.image
-            console.log(response.data.image, 'RESPONSE DATA IMAGE')
-            console.log(this.userImage, 'USER IMAGE VARIABLE')
+          .then(response => {
+            if (response.data) {
+              this.username = response.data.username
+              this.firstName = response.data.first_name
+              this.lastName = response.data.last_name
+              this.email = response.data.email
+              this.selectGender = response.data.gender
+              this.birthdate = response.data.birthdate
+              this.selectCountry = response.data.country
+              this.phoneNumber = response.data.phone_number
+              this.loggedUser = response.data
+              if (response.data.image) this.userImage = response.data.image
+              console.log(response.data.image, 'RESPONSE DATA IMAGE')
+              console.log(this.userImage, 'USER IMAGE VARIABLE')
+              this.pageLoading = false
+            }
+          })
+          .catch(error => {
+            console.log(error)
             this.pageLoading = false
-          }
-        })
-        .catch(error => {
-          console.log(error)
-          this.pageLoading = false
-        })
+          })
     },
 
     updateProfile() {
@@ -628,18 +629,31 @@ export default {
         country: this.selectCountry.name,
         phone_number: this.phoneNumber,
       })
-        .then(response => {
-            if (response) {
-              window.alert('bravo kretenu nemas sweetalert')
-              this.loading = false;
+          .then(response => {
+                if (response) {
+                  Swal.fire(
+                      'Done!',
+                      'Your information has been updated.',
+                      'success'
+                  )
+
+                  this.edit = true
+                  this.loading = false;
+                }
+              }
+          )
+          .catch(error => {
+            this.loading = false
+            this.error = error.response.data;
+            // console.log(error.response.data.phone_number)
+            if (error.response.data.phone_number == "The phone number has already been taken.") {
+              Swal.fire(
+                  'Oops!',
+                  'The phone number has already been taken.',
+                  'error'
+              )
             }
-          }
-        )
-        .catch(error => {
-          console.log(error)
-          this.loading = false
-          this.error = error.response.data.message;
-        })
+          })
     },
 
     updatePassword() {
@@ -649,19 +663,28 @@ export default {
         password: this.newPassword,
         password_confirmation: this.confirmNewPassword
       })
-        .then(response => {
-            if (response) {
-              window.alert('bravo kretenu nemas sweetalert')
-              this.loading = false;
-              //todo: zatvori dialog (Odnosno false)
+          .then(response => {
+                if (response) {
+                  Swal.fire(
+                      'Done!',
+                      'Your information has been updated.',
+                      'success'
+                  )
+                }
+              }
+          )
+          .catch(error => {
+            console.log(error)
+            this.loading = false
+            this.error = error.response.data;
+            if (error.response.data.message == "Old password is not correct.") {
+              Swal.fire(
+                  'Oops!',
+                  'Old password is incorrect.',
+                  'error'
+              )
             }
-          }
-        )
-        .catch(error => {
-          console.log(error)
-          this.loading = false
-          this.error = error.response.data.message;
-        })
+          })
     },
 
     selectImage(image) {
@@ -680,22 +703,25 @@ export default {
       UploadService.upload(this.currentImage, (event) => {
         this.progress = Math.round((100 * event.loaded) / event.total);
       })
-        .then((response) => {
-          this.message = response.data.message;
-          return UploadService.getFiles();
-        })
-        .then((images) => {
-          this.imageInfos = images.data;
-        })
-        .catch((err) => {
-          this.progress = 0;
-          this.message = "Could not upload the image! " + err;
-          this.currentImage = undefined;
-        });
+          .then((response) => {
+            this.message = response.data.message;
+            return UploadService.getFiles();
+          })
+          .then((images) => {
+            this.imageInfos = images.data;
+          })
+          .catch((err) => {
+            this.progress = 0;
+            this.message = "Could not upload the image! " + err;
+            this.currentImage = undefined;
+          });
     },
 
   },
   mounted() {
+    if (window.localStorage.getItem('token') === null) {
+      this.$router.push('/pageNotFound')
+    }
     document.title = 'Edit Profile - Auction House'
   },
   created() {
