@@ -1,113 +1,112 @@
 <template>
   <div>
-  <v-data-table
+    <v-data-table
       style="width: 95%; margin: 0 auto; padding-top: 6px"
       :headers="headers"
       :items="tableData"
       :search="search"
       sort-by="title"
       class="elevation-1; rounded-card; mt-10"
-  >
+    >
 
-    <template v-slot:top>
-      <v-toolbar
+      <template v-slot:top>
+        <v-toolbar
           flat
           class="mb-8"
-      >
-        <v-toolbar-title><h2>Auctions</h2></v-toolbar-title>
-        <v-divider
+        >
+          <v-toolbar-title><h2>Auctions</h2></v-toolbar-title>
+          <v-divider
             class="mx-4"
             inset
             vertical
-        ></v-divider>
-        <v-row>
-          <v-col cols="12" md="4">
-            <v-text-field
+          ></v-divider>
+          <v-row>
+            <v-col cols="12" md="4">
+              <v-text-field
                 v-model="search"
                 append-icon="mdi-magnify"
                 label="Search"
                 single-line
                 hide-details
-            ></v-text-field>
-          </v-col>
-          <v-divider
+              ></v-text-field>
+            </v-col>
+            <v-divider
               class="mx-4"
               inset
               vertical
-          ></v-divider>
-          <v-col cols="12" md="4">
-            <v-select
+            ></v-divider>
+            <v-col cols="12" md="4">
+              <v-select
                 single-line
                 hide-details
                 v-model="selectStatus"
                 :items="statuses"
                 item-text="status"
                 label="Status"
-                clearable
                 @change="updateTableData()"
-            ></v-select>
-          </v-col>
-        </v-row>
+              ></v-select>
+            </v-col>
+          </v-row>
 
-        <v-spacer></v-spacer>
-        <validation-observer>
-          <v-dialog
+          <v-spacer></v-spacer>
+          <validation-observer>
+            <v-dialog
               v-model="dialog"
               max-width="60%"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
                   color="primary"
                   dark
                   class="mb-2"
                   v-bind="attrs"
                   v-on="on"
-              >
-                <v-icon left>mdi-plus-circle-multiple-outline</v-icon>
-                Create auction
-              </v-btn>
-            </template>
-            <template v-slot:default="dialog">
-              <v-card color="#2c3e50">
-                <v-card-text>
-                  <div class="pa-1">
-                    <v-toolbar-title class="pa-4">
-                      <table style="width: 100%">
-                        <tr>
-                          <td>
-                            <hr/>
-                          </td>
-                          <td style="width:1px; padding: 10px; white-space: nowrap;"><h2 style="color: white">Item
-                            details</h2></td>
-                          <td>
-                            <hr/>
-                          </td>
-                        </tr>
-                      </table>
-                    </v-toolbar-title>
-                    <v-card class="pa-4">
-                      <validation-provider
+                >
+                  <v-icon left>mdi-plus-circle-multiple-outline</v-icon>
+                  Create auction
+                </v-btn>
+              </template>
+              <template v-slot:default="dialog">
+                <v-card color="#2c3e50">
+                  <v-card-text>
+                    <div class="pa-1">
+                      <v-toolbar-title class="pa-4">
+                        <table style="width: 100%">
+                          <tr>
+                            <td>
+                              <hr/>
+                            </td>
+                            <td style="width:1px; padding: 10px; white-space: nowrap;"><h2 style="color: white">Item
+                              details</h2></td>
+                            <td>
+                              <hr/>
+                            </td>
+                          </tr>
+                        </table>
+                      </v-toolbar-title>
+                      <v-card class="pa-4">
+                        <validation-provider
                           v-slot="{ errors }"
                           name="Title"
                           rules="required|min:3|max:64"
                           clearable
-                      >
-                        <v-text-field
+                        >
+                          <v-text-field
                             v-model="addItemTitle"
                             :error-messages="errors"
                             label="Item title"
                             required
                             clearable
-                        >
-                        </v-text-field>
-                      </validation-provider>
-                      <validation-provider
+                          >
+                          </v-text-field>
+                        </validation-provider>
+                        <validation-provider
                           v-slot="{ errors }"
                           name="Description"
                           clearable
                           rules="required|min:3|max:500"
-                      >
-                        <v-textarea
+                        >
+                          <v-textarea
                             v-model="addItemDescription"
                             :error-messages="errors"
                             :counter="500"
@@ -115,17 +114,17 @@
                             auto-grow
                             solo
                             clearable
-                        >
-                        </v-textarea>
-                      </validation-provider>
-                      <v-row>
-                        <v-col cols="12" sm="6">
-                          <validation-provider
+                          >
+                          </v-textarea>
+                        </validation-provider>
+                        <v-row>
+                          <v-col cols="12" sm="6">
+                            <validation-provider
                               v-slot="{ errors }"
                               name="Warehouse information"
                               rules="required"
-                          >
-                            <v-select
+                            >
+                              <v-select
                                 v-model="addItemWarehouse"
                                 :error-messages="errors"
                                 label="Warehouse"
@@ -133,17 +132,17 @@
                                 item-text="name"
                                 required
                                 clearable
-                            >
-                            </v-select>
-                          </validation-provider>
-                        </v-col>
-                        <v-col cols="12" sm="6">
-                          <validation-provider
+                              >
+                              </v-select>
+                            </validation-provider>
+                          </v-col>
+                          <v-col cols="12" sm="6">
+                            <validation-provider
                               v-slot="{ errors }"
                               name="Item category"
                               rules="required"
-                          >
-                            <v-select
+                            >
+                              <v-select
                                 v-model="addItemCategory"
                                 :error-messages="errors"
                                 label="Category"
@@ -152,19 +151,19 @@
                                 required
                                 clearable
                                 @change="getSubCategoriesAndConditions()"
-                            >
-                            </v-select>
-                          </validation-provider>
-                        </v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col cols="12" sm="7">
-                          <validation-provider
+                              >
+                              </v-select>
+                            </validation-provider>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="12" sm="7">
+                            <validation-provider
                               v-slot="{ errors }"
                               name="Item subcategory"
                               rules="required"
-                          >
-                            <v-select
+                            >
+                              <v-select
                                 v-model="addItemSubCategory"
                                 :error-messages="errors"
                                 label="Subcategory"
@@ -173,17 +172,17 @@
                                 required
                                 clearable
                                 :disabled="!addItemCategory"
-                            >
-                            </v-select>
-                          </validation-provider>
-                        </v-col>
-                        <v-col cols="12" sm="5">
-                          <validation-provider
+                              >
+                              </v-select>
+                            </validation-provider>
+                          </v-col>
+                          <v-col cols="12" sm="5">
+                            <validation-provider
                               v-slot="{ errors }"
                               name="Item condition"
                               rules="required"
-                          >
-                            <v-select
+                            >
+                              <v-select
                                 v-model="addItemCondition"
                                 :error-messages="errors"
                                 label="Condition"
@@ -192,129 +191,129 @@
                                 required
                                 clearable
                                 :disabled="!addItemCategory"
-                            >
-                            </v-select>
-                          </validation-provider>
-                        </v-col>
-                      </v-row>
-                      <v-dialog
+                              >
+                              </v-select>
+                            </validation-provider>
+                          </v-col>
+                        </v-row>
+                        <v-dialog
                           transition="scale-transition"
                           max-width="35%"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <a
+                        >
+                          <template v-slot:activator="{ on, attrs }">
+                            <a
                               v-bind="attrs"
                               v-on="on"
-                          >
-                            <v-icon large>
-                              mdi-pencil-outline
-                            </v-icon>
-                          </a>
-                        </template>
-                        <template v-slot:default="dialog">
-                          <v-card>
-                            <v-card-text>
-                              <div class="pa-4">
-                                <v-row no-gutters justify="center" align="center">
-                                  <v-col cols="8">
-                                    <v-file-input
+                            >
+                              <v-icon large>
+                                mdi-pencil-outline
+                              </v-icon>
+                            </a>
+                          </template>
+                          <template v-slot:default="dialog">
+                            <v-card>
+                              <v-card-text>
+                                <div class="pa-4">
+                                  <v-row no-gutters justify="center" align="center">
+                                    <v-col cols="8">
+                                      <v-file-input
                                         show-size
                                         label="Select Image"
                                         accept="image/*"
                                         @change="selectImage"
-                                    ></v-file-input>
-                                  </v-col>
-                                  <v-col cols="4" class="pl-2">
-                                    <v-btn color="primary" dark @click="upload">
-                                      <v-icon left dark>mdi-cloud-upload</v-icon>
-                                      Upload
-                                    </v-btn>
-                                  </v-col>
-                                </v-row>
-                                <div v-if="progress">
-                                  <div>
-                                    <v-progress-linear
+                                      ></v-file-input>
+                                    </v-col>
+                                    <v-col cols="4" class="pl-2">
+                                      <v-btn color="primary" dark @click="upload">
+                                        <v-icon left dark>mdi-cloud-upload</v-icon>
+                                        Upload
+                                      </v-btn>
+                                    </v-col>
+                                  </v-row>
+                                  <div v-if="progress">
+                                    <div>
+                                      <v-progress-linear
                                         v-model="progress"
                                         color="light-blue"
                                         height="25"
                                         reactive
-                                    >
-                                      <strong>{{ progress }} %</strong>
-                                    </v-progress-linear>
+                                      >
+                                        <strong>{{ progress }} %</strong>
+                                      </v-progress-linear>
+                                    </div>
                                   </div>
-                                </div>
 
-                                <div v-if="previewImage">
-                                  <div>
-                                    <img style="width: 100%" class="preview my-3" :src="previewImage" alt=""/>
+                                  <div v-if="previewImage">
+                                    <div>
+                                      <img style="width: 100%" class="preview my-3" :src="previewImage" alt=""/>
+                                    </div>
                                   </div>
+
+                                  <v-alert v-if="message" border="left" color="blue-grey" dark>
+                                    {{ message }}
+                                  </v-alert>
+
+                                  <v-card v-if="imageInfos.length > 0" class="mx-auto">
+                                    <v-list>
+                                      <v-subheader>List of Images</v-subheader>
+                                      <v-list-item-group color="primary">
+                                        <v-list-item v-for="(image, index) in imageInfos" :key="index">
+                                          <a :href="image.url">{{ image.name }}</a>
+                                        </v-list-item>
+                                      </v-list-item-group>
+                                    </v-list>
+                                  </v-card>
                                 </div>
-
-                                <v-alert v-if="message" border="left" color="blue-grey" dark>
-                                  {{ message }}
-                                </v-alert>
-
-                                <v-card v-if="imageInfos.length > 0" class="mx-auto">
-                                  <v-list>
-                                    <v-subheader>List of Images</v-subheader>
-                                    <v-list-item-group color="primary">
-                                      <v-list-item v-for="(image, index) in imageInfos" :key="index">
-                                        <a :href="image.url">{{ image.name }}</a>
-                                      </v-list-item>
-                                    </v-list-item-group>
-                                  </v-list>
-                                </v-card>
-                              </div>
-                            </v-card-text>
-                            <v-card-actions class="justify-end">
-                              <v-btn
+                              </v-card-text>
+                              <v-card-actions class="justify-end">
+                                <v-btn
                                   text
                                   @click="dialog.value = false"
-                              >Close
-                              </v-btn>
-                            </v-card-actions>
-                          </v-card>
-                        </template>
-                      </v-dialog>
-                    </v-card>
-                    <v-toolbar-title class="pa-4">
-                      <table style="width: 100%">
-                        <tr>
-                          <td>
-                            <hr/>
-                          </td>
-                          <td style="width:1px; padding: 10px; white-space: nowrap;"><h2 style="color: white">Auction
-                            details</h2></td>
-                          <td>
-                            <hr/>
-                          </td>
-                        </tr>
-                      </table>
-                    </v-toolbar-title>
-                    <v-card class="pa-4">
-                      <v-row>
-                        <v-col cols="12" sm="12">
-                          <validation-provider
+                                >Close
+                                </v-btn>
+                              </v-card-actions>
+                            </v-card>
+                          </template>
+                        </v-dialog>
+                      </v-card>
+                      <v-toolbar-title class="pa-4">
+                        <table style="width: 100%">
+                          <tr>
+                            <td>
+                              <hr/>
+                            </td>
+                            <td style="width:1px; padding: 10px; white-space: nowrap;"><h2 style="color: white">Auction
+                              details</h2></td>
+                            <td>
+                              <hr/>
+                            </td>
+                          </tr>
+                        </table>
+                      </v-toolbar-title>
+                      <v-card class="pa-4">
+                        <v-row>
+                          <v-col cols="12" sm="12">
+                            <validation-provider
                               v-slot="{ errors }"
                               name="title"
                               rules="required|min:3|max:64"
                               clearable
-                          >
-                            <v-text-field
+                            >
+                              <v-text-field
                                 v-model="addAuctionTitle"
                                 :error-messages="errors"
                                 label="Auction title"
                                 required
                                 clearable
-                            >
-                            </v-text-field>
-                          </validation-provider>
-                        </v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col cols="12" sm="3">
-                          <validation-provider>
-                            <v-menu
+                              >
+                              </v-text-field>
+                            </validation-provider>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="12" sm="3">
+                            <validation-provider>
+                              <v-menu
                                 ref="menu1"
                                 v-model="menu1"
                                 :close-on-content-click="false"
@@ -322,27 +321,27 @@
                                 offset-y
                                 max-width="290px"
                                 min-width="auto"
-                            >
-                              <template v-slot:activator="{ on, attrs }">
-                                <v-text-field
+                              >
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-text-field
                                     v-model="dateFormatted"
                                     label="Start date"
                                     prepend-icon="mdi-calendar"
                                     v-bind="attrs"
                                     @blur="date = parseDate(dateFormatted)"
                                     v-on="on"
-                                ></v-text-field>
-                              </template>
-                              <v-date-picker
+                                  ></v-text-field>
+                                </template>
+                                <v-date-picker
                                   v-model="date"
                                   no-title
                                   @input="menu1 = false"
-                              ></v-date-picker>
-                            </v-menu>
-                          </validation-provider>
-                        </v-col>
-                        <v-col cols="12" sm="2">
-                          <v-menu
+                                ></v-date-picker>
+                              </v-menu>
+                            </validation-provider>
+                          </v-col>
+                          <v-col cols="12" sm="2">
+                            <v-menu
                               ref="menu"
                               v-model="menu2"
                               :close-on-content-click="false"
@@ -352,35 +351,35 @@
                               offset-y
                               max-width="290px"
                               min-width="290px"
-                          >
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-text-field
+                            >
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-text-field
                                   v-model="time"
                                   label="Start time"
                                   prepend-icon="mdi-clock-time-four-outline"
                                   readonly
                                   v-bind="attrs"
                                   v-on="on"
-                              ></v-text-field>
-                            </template>
-                            <v-time-picker
+                                ></v-text-field>
+                              </template>
+                              <v-time-picker
                                 v-if="menu2"
                                 v-model="time"
                                 full-width
                                 @click:minute="$refs.menu.save(time)"
-                            ></v-time-picker>
-                          </v-menu>
-                        </v-col>
-                        <v-spacer></v-spacer>
-                        <v-divider
+                              ></v-time-picker>
+                            </v-menu>
+                          </v-col>
+                          <v-spacer></v-spacer>
+                          <v-divider
                             class="mx-4"
                             inset
                             vertical
-                        ></v-divider>
-                        <v-spacer></v-spacer>
+                          ></v-divider>
+                          <v-spacer></v-spacer>
 
-                        <v-col cols="12" sm="3">
-                          <v-menu
+                          <v-col cols="12" sm="3">
+                            <v-menu
                               ref="menu1"
                               v-model="menu1"
                               :close-on-content-click="false"
@@ -388,26 +387,26 @@
                               offset-y
                               max-width="290px"
                               min-width="auto"
-                          >
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-text-field
+                            >
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-text-field
                                   v-model="dateFormatted"
                                   label="End date"
                                   prepend-icon="mdi-calendar"
                                   v-bind="attrs"
                                   @blur="date = parseDate(dateFormatted)"
                                   v-on="on"
-                              ></v-text-field>
-                            </template>
-                            <v-date-picker
+                                ></v-text-field>
+                              </template>
+                              <v-date-picker
                                 v-model="date"
                                 no-title
                                 @input="menu1 = false"
-                            ></v-date-picker>
-                          </v-menu>
-                        </v-col>
-                        <v-col cols="12" sm="2">
-                          <v-menu
+                              ></v-date-picker>
+                            </v-menu>
+                          </v-col>
+                          <v-col cols="12" sm="2">
+                            <v-menu
                               ref="menu"
                               v-model="menu2"
                               :close-on-content-click="false"
@@ -417,105 +416,105 @@
                               offset-y
                               max-width="290px"
                               min-width="290px"
-                          >
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-text-field
+                            >
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-text-field
                                   v-model="time"
                                   label="End time"
                                   prepend-icon="mdi-clock-time-four-outline"
                                   readonly
                                   v-bind="attrs"
                                   v-on="on"
-                              ></v-text-field>
-                            </template>
-                            <v-time-picker
+                                ></v-text-field>
+                              </template>
+                              <v-time-picker
                                 v-if="menu2"
                                 v-model="time"
                                 full-width
                                 @click:minute="$refs.menu.save(time)"
-                            ></v-time-picker>
-                          </v-menu>
-                        </v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col cols="12" sm="12">
-                          <validation-provider
+                              ></v-time-picker>
+                            </v-menu>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="12" sm="12">
+                            <validation-provider
                               v-slot="{ errors }"
                               name="buyout"
                               rules="required|min_value:1"
                               clearable
-                          >
-                            <v-text-field
+                            >
+                              <v-text-field
                                 v-model="addAuctionBuyout"
                                 :error-messages="errors"
                                 label="Buyout"
                                 required
                                 clearable
-                            >
-                            </v-text-field>
-                          </validation-provider>
-                        </v-col>
-                      </v-row>
-                    </v-card>
-                  </div>
-                  <v-btn large
-                         dark
-                         type="submit"
-                         color="primary"
-                         class="mt-6"
-                         :disabled="!addItemTitle || !addItemDescription || !addItemCategory || !addItemSubCategory ||
+                              >
+                              </v-text-field>
+                            </validation-provider>
+                          </v-col>
+                        </v-row>
+                      </v-card>
+                    </div>
+                    <v-btn large
+                           dark
+                           type="submit"
+                           color="primary"
+                           class="mt-6"
+                           :disabled="!addItemTitle || !addItemDescription || !addItemCategory || !addItemSubCategory ||
                                     !addItemCondition || !addItemWarehouse || !addAuctionTitle || !addAuctionBuyout"
-                  >
-                    <v-icon left class="mr-1">mdi-pencil-plus-outline</v-icon>
-                    Post
-                  </v-btn>
-                </v-card-text>
-                <v-card-actions class="justify-end">
-                  <v-btn
+                    >
+                      <v-icon left class="mr-1">mdi-pencil-plus-outline</v-icon>
+                      Post
+                    </v-btn>
+                  </v-card-text>
+                  <v-card-actions class="justify-end">
+                    <v-btn
                       text
                       @click="dialog.value = false"
                       dark
-                  >Close
-                  </v-btn>
+                    >Close
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </template>
+            </v-dialog>
+            <v-dialog v-model="dialogDelete" max-width="35%">
+              <v-card>
+                <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <!--                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>-->
+                  <!--                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>-->
+                  <v-spacer></v-spacer>
                 </v-card-actions>
               </v-card>
-            </template>
-          </v-dialog>
-          <v-dialog v-model="dialogDelete" max-width="35%">
-            <v-card>
-              <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-<!--                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>-->
-<!--                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>-->
-                <v-spacer></v-spacer>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-        </validation-observer>
+            </v-dialog>
+          </validation-observer>
 
-      </v-toolbar>
-    </template>
-        <template v-slot:item.actions="{ item }">
-          <v-icon
-              class="mr-2"
-              @click="editAuction(item)"
-          >
-            mdi-pencil
-          </v-icon>
-<!--          <v-icon-->
-<!--              @click="deleteAuction(item)"-->
-<!--          >-->
-<!--            mdi-delete-->
-<!--          </v-icon>-->
-        </template>
-  </v-data-table>
-  <edit-auction
+        </v-toolbar>
+      </template>
+      <template v-slot:item.actions="{ item }">
+        <v-icon
+          class="mr-2"
+          @click="editAuction(item)"
+        >
+          mdi-pencil
+        </v-icon>
+        <!--          <v-icon-->
+        <!--              @click="deleteAuction(item)"-->
+        <!--          >-->
+        <!--            mdi-delete-->
+        <!--          </v-icon>-->
+      </template>
+    </v-data-table>
+    <edit-auction
       v-if="editAuctionDialog"
       @close="editAuctionDialog = false"
       :show-dialog="editAuctionDialog"
       :auction="chosenAuction"
-  />
+    />
   </div>
 </template>
 
@@ -628,23 +627,18 @@ export default {
 
   methods: {
     // text: item => item.name + ' — ' + item.address,
-    updateTableData(){
-      if (this.selectStatus == 'Created'){
+    updateTableData() {
+      if (this.selectStatus == 'Created') {
         this.tableData = this.auctions.created
-      }
-      else if (this.selectStatus == 'Ongoing'){
+      } else if (this.selectStatus == 'Ongoing') {
         this.tableData = this.auctions.ongoing
-      }
-      else if (this.selectStatus == 'Expired'){
+      } else if (this.selectStatus == 'Expired') {
         this.tableData = this.auctions.expired
-      }
-      else if (this.selectStatus == 'Sold'){
+      } else if (this.selectStatus == 'Sold') {
         this.tableData = this.auctions.sold
-      }
-      else if (this.selectStatus == 'NA'){
+      } else if (this.selectStatus == 'NA') {
         this.tableData = this.auctions.na
-      }
-      else{
+      } else {
         this.tableData = this.auctions
       }
     },
@@ -677,94 +671,94 @@ export default {
       UploadService.upload(this.currentImage, (event) => {
         this.progress = Math.round((100 * event.loaded) / event.total);
       })
-          .then((response) => {
-            this.message = response.data.message;
-            return UploadService.getFiles();
-          })
-          .then((images) => {
-            this.imageInfos = images.data;
-          })
-          .catch((err) => {
-            this.progress = 0;
-            this.message = "Could not upload the image! " + err;
-            this.currentImage = undefined;
-          });
+        .then((response) => {
+          this.message = response.data.message;
+          return UploadService.getFiles();
+        })
+        .then((images) => {
+          this.imageInfos = images.data;
+        })
+        .catch((err) => {
+          this.progress = 0;
+          this.message = "Could not upload the image! " + err;
+          this.currentImage = undefined;
+        });
     },
 
     getAuctions() {
       this.auctions = []
       axios.get('/auctions')
-          .then(response => {
-            if (response.data) {
-              // for (let i = 0; i < response.data.length; i++) {
-                // console.log(response.data)
-                this.auctions = response.data
-              this.tableData = response.data.na
-              // }
-            }
-            this.selectStatus = this.statuses[0]
-          })
-          .catch(error => {
-            console.log(error)
-          })
+        .then(response => {
+          if (response.data) {
+            // for (let i = 0; i < response.data.length; i++) {
+            // console.log(response.data)
+            this.auctions = response.data
+            this.tableData = this.auctions.created
+            // }
+          }
+          this.selectStatus = this.statuses[0]
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
 
     getStatuses() {
       axios.get('/statuses')
-          .then(response => {
-            if (response.data) {
-              this.statuses = response.data
-              // console.log(response.data)
-            }
-            this.selectStatus = this.statuses[0]
-          })
-          .catch(error => {
-            console.log(error)
-          })
+        .then(response => {
+          if (response.data) {
+            this.statuses = response.data
+            // console.log(response.data)
+          }
+          this.selectStatus = this.statuses[0]
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     getParentCategories() {
       axios.get('/parent_categories')
-          .then(response => {
-            if (response.data) {
-              this.categories = response.data
-            }
-          })
-          .catch(error => {
-            console.log(error)
-          })
+        .then(response => {
+          if (response.data) {
+            this.categories = response.data
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     getSubCategoriesAndConditions() {
       axios.post('/child_categories_conditions', {
         category: this.addItemCategory
       })
-          .then(response => {
-            if (response.data) {
-              this.subCategories = response.data.categories
-              this.conditions = response.data.conditions
-            }
-          })
-          .catch(error => {
-            console.log(error)
-          })
+        .then(response => {
+          if (response.data) {
+            this.subCategories = response.data.categories
+            this.conditions = response.data.conditions
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
       // console.log(this.addItemCategory)
 
     },
     getWarehouse() {
       axios.get('/warehouses')
-          .then(response => {
-            if (response.data) {
-              this.warehouses = response.data
-            }
-          })
-          .catch(error => {
-            console.log(error)
-          })
+        .then(response => {
+          if (response.data) {
+            this.warehouses = response.data
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
   },
 
   mounted() {
     // todo: comment
-    if (!window.localStorage.user_roles.includes('Administrator')){
+    if (!window.localStorage.user_roles.includes('Administrator')) {
       this.$router.push('/pageNotFound')
     }
     document.title = 'Admin Auctions - Auction House'

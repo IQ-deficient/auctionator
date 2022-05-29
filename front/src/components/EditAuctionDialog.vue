@@ -6,7 +6,7 @@
           max-width="60%"
           persistent
       >
-        <template v-slot:default="dialog">
+        <template>
           <v-card color="#2c3e50">
             <v-card-text>
               <div class="pa-1">
@@ -288,7 +288,7 @@
             <v-card-actions class="justify-end">
               <v-btn
                   text
-                  @click="dialog.value = false"
+                  @click="$emit('close')"
                   dark
               >Close
               </v-btn>
