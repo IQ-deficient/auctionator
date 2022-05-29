@@ -311,130 +311,162 @@
                           </v-col>
                         </v-row>
                         <v-row>
-                          <v-col cols="12" sm="3">
+<!--                           KURACINASDAKIDSADA-->
+                          <v-col cols="6" sm="6">
                             <validation-provider>
-                              <v-menu
-                                ref="menu1"
-                                v-model="menu1"
-                                :close-on-content-click="false"
-                                transition="scale-transition"
-                                offset-y
-                                max-width="290px"
-                                min-width="auto"
+                              <v-datetime-picker
+                                v-model="datetime1"
+                                label="Pick start date and time"
+                                prepend-icon="mdi-calendar"
+                                :text-field-props="textFieldProps"
+                                :time-picker-props="timeProps"
+                                time-format="HH:mm:ss"
                               >
-                                <template v-slot:activator="{ on, attrs }">
-                                  <v-text-field
-                                    v-model="dateFormatted"
-                                    label="Start date"
-                                    prepend-icon="mdi-calendar"
-                                    v-bind="attrs"
-                                    @blur="date = parseDate(dateFormatted)"
-                                    v-on="on"
-                                  ></v-text-field>
+                                <template slot="dateIcon">
+                                  <v-icon>mdi-calendar</v-icon>
                                 </template>
-                                <v-date-picker
-                                  v-model="date"
-                                  no-title
-                                  @input="menu1 = false"
-                                ></v-date-picker>
-                              </v-menu>
+                                <template slot="timeIcon">
+                                  <v-icon>mdi-clock</v-icon>
+                                </template>
+                              </v-datetime-picker>
+                              <!--                              <v-menu-->
+                              <!--                                ref="menu1"-->
+                              <!--                                v-model="menu1"-->
+                              <!--                                :close-on-content-click="false"-->
+                              <!--                                transition="scale-transition"-->
+                              <!--                                offset-y-->
+                              <!--                                max-width="290px"-->
+                              <!--                                min-width="auto"-->
+                              <!--                              >-->
+                              <!--                                <template v-slot:activator="{ on, attrs }">-->
+                              <!--                                  <v-text-field-->
+                              <!--                                    v-model="dateFormatted"-->
+                              <!--                                    label="Start date"-->
+                              <!--                                    prepend-icon="mdi-calendar"-->
+                              <!--                                    v-bind="attrs"-->
+                              <!--                                    @blur="date = parseDate(dateFormatted)"-->
+                              <!--                                    v-on="on"-->
+                              <!--                                  ></v-text-field>-->
+                              <!--                                </template>-->
+                              <!--                                <v-date-picker-->
+                              <!--                                  v-model="date"-->
+                              <!--                                  no-title-->
+                              <!--                                  @input="menu1 = false"-->
+                              <!--                                ></v-date-picker>-->
+                              <!--                              </v-menu>-->
                             </validation-provider>
                           </v-col>
-                          <v-col cols="12" sm="2">
-                            <v-menu
-                              ref="menu"
-                              v-model="menu2"
-                              :close-on-content-click="false"
-                              :nudge-right="40"
-                              :return-value.sync="time"
-                              transition="scale-transition"
-                              offset-y
-                              max-width="290px"
-                              min-width="290px"
-                            >
-                              <template v-slot:activator="{ on, attrs }">
-                                <v-text-field
-                                  v-model="time"
-                                  label="Start time"
-                                  prepend-icon="mdi-clock-time-four-outline"
-                                  readonly
-                                  v-bind="attrs"
-                                  v-on="on"
-                                ></v-text-field>
-                              </template>
-                              <v-time-picker
-                                v-if="menu2"
-                                v-model="time"
-                                full-width
-                                @click:minute="$refs.menu.save(time)"
-                              ></v-time-picker>
-                            </v-menu>
+                          <!--                          <v-col cols="12" sm="2">-->
+                          <!--                            <v-menu-->
+                          <!--                              ref="menu"-->
+                          <!--                              v-model="menu2"-->
+                          <!--                              :close-on-content-click="false"-->
+                          <!--                              :nudge-right="40"-->
+                          <!--                              :return-value.sync="time"-->
+                          <!--                              transition="scale-transition"-->
+                          <!--                              offset-y-->
+                          <!--                              max-width="290px"-->
+                          <!--                              min-width="290px"-->
+                          <!--                            >-->
+                          <!--                              <template v-slot:activator="{ on, attrs }">-->
+                          <!--                                <v-text-field-->
+                          <!--                                  v-model="time"-->
+                          <!--                                  label="Start time"-->
+                          <!--                                  prepend-icon="mdi-clock-time-four-outline"-->
+                          <!--                                  readonly-->
+                          <!--                                  v-bind="attrs"-->
+                          <!--                                  v-on="on"-->
+                          <!--                                ></v-text-field>-->
+                          <!--                              </template>-->
+                          <!--                              <v-time-picker-->
+                          <!--                                v-if="menu2"-->
+                          <!--                                v-model="time"-->
+                          <!--                                full-width-->
+                          <!--                                @click:minute="$refs.menu.save(time)"-->
+                          <!--                              ></v-time-picker>-->
+                          <!--                            </v-menu>-->
+                          <!--                          </v-col>-->
+<!--                          <v-spacer></v-spacer>-->
+<!--                          <v-divider-->
+<!--                            class="mx-4"-->
+<!--                            inset-->
+<!--                            vertical-->
+<!--                          ></v-divider>-->
+<!--                          <v-spacer></v-spacer>-->
+                          <v-col cols="6" sm="6">
+                            <validation-provider>
+                              <v-datetime-picker
+                                v-model="datetime2"
+                                label="Pick start date and time"
+                                prepend-icon="mdi-calendar"
+                                :text-field-props="textFieldProps"
+                                :time-picker-props="timeProps"
+                                time-format="HH:mm:ss"
+                              >
+                                <template slot="dateIcon">
+                                  <v-icon>mdi-calendar</v-icon>
+                                </template>
+                                <template slot="timeIcon">
+                                  <v-icon>mdi-clock</v-icon>
+                                </template>
+                              </v-datetime-picker>
+                              <!--                            <v-menu-->
+                              <!--                              ref="menu1"-->
+                              <!--                              v-model="menu1"-->
+                              <!--                              :close-on-content-click="false"-->
+                              <!--                              transition="scale-transition"-->
+                              <!--                              offset-y-->
+                              <!--                              max-width="290px"-->
+                              <!--                              min-width="auto"-->
+                              <!--                            >-->
+                              <!--                              <template v-slot:activator="{ on, attrs }">-->
+                              <!--                                <v-text-field-->
+                              <!--                                  v-model="dateFormatted"-->
+                              <!--                                  label="End date"-->
+                              <!--                                  prepend-icon="mdi-calendar"-->
+                              <!--                                  v-bind="attrs"-->
+                              <!--                                  @blur="date = parseDate(dateFormatted)"-->
+                              <!--                                  v-on="on"-->
+                              <!--                                ></v-text-field>-->
+                              <!--                              </template>-->
+                              <!--                              <v-date-picker-->
+                              <!--                                v-model="date"-->
+                              <!--                                no-title-->
+                              <!--                                @input="menu1 = false"-->
+                              <!--                              ></v-date-picker>-->
+                              <!--                            </v-menu>-->
+                            </validation-provider>
                           </v-col>
-                          <v-spacer></v-spacer>
-                          <v-divider
-                            class="mx-4"
-                            inset
-                            vertical
-                          ></v-divider>
-                          <v-spacer></v-spacer>
-
-                          <v-col cols="12" sm="3">
-                            <v-menu
-                              ref="menu1"
-                              v-model="menu1"
-                              :close-on-content-click="false"
-                              transition="scale-transition"
-                              offset-y
-                              max-width="290px"
-                              min-width="auto"
-                            >
-                              <template v-slot:activator="{ on, attrs }">
-                                <v-text-field
-                                  v-model="dateFormatted"
-                                  label="End date"
-                                  prepend-icon="mdi-calendar"
-                                  v-bind="attrs"
-                                  @blur="date = parseDate(dateFormatted)"
-                                  v-on="on"
-                                ></v-text-field>
-                              </template>
-                              <v-date-picker
-                                v-model="date"
-                                no-title
-                                @input="menu1 = false"
-                              ></v-date-picker>
-                            </v-menu>
-                          </v-col>
-                          <v-col cols="12" sm="2">
-                            <v-menu
-                              ref="menu"
-                              v-model="menu2"
-                              :close-on-content-click="false"
-                              :nudge-right="40"
-                              :return-value.sync="time"
-                              transition="scale-transition"
-                              offset-y
-                              max-width="290px"
-                              min-width="290px"
-                            >
-                              <template v-slot:activator="{ on, attrs }">
-                                <v-text-field
-                                  v-model="time"
-                                  label="End time"
-                                  prepend-icon="mdi-clock-time-four-outline"
-                                  readonly
-                                  v-bind="attrs"
-                                  v-on="on"
-                                ></v-text-field>
-                              </template>
-                              <v-time-picker
-                                v-if="menu2"
-                                v-model="time"
-                                full-width
-                                @click:minute="$refs.menu.save(time)"
-                              ></v-time-picker>
-                            </v-menu>
-                          </v-col>
+                          <!--                          <v-col cols="12" sm="2">-->
+                          <!--                            <v-menu-->
+                          <!--                              ref="menu"-->
+                          <!--                              v-model="menu2"-->
+                          <!--                              :close-on-content-click="false"-->
+                          <!--                              :nudge-right="40"-->
+                          <!--                              :return-value.sync="time"-->
+                          <!--                              transition="scale-transition"-->
+                          <!--                              offset-y-->
+                          <!--                              max-width="290px"-->
+                          <!--                              min-width="290px"-->
+                          <!--                            >-->
+                          <!--                              <template v-slot:activator="{ on, attrs }">-->
+                          <!--                                <v-text-field-->
+                          <!--                                  v-model="time"-->
+                          <!--                                  label="End time"-->
+                          <!--                                  prepend-icon="mdi-clock-time-four-outline"-->
+                          <!--                                  readonly-->
+                          <!--                                  v-bind="attrs"-->
+                          <!--                                  v-on="on"-->
+                          <!--                                ></v-text-field>-->
+                          <!--                              </template>-->
+                          <!--                              <v-time-picker-->
+                          <!--                                v-if="menu2"-->
+                          <!--                                v-model="time"-->
+                          <!--                                full-width-->
+                          <!--                                @click:minute="$refs.menu.save(time)"-->
+                          <!--                              ></v-time-picker>-->
+                          <!--                            </v-menu>-->
+                          <!--                          </v-col>-->
                         </v-row>
                         <v-row>
                           <v-col cols="12" sm="12">
@@ -601,6 +633,15 @@ export default {
     editAuctionDialog: false,
     chosenAuction: '',
     tableData: [],
+    textFieldProps: {
+      prependIcon: 'mdi-calendar'
+    },
+    timeProps: {
+      useSeconds: true,
+      ampmInTitle: true
+    },
+    datetime1: new Date(),
+    datetime2: new Date(),
   }),
 
   // computed: {

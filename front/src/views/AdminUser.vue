@@ -2,6 +2,7 @@
   <div>
     <v-data-table
         style="width: 95%; margin: 0 auto; padding-top: 6px"
+        :loading="dataLoading"
         :headers="headers"
         :items="tableData"
         :search="search"
@@ -43,7 +44,6 @@
                   :items="roles"
                   item-text="name"
                   label="Roles"
-                  clearable
                   @change="updateTableData()"
               ></v-select>
             </v-col>
@@ -64,7 +64,7 @@
                     v-on="on"
                 >
                   <v-icon left>mdi-account-multiple-plus-outline</v-icon>
-                  Create user
+                  Create employee
                 </v-btn>
               </template>
               <template v-slot:default="dialog">
@@ -338,8 +338,10 @@
     <edit-user
         v-if="editUserDialogue"
         @close="editUserDialogue = false"
+        :edit-type="selectRole"
         :show-dialog="editUserDialogue"
         :user="chosenUser"
+        :employee-roles="employeeRoles"
     />
   </div>
 </template>
@@ -439,7 +441,9 @@ export default {
     employee_roles: [
         'Manager',
         'Auctioneer'
-    ]
+    ],
+    dataLoading: false,
+    employeeRoles: [],
   }),
 
   // computed: {
@@ -462,10 +466,10 @@ export default {
     this.getUsers()
     // this.getRoles()
     this.getCountries()
+    this.getEmployeeRoles()
   },
 
   methods: {
-
     updateTableData(){
       if (this.selectRole == 'Clients'){
         this.tableData = this.users.clients
@@ -490,6 +494,7 @@ export default {
     },
 
     getUsers() {
+      this.dataLoading = true;
       this.users = []
       axios.get('/users')
           .then(response => {
@@ -498,9 +503,11 @@ export default {
                 this.tableData = response.data.clients
             }
             this.selectRole = this.roles[0]
+            this.dataLoading = false;
           })
           .catch(error => {
             console.log(error)
+            this.dataLoading = false;
           })
     },
 
@@ -516,6 +523,18 @@ export default {
           .catch(error => {
             console.log(error)
           })
+    },
+
+    getEmployeeRoles() {
+      axios.get('/employees')
+        .then(response => {
+          if (response.data) {
+            this.employeeRoles = response.data
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
 
     getCountries() {

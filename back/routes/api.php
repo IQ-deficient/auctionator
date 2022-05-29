@@ -108,6 +108,7 @@ Route::group([
     // Roles
     Route::get('/roles', [RoleController::class, 'index']);
     Route::get('/auth_roles', [RoleController::class, 'getAuthUserRoles']);
+    Route::get('/user_roles/{user}', [RoleController::class, 'getUserRoles']);
 
     // Statuses
     Route::get('/statuses', [StatusController::class, 'index']);
@@ -119,7 +120,6 @@ Route::group([
     Route::put('/user/{user}', [UserController::class, 'update']);     // update profile auth user
     Route::put('/manage/{user}', [UserController::class, 'manage']);     // manage user profiles
     Route::put('/password/{user}', [UserController::class, 'changePassword']);       // update password
-
     Route::delete('/user/{user}', [UserController::class, 'destroy']);      // deactivate user
 
     // UserRoles
