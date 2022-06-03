@@ -38,6 +38,15 @@ class RoleController extends Controller
     }
 
     /**
+     * Return roles for a given user.
+     * @return array
+     */
+    public function getUserRoles(User $user)
+    {
+        return User::getUserRoles($user->username);
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return Response
