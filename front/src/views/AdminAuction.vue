@@ -1,49 +1,50 @@
 <template>
   <div>
     <v-data-table
-      style="width: 95%; margin: 0 auto; padding-top: 6px"
-      :headers="headers"
-      :items="tableData"
-      :search="search"
-      sort-by="title"
-      class="elevation-1; rounded-card; mt-10"
+        :loading="dataLoading"
+        style="width: 95%; margin: 0 auto; padding-top: 6px"
+        :headers="headers"
+        :items="tableData"
+        :search="search"
+        sort-by="title"
+        class="elevation-1; rounded-card; mt-10"
     >
 
       <template v-slot:top>
         <v-toolbar
-          flat
-          class="mb-8"
+            flat
+            class="mb-8"
         >
           <v-toolbar-title><h2>Auctions</h2></v-toolbar-title>
           <v-divider
-            class="mx-4"
-            inset
-            vertical
+              class="mx-4"
+              inset
+              vertical
           ></v-divider>
           <v-row>
             <v-col cols="12" md="4">
               <v-text-field
-                v-model="search"
-                append-icon="mdi-magnify"
-                label="Search"
-                single-line
-                hide-details
+                  v-model="search"
+                  append-icon="mdi-magnify"
+                  label="Search"
+                  single-line
+                  hide-details
               ></v-text-field>
             </v-col>
             <v-divider
-              class="mx-4"
-              inset
-              vertical
+                class="mx-4"
+                inset
+                vertical
             ></v-divider>
             <v-col cols="12" md="4">
               <v-select
-                single-line
-                hide-details
-                v-model="selectStatus"
-                :items="statuses"
-                item-text="status"
-                label="Status"
-                @change="updateTableData()"
+                  single-line
+                  hide-details
+                  v-model="selectStatus"
+                  :items="statuses"
+                  item-text="status"
+                  label="Status"
+                  @change="updateTableData()"
               ></v-select>
             </v-col>
           </v-row>
@@ -51,16 +52,16 @@
           <v-spacer></v-spacer>
           <validation-observer>
             <v-dialog
-              v-model="dialog"
-              max-width="60%"
+                v-model="modal"
+                max-width="60%"
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
-                  color="primary"
-                  dark
-                  class="mb-2"
-                  v-bind="attrs"
-                  v-on="on"
+                    color="primary"
+                    dark
+                    class="mb-2"
+                    v-bind="attrs"
+                    v-on="on"
                 >
                   <v-icon left>mdi-plus-circle-multiple-outline</v-icon>
                   Create auction
@@ -86,71 +87,71 @@
                       </v-toolbar-title>
                       <v-card class="pa-4">
                         <validation-provider
-                          v-slot="{ errors }"
-                          name="Title"
-                          rules="required|min:3|max:64"
-                          clearable
+                            v-slot="{ errors }"
+                            name="Title"
+                            rules="required|min:3|max:64"
+                            clearable
                         >
                           <v-text-field
-                            v-model="addItemTitle"
-                            :error-messages="errors"
-                            label="Item title"
-                            required
-                            clearable
+                              v-model="addItemTitle"
+                              :error-messages="errors"
+                              label="Item title"
+                              required
+                              clearable
                           >
                           </v-text-field>
                         </validation-provider>
                         <validation-provider
-                          v-slot="{ errors }"
-                          name="Description"
-                          clearable
-                          rules="required|min:3|max:500"
+                            v-slot="{ errors }"
+                            name="Description"
+                            clearable
+                            rules="required|min:3|max:500"
                         >
                           <v-textarea
-                            v-model="addItemDescription"
-                            :error-messages="errors"
-                            :counter="500"
-                            label="Item description"
-                            auto-grow
-                            solo
-                            clearable
+                              v-model="addItemDescription"
+                              :error-messages="errors"
+                              :counter="500"
+                              label="Item description"
+                              auto-grow
+                              solo
+                              clearable
                           >
                           </v-textarea>
                         </validation-provider>
                         <v-row>
                           <v-col cols="12" sm="6">
                             <validation-provider
-                              v-slot="{ errors }"
-                              name="Warehouse information"
-                              rules="required"
+                                v-slot="{ errors }"
+                                name="Warehouse information"
+                                rules="required"
                             >
                               <v-select
-                                v-model="addItemWarehouse"
-                                :error-messages="errors"
-                                label="Warehouse"
-                                :items="warehouses"
-                                item-text="name"
-                                required
-                                clearable
+                                  v-model="addItemWarehouse"
+                                  :error-messages="errors"
+                                  label="Warehouse"
+                                  :items="warehouses"
+                                  item-text="id"
+                                  required
+                                  clearable
                               >
                               </v-select>
                             </validation-provider>
                           </v-col>
                           <v-col cols="12" sm="6">
                             <validation-provider
-                              v-slot="{ errors }"
-                              name="Item category"
-                              rules="required"
+                                v-slot="{ errors }"
+                                name="Item category"
+                                rules="required"
                             >
                               <v-select
-                                v-model="addItemCategory"
-                                :error-messages="errors"
-                                label="Category"
-                                :items="categories"
-                                item-text="name"
-                                required
-                                clearable
-                                @change="getSubCategoriesAndConditions()"
+                                  v-model="addItemCategory"
+                                  :error-messages="errors"
+                                  label="Category"
+                                  :items="categories"
+                                  item-text="name"
+                                  required
+                                  clearable
+                                  @change="getSubCategoriesAndConditions()"
                               >
                               </v-select>
                             </validation-provider>
@@ -159,51 +160,51 @@
                         <v-row>
                           <v-col cols="12" sm="7">
                             <validation-provider
-                              v-slot="{ errors }"
-                              name="Item subcategory"
-                              rules="required"
+                                v-slot="{ errors }"
+                                name="Item subcategory"
+                                rules="required"
                             >
                               <v-select
-                                v-model="addItemSubCategory"
-                                :error-messages="errors"
-                                label="Subcategory"
-                                :items="subCategories"
-                                item-text="name"
-                                required
-                                clearable
-                                :disabled="!addItemCategory"
+                                  v-model="addItemSubCategory"
+                                  :error-messages="errors"
+                                  label="Subcategory"
+                                  :items="subCategories"
+                                  item-text="name"
+                                  required
+                                  clearable
+                                  :disabled="!addItemCategory"
                               >
                               </v-select>
                             </validation-provider>
                           </v-col>
                           <v-col cols="12" sm="5">
                             <validation-provider
-                              v-slot="{ errors }"
-                              name="Item condition"
-                              rules="required"
+                                v-slot="{ errors }"
+                                name="Item condition"
+                                rules="required"
                             >
                               <v-select
-                                v-model="addItemCondition"
-                                :error-messages="errors"
-                                label="Condition"
-                                :items="conditions"
-                                item-text="condition"
-                                required
-                                clearable
-                                :disabled="!addItemCategory"
+                                  v-model="addItemCondition"
+                                  :error-messages="errors"
+                                  label="Condition"
+                                  :items="conditions"
+                                  item-text="condition"
+                                  required
+                                  clearable
+                                  :disabled="!addItemCategory"
                               >
                               </v-select>
                             </validation-provider>
                           </v-col>
                         </v-row>
                         <v-dialog
-                          transition="scale-transition"
-                          max-width="35%"
+                            transition="scale-transition"
+                            max-width="35%"
                         >
                           <template v-slot:activator="{ on, attrs }">
                             <a
-                              v-bind="attrs"
-                              v-on="on"
+                                v-bind="attrs"
+                                v-on="on"
                             >
                               <v-icon large>
                                 mdi-pencil-outline
@@ -217,10 +218,10 @@
                                   <v-row no-gutters justify="center" align="center">
                                     <v-col cols="8">
                                       <v-file-input
-                                        show-size
-                                        label="Select Image"
-                                        accept="image/*"
-                                        @change="selectImage"
+                                          show-size
+                                          label="Select Image"
+                                          accept="image/*"
+                                          @change="selectImage"
                                       ></v-file-input>
                                     </v-col>
                                     <v-col cols="4" class="pl-2">
@@ -233,10 +234,10 @@
                                   <div v-if="progress">
                                     <div>
                                       <v-progress-linear
-                                        v-model="progress"
-                                        color="light-blue"
-                                        height="25"
-                                        reactive
+                                          v-model="progress"
+                                          color="light-blue"
+                                          height="25"
+                                          reactive
                                       >
                                         <strong>{{ progress }} %</strong>
                                       </v-progress-linear>
@@ -267,8 +268,8 @@
                               </v-card-text>
                               <v-card-actions class="justify-end">
                                 <v-btn
-                                  text
-                                  @click="dialog.value = false"
+                                    text
+                                    @click="dialog.value = false"
                                 >Close
                                 </v-btn>
                               </v-card-actions>
@@ -294,33 +295,49 @@
                         <v-row>
                           <v-col cols="12" sm="12">
                             <validation-provider
-                              v-slot="{ errors }"
-                              name="title"
-                              rules="required|min:3|max:64"
-                              clearable
+                                v-slot="{ errors }"
+                                name="title"
+                                rules="required|min:3|max:64"
+                                clearable
                             >
                               <v-text-field
-                                v-model="addAuctionTitle"
-                                :error-messages="errors"
-                                label="Auction title"
-                                required
+                                  v-model="addAuctionTitle"
+                                  :error-messages="errors"
+                                  label="Auction title"
+                                  required
+                                  clearable
+                              >
+                              </v-text-field>
+                            </validation-provider>
+                          </v-col>
+                          <v-col cols="12" sm="12">
+                            <validation-provider
+                                v-slot="{ errors }"
+                                name="Seller"
+                                rules="required|min:3|max:64"
                                 clearable
+                            >
+                              <v-text-field
+                                  v-model="addAuctionSeller"
+                                  :error-messages="errors"
+                                  label="Seller"
+                                  required
+                                  clearable
                               >
                               </v-text-field>
                             </validation-provider>
                           </v-col>
                         </v-row>
                         <v-row>
-<!--                           KURACINASDAKIDSADA-->
                           <v-col cols="6" sm="6">
                             <validation-provider>
                               <v-datetime-picker
-                                v-model="datetime1"
-                                label="Pick start date and time"
-                                prepend-icon="mdi-calendar"
-                                :text-field-props="textFieldProps"
-                                :time-picker-props="timeProps"
-                                time-format="HH:mm:ss"
+                                  v-model="addStartDate"
+                                  label="Pick start date and time"
+                                  prepend-icon="mdi-calendar"
+                                  :text-field-props="textFieldProps"
+                                  :time-picker-props="timeProps"
+                                  time-format="Y-m-d H:i:s"
                               >
                                 <template slot="dateIcon">
                                   <v-icon>mdi-calendar</v-icon>
@@ -386,22 +403,22 @@
                           <!--                              ></v-time-picker>-->
                           <!--                            </v-menu>-->
                           <!--                          </v-col>-->
-<!--                          <v-spacer></v-spacer>-->
-<!--                          <v-divider-->
-<!--                            class="mx-4"-->
-<!--                            inset-->
-<!--                            vertical-->
-<!--                          ></v-divider>-->
-<!--                          <v-spacer></v-spacer>-->
+                          <!--                          <v-spacer></v-spacer>-->
+                          <!--                          <v-divider-->
+                          <!--                            class="mx-4"-->
+                          <!--                            inset-->
+                          <!--                            vertical-->
+                          <!--                          ></v-divider>-->
+                          <!--                          <v-spacer></v-spacer>-->
                           <v-col cols="6" sm="6">
                             <validation-provider>
                               <v-datetime-picker
-                                v-model="datetime2"
-                                label="Pick start date and time"
-                                prepend-icon="mdi-calendar"
-                                :text-field-props="textFieldProps"
-                                :time-picker-props="timeProps"
-                                time-format="HH:mm:ss"
+                                  v-model="addEndDate"
+                                  label="Pick start date and time"
+                                  prepend-icon="mdi-calendar"
+                                  :text-field-props="textFieldProps"
+                                  :time-picker-props="timeProps"
+                                  time-format="Y-m-d H:i:s"
                               >
                                 <template slot="dateIcon">
                                   <v-icon>mdi-calendar</v-icon>
@@ -471,17 +488,17 @@
                         <v-row>
                           <v-col cols="12" sm="12">
                             <validation-provider
-                              v-slot="{ errors }"
-                              name="buyout"
-                              rules="required|min_value:1"
-                              clearable
+                                v-slot="{ errors }"
+                                name="buyout"
+                                rules="required|min_value:1"
+                                clearable
                             >
                               <v-text-field
-                                v-model="addAuctionBuyout"
-                                :error-messages="errors"
-                                label="Buyout"
-                                required
-                                clearable
+                                  v-model="addAuctionBuyout"
+                                  :error-messages="errors"
+                                  label="Buyout"
+                                  required
+                                  clearable
                               >
                               </v-text-field>
                             </validation-provider>
@@ -494,8 +511,8 @@
                            type="submit"
                            color="primary"
                            class="mt-6"
-                           :disabled="!addItemTitle || !addItemDescription || !addItemCategory || !addItemSubCategory ||
-                                    !addItemCondition || !addItemWarehouse || !addAuctionTitle || !addAuctionBuyout"
+
+                           @click="createAuction()"
                     >
                       <v-icon left class="mr-1">mdi-pencil-plus-outline</v-icon>
                       Post
@@ -503,9 +520,9 @@
                   </v-card-text>
                   <v-card-actions class="justify-end">
                     <v-btn
-                      text
-                      @click="dialog.value = false"
-                      dark
+                        text
+                        @click="dialog.value = false"
+                        dark
                     >Close
                     </v-btn>
                   </v-card-actions>
@@ -529,8 +546,8 @@
       </template>
       <template v-slot:item.actions="{ item }">
         <v-icon
-          class="mr-2"
-          @click="editAuction(item)"
+            class="mr-2"
+            @click="editAuction(item)"
         >
           mdi-pencil
         </v-icon>
@@ -542,10 +559,10 @@
       </template>
     </v-data-table>
     <edit-auction
-      v-if="editAuctionDialog"
-      @close="editAuctionDialog = false"
-      :show-dialog="editAuctionDialog"
-      :auction="chosenAuction"
+        v-if="editAuctionDialog"
+        @close="editAuctionDialog = false"
+        :show-dialog="editAuctionDialog"
+        :auction="chosenAuction"
     />
   </div>
 </template>
@@ -627,6 +644,7 @@ export default {
     message: "",
     imageInfos: [],
     addAuctionTitle: '',
+    addAuctionSeller: '',
     addAuctionBuyout: '',
     // closeDelete: '',
     // deleteItemConfirm: '',
@@ -640,8 +658,9 @@ export default {
       useSeconds: true,
       ampmInTitle: true
     },
-    datetime1: new Date(),
-    datetime2: new Date(),
+    addStartDate: new Date(),
+    addEndDate: new Date(),
+    dataLoading: false,
   }),
 
   // computed: {
@@ -683,7 +702,6 @@ export default {
         this.tableData = this.auctions
       }
     },
-
     submit() {
       this.$refs.observer.validate()
     },
@@ -712,88 +730,131 @@ export default {
       UploadService.upload(this.currentImage, (event) => {
         this.progress = Math.round((100 * event.loaded) / event.total);
       })
-        .then((response) => {
-          this.message = response.data.message;
-          return UploadService.getFiles();
-        })
-        .then((images) => {
-          this.imageInfos = images.data;
-        })
-        .catch((err) => {
-          this.progress = 0;
-          this.message = "Could not upload the image! " + err;
-          this.currentImage = undefined;
-        });
+          .then((response) => {
+            this.message = response.data.message;
+            return UploadService.getFiles();
+          })
+          .then((images) => {
+            this.imageInfos = images.data;
+          })
+          .catch((err) => {
+            this.progress = 0;
+            this.message = "Could not upload the image! " + err;
+            this.currentImage = undefined;
+          });
     },
-
     getAuctions() {
+      this.dataLoading = true;
       this.auctions = []
       axios.get('/auctions')
-        .then(response => {
-          if (response.data) {
-            // for (let i = 0; i < response.data.length; i++) {
-            // console.log(response.data)
-            this.auctions = response.data
-            this.tableData = this.auctions.created
-            // }
-          }
-          this.selectStatus = this.statuses[0]
-        })
-        .catch(error => {
-          console.log(error)
-        })
+          .then(response => {
+            if (response.data) {
+              // for (let i = 0; i < response.data.length; i++) {
+              // console.log(response.data)
+              this.auctions = response.data
+              this.tableData = this.auctions.created
+              // }
+            }
+            this.selectStatus = this.statuses[0]
+            this.dataLoading = false;
+          })
+          .catch(error => {
+            console.log(error)
+            this.dataLoading = false;
+          })
     },
-
     getStatuses() {
+      this.dataLoading = true;
       axios.get('/statuses')
-        .then(response => {
-          if (response.data) {
-            this.statuses = response.data
-            // console.log(response.data)
-          }
-          this.selectStatus = this.statuses[0]
-        })
-        .catch(error => {
-          console.log(error)
-        })
+          .then(response => {
+            if (response.data) {
+              this.statuses = response.data
+              // console.log(response.data)
+            }
+            this.selectStatus = this.statuses[0]
+            this.dataLoading = false;
+          })
+          .catch(error => {
+            console.log(error)
+            this.dataLoading = false;
+          })
     },
     getParentCategories() {
+      this.dataLoading = true;
       axios.get('/parent_categories')
-        .then(response => {
-          if (response.data) {
-            this.categories = response.data
-          }
-        })
-        .catch(error => {
-          console.log(error)
-        })
+          .then(response => {
+            if (response.data) {
+              this.categories = response.data
+            }
+            this.dataLoading = false;
+          })
+          .catch(error => {
+            console.log(error)
+            this.dataLoading = false;
+          })
     },
     getSubCategoriesAndConditions() {
+      this.dataLoading = true;
       axios.post('/child_categories_conditions', {
         category: this.addItemCategory
       })
-        .then(response => {
-          if (response.data) {
-            this.subCategories = response.data.categories
-            this.conditions = response.data.conditions
-          }
-        })
-        .catch(error => {
-          console.log(error)
-        })
+          .then(response => {
+            if (response.data) {
+              this.subCategories = response.data.categories
+              this.conditions = response.data.conditions
+            }
+            this.dataLoading = false;
+          })
+          .catch(error => {
+            console.log(error)
+            this.dataLoading = false;
+          })
       // console.log(this.addItemCategory)
 
     },
     getWarehouse() {
-      axios.get('/warehouses')
-        .then(response => {
-          if (response.data) {
-            this.warehouses = response.data
-          }
-        })
-        .catch(error => {
-          console.log(error)
-        })
+      this.dataLoading = true;
+      axios.get('/active_warehouses')
+          .then(response => {
+            if (response.data) {
+              this.warehouses = response.data
+              console.log(response.data)
+            }
+            this.dataLoading = false;
+          })
+          .catch(error => {
+            console.log(error)
+            this.dataLoading = false;
+          })
+    },
+    createAuction() {
+      console.log(this.addItemWarehouse.id)
+      axios.post('/auction', {
+        title_item: this.addItemTitle,
+        description: this.addItemDescription,
+        category: this.addItemSubCategory,
+        condition: this.addItemCondition,
+        warehouse_id: this.addItemWarehouse,
+
+        title: this.addAuctionTitle,
+        seller: this.addAuctionSeller,
+        start_datetime: this.addStartDate.toISOString().replace('Z', ' ').replace('T', ' '),
+        end_datetime: this.addEndDate.toISOString().replace('Z', ' ').replace('T', ' '),
+        buyout: this.addAuctionBuyout,
+      })
+          .then(response => {
+                if (response) {
+                  window.alert('bravo kretenu nemas sweetalert')
+                  this.loading = false;
+                  this.modal = false
+                }
+              }
+          )
+          .catch(error => {
+            console.log(error)
+            this.loading = false
+            this.error = error.response.data.message;
+          })
     },
   },
 

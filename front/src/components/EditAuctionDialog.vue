@@ -33,6 +33,7 @@
                   >
                     <v-text-field
                         v-model="addItemTitle"
+                        :loading="dataLoading"
                         :error-messages="errors"
                         label="Item title"
                         required
@@ -48,6 +49,7 @@
                   >
                     <v-textarea
                         v-model="addItemDescription"
+                        :loading="dataLoading"
                         :error-messages="errors"
                         :counter="500"
                         label="Item description"
@@ -66,6 +68,7 @@
                       >
                         <v-select
                             v-model="addItemWarehouse"
+                            :loading="dataLoading"
                             :error-messages="errors"
                             label="Warehouse"
                             :items="warehouses"
@@ -85,6 +88,7 @@
                       >
                         <v-select
                             v-model="addItemCategory"
+                            :loading="categoryLoading"
                             :error-messages="errors"
                             label="Category"
                             :items="categories"
@@ -106,6 +110,7 @@
                       >
                         <v-select
                             v-model="addItemSubCategory"
+                            :loading="categoryLoading"
                             :error-messages="errors"
                             label="Subcategory"
                             :items="subCategories"
@@ -125,6 +130,7 @@
                       >
                         <v-select
                             v-model="addItemCondition"
+                            :loading="categoryLoading"
                             :error-messages="errors"
                             label="Condition"
                             :items="conditions"
@@ -242,6 +248,7 @@
                       >
                         <v-text-field
                             v-model="addAuctionTitle"
+                            :loading="dataLoading"
                             :error-messages="errors"
                             label="Auction title"
                             required
@@ -261,6 +268,7 @@
                       >
                         <v-text-field
                             v-model="addAuctionBuyout"
+                            :loading="dataLoading"
                             :error-messages="errors"
                             label="Buyout"
                             required
@@ -368,6 +376,8 @@ export default {
     conditions: [],
     addAuctionTitle: '',
     addAuctionBuyout: '',
+    dataLoading: true,
+    categoryLoading: true
   }),
   created() {
     this.getParentCategories();
@@ -384,18 +394,22 @@ export default {
   methods: {
 
     getParentCategories() {
+      this.categoryLoading = true;
       axios.get('/parent_categories')
           .then(response => {
             if (response.data) {
               this.categories = response.data
+              this.categoryLoading = false;
             }
           })
           .catch(error => {
             console.log(error)
+            this.categoryLoading = false;
           })
     },
 
     getSubCategoriesAndConditions() {
+      this.categoryLoading = true;
       axios.post('/child_categories_conditions', {
         category: this.addItemCategory
       })
@@ -404,22 +418,27 @@ export default {
               this.subCategories = response.data.categories
               this.conditions = response.data.conditions
             }
+            this.categoryLoading = false;
           })
           .catch(error => {
             console.log(error)
+            this.categoryLoading = false;
           })
       console.log(this.addItemCategory)
     },
 
     getWarehouse() {
+      this.dataLoading = true;
       axios.get('/warehouses')
           .then(response => {
             if (response.data) {
               this.warehouses = response.data
             }
+            this.dataLoading = false;
           })
           .catch(error => {
             console.log(error)
+            this.dataLoading = false;
           })
     },
 

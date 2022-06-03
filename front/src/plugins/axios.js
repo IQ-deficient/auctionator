@@ -2,6 +2,7 @@
 
 import Vue from 'vue';
 import axios from "axios";
+// import Swal from "sweetalert2";
 
 // Full config:  https://github.com/axios/axios#request-config
 axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || 'http://127.0.0.1:8000/api';
@@ -13,7 +14,7 @@ let config = {
     // timeout: 60 * 1000, // Timeout
     // withCredentials: true, // Check cross-site Access-Control
 
-    // headers: {'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))}
+    headers: {'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))}
 };
 
 const _axios = axios.create(config);
@@ -39,16 +40,40 @@ _axios.interceptors.request.use(
 );
 
 // Add a response interceptor
-_axios.interceptors.response.use(
-    function (response) {
-        // Do something with response data
-        return response;
-    },
-    function (error) {
-        // Do something with response error
+// _axios.interceptors.response.use(
+//     function (response) {
+//         // Do something with response data
+//         return response;
+//     },
+//     function (error) {
+//         // Do something with response error
+//         return Promise.reject(error);
+//     }
+// );
+
+axios.interceptors.response.use(function (response) {
+    return response;
+}, function (error) {
+    if (401 === error.response.status) {
+        localStorage.clear();
+        // Swal.fire({
+        //     title: "Session Expired",
+        //     text: "Your session has expired. Would you like to be redirected to the login page?",
+        //     type: "warning",
+        //     showCancelButton: true,
+        //     confirmButtonColor: "#DD6B55",
+        //     confirmButtonText: "Yes",
+        //     closeOnConfirm: false
+        // }).then((result) => {
+        //     if (result.isConfirmed) {
+        //         window.location = '/login';
+        //     }
+        // });
+        window.location = '/login'
+    } else {
         return Promise.reject(error);
     }
-);
+});
 
 // Plugin.install = function(Vue, options) {
 Plugin.install = function (Vue) {

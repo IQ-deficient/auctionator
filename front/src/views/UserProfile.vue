@@ -28,6 +28,7 @@
               </div>
               <!--            <a href="#" style="text-decoration: none"></a>-->
               <v-dialog
+                  v-model="imageDialog"
                   transition="scale-transition"
                   max-width="35%"
               >
@@ -41,7 +42,8 @@
                     </v-icon>
                   </a>
                 </template>
-                <template v-slot:default="dialog">
+                <template v-slot:default="dialog"
+                >
                   <v-card class="pa-4">
                     <v-card-text>
                       <div>
@@ -138,6 +140,7 @@
                      sm="5"
                      style="margin: 0 auto">
                 <v-text-field style="text-align: center"
+                              :loading="pageLoading"
                               v-model="username"
                               label="Username"
                               append-icon="mdi-account-edit-outline"
@@ -182,6 +185,7 @@
                 >
                   <v-text-field
                       v-model="lastName"
+                      :loading="pageLoading"
                       :error-messages="errors"
                       label="Last name"
                       required
@@ -198,6 +202,7 @@
                      sm="7">
                 <v-text-field
                     v-model="email"
+                    :loading="pageLoading"
                     label="Email"
                     append-icon="mdi-email-edit-outline"
                     shaped
@@ -218,6 +223,7 @@
                 >
                   <v-select
                       v-model="selectGender"
+                      :loading="pageLoading"
                       :items="genders"
                       :error-messages="errors"
                       item-text="name"
@@ -246,6 +252,7 @@
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
                           v-model="birthdate"
+                          :loading="pageLoading"
                           :error-messages="errors"
                           label="Pick a date"
                           append-icon="mdi-cake-variant-outline"
@@ -293,6 +300,7 @@
                   <v-select
                       v-model="selectCountry"
                       :items="countries"
+                      :loading="pageLoading"
                       item-text="name"
                       :error-messages="errors"
                       label="Country"
@@ -315,6 +323,7 @@
                 >
                   <v-text-field v-if="phoneCode != null"
                                 :prefix="'(' + phoneCode + ')'"
+                                :loading="pageLoading"
                                 v-model="phoneNumber"
                                 :error-messages="errors"
                                 label="Phone number"
@@ -341,6 +350,7 @@
                 <v-dialog
                     transition="dialog-bottom-transition"
                     max-width="35%"
+                    v-model="passwordDialog"
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn large
@@ -350,7 +360,8 @@
                     >Change password
                     </v-btn>
                   </template>
-                  <template v-slot:default="dialog">
+                  <template v-slot:default="dialog"
+                  >
                     <v-card class="pa-4">
                       <v-card-text>
                         <div>
@@ -521,12 +532,12 @@ export default {
     selectGender: '',
     genders: [],
     birthdate: '',
-
     date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
     menu: false,
     modal: false,
     menu2: false,
-
+    passwordDialog: false,
+    imageDialog: false,
     selectCountry: '',
     countries: [],
     phoneCode: '',
@@ -608,8 +619,8 @@ export default {
               this.phoneNumber = response.data.phone_number
               this.loggedUser = response.data
               if (response.data.image) this.userImage = response.data.image
-              console.log(response.data.image, 'RESPONSE DATA IMAGE')
-              console.log(this.userImage, 'USER IMAGE VARIABLE')
+              // console.log(response.data.image, 'RESPONSE DATA IMAGE')
+              // console.log(this.userImage, 'USER IMAGE VARIABLE')
               this.pageLoading = false
             }
           })
@@ -670,6 +681,8 @@ export default {
                       'Your information has been updated.',
                       'success'
                   )
+                  this.passwordDialog = false
+                  this.modal = false
                 }
               }
           )

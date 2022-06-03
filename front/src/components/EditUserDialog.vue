@@ -314,8 +314,8 @@ export default {
     countries: [],
     phoneCode: '',
     phoneNumber: '',
-    checkedRoles: []
-
+    checkedRoles: [],
+    dataLoading: false
   }),
 
   created() {
