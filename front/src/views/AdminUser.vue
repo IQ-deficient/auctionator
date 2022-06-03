@@ -409,6 +409,7 @@ export default {
       {text: 'Country', value: 'country'},
       {text: 'Phone number', value: 'phone_number'},
       {text: '', value: 'actions', sortable: false},
+      {text: '', value: 'roles', sortable: false},
     ],
     search: '',
     selectRole: '',

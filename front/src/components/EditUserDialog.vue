@@ -171,6 +171,26 @@
                         ></v-text-field>
                       </validation-provider>
                     </v-col>
+
+                      <v-col
+                          cols="12"
+                          sm="6">
+                        <validation-provider
+                            v-slot="{ errors }"
+                            name="Role"
+                            clearable
+                        >
+                          <v-select
+                              v-model="selectRole"
+                              :items="roles"
+                              :error-messages="errors"
+                              item-text="name"
+                              label="Role"
+                              multiple
+                          ></v-select>
+                        </validation-provider>
+                      </v-col>
+
                   </v-row>
                 </v-card>
               </div>
@@ -267,6 +287,7 @@ export default {
     // email: '',
     selectGender: '',
     genders: [],
+    roles: [],
     birthdate: '',
 
     date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
