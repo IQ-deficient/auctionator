@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-toolbar
-      dark
-      color="accent"
+        dark
+        color="accent"
     >
       <v-toolbar-title>Looking for something specific?</v-toolbar-title>
       <v-autocomplete style="width: 50%"
@@ -23,8 +23,8 @@
     </v-toolbar>
     <v-app-bar dark style="background-color: #1a202c">
       <v-breadcrumbs
-        :items="items"
-        large
+          :items="items"
+          large
       >
         <template v-slot:divider>
           <v-icon>mdi-chevron-right</v-icon>
@@ -41,10 +41,10 @@
 
     <div v-if="dataLoading" class="mt-16">
       <v-progress-circular
-        :size="100"
-        :width="7"
-        color="white"
-        indeterminate
+          :size="100"
+          :width="7"
+          color="white"
+          indeterminate
       ></v-progress-circular>
     </div>
     <div v-else-if="auctions == ''">
@@ -56,15 +56,15 @@
       <validation-observer>
         <v-row style="justify-content: center">
           <v-card
-            v-for="auction in auctions" :key="auction.id"
-            class="ma-5 card-body d-flex flex-column h-100"
-            max-width="22%"
-            color="tertiary"
+              v-for="auction in auctions" :key="auction.id"
+              class="ma-5 card-body d-flex flex-column h-100"
+              max-width="22%"
+              color="tertiary"
           >
             <v-img
-              src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-              class="h-50"
-              height="200px"
+                src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+                class="h-50"
+                height="200px"
             ></v-img>
 
             <v-card-title style="word-break: normal">
@@ -83,12 +83,12 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-dialog
-                transition="dialog-bottom-transition"
-                max-width="35%"
+                  transition="dialog-bottom-transition"
+                  max-width="35%"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn v-if="role == 'Client'"
-                      class="mx-1"
+                         class="mx-1"
                          color="primary"
                          v-bind="attrs"
                          v-on="on"
@@ -105,9 +105,9 @@
                       <div class="pt-5">
                         <v-carousel hide-delimiters style="height: 300px">
                           <v-carousel-item
-                            v-for="(item,i) in pictures"
-                            :key="i"
-                            :src="item.src"
+                              v-for="(item,i) in pictures"
+                              :key="i"
+                              :src="item.src"
                           ></v-carousel-item>
                         </v-carousel>
                         <div>
@@ -125,55 +125,56 @@
                           <div v-else> {{ "NA" }}</div>
                         </v-card-text>
                         <validation-provider
-                          v-slot="{ errors }"
-                          name="bidInput"
-                          clearable
+                            v-slot="{ errors }"
+                            name="bidInput"
+                            clearable
                         >
                           <v-row>
                             <v-card-title style="word-break: normal" class="mb-4">
                               Your bid:
                             </v-card-title>
                             <v-text-field
-                              v-model="bidInput"
-                              :error-messages="errors"
-                              hint="*Must be at least 3% higher than the current value."
-                              clearable
+                                v-model="bidInput"
+                                :error-messages="errors"
+                                hint="*Must be at least 3% higher than the current value."
+                                clearable
                             >
                             </v-text-field>
                           </v-row>
                         </validation-provider>
                       </div>
-                      <div>
-                        <v-btn large
-                               type="submit"
-                               color="primary"
-                               class="mr-4"
-                        >
-                          <v-icon left class="mr-1">mdi-gavel</v-icon>
-                          Place bid
-                        </v-btn>
-                        <v-btn large
-                               type="submit"
-                               color="success"
-                        >
-                          <v-icon left class="mr-1">mdi-cash-multiple</v-icon>
-                          Buyout
-                        </v-btn>
-
-                      </div>
-
+                      <v-row style="justify-content: center" class="mt-2">
+                        <div>
+                          <v-btn large
+                                 type="submit"
+                                 color="primary"
+                                 class="mr-4"
+                                 @click="postBid()"
+                          >
+                            <v-icon left class="mr-1">mdi-gavel</v-icon>
+                            Place bid
+                          </v-btn>
+                          <v-btn large
+                                 type="submit"
+                                 color="success"
+                          >
+                            <v-icon left class="mr-1">mdi-cash-multiple</v-icon>
+                            Buyout
+                          </v-btn>
+                        </div>
+                      </v-row>
                     </v-card-text>
                     <v-card-actions class="justify-end">
                       <v-btn
-                        icon
-                        @click="show1 = !show1"
+                          icon
+                          @click="show1 = !show1"
                       >
                         <v-icon>{{ show1 ? 'mdi-chevron-right' : 'mdi-chevron-left' }}</v-icon>
                       </v-btn>
                       <v-spacer></v-spacer>
                       <v-btn
-                        text
-                        @click="dialog.value = false"
+                          text
+                          @click="dialog.value = false"
                       >Close
                       </v-btn>
                     </v-card-actions>
@@ -286,7 +287,9 @@ export default {
       dataLoading: false,
       category: "",
       conditions: [],
-      role: localStorage.getItem('user_roles')
+      role: localStorage.getItem('user_roles'),
+      username: '',
+      auction_id: ''
     }
   },
 
@@ -313,30 +316,78 @@ export default {
       axios.post('/filtered_auctions', {
         category: this.category
       })
-        .then(response => {
-          if (response.data) {
-            this.auctions = response.data.auctions
-            this.conditions = response.data.conditions
-            // for (let i = 0; i < response.data.length; i++) {
-            //   // console.log(response.data)//   this.auctions = response.data
-            // }
-          }
-          this.dataLoading = false
-        })
-        .catch(error => {
-          console.log(error)
-          this.dataLoading = false
-        })
+          .then(response => {
+            if (response.data) {
+              console.log(response.data.auctions.id)
+              this.auctions = response.data.auctions
+              this.conditions = response.data.conditions
+              // for (let i = 0; i < response.data.length; i++) {
+              //   // console.log(response.data)//   this.auctions = response.data
+              // }
+            }
+            this.dataLoading = false
+          })
+          .catch(error => {
+            console.log(error)
+            this.dataLoading = false
+          })
     },
+
+    getAuctionId() {
+      this.dataLoading = true
+      axios.get('/auction/', {
+        category: this.category
+      })
+          .then(response => {
+            if (response.data) {
+              console.log(response.data.auctions)
+              this.auctions = response.data.auctions
+              this.auction_id = response.data.id
+              this.conditions = response.data.conditions
+              // for (let i = 0; i < response.data.length; i++) {
+              //   // console.log(response.data)//   this.auctions = response.data
+              // }
+            }
+            this.dataLoading = false
+          })
+          .catch(error => {
+            console.log(error)
+            this.dataLoading = false
+          })
+    },
+
+    getLoggedUser() {
+      this.pageLoading = true
+      axios.get('/auth/user')
+          .then(response => {
+            if (response.data) {
+              this.username = response.data.username
+              this.pageLoading = false
+            }
+          })
+          .catch(error => {
+            console.log(error)
+            this.pageLoading = false
+          })
+    },
+
+    postBid(){
+      this.loading = true
+      axios.post('/bid', {
+        value: this.bidInput,
+        username: this.username
+      })
+    }
   },
 
   created() {
     // Local Storage variable used to update the category a user searches by from Menu (Navbar.vue)
     this.category = localStorage.getItem('search_category')
-    console.log(this.category, 'xd')
+    console.log(this.category)
     if (this.category == '' || this.category == null) {
       this.$router.push('/pageNotFound')
     }
+    this.getLoggedUser()
     this.showAuction()
   },
 

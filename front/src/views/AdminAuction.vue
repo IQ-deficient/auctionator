@@ -828,7 +828,7 @@ export default {
           })
     },
     createAuction() {
-      console.log(this.addItemWarehouse.id)
+      // console.log(this.addItemWarehouse.id)
       axios.post('/auction', {
         title_item: this.addItemTitle,
         description: this.addItemDescription,
