@@ -42,8 +42,7 @@
                     </v-icon>
                   </a>
                 </template>
-                <template v-slot:default="dialog"
-                >
+                <template v-slot:default="dialog">
                   <v-card class="pa-4">
                     <v-card-text>
                       <div>
