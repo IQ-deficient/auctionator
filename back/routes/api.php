@@ -51,7 +51,7 @@ Route::post('/filtered_auctions', [AuctionController::class, 'getFiltered']);   
 Route::get('/menu_categories', [CategoryController::class, 'getMenuCategories']);   // All Categories formatted for Menu
 Route::get('/active_countries', [CountryController::class, 'getActive']);  // Used in registration
 
-Route::put('/image/{user}', [UserController::class, 'changeUserImage'])->name('upomoc');       // update image
+Route::post('/image/{user}', [UserController::class, 'changeUserImage'])->name('test_image_route');       // update image
 
 // This Middleware should require User being Authenticated and his JWT token to be granted access to these routes
 Route::group([

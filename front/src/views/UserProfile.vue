@@ -5,6 +5,7 @@
         src="../assets/Mercy.png"
     >
     </v-parallax>
+
     <validation-observer ref="observer" v-slot="{ invalid }" tag="form" @submit.prevent="updateProfile()"
     >
       <v-card width="50%"
@@ -30,7 +31,8 @@
               <v-dialog
                   v-model="imageDialog"
                   transition="scale-transition"
-                  max-width="35%"
+                  max-width="45%"
+                  @close="imageUpload = null"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <a
@@ -40,6 +42,7 @@
                     <v-icon dark large>
                       mdi-pencil-outline
                     </v-icon>
+
                   </a>
                 </template>
                 <template v-slot:default="dialog">
@@ -49,6 +52,7 @@
                         <v-row no-gutters justify="center" align="center">
                           <v-col cols="8">
                             <v-file-input
+                                v-model="imageUpload"
                                 show-size
                                 label="Select Image"
                                 accept="image/*"
@@ -100,7 +104,11 @@
                     <v-card-actions class="justify-end">
                       <v-btn
                           text
-                          @click="dialog.value = false"
+                          @click="dialog.value = false;
+                          currentImage = undefined;
+                          previewImage = undefined;
+                          imageInfos = '';
+                          progress = 0"
                       >Close
                       </v-btn>
                     </v-card-actions>
@@ -163,6 +171,7 @@
                 >
                   <v-text-field
                       v-model="firstName"
+                      :loading="pageLoading"
                       :error-messages="errors"
                       label="First name"
                       required
@@ -537,6 +546,7 @@ export default {
     menu2: false,
     passwordDialog: false,
     imageDialog: false,
+    imageUpload: null,
     selectCountry: '',
     countries: [],
     phoneCode: '',
@@ -698,50 +708,60 @@ export default {
             }
           })
     },
-
+    //-----------------------------------image upload------------------------------------------
     selectImage(image) {
       this.currentImage = image;
       this.previewImage = URL.createObjectURL(this.currentImage);
       this.progress = 0;
       this.message = "";
     },
-
     upload() {
       if (!this.currentImage) {
-        this.message = "Please select an Image!";
+        this.message = "Please select an image!";
         return;
       }
+      this.loading = true
       this.progress = 0;
       UploadService.upload(this.currentImage, (event) => {
         this.progress = Math.round((100 * event.loaded) / event.total);
-      })
-          .then((response) => {
-            this.message = response.data.message;
-            return UploadService.getFiles();
-          })
-          .then((images) => {
-            this.imageInfos = images.data;
-          })
-          .catch((err) => {
-            this.progress = 0;
-            this.message = "Could not upload the image! " + err;
-            this.currentImage = undefined;
-          });
+        Swal.fire({
+          title: 'Done!',
+          text: 'Your profile image has been updated.',
+          icon: 'success'
+        }).then(() => {
+          // if (result.isConfirmed) {
+            window.location.reload()
+          // }
+        })
+        }).then((response) => {
+          this.message = response.data.message;
+          return UploadService.getFiles();
+        })
+            .then((images) => {
+              this.imageInfos = images.data;
+            })
+            .catch((err) => {
+              this.progress = 0;
+              this.message = "Could not upload the image! " + err;
+              this.currentImage = undefined;
+              this.imageDialog = false
+            });
+      },
     },
+    //-----------------------------------image upload------------------------------------------
 
-  },
-  mounted() {
-    if (window.localStorage.getItem('token') === null) {
-      this.$router.push('/pageNotFound')
+    mounted() {
+      if (window.localStorage.getItem('token') === null) {
+        this.$router.push('/pageNotFound')
+      }
+      document.title = 'Edit Profile - Auction House'
+    },
+    created() {
+      this.getGenders();
+      this.getLoggedUser();
+      this.getCountries();
     }
-    document.title = 'Edit Profile - Auction House'
-  },
-  created() {
-    this.getGenders();
-    this.getLoggedUser();
-    this.getCountries();
   }
-}
 
 </script>
 

@@ -22,7 +22,7 @@
     </head>
     <body class="antialiased">
 
-    <form method="post" action="{{route("upomoc", 2)}}" enctype="multipart/form-data">
+    <form method="post" action="{{route("test_image_route", 2)}}" enctype="multipart/form-data">
         @method("PUT")
         <input type="file" name="image">
         <button type="submit">SUBMITUJ</button>
