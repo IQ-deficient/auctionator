@@ -31,12 +31,12 @@
                   hide-details
               ></v-text-field>
             </v-col>
-            <v-divider
-                class="mx-4"
-                inset
-                vertical
+            <v-divider v-if="isAdmin"
+                       class="mx-4"
+                       inset
+                       vertical
             ></v-divider>
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="4" v-if="isAdmin">
               <v-select
                   single-line
                   hide-details
@@ -56,12 +56,12 @@
                 max-width="60%"
             >
               <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                    color="primary"
-                    dark
-                    class="mb-2"
-                    v-bind="attrs"
-                    v-on="on"
+                <v-btn v-if="isAdmin"
+                       color="primary"
+                       dark
+                       class="mb-2"
+                       v-bind="attrs"
+                       v-on="on"
                 >
                   <v-icon left>mdi-account-multiple-plus-outline</v-icon>
                   Create employee
@@ -191,11 +191,11 @@
                                 clearable
                             >
                               <v-text-field v-if="phoneCode != null"
-                                  :prefix="'(' + phoneCode + ')'"
-                                  v-model="phoneNumber"
-                                  :error-messages="errors"
-                                  label="Phone number"
-                                  append-icon="mdi-phone-classic"
+                                            :prefix="'(' + phoneCode + ')'"
+                                            v-model="phoneNumber"
+                                            :error-messages="errors"
+                                            label="Phone number"
+                                            append-icon="mdi-phone-classic"
                               ></v-text-field>
                               <v-text-field v-else
                                             v-model="phoneNumber"
@@ -230,8 +230,8 @@
                               >
                               </v-text-field>
                             </validation-provider>
-                            </v-col >
-                          </v-row>
+                          </v-col>
+                        </v-row>
                         <v-row>
                           <v-col
                               cols="12"
@@ -269,14 +269,14 @@
                                 clearable
                             >
                               <v-select
-                                v-model="selectEmployeeRoles"
-                                :error-messages="errors"
-                                :items="employee_roles"
-                                label="Choose role"
-                                multiple
-                                chips
-                                persistent-hint
-                            ></v-select>
+                                  v-model="selectEmployeeRoles"
+                                  :error-messages="errors"
+                                  :items="employee_roles"
+                                  label="Choose role"
+                                  multiple
+                                  chips
+                                  persistent-hint
+                              ></v-select>
                             </validation-provider>
                           </v-col>
                         </v-row>
@@ -306,17 +306,17 @@
                 </v-card>
               </template>
             </v-dialog>
-<!--            <v-dialog v-model="dialogDelete" max-width="35%">-->
-<!--              <v-card>-->
-<!--                <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>-->
-<!--                <v-card-actions>-->
-<!--                  <v-spacer></v-spacer>-->
-<!--                  <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>-->
-<!--                  <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>-->
-<!--                  <v-spacer></v-spacer>-->
-<!--                </v-card-actions>-->
-<!--              </v-card>-->
-<!--            </v-dialog>-->
+            <!--            <v-dialog v-model="dialogDelete" max-width="35%">-->
+            <!--              <v-card>-->
+            <!--                <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>-->
+            <!--                <v-card-actions>-->
+            <!--                  <v-spacer></v-spacer>-->
+            <!--                  <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>-->
+            <!--                  <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>-->
+            <!--                  <v-spacer></v-spacer>-->
+            <!--                </v-card-actions>-->
+            <!--              </v-card>-->
+            <!--            </v-dialog>-->
           </validation-observer>
 
         </v-toolbar>
@@ -351,6 +351,7 @@ import axios from "axios";
 import {required, digits, email, max} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 import EditUserDialog from "../components/EditUserDialog";
+import Swal from "sweetalert2";
 // import UploadService from "../services/UploadFilesService";
 
 setInteractionMode('eager')
@@ -384,7 +385,6 @@ extend('email', {
 })
 
 
-
 export default {
   name: "AdminUser",
 
@@ -416,8 +416,8 @@ export default {
     search: '',
     selectRole: '',
     roles: [
-        'Clients',
-        'Employees'
+      'Clients',
+      'Employees'
     ],
     users: [],
     username: '',
@@ -440,11 +440,13 @@ export default {
     chosenUser: '',
     selectEmployeeRoles: '',
     employee_roles: [
-        'Manager',
-        'Auctioneer'
+      'Manager',
+      'Auctioneer'
     ],
     dataLoading: false,
     employeeRoles: [],
+    isAdmin: window.localStorage.user_roles.includes('Administrator'),
+    allowedRoles: window.localStorage.user_roles.includes('Administrator') || window.localStorage.user_roles.includes('Manager')
   }),
 
   // computed: {
@@ -463,7 +465,7 @@ export default {
   // },
 
   created() {
-    this.getUserRoles()
+    // this.getUserRoles()
     this.getUsers()
     // this.getRoles()
     this.getCountries()
@@ -471,10 +473,10 @@ export default {
   },
 
   methods: {
-    updateTableData(){
-      if (this.selectRole == 'Clients'){
+    updateTableData() {
+      if (this.selectRole == 'Clients') {
         this.tableData = this.users.clients
-      } else{
+      } else {
         this.tableData = this.users.managers_auctioneers
       }
     },
@@ -500,8 +502,8 @@ export default {
       axios.get('/users')
           .then(response => {
             if (response.data) {
-                this.users = response.data
-                this.tableData = response.data.clients
+              this.users = response.data
+              this.tableData = response.data.clients
             }
             this.selectRole = this.roles[0]
             this.dataLoading = false;
@@ -528,14 +530,14 @@ export default {
 
     getEmployeeRoles() {
       axios.get('/employees')
-        .then(response => {
-          if (response.data) {
-            this.employeeRoles = response.data
-          }
-        })
-        .catch(error => {
-          console.log(error)
-        })
+          .then(response => {
+            if (response.data) {
+              this.employeeRoles = response.data
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
     },
 
     getCountries() {
@@ -560,23 +562,23 @@ export default {
       this.phoneCode = this.selectCountry.phone_code
     },
 
-    getUserRoles() {
-      this.user_roles = []
-      axios.get('/auth_roles')
-          .then(response => {
-            if (response.data) {
-              this.user_roles = response.data
-            }
-            // todo: KOMENTAR
-            if (!this.user_roles.includes('Administrator')){
-              this.$router.push('/pageNotFound')
-              // todo: dodati message u swal2
-            }
-          })
-          .catch(error => {
-            console.log(error)
-          })
-    },
+    // getUserRoles() {
+    //   this.user_roles = []
+    //   axios.get('/auth_roles')
+    //       .then(response => {
+    //         if (response.data) {
+    //           this.user_roles = response.data
+    //         }
+    //         // todo: KOMENTAR
+    //         if (!this.user_roles.includes('Administrator')) {
+    //           this.$router.push('/pageNotFound')
+    //           // todo: dodati message u swal2
+    //         }
+    //       })
+    //       .catch(error => {
+    //         console.log(error)
+    //       })
+    // },
 
     createUser() {
       this.loading = true
@@ -594,8 +596,14 @@ export default {
       })
           .then(response => {
                 if (response) {
-                  this.$router.push('/login');
-                  this.loading = false;
+                  Swal.fire({
+                    title: 'Done!',
+                    text: 'Employee created successfully.',
+                    icon: 'success'
+                  }).then(() => {
+                    this.showDialog = false;
+                    this.loading = false;
+                  })
                 }
               }
           )
@@ -608,7 +616,10 @@ export default {
   },
 
   mounted() {
-    if (!window.localStorage.user_roles.includes('Administrator')){
+
+    console.log(this.allowedRoles)
+
+    if (!this.allowedRoles) {
       this.$router.push('/pageNotFound')
     }
     document.title = 'Administration - Auction House'

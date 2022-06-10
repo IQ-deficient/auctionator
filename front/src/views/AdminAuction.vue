@@ -860,7 +860,6 @@ export default {
   },
 
   mounted() {
-    // todo: comment
     if (!window.localStorage.user_roles.includes('Administrator')) {
       this.$router.push('/pageNotFound')
     }
