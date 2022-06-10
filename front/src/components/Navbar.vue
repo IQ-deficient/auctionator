@@ -10,7 +10,7 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" style="color: black; margin-left: 10px"></v-app-bar-nav-icon>
       <router-link to="/home">
         <!--        Logo aplikacije sa likom na /home-->
-        <v-img src="../assets/architecture icon.svg"
+        <v-img src="../assets/architecture-icon.svg"
                style="margin-left: 28px"
                max-height="60px"
                max-width="60px"
@@ -39,56 +39,242 @@
         </router-link>
       </div>
       <div v-else>
-        <v-speed-dial
-            v-model="fab"
-            :top="top"
-            :bottom="bottom"
-            :right="right"
-            :left="left"
-            :direction="direction"
-            :open-on-hover="hover"
-            :transition="transition"
+        <v-container
+            fluid
         >
-          <template v-slot:activator>
-            <v-btn
-                v-model="fab"
-                color="accent"
-                dark
-                fab
+          <v-row justify="center">
+            <v-menu
+                bottom
+                min-width="20%"
+                offset-y
             >
-              <v-icon v-if="fab">
-                mdi-close
-              </v-icon>
-              <v-icon v-else>
-                mdi-account-circle
-              </v-icon>
-            </v-btn>
-          </template>
-          <v-btn
-              fab
-              dark
-              small
-              color="primary"
-              @click="logout()"
-          >
-            <v-icon>mdi-logout-variant</v-icon>
-          </v-btn>
-          <router-link to="/user-profile">
-            <v-btn
-                fab
-                dark
-                small
-                color="primary"
-            >
-              <v-icon>mdi-account-details</v-icon>
-            </v-btn>
-          </router-link>
-        </v-speed-dial>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                    icon
+                    x-large
+                    v-on="on"
+                >
+                  <v-avatar size="50">
+                    <v-img v-if="userImage"
+                           :loading="pageLoading"
+                           :src="require('../../../back/public/' + userImage)"
+                           lazy-src="../assets/user-image-nav.svg"
+                           :alt="loggedUser.first_name">
+                      <template v-slot:placeholder>
+                        <v-row
+                            class="fill-height ma-0"
+                            align="center"
+                            justify="center"
+                        >
+                          <v-progress-circular
+                              indeterminate
+                              width="14"
+                              :size="145"
+                              color="primary"
+                          ></v-progress-circular>
+                        </v-row>
+                      </template>
+                    </v-img>
+                    <v-img v-else
+                           lazy-src="../assets/user-image-nav.svg"
+                           src="../assets/user-image-nav.svg"
+                           alt="User image placeholder">
+                    </v-img>
+                  </v-avatar>
+                </v-btn>
+              </template>
+              <v-card>
+                <v-list-item-content class="justify-center">
+                  <div class="mx-auto text-center">
+                    <router-link to="/user-profile" style="text-decoration: none">
+
+                      <v-avatar size="50" class="mb-2">
+                        <v-img v-if="userImage"
+                               :loading="pageLoading"
+                               :src="require('../../../back/public/' + userImage)"
+                               lazy-src="../assets/user-image-nav.svg"
+                               :alt="loggedUser.first_name">
+                          <template v-slot:placeholder>
+                            <v-row
+                                class="fill-height ma-0"
+                                align="center"
+                                justify="center"
+                            >
+                              <v-progress-circular
+                                  indeterminate
+                                  width="14"
+                                  :size="145"
+                                  color="primary"
+                              ></v-progress-circular>
+                            </v-row>
+                          </template>
+                        </v-img>
+                        <v-img v-else
+                               lazy-src="../assets/user-image-nav.svg"
+                               src="../assets/user-image-nav.svg"
+                               alt="User image placeholder">
+                        </v-img>
+                      </v-avatar>
+                    </router-link>
+                    <h3>{{ this.loggedUser.username }}</h3>
+                    <p class="text-caption mt-1">
+                      {{ this.loggedUser.email }}
+                    </p>
+                    <v-divider class="my-3"></v-divider>
+                    <div v-if="role == 'Client'">
+                      <v-container
+                          fluid
+                      >
+                        <v-row justify="center">
+                          <v-menu
+                              left
+                              min-width="12%"
+                              offset-x
+                          >
+                            <template v-slot:activator="{ on }">
+                              <v-btn
+                                  depressed
+                                  text
+                                  v-on="on"
+                              >
+                                <v-icon left class="mr-2">mdi-tag-arrow-left-outline</v-icon>
+                                Bid options
+                              </v-btn>
+                            </template>
+                            <v-card>
+                              <v-list-item-content class="justify-center">
+                                <div class="mx-auto text-center">
+                                  <router-link to="/bids" style="text-decoration: none">
+                                    <v-btn
+                                        depressed
+                                        text
+                                    >
+                                      <v-icon left class="mr-2">mdi-alarm-multiple</v-icon>
+                                      Bids
+                                    </v-btn>
+                                  </router-link>
+                                  <v-divider class="my-1"></v-divider>
+                                  <router-link to="/history" style="text-decoration: none">
+                                    <v-btn
+                                        depressed
+                                        text
+                                    >
+                                      <v-icon left class="mr-2">mdi-history</v-icon>
+                                      History
+                                    </v-btn>
+                                  </router-link>
+                                </div>
+                              </v-list-item-content>
+                            </v-card>
+                          </v-menu>
+                        </v-row>
+                      </v-container>
+                      <v-divider class="my-3"></v-divider>
+
+                    </div>
+                    <div v-if="role == 'Administrator'">
+                      <v-container
+                          fluid
+                      >
+                        <v-row justify="center">
+                          <v-menu
+                              left
+                              min-width="12%"
+                              offset-x
+                          >
+                            <template v-slot:activator="{ on }">
+                              <v-btn
+                                  depressed
+                                  text
+                                  v-on="on"
+                              >
+                                <v-icon left class="mr-2">mdi-shield-crown-outline</v-icon>
+                                Admin Function
+                              </v-btn>
+                            </template>
+                            <v-card>
+                              <v-list-item-content class="justify-center">
+                                <div class="mx-auto text-center">
+                                  <router-link to="/admin-auction" style="text-decoration: none">
+                                    <v-btn
+                                        depressed
+                                        text
+                                    >
+                                      <v-icon left class="mr-2">mdi-store-search-outline</v-icon>
+                                      Auctions
+                                    </v-btn>
+                                  </router-link>
+                                  <v-divider class="my-1"></v-divider>
+                                  <router-link to="/admin-user" style="text-decoration: none">
+                                    <v-btn
+                                        depressed
+                                        text
+                                    >
+                                      <v-icon left class="mr-2">mdi-account-search-outline</v-icon>
+                                      Users
+                                    </v-btn>
+                                  </router-link>
+                                </div>
+                              </v-list-item-content>
+                            </v-card>
+                          </v-menu>
+                        </v-row>
+                      </v-container>
+                      <v-divider class="my-3"></v-divider>
+
+                    </div>
+                    <div v-if="role.includes('Auctioneer')">
+                      <router-link to="/admin-auction" style="text-decoration: none">
+                        <v-btn
+                            depressed
+                            text
+                        >
+                          <v-icon left class="mr-2">mdi-store-search-outline</v-icon>
+                          Manage Auctions
+                        </v-btn>
+                      </router-link>
+                      <v-divider class="my-3"></v-divider>
+                    </div>
+                    <div v-if="role.includes('Manager')">
+                      <router-link to="/admin-user" style="text-decoration: none">
+                        <v-btn
+                            depressed
+                            text
+                        >
+                          <v-icon left class="mr-2">mdi-account-search-outline</v-icon>
+                          Manage Users
+                        </v-btn>
+                      </router-link>
+                      <v-divider class="my-3"></v-divider>
+                    </div>
+
+                    <router-link to="/user-profile" style="text-decoration: none">
+                      <v-btn
+                          text
+                      >
+                        <v-icon left class="mr-2">mdi-account-cog-outline</v-icon>
+                        Account settings
+                      </v-btn>
+                    </router-link>
+                    <v-divider class="my-3"></v-divider>
+                    <v-btn
+                        depressed
+                        color="primary"
+                        @click="logout()"
+                    >
+                      <v-icon left class="mr-2">mdi-logout-variant</v-icon>
+
+                      Logout
+                    </v-btn>
+                  </div>
+                </v-list-item-content>
+              </v-card>
+            </v-menu>
+          </v-row>
+        </v-container>
       </div>
-      <!--      Korisnikov avatar koji otvara funkcije odjavljivanja i azuriranja naloga-->
     </v-toolbar>
 
-    <!------- Globalni tag fioke sa elementima kategorija i potkategorija ------->
     <v-navigation-drawer style="min-width: 28%; width: fit-content"
                          v-model="drawer"
                          absolute
@@ -166,88 +352,88 @@
         </v-treeview>
 
       </v-list>
-      <div v-if="token">
-        <v-list class="d-flex flex-column"
-                nav
-                dense
-        >
-          <div v-if="role == 'Client'">
-            <router-link to="/bids" style="text-decoration: none">
-              <v-btn style="float: left"
-                     color="transparent"
-                     depressed
-                     class="ma-1"
-              >
-                <v-icon left class="mr-2">mdi-alarm-multiple</v-icon>
-                <span class="hidden-sm-and-down">Bids</span>
-              </v-btn>
-            </router-link>
-          </div>
-          <div v-if="role == 'Client'">
-            <hr>
-            <router-link to="/history" style="text-decoration: none">
-              <v-btn style="float: left"
-                     color="transparent"
-                     depressed
-                     class="ma-1"
+<!--      <div v-if="token">-->
+<!--        <v-list class="d-flex flex-column"-->
+<!--                nav-->
+<!--                dense-->
+<!--        >-->
+<!--          <div v-if="role == 'Client'">-->
+<!--            <router-link to="/bids" style="text-decoration: none">-->
+<!--              <v-btn style="float: left"-->
+<!--                     color="transparent"-->
+<!--                     depressed-->
+<!--                     class="ma-1"-->
+<!--              >-->
+<!--                <v-icon left class="mr-2">mdi-alarm-multiple</v-icon>-->
+<!--                <span class="hidden-sm-and-down">Bids</span>-->
+<!--              </v-btn>-->
+<!--            </router-link>-->
+<!--          </div>-->
+<!--          <div v-if="role == 'Client'">-->
+<!--            <hr>-->
+<!--            <router-link to="/history" style="text-decoration: none">-->
+<!--              <v-btn style="float: left"-->
+<!--                     color="transparent"-->
+<!--                     depressed-->
+<!--                     class="ma-1"-->
 
-              >
-                <v-icon left class="mr-2">mdi-history</v-icon>
-                <span class="hidden-sm-and-down">History</span>
-              </v-btn>
-            </router-link>
-          </div>
-          <div v-if="role == 'Administrator' || role == 'Auctioneer'">
-            <router-link to="/admin-auction" style="text-decoration: none">
-              <v-btn style="float: left"
-                     color="transparent"
-                     depressed
-                     class="ma-1"
+<!--              >-->
+<!--                <v-icon left class="mr-2">mdi-history</v-icon>-->
+<!--                <span class="hidden-sm-and-down">History</span>-->
+<!--              </v-btn>-->
+<!--            </router-link>-->
+<!--          </div>-->
+<!--          <div v-if="role == 'Administrator' || role == 'Auctioneer'">-->
+<!--            <router-link to="/admin-auction" style="text-decoration: none">-->
+<!--              <v-btn style="float: left"-->
+<!--                     color="transparent"-->
+<!--                     depressed-->
+<!--                     class="ma-1"-->
 
-              >
-                <v-icon left class="mr-2">mdi-store-search-outline</v-icon>
-                <span class="hidden-sm-and-down">Auctions</span>
-              </v-btn>
-            </router-link>
-          </div>
-          <div v-if="role == 'Administrator' || role == 'Manager'">
-            <hr>
-            <router-link to="/admin-user" style="text-decoration: none">
-              <v-btn style="float: left"
-                     color="transparent"
-                     depressed
-                     class="ma-1"
+<!--              >-->
+<!--                <v-icon left class="mr-2">mdi-store-search-outline</v-icon>-->
+<!--                <span class="hidden-sm-and-down">Auctions</span>-->
+<!--              </v-btn>-->
+<!--            </router-link>-->
+<!--          </div>-->
+<!--          <div v-if="role == 'Administrator' || role == 'Manager'">-->
+<!--            <hr>-->
+<!--            <router-link to="/admin-user" style="text-decoration: none">-->
+<!--              <v-btn style="float: left"-->
+<!--                     color="transparent"-->
+<!--                     depressed-->
+<!--                     class="ma-1"-->
 
-              >
-                <v-icon left class="mr-2">mdi-account-search-outline</v-icon>
-                <span class="hidden-sm-and-down">Users</span>
-              </v-btn>
-            </router-link>
-          </div>
-          <hr>
-          <router-link to="/user-profile" style="text-decoration: none">
-            <v-btn style="float: left"
-                   color="transparent"
-                   depressed
-                   class="ma-1"
-            >
-              <v-icon left class="mr-2">mdi-account-cog-outline</v-icon>
-              <span class="hidden-sm-and-down">Account settings</span>
-            </v-btn>
-          </router-link>
-          <div>
+<!--              >-->
+<!--                <v-icon left class="mr-2">mdi-account-search-outline</v-icon>-->
+<!--                <span class="hidden-sm-and-down">Users</span>-->
+<!--              </v-btn>-->
+<!--            </router-link>-->
+<!--          </div>-->
+<!--          <hr>-->
+<!--          <router-link to="/user-profile" style="text-decoration: none">-->
+<!--            <v-btn style="float: left"-->
+<!--                   color="transparent"-->
+<!--                   depressed-->
+<!--                   class="ma-1"-->
+<!--            >-->
+<!--              <v-icon left class="mr-2">mdi-account-cog-outline</v-icon>-->
+<!--              <span class="hidden-sm-and-down">Account settings</span>-->
+<!--            </v-btn>-->
+<!--          </router-link>-->
+<!--          <div>-->
 
-          </div>
-          <v-btn value="center" width="100%" style="text-decoration: none"
-                 color="info"
-                 depressed
-                 @click="logout()"
-          >
-            <v-icon left class="mr-2">mdi-logout-variant</v-icon>
-            <span class="hidden-sm-and-down">Logout</span>
-          </v-btn>
-        </v-list>
-      </div>
+<!--          </div>-->
+<!--          <v-btn value="center" width="100%" style="text-decoration: none"-->
+<!--                 color="info"-->
+<!--                 depressed-->
+<!--                 @click="logout()"-->
+<!--          >-->
+<!--            <v-icon left class="mr-2">mdi-logout-variant</v-icon>-->
+<!--            <span class="hidden-sm-and-down">Logout</span>-->
+<!--          </v-btn>-->
+<!--        </v-list>-->
+<!--      </div>-->
 
       <!--      <div class="mt-auto">-->
       <!--        <hr>-->
@@ -280,12 +466,18 @@ export default {
     categories: [],
     subcategories: [],
     user_roles: [],
+    loggedUser: '',
+    userImage: '',
+    pageLoading: false,
     token: localStorage.getItem('token'),
     role: localStorage.getItem('user_roles'),
   }),
 
   created() {
     this.getCategories()
+    if (localStorage.getItem('token')) {
+      this.getLoggedUser()
+    }
   },
 
   methods: {
@@ -355,12 +547,28 @@ export default {
       // localStorage.removeItem("user");
       // this.$router.push('/home');
     },
+
+    getLoggedUser() {
+      this.pageLoading = true
+      axios.get('/auth/user')
+          .then(response => {
+            if (response.data) {
+              this.loggedUser = response.data
+              // this.username = response.data.username
+              // this.email = response.data.email
+              if (response.data.image) this.userImage = response.data.image
+              this.pageLoading = false
+            }
+          })
+          .catch(error => {
+            console.log(error)
+            this.pageLoading = false
+          })
+    },
   },
 
   watch: {
-    // group() {
-    //   this.drawer = false
-    // },
+
     top(val) {
       this.bottom = !val
     },

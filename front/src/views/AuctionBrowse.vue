@@ -49,7 +49,7 @@
     </div>
     <div v-else-if="auctions == ''">
       <v-img dark class="mt-16" style="width: 18%; height: 18%;
-                            margin: 0 auto" src="../assets/no_items.svg"></v-img>
+                            margin: 0 auto" src="../assets/no-items.svg"></v-img>
       <v-card-text class="text-lg-h2" style="color: black">No items found</v-card-text>
     </div>
     <div v-else>

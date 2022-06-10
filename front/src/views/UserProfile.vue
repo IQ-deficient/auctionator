@@ -15,7 +15,7 @@
                   <v-img v-if="userImage"
                          :loading="pageLoading"
                          :src="require('../../../back/public/' + userImage)"
-                         lazy-src="../assets/user image.svg"
+                         lazy-src="../assets/user-image.svg"
                          :alt="loggedUser.first_name">
                     <template v-slot:placeholder>
                       <v-row
@@ -32,10 +32,9 @@
                       </v-row>
                     </template>
                   </v-img>
-                  <!-- TODO: LOADING FOR IMAGE AND OTHER FILLABLE FIELDS -->
                   <v-img v-else
-                         lazy-src="../assets/user image.svg"
-                         src="../assets/user image.svg"
+                         lazy-src="../assets/user-image.svg"
+                         src="../assets/user-image.svg"
                          alt="User image placeholder">
                   </v-img>
                 </v-avatar>
