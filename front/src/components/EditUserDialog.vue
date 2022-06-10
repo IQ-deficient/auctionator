@@ -2,9 +2,9 @@
   <v-container>
     <validation-observer ref="observer" v-slot="{ invalid }" tag="form" @submit.prevent="updateUser()">
       <v-dialog
-        v-model="showDialog"
-        max-width="60%"
-        persistent
+          v-model="showDialog"
+          max-width="60%"
+          persistent
       >
         <template>
           <v-card color="#2c3e50">
@@ -29,101 +29,105 @@
                 <v-card class="pa-4">
                   <v-row>
                     <v-col
-                      cols="12"
-                      sm="6"
+                        cols="12"
+                        sm="6"
                     >
                       <validation-provider
-                        v-slot="{ errors }"
-                        name="First name"
-                        rules="required|min:3|max:32"
-                        clearable
+                          v-slot="{ errors }"
+                          name="First name"
+                          rules="required|min:3|max:32"
+                          clearable
                       >
                         <v-text-field
-                          v-model="firstName"
-                          :error-messages="errors"
-                          label="First name"
-                          required
+                            :loading="dataLoading"
+                            v-model="firstName"
+                            :error-messages="errors"
+                            label="First name"
+                            required
                         ></v-text-field>
                       </validation-provider>
                     </v-col>
                     <v-col
-                      cols="12"
-                      sm="6"
+                        cols="12"
+                        sm="6"
                     >
                       <validation-provider
-                        v-slot="{ errors }"
-                        name="Last name"
-                        rules="required|min:3|max:32"
-                        clearable
+                          v-slot="{ errors }"
+                          name="Last name"
+                          rules="required|min:3|max:32"
+                          clearable
                       >
                         <v-text-field
-                          v-model="lastName"
-                          :error-messages="errors"
-                          label="Last name"
-                          required
+                            :loading="dataLoading"
+                            v-model="lastName"
+                            :error-messages="errors"
+                            label="Last name"
+                            required
                         ></v-text-field>
                       </validation-provider>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col
-                      cols="12"
-                      sm="5">
+                        cols="12"
+                        sm="6">
                       <validation-provider
-                        v-slot="{ errors }"
-                        name="Gender"
-                        clearable
+                          v-slot="{ errors }"
+                          name="Gender"
+                          clearable
                       >
                         <v-select
-                          v-model="selectGender"
-                          :items="genders"
-                          :error-messages="errors"
-                          item-text="name"
-                          label="Gender"
+                            :loading="dataLoading"
+                            v-model="selectGender"
+                            :items="genders"
+                            :error-messages="errors"
+                            item-text="name"
+                            label="Gender"
                         ></v-select>
                       </validation-provider>
                     </v-col>
                     <v-col
-                      cols="12"
-                      sm="7">
+                        cols="12"
+                        sm="6">
                       <validation-provider
-                        v-slot="{ errors }"
-                        name="Birth date"
-                        clearable
+                          v-slot="{ errors }"
+                          name="Birth date"
+                          clearable
                       >
                         <v-dialog
-                          ref="dialog"
-                          v-model="modal"
-                          :return-value.sync="date"
-                          persistent
-                          width="290px"
+                            ref="dialog"
+                            v-model="dateDialog"
+                            :return-value.sync="date"
+                            persistent
+                            width="290px"
                         >
                           <template v-slot:activator="{ on, attrs }">
                             <v-text-field
-                              v-model="birthdate"
-                              :error-messages="errors"
-                              label="Pick a date"
-                              append-icon="mdi-cake-variant-outline"
-                              v-bind="attrs"
-                              v-on="on"
+                                :loading="dataLoading"
+                                v-model="birthdate"
+                                :error-messages="errors"
+                                label="Pick a date"
+                                append-icon="mdi-cake-variant-outline"
+                                v-bind="attrs"
+                                v-on="on"
                             ></v-text-field>
                           </template>
                           <v-date-picker
-                            v-model="birthdate"
-                            scrollable
+                              v-model="birthdate"
+                              scrollable
                           >
                             <v-spacer></v-spacer>
                             <v-btn
-                              text
-                              color="primary"
-                              @click="modal = false"
+                                text
+                                color="primary"
+                                @click="dateDialog = false"
                             >
                               Cancel
                             </v-btn>
                             <v-btn
-                              text
-                              color="primary"
-                              @click="$refs.dialog.save(date)"
+                                text
+                                color="primary"
+                                @click="$refs.dialog.save(date)"
                             >
                               OK
                             </v-btn>
@@ -134,73 +138,74 @@
                   </v-row>
                   <v-row>
                     <v-col
-                      cols="12"
-                      sm="5">
+                        cols="12"
+                        sm="6">
                       <validation-provider
-                        v-slot="{ errors }"
-                        name="Country"
-                        rules="required"
-                        clearable
+                          v-slot="{ errors }"
+                          name="Country"
+                          rules="required"
+                          clearable
                       >
                         <v-select
-                          v-model="selectCountry"
-                          :items="countries"
-                          item-text="name"
-                          :error-messages="errors"
-                          label="Country"
-                          return-object
-                          @change="updateCountryCode()"
+                            :loading="dataLoading"
+                            v-model="selectCountry"
+                            :items="countries"
+                            item-text="name"
+                            :error-messages="errors"
+                            label="Country"
+                            return-object
+                            @change="updateCountryCode()"
                         ></v-select>
                       </validation-provider>
                     </v-col>
                     <v-col
-                      cols="12"
-                      sm="7">
+                        cols="12"
+                        sm="6">
                       <validation-provider
-                        v-slot="{ errors }"
-                        name="Phone number"
-                        rules="required|numeric|min:8|max:15"
-                        clearable
+                          v-slot="{ errors }"
+                          name="Phone number"
+                          rules="required|numeric|min:8|max:15"
+                          clearable
                       >
                         <v-text-field
-                          :prefix="'(' + phoneCode + ')'"
-                          v-model="phoneNumber"
-                          :error-messages="errors"
-                          label="Phone number"
-                          append-icon="mdi-phone-classic"
+                            :loading="dataLoading"
+                            :prefix="'(' + phoneCode + ')'"
+                            v-model="phoneNumber"
+                            :error-messages="errors"
+                            label="Phone number"
+                            append-icon="mdi-phone-classic"
                         ></v-text-field>
                       </validation-provider>
                     </v-col>
-
-                      <v-col
-                          cols="12"
-                          sm="6">
-                        <validation-provider
-                            v-slot="{ errors }"
-                            name="Role"
-                            clearable
-                        >
-                          <v-select
-                              v-model="selectRole"
-                              :items="roles"
-                              :error-messages="errors"
-                              item-text="name"
-                              label="Role"
-                              multiple
-                          ></v-select>
-                        </validation-provider>
-                      </v-col>
-
+<!--                    <v-col v-if="isAdmin"-->
+<!--                           cols="12"-->
+<!--                           sm="6">-->
+<!--                      <validation-provider-->
+<!--                          v-slot="{ errors }"-->
+<!--                          name="Role"-->
+<!--                          clearable-->
+<!--                      >-->
+<!--                        <v-select-->
+<!--                            :loading="dataLoading"-->
+<!--                            v-model="selectRole"-->
+<!--                            :items="roles"-->
+<!--                            :error-messages="errors"-->
+<!--                            item-text="name"-->
+<!--                            label="Role"-->
+<!--                            multiple-->
+<!--                        ></v-select>-->
+<!--                      </validation-provider>-->
+<!--                    </v-col>-->
                   </v-row>
                   <v-row>
                     <v-col>
                       <v-select
-                        v-if="editType == 'Employees'"
-                        v-model="checkedRoles"
-                        label="Select user roles"
-                        multiple
-                        :items="employeeRoles"
-                        item-text="name"
+                          v-if="editType == 'Employees'"
+                          v-model="checkedRoles"
+                          label="Select user roles"
+                          multiple
+                          :items="employeeRoles"
+                          item-text="name"
                       >
                       </v-select>
                     </v-col>
@@ -222,9 +227,9 @@
             </v-card-text>
             <v-card-actions class="justify-end">
               <v-btn
-                text
-                @click="$emit('close')"
-                dark
+                  text
+                  @click="$emit('close')"
+                  dark
               >Close
               </v-btn>
             </v-card-actions>
@@ -251,6 +256,7 @@
 import {required, digits, max,} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 import axios from "axios";
+import Swal from "sweetalert2";
 // import UploadService from "../services/UploadFilesService";
 
 setInteractionMode('eager')
@@ -296,26 +302,23 @@ export default {
   },
 
   data: () => ({
-    // username: '',
+    dataLoading: false,
     firstName: '',
     lastName: '',
-    // email: '',
     selectGender: '',
     genders: [],
     roles: [],
     birthdate: '',
+    isAdmin: window.localStorage.user_roles.includes('Administrator'),
 
     date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-    menu: false,
-    modal: false,
-    menu2: false,
+    dateDialog: false,
 
     selectCountry: '',
     countries: [],
     phoneCode: '',
     phoneNumber: '',
     checkedRoles: [],
-    dataLoading: false
   }),
 
   created() {
@@ -334,45 +337,54 @@ export default {
   methods: {
 
     getGenders() {
+      this.dataLoading = true;
       axios.get('/genders')
-        .then(response => {
-          if (response.data) {
-            this.genders = response.data
-          }
-        })
-        .catch(error => {
-          console.log(error)
-        })
+          .then(response => {
+            if (response.data) {
+              this.genders = response.data
+              this.dataLoading = false;
+            }
+          })
+          .catch(error => {
+            this.dataLoading = false;
+            console.log(error)
+          })
     },
 
     getUserRoles() {
+      this.dataLoading = true;
       axios.get('/user_roles/' + this.user.id)
-        .then(response => {
-          if (response.data) {
-            this.checkedRoles = response.data
-          }
-        })
-        .catch(error => {
-          console.log(error)
-        })
+          .then(response => {
+            if (response.data) {
+              this.checkedRoles = response.data
+              this.dataLoading = false;
+            }
+          })
+          .catch(error => {
+            this.dataLoading = false;
+            console.log(error)
+          })
     },
 
     getCountries() {
+      this.dataLoading = true;
       axios.get('/active_countries')
-        .then(response => {
-          if (response.data) {
-            this.countries = response.data
-          }
-          for (let i = 0; i < this.countries.length; i++) {
-            if (this.countries[i].name == this.selectCountry) {
-              this.selectCountry = this.countries[i]
+          .then(response => {
+            if (response.data) {
+              this.countries = response.data
+              this.dataLoading = false
             }
-          }
-          this.phoneCode = this.selectCountry.phone_code
-        })
-        .catch(error => {
-          console.log(error)
-        })
+            for (let i = 0; i < this.countries.length; i++) {
+              if (this.countries[i].name == this.selectCountry) {
+                this.selectCountry = this.countries[i]
+              }
+            }
+            this.phoneCode = this.selectCountry.phone_code
+          })
+          .catch(error => {
+            this.dataLoading = false
+            console.log(error)
+          })
     },
 
     updateCountryCode() {
@@ -390,18 +402,24 @@ export default {
         phone_number: this.phoneNumber,
         roles: this.checkedRoles
       })
-        .then(response => {
-            if (response) {
-              window.alert('bravo kretenu nemas sweetalert')
-              this.loading = false;
-            }
-          }
-        )
-        .catch(error => {
-          console.log(error)
-          this.loading = false
-          this.error = error.response.data.message;
-        })
+          .then(response => {
+                if (response) {
+                  Swal.fire({
+                    title: 'Done!',
+                    text: 'User updated successfully.',
+                    icon: 'success'
+                  }).then(() => {
+                    this.showDialog = false;
+                    this.loading = false;
+                  })
+                }
+              }
+          )
+          .catch(error => {
+            console.log(error)
+            this.loading = false
+            this.error = error.response.data.message;
+          })
     },
 
   }
