@@ -1,127 +1,168 @@
 <template>
   <div>
-    <v-parallax
-        height="325"
-        src="../assets/Mercy.png"
-    >
+    <v-parallax height="175" src="https://cdn.vuetifyjs.com/images/parallax/material2.jpg">
+      <div class="fill-height repeating-gradient"></div>
     </v-parallax>
 
-    <validation-observer ref="observer" v-slot="{ invalid }" tag="form" @submit.prevent="updateProfile()"
-    >
+    <validation-observer ref="observer" v-slot="{ invalid }" tag="form" @submit.prevent="updateProfile()">
       <v-card width="50%"
-              style="margin: 0 auto; position: relative" color="info" class="pa-4">
-        <v-row>
-          <v-col cols="12" sm="10">
-            <div style="position: relative; width: 0; height: 0; margin: 0 auto">
+              style="margin: 0 auto; position: relative; top: -25px" color="info" class="pa-4">
+        <v-row class="">
+          <v-col cols="12" sm="12">
+            <div style="position: relative; width: 145px; height: 0; margin: 0 auto">
               <div style="position: absolute; top: -120px">
-                <v-avatar size="145px">
-                  <img
-                      v-if="userImage"
-                      :src="require('../../../back/public/' + userImage)"
-                      :alt="loggedUser.first_name">
+                <v-avatar size="145">
+                  <v-img v-if="userImage"
+                         :loading="pageLoading"
+                         :src="require('../../../back/public/' + userImage)"
+                         lazy-src="../assets/user image.svg"
+                         :alt="loggedUser.first_name">
+                    <template v-slot:placeholder>
+                      <v-row
+                          class="fill-height ma-0"
+                          align="center"
+                          justify="center"
+                      >
+                        <v-progress-circular
+                            indeterminate
+                            width="14"
+                            :size="145"
+                            color="primary"
+                        ></v-progress-circular>
+                      </v-row>
+                    </template>
+                  </v-img>
                   <!-- TODO: LOADING FOR IMAGE AND OTHER FILLABLE FIELDS -->
-                  <img
-                      v-else
-                      src="../assets/DefaultProfileImage.png"
-                      alt="Default User Image">
-                  <!--                  src="../storage/user_images/45364356-1652435259.png">-->
+                  <v-img v-else
+                         lazy-src="../assets/user image.svg"
+                         src="../assets/user image.svg"
+                         alt="User image placeholder">
+                  </v-img>
                 </v-avatar>
               </div>
-              <!--            <a href="#" style="text-decoration: none"></a>-->
-              <v-dialog
-                  v-model="imageDialog"
-                  transition="scale-transition"
-                  max-width="45%"
-                  @close="imageUpload = null"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <a
-                      v-bind="attrs"
-                      v-on="on"
-                  >
-                    <v-icon dark large>
-                      mdi-pencil-outline
-                    </v-icon>
+              <v-row>
+                <v-dialog
+                    v-model="imageDialog"
+                    transition="scale-transition"
+                    max-width="45%"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <a
+                        v-bind="attrs"
+                        v-on="on"
+                    >
+                      <v-icon dark large left>
+                        mdi-pencil-outline
+                      </v-icon>
 
-                  </a>
-                </template>
-                <template v-slot:default="dialog">
-                  <v-card class="pa-4">
-                    <v-card-text>
-                      <div>
-                        <v-row no-gutters justify="center" align="center">
-                          <v-col cols="8">
-                            <v-file-input
-                                v-model="imageUpload"
-                                show-size
-                                label="Select Image"
-                                accept="image/*"
-                                @change="selectImage"
-                            ></v-file-input>
-                          </v-col>
-                          <v-col cols="4" class="pl-2">
-                            <v-btn color="primary" dark @click="upload">
-                              <v-icon left dark>mdi-cloud-upload</v-icon>
-                              Upload
-                            </v-btn>
-                          </v-col>
-                        </v-row>
-                        <div v-if="progress">
-                          <div>
-                            <v-progress-linear
-                                v-model="progress"
-                                color="light-blue"
-                                height="25"
-                                reactive
-                            >
-                              <strong>{{ progress }} %</strong>
-                            </v-progress-linear>
+                    </a>
+                  </template>
+                  <template v-slot:default="dialog">
+                    <v-card class="pa-4">
+                      <v-card-text>
+                        <div>
+                          <v-row no-gutters justify="center" align="center">
+                            <v-col cols="8">
+                              <v-file-input
+                                  v-model="imageUpload"
+                                  show-size
+                                  label="Select Image"
+                                  accept="image/*"
+                                  @change="selectImage"
+                              ></v-file-input>
+                            </v-col>
+                            <v-col cols="4" class="pl-2">
+                              <v-btn color="primary" dark @click="upload">
+                                <v-icon left dark>mdi-cloud-upload</v-icon>
+                                Upload
+                              </v-btn>
+                            </v-col>
+                          </v-row>
+                          <div v-if="progress">
+                            <div>
+                              <v-progress-linear
+                                  v-model="progress"
+                                  color="success"
+                                  height="25"
+                                  reactive
+                              >
+                                <strong>{{ progress }} %</strong>
+                              </v-progress-linear>
+                            </div>
                           </div>
-                        </div>
 
-                        <div v-if="previewImage">
-                          <div>
-                            <img style="width: 100%" class="preview my-3" :src="previewImage" alt=""/>
+                          <v-alert v-if="message" border="left" color="error" dark>
+                            {{ message }}
+                          </v-alert>
+
+                          <div v-if="previewImage">
+                            <div>
+                              <img style="width: 100%" class="preview my-3" :src="previewImage" alt=""/>
+                            </div>
                           </div>
+
+                          <v-card v-if="imageInfos.length > 0" class="mx-auto">
+                            <v-list>
+                              <v-subheader>List of Images</v-subheader>
+                              <v-list-item-group color="primary">
+                                <v-list-item v-for="(image, index) in imageInfos" :key="index">
+                                  <a :href="image.url">{{ image.name }}</a>
+                                </v-list-item>
+                              </v-list-item-group>
+                            </v-list>
+                          </v-card>
                         </div>
-
-                        <v-alert v-if="message" border="left" color="blue-grey" dark>
-                          {{ message }}
-                        </v-alert>
-
-                        <v-card v-if="imageInfos.length > 0" class="mx-auto">
-                          <v-list>
-                            <v-subheader>List of Images</v-subheader>
-                            <v-list-item-group color="primary">
-                              <v-list-item v-for="(image, index) in imageInfos" :key="index">
-                                <a :href="image.url">{{ image.name }}</a>
-                              </v-list-item>
-                            </v-list-item-group>
-                          </v-list>
-                        </v-card>
-                      </div>
-                    </v-card-text>
-                    <v-card-actions class="justify-end">
-                      <v-btn
-                          text
-                          @click="dialog.value = false;
+                      </v-card-text>
+                      <v-card-actions class="justify-end">
+                        <v-btn
+                            text
+                            @click="dialog.value = false;
                           currentImage = undefined;
                           previewImage = undefined;
-                          imageInfos = '';
-                          progress = 0"
-                      >Close
-                      </v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </template>
-              </v-dialog>
+                          progress = 0;
+                          message = '';"
+                        >Close
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </template>
+                </v-dialog>
+              </v-row>
             </div>
           </v-col>
         </v-row>
         <v-form>
           <v-container class="pa-4">
-            <v-row>
-              <v-col cols="12" sm="2">
+            <v-row style="margin-top: auto">
+              <v-col cols="12"
+                     sm="6"
+                     style="margin: 0 auto">
+                <v-text-field style="text-align: center"
+                              :loading="pageLoading"
+                              v-model="username"
+                              label="Username"
+                              append-icon="mdi-account-edit-outline"
+                              shaped
+                              dark
+                              disabled
+                ></v-text-field>
+              </v-col>
+              <v-col style="margin: 0 auto"
+                     cols="12"
+                     sm="6">
+                <v-text-field
+                    v-model="email"
+                    :loading="pageLoading"
+                    label="Email"
+                    append-icon="mdi-email-edit-outline"
+                    shaped
+                    dark
+                    disabled
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-col cols="12" sm="12" class="mb-6">
+              <div class="row justify-space-between">
                 <div v-if="edit">
                   <v-btn
                       color="accent"
@@ -140,232 +181,20 @@
                     Cancel
                   </v-btn>
                 </div>
-              </v-col>
-            </v-row>
-            <v-row style="">
-              <v-col cols="12"
-                     sm="5"
-                     style="margin: 0 auto">
-                <v-text-field style="text-align: center"
-                              :loading="pageLoading"
-                              v-model="username"
-                              label="Username"
-                              append-icon="mdi-account-edit-outline"
-                              solo-inverted
-                              shaped
-                              dark
-                              disabled
-                ></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row style="">
-              <v-col
-                  cols="12"
-                  sm="6"
-              >
-                <validation-provider
-                    v-slot="{ errors }"
-                    name="First name"
-                    rules="required|min:3|max:32"
-                    clearable
-                >
-                  <v-text-field
-                      v-model="firstName"
-                      :loading="pageLoading"
-                      :error-messages="errors"
-                      label="First name"
-                      required
-                      dark
-                      :disabled="edit"
-                      solo-inverted
-                  ></v-text-field>
-                </validation-provider>
-              </v-col>
-              <v-col
-                  cols="12"
-                  sm="6"
-              >
-                <validation-provider
-                    v-slot="{ errors }"
-                    name="Last name"
-                    rules="required|min:3|max:32"
-                    clearable
-                >
-                  <v-text-field
-                      v-model="lastName"
-                      :loading="pageLoading"
-                      :error-messages="errors"
-                      label="Last name"
-                      required
-                      dark
-                      :disabled="edit"
-                      solo-inverted
-                  ></v-text-field>
-                </validation-provider>
-              </v-col>
-            </v-row>
-            <v-row style="">
-              <v-col style="margin: 0 auto"
-                     cols="12"
-                     sm="7">
-                <v-text-field
-                    v-model="email"
-                    :loading="pageLoading"
-                    label="Email"
-                    append-icon="mdi-email-edit-outline"
-                    shaped
-                    dark
-                    disabled
-                    solo-inverted
-                ></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row style="">
-              <v-col
-                  cols="12"
-                  sm="5">
-                <validation-provider
-                    v-slot="{ errors }"
-                    name="Gender"
-                    clearable
-                >
-                  <v-select
-                      v-model="selectGender"
-                      :loading="pageLoading"
-                      :items="genders"
-                      :error-messages="errors"
-                      item-text="name"
-                      label="Gender"
-                      dark
-                      :disabled="edit"
-                      solo-inverted
-                  ></v-select>
-                </validation-provider>
-              </v-col>
-              <v-col
-                  cols="12"
-                  sm="7">
-                <validation-provider
-                    v-slot="{ errors }"
-                    name="Birth date"
-                    clearable
-                >
-                  <v-dialog
-                      ref="dialog"
-                      v-model="modal"
-                      :return-value.sync="date"
-                      persistent
-                      width="290px"
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field
-                          v-model="birthdate"
-                          :loading="pageLoading"
-                          :error-messages="errors"
-                          label="Pick a date"
-                          append-icon="mdi-cake-variant-outline"
-                          dark
-                          :disabled="edit"
-                          solo-inverted
-                          v-bind="attrs"
-                          v-on="on"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker
-                        v-model="birthdate"
-                        scrollable
-                    >
-                      <v-spacer></v-spacer>
-                      <v-btn
-                          text
-                          color="primary"
-                          @click="modal = false"
-                      >
-                        Cancel
-                      </v-btn>
-                      <v-btn
-                          text
-                          color="primary"
-                          @click="$refs.dialog.save(date)"
-                      >
-                        OK
-                      </v-btn>
-                    </v-date-picker>
-                  </v-dialog>
-                </validation-provider>
-              </v-col>
-            </v-row>
-            <v-row style="">
-              <v-col
-                  cols="12"
-                  sm="5">
-                <validation-provider
-                    v-slot="{ errors }"
-                    name="Country"
-                    rules="required"
-                    clearable
-                >
-                  <v-select
-                      v-model="selectCountry"
-                      :items="countries"
-                      :loading="pageLoading"
-                      item-text="name"
-                      :error-messages="errors"
-                      label="Country"
-                      dark
-                      :disabled="edit"
-                      solo-inverted
-                      return-object
-                      @change="updateCountryCode()"
-                  ></v-select>
-                </validation-provider>
-              </v-col>
-              <v-col
-                  cols="12"
-                  sm="7">
-                <validation-provider
-                    v-slot="{ errors }"
-                    name="Phone number"
-                    rules="required|numeric|min:8|max:15"
-                    clearable
-                >
-                  <v-text-field v-if="phoneCode != null"
-                                :prefix="'(' + phoneCode + ')'"
-                                :loading="pageLoading"
-                                v-model="phoneNumber"
-                                :error-messages="errors"
-                                label="Phone number"
-                                append-icon="mdi-phone-classic"
-                                dark
-                                :disabled="edit"
-                                solo-inverted
-                  ></v-text-field>
-                  <v-text-field v-else
-                                v-model="phoneNumber"
-                                :error-messages="errors"
-                                label="Phone number"
-                                append-icon="mdi-phone-classic"
-                                dark
-                                :disabled="edit"
-                                solo-inverted
-                  ></v-text-field>
-                </validation-provider>
-              </v-col>
-            </v-row>
-            <v-row style="">
-              <v-col cols="12" sm="5"
-                     style="margin: 0 auto">
+                <v-spacer></v-spacer>
                 <v-dialog
                     transition="dialog-bottom-transition"
                     max-width="35%"
                     v-model="passwordDialog"
                 >
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn large
-                           color="accent"
-                           v-bind="attrs"
-                           v-on="on"
-                    >Change password
+                    <v-btn
+                        color="accent"
+                        v-bind="attrs"
+                        v-on="on"
+                    >
+                      <v-icon left>mdi-lock-reset</v-icon>
+                      Change password
                     </v-btn>
                   </template>
                   <template v-slot:default="dialog"
@@ -452,6 +281,184 @@
                     </v-card>
                   </template>
                 </v-dialog>
+              </div>
+            </v-col>
+            <v-row style="">
+              <v-col
+                  cols="12"
+                  sm="6"
+              >
+                <validation-provider
+                    v-slot="{ errors }"
+                    name="First name"
+                    rules="required|min:3|max:32"
+                    clearable
+                >
+                  <v-text-field
+                      v-model="firstName"
+                      :loading="pageLoading"
+                      :error-messages="errors"
+                      label="First name"
+                      required
+                      dark
+                      :disabled="edit"
+                      solo-inverted
+                  ></v-text-field>
+                </validation-provider>
+              </v-col>
+              <v-col
+                  cols="12"
+                  sm="6"
+              >
+                <validation-provider
+                    v-slot="{ errors }"
+                    name="Last name"
+                    rules="required|min:3|max:32"
+                    clearable
+                >
+                  <v-text-field
+                      v-model="lastName"
+                      :loading="pageLoading"
+                      :error-messages="errors"
+                      label="Last name"
+                      required
+                      dark
+                      :disabled="edit"
+                      solo-inverted
+                  ></v-text-field>
+                </validation-provider>
+              </v-col>
+            </v-row>
+            <v-row style="">
+              <v-col
+                  cols="12"
+                  sm="6">
+                <validation-provider
+                    v-slot="{ errors }"
+                    name="Gender"
+                    clearable
+                >
+                  <v-select
+                      v-model="selectGender"
+                      :loading="pageLoading"
+                      :items="genders"
+                      :error-messages="errors"
+                      item-text="name"
+                      label="Gender"
+                      dark
+                      :disabled="edit"
+                      solo-inverted
+                  ></v-select>
+                </validation-provider>
+              </v-col>
+              <v-col
+                  cols="12"
+                  sm="6">
+                <validation-provider
+                    v-slot="{ errors }"
+                    name="Birth date"
+                    clearable
+                >
+                  <v-dialog
+                      ref="dialog"
+                      v-model="modal"
+                      :return-value.sync="date"
+                      persistent
+                      width="290px"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                          v-model="birthdate"
+                          :loading="pageLoading"
+                          :error-messages="errors"
+                          label="Pick a date"
+                          append-icon="mdi-cake-variant-outline"
+                          dark
+                          :disabled="edit"
+                          solo-inverted
+                          v-bind="attrs"
+                          v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                        v-model="birthdate"
+                        scrollable
+                    >
+                      <v-spacer></v-spacer>
+                      <v-btn
+                          text
+                          color="primary"
+                          @click="modal = false"
+                      >
+                        Cancel
+                      </v-btn>
+                      <v-btn
+                          text
+                          color="primary"
+                          @click="$refs.dialog.save(date)"
+                      >
+                        OK
+                      </v-btn>
+                    </v-date-picker>
+                  </v-dialog>
+                </validation-provider>
+              </v-col>
+            </v-row>
+            <v-row style="">
+              <v-col
+                  cols="12"
+                  sm="6">
+                <validation-provider
+                    v-slot="{ errors }"
+                    name="Country"
+                    rules="required"
+                    clearable
+                >
+                  <v-select
+                      v-model="selectCountry"
+                      :items="countries"
+                      :loading="pageLoading"
+                      item-text="name"
+                      :error-messages="errors"
+                      label="Country"
+                      dark
+                      :disabled="edit"
+                      solo-inverted
+                      return-object
+                      @change="updateCountryCode()"
+                  ></v-select>
+                </validation-provider>
+              </v-col>
+              <v-col
+                  cols="12"
+                  sm="6">
+                <validation-provider
+                    v-slot="{ errors }"
+                    name="Phone number"
+                    rules="required|numeric|min:8|max:15"
+                    clearable
+                >
+                  <v-text-field v-if="phoneCode != null"
+                                :prefix="'(' + phoneCode + ')'"
+                                :loading="pageLoading"
+                                v-model="phoneNumber"
+                                :error-messages="errors"
+                                label="Phone number"
+                                append-icon="mdi-phone-classic"
+                                dark
+                                :disabled="edit"
+                                solo-inverted
+                  ></v-text-field>
+                  <v-text-field v-else
+                                v-model="phoneNumber"
+                                :error-messages="errors"
+                                label="Phone number"
+                                append-icon="mdi-phone-classic"
+                                dark
+                                :disabled="edit"
+                                solo-inverted
+                  ></v-text-field>
+                </validation-provider>
               </v-col>
             </v-row>
             <div v-if="!edit">
@@ -561,9 +568,13 @@ export default {
     previewImage: undefined,
     progress: 0,
     message: "",
+    imageName: '',
     imageInfos: [],
     userImage: "",
-    pageLoading: false
+    pageLoading: false,
+    isValid: false,
+    extensions: [".jpg", ".jpeg", ".png"]
+
   }),
   methods: {
     submit() {
@@ -708,7 +719,7 @@ export default {
             }
           })
     },
-    //-----------------------------------image upload------------------------------------------
+
     selectImage(image) {
       this.currentImage = image;
       this.previewImage = URL.createObjectURL(this.currentImage);
@@ -716,8 +727,28 @@ export default {
       this.message = "";
     },
     upload() {
-      if (!this.currentImage) {
+
+      if (this.currentImage) {
+        this.imageName = this.currentImage.name
+        for (let j = 0; j < this.extensions.length; j++) {
+          this.currentExtension = this.extensions[j];
+          if (this.imageName.substr(this.imageName.length - this.currentExtension.length,
+              this.currentExtension.length).toLowerCase() == this.currentExtension.toLowerCase()) {
+            this.isValid = true;
+          }
+        }
+
+        if (!this.isValid) {
+          this.message = "Sorry, " + this.imageName + " is invalid, allowed extensions are: " + this.extensions.join(", ");
+          return;
+        }
+      } else {
         this.message = "Please select an image!";
+        return;
+      }
+
+      if (this.currentImage.size > 2097152) {
+        this.message = "File size cannot be greater than 2MB!";
         return;
       }
       this.loading = true
@@ -730,41 +761,49 @@ export default {
           icon: 'success'
         }).then(() => {
           // if (result.isConfirmed) {
-            window.location.reload()
+          window.location.reload()
           // }
         })
-        }).then((response) => {
-          this.message = response.data.message;
-          return UploadService.getFiles();
-        })
-            .then((images) => {
-              this.imageInfos = images.data;
-            })
-            .catch((err) => {
-              this.progress = 0;
-              this.message = "Could not upload the image! " + err;
-              this.currentImage = undefined;
-              this.imageDialog = false
-            });
-      },
+      }).then((response) => {
+        this.message = response.data.message;
+        return UploadService.getFiles();
+      })
+          .then((images) => {
+            this.imageInfos = images.data;
+          })
+          .catch((err) => {
+            this.progress = 0;
+            this.message = "Could not upload the image! " + err;
+            this.currentImage = undefined;
+            this.imageDialog = false
+          });
     },
-    //-----------------------------------image upload------------------------------------------
+  },
 
-    mounted() {
-      if (window.localStorage.getItem('token') === null) {
-        this.$router.push('/pageNotFound')
-      }
-      document.title = 'Edit Profile - Auction House'
-    },
-    created() {
-      this.getGenders();
-      this.getLoggedUser();
-      this.getCountries();
+  mounted() {
+    if (window.localStorage.getItem('token') === null) {
+      this.$router.push('/pageNotFound')
     }
+    document.title = 'Edit Profile - Auction House'
+  },
+  created() {
+    this.getGenders();
+    this.getLoggedUser();
+    this.getCountries();
   }
+}
 
 </script>
 
 <style scoped>
+
+.repeating-gradient {
+  background-image: repeating-linear-gradient(-45deg,
+  rgba(255, 0, 0, .25),
+  rgba(255, 0, 0, .25) 5px,
+  rgba(0, 0, 255, .25) 5px,
+  rgba(0, 0, 255, .25) 10px
+  );
+}
 
 </style>
