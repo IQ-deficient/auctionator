@@ -1,23 +1,25 @@
 <template>
   <div style="margin-top: 4%">
-    <!--    <v-progress-linear-->
-    <!--        :active="loading"-->
-    <!--        :indeterminate="loading"-->
-    <!--        absolute-->
-    <!--        top-->
-    <!--        color="primary"-->
-    <!--    ></v-progress-linear>-->
     <v-card
-        class="mx-auto"
-        max-width="38%"
-        style="justify-content: end"
+        class="pa-6"
+        max-width="48%"
+        style="margin: 0 auto"
     >
+      <v-row class="justify-start">
+        <v-img src="../assets/architecture-icon.svg"
+               style="margin-left: 0px"
+               max-height="70px"
+               max-width="70px"
+        ></v-img>
+        <v-divider vertical style="margin-left: 18px; border-right: 2px solid black"></v-divider>
+        <v-card-title style="margin-left: 8px">Create a new account</v-card-title>
+      </v-row>
       <validation-observer ref="observer" tag="form" @submit.prevent="register()"
       >
-        <form @submit.prevent="submit" style="height: 490px; width: 92%; margin: 0 auto">
+        <form @submit.prevent="submit">
           <v-row>
-            <v-col cols="6">
-              <!--          Polje za ime-->
+            <v-col cols="12"
+                   sm="6">
               <validation-provider
                   v-slot="{ errors }"
                   name="First name"
@@ -32,8 +34,8 @@
               </validation-provider>
 
             </v-col>
-            <!--          Polje za prezime-->
-            <v-col cols="6">
+            <v-col cols="12"
+                   sm="6">
               <validation-provider
                   v-slot="{ errors }"
                   name="Last name"
@@ -48,25 +50,27 @@
               </validation-provider>
             </v-col>
           </v-row>
-          <!--          Polje za korisnicko ime-->
           <v-row>
+            <v-col cols="12"
+                   sm="12">
+              <validation-provider
+                  v-slot="{ errors }"
+                  name="Username"
+                  rules="required|min:3|max:32"
+              >
+                <v-text-field
+                    v-model="username"
+                    :error-messages="errors"
+                    label="Username"
+                    clearable
+                ></v-text-field>
+                <span>{{ errors[0] }}</span>
+              </validation-provider>
+            </v-col>
           </v-row>
-          <validation-provider
-              v-slot="{ errors }"
-              name="Username"
-              rules="required|min:3|max:32"
-          >
-            <v-text-field
-                v-model="username"
-                :error-messages="errors"
-                label="Username"
-                clearable
-            ></v-text-field>
-            <span>{{ errors[0] }}</span>
-          </validation-provider>
           <v-row>
-            <v-col cols="5">
-              <!--          Padajuci meni za drzavu-->
+            <v-col cols="12"
+                   sm="6">
               <validation-provider
                   v-slot="{ errors }"
                   name="Country"
@@ -84,8 +88,8 @@
                 ></v-select>
               </validation-provider>
             </v-col>
-            <!--          Polje za broj telefona-->
-            <v-col cols="7">
+            <v-col cols="12"
+                   sm="6">
               <validation-provider
                   v-slot="{ errors }"
                   name="Phone number"
@@ -108,67 +112,79 @@
               </validation-provider>
             </v-col>
           </v-row>
-          <!--          Polje za imejl-->
-          <validation-provider
-              v-slot="{ errors }"
-              name="Email"
-              rules="required|email|min:10|max:254"
-          >
-            <v-text-field
-                v-model="email"
-                :error-messages="errors"
-                label="Email"
-                clearable
-            ></v-text-field>
-          </validation-provider>
-          <!--          Polje za lozinku-->
-          <validation-provider
-              v-slot="{ errors }"
-              name="Password"
-              rules="required"
-              clearable
-          >
-            <v-text-field
-                v-model="password"
-                :error-messages="errors"
-                label="Password"
-                :type="showPassword ? 'text' : 'password'"
-                :counter="8"
-                hint="Must be at least 8 characters."
-                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                @click:append="showPassword = !showPassword"
-                clearable
+          <v-row>
+            <v-col cols="12" sm="12">
+              <validation-provider
+                  v-slot="{ errors }"
+                  name="Email"
+                  rules="required|email|min:10|max:254"
+              >
+                <v-text-field
+                    v-model="email"
+                    :error-messages="errors"
+                    label="Email"
+                    clearable
+                ></v-text-field>
+              </validation-provider>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" sm="12">
+              <validation-provider
+                  v-slot="{ errors }"
+                  name="Password"
+                  rules="required"
+                  clearable
+              >
+                <v-text-field
+                    v-model="password"
+                    :error-messages="errors"
+                    label="Password"
+                    :type="showPassword ? 'text' : 'password'"
+                    :counter="8"
+                    hint="Must be at least 8 characters."
+                    :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                    @click:append="showPassword = !showPassword"
+                    clearable
+                >
+                </v-text-field>
+              </validation-provider>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" sm="12">
+              <validation-provider
+                  v-slot="{ errors }"
+                  name="Password confirmation"
+                  rules="required"
+              >
+                <v-text-field
+                    v-model="confirmPassword"
+                    :error-messages="errors"
+                    label="Confirm password"
+                    :type="showConfirmPass ? 'text' : 'password'"
+                    :append-icon="showConfirmPass ? 'mdi-eye' : 'mdi-eye-off'"
+                    @click:append="showConfirmPass = !showConfirmPass"
+                    clearable
+                >
+                </v-text-field>
+              </validation-provider>
+            </v-col>
+          </v-row>
+          <v-row class="ma-4">
+            <v-btn
+                width="100%"
+                type="submit"
+                color="primary"
+                @click="register()"
             >
-            </v-text-field>
-          </validation-provider>
-          <!--          Polje za potvrdu lozinke-->
-          <validation-provider
-              v-slot="{ errors }"
-              name="Password confirmation"
-              rules="required"
-          >
-            <v-text-field
-                v-model="confirmPassword"
-                :error-messages="errors"
-                label="Confirm password"
-                :type="showConfirmPass ? 'text' : 'password'"
-                :append-icon="showConfirmPass ? 'mdi-eye' : 'mdi-eye-off'"
-                @click:append="showConfirmPass = !showConfirmPass"
-                clearable
-            >
-            </v-text-field>
-          </validation-provider>
-          <v-btn
-              type="submit"
-              color="primary"
-              @click="register()"
-          >
-            <v-icon
-                left
-            >mdi-account-plus
-            </v-icon>
-            Register
-          </v-btn>
+              <v-icon
+                  left
+              >mdi-account-plus
+              </v-icon>
+              Register
+            </v-btn>
+          </v-row>
         </form>
       </validation-observer>
     </v-card>
@@ -329,10 +345,10 @@ export default {
         password_confirmation: this.confirmPassword
       })
           .then(response => {
-                if (response) {
-                  this.$router.push('/login');
-                  this.loading = false;
-                }
+            if (response) {
+              this.$router.push('/login');
+              this.loading = false;
+            }
             return response.data;
           })
           .catch(error => {

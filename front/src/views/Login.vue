@@ -1,96 +1,97 @@
 <template>
-  <div style="margin-top: 8%">
-    <v-card
-        class="mx-auto"
-        max-width="28%"
-        style="justify-content: end"
-    >
+  <div style="margin-top: 6%">
+    <v-card class="pa-6" max-width="28%" style="margin: 0 auto">
       <validation-observer ref="observer" v-slot="{ invalid }" tag="form" @submit.prevent="login()"
       >
-        <form @submit.prevent="submit"
-              style="height: 280px; width: 88%; margin: 0 auto"
-              class="pt-3">
-          <!--          Polje za unos imejla-->
-          <validation-provider
-              v-slot="{ errors }"
-              name="Email"
-              rules="required|email"
-          >
-            <v-text-field
-                v-model="email"
-                :error-messages="errors"
-                label="E-mail"
-                clearable
-            ></v-text-field>
-          </validation-provider>
-          <!--          Polje za unos lozinke-->
-          <validation-provider
-              v-slot="{ errors }"
-              name="Password"
-              rules="required|min:8|max:128"
-          >
-            <v-text-field
-                v-model="password"
-                :error-messages="errors"
-                label="Password"
-                :type="showPassword ? 'text' : 'password'"
-                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                @click:append="showPassword = !showPassword"
-                clearable
-            ></v-text-field>
-          </validation-provider>
-          <validation-provider
-              v-slot="{ errors }"
-              name="checkbox"
-          >
-            <v-checkbox
-                v-model="checkbox"
-                :error-messages="errors"
-                value="1"
-                label="Remember me"
-                type="checkbox"
-            ></v-checkbox>
-          </validation-provider>
+        <form @submit.prevent="submit">
+          <v-row class="justify-start">
+            <v-img src="../assets/architecture-icon.svg"
+                   style="margin-left: 0px"
+                   max-height="70px"
+                   max-width="70px"
+            ></v-img>
+            <v-divider vertical style="margin-left: 18px; border-right: 2px solid black"></v-divider>
+            <v-card-title style="margin-left: 8px">Sign in</v-card-title>
+          </v-row>
+          <v-row>
+            <v-col
+                cols="12"
+                sm="12"
+            >
+              <validation-provider
+                  v-slot="{ errors }"
+                  name="Email"
+                  rules="required|email"
+              >
+                <v-text-field
+                    v-model="email"
+                    :error-messages="errors"
+                    label="E-mail"
+                    clearable
+                ></v-text-field>
+              </validation-provider>
+            </v-col>
+            </v-row>
+            <v-row>
+              <v-col
+                  cols="12"
+                  sm="12"
+              >
+                <validation-provider
+                    v-slot="{ errors }"
+                    name="Password"
+                    rules="required|min:8|max:128"
+                >
+                  <v-text-field
+                      v-model="password"
+                      :error-messages="errors"
+                      label="Password"
+                      :type="showPassword ? 'text' : 'password'"
+                      :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                      @click:append="showPassword = !showPassword"
+                      clearable
+                  ></v-text-field>
+                </validation-provider>
+              </v-col>
+            </v-row>
 
-          <v-btn
-              type="submit"
-              class="mb-1"
-              color="primary"
-              @click="login()"
-              @submit.prevent="invalid"
-          >
-            <v-icon left class="mr-2">mdi-login</v-icon>
-            Sign in
-          </v-btn>
-        </form>
-      </validation-observer>
-      <v-row>
-        <v-col cols="12">
-          <router-link to="/" style="text-decoration: none">
+          <v-row class="ma-4">
+            <v-btn
+                width="100%"
+                type="submit"
+                class="mb-1"
+                color="primary"
+                @click="login()"
+                @submit.prevent="invalid"
+            >
+              <v-icon left class="mr-2">mdi-login</v-icon>
+              Login
+            </v-btn>
+          </v-row>
+          <v-row class="justify-end">
+            <router-link to="/" style="text-decoration: none">
             <span>
-              <v-icon left class="pa-1">
-              mdi-lock-outline
-            </v-icon>
+              <v-icon left class="pa-1">mdi-lock-outline</v-icon>
               Forgot password?
             </span>
-          </router-link>
-        </v-col>
-      </v-row>
+            </router-link>
+          </v-row>
+        </form>
+      </validation-observer>
     </v-card>
     <div style="width: 26%; color: white; margin: 0 auto" class="mt-4">
-      <table width="100%">
+      <table style="width: 100%">
         <tr>
           <td>
             <hr/>
           </td>
-          <td style="width:1px; padding: 0 10px; white-space: nowrap;">New to our platform?</td>
+          <td style="width: 1px; padding: 0px; white-space: nowrap;">New to our platform?</td>
           <td>
             <hr/>
           </td>
         </tr>
       </table>
     </div>
-
     <router-link to="/register" style="text-decoration: none">
       <v-btn
           color="accent"
