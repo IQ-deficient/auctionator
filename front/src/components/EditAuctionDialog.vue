@@ -8,9 +8,19 @@
       >
         <template>
           <v-card color="#2c3e50">
+            <v-card-actions class="justify-end">
+              <v-btn
+                  small
+                  fab
+                  @click="$emit('close')"
+                  dark
+              ><v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-card-actions>
             <v-card-text>
+
               <div class="pa-1">
-                <v-toolbar-title class="pa-4">
+                <v-toolbar-title>
                   <table style="width: 100%">
                     <tr>
                       <td>
@@ -102,7 +112,7 @@
                     </v-col>
                   </v-row>
                   <v-row>
-                    <v-col cols="12" sm="7">
+                    <v-col cols="12" sm="6">
                       <validation-provider
                           v-slot="{ errors }"
                           name="Item subcategory"
@@ -122,7 +132,7 @@
                         </v-select>
                       </validation-provider>
                     </v-col>
-                    <v-col cols="12" sm="5">
+                    <v-col cols="12" sm="6">
                       <validation-provider
                           v-slot="{ errors }"
                           name="Item condition"
@@ -257,8 +267,59 @@
                         </v-text-field>
                       </validation-provider>
                     </v-col>
+                    <v-col cols="12" sm="12">
+                      <validation-provider
+                          v-slot="{ errors }"
+                          name="Seller"
+                          rules="required|min:3|max:64"
+                          clearable
+                      >
+                        <v-text-field
+                            v-model="addAuctionSeller"
+                            :error-messages="errors"
+                            label="Seller"
+                            required
+                            clearable
+                        >
+                        </v-text-field>
+                      </validation-provider>
+                    </v-col>
                   </v-row>
                   <v-row>
+                    <v-col cols="6" sm="6">
+                      <validation-provider>
+                        <v-datetime-picker
+                            v-model="addStartDate"
+                            prepend-icon="mdi-calendar"
+                            :text-field-props="textFieldProps"
+                            :time-picker-props="timeProps"
+                        >
+                          <template slot="dateIcon">
+                            <v-icon>mdi-calendar</v-icon>
+                          </template>
+                          <template slot="timeIcon">
+                            <v-icon>mdi-clock</v-icon>
+                          </template>
+                        </v-datetime-picker>
+                      </validation-provider>
+                    </v-col>
+                    <v-col cols="6" sm="6">
+                      <validation-provider>
+                        <v-datetime-picker
+                            v-model="addEndDate"
+                            prepend-icon="mdi-calendar"
+                            :text-field-props="textFieldProps"
+                            :time-picker-props="timeProps"
+                        >
+                          <template slot="dateIcon">
+                            <v-icon>mdi-calendar</v-icon>
+                          </template>
+                          <template slot="timeIcon">
+                            <v-icon>mdi-clock</v-icon>
+                          </template>
+                        </v-datetime-picker>
+                      </validation-provider>
+                    </v-col>
                     <v-col cols="12" sm="12">
                       <validation-provider
                           v-slot="{ errors }"
@@ -293,28 +354,9 @@
                 Post
               </v-btn>
             </v-card-text>
-            <v-card-actions class="justify-end">
-              <v-btn
-                  text
-                  @click="$emit('close')"
-                  dark
-              >Close
-              </v-btn>
-            </v-card-actions>
           </v-card>
         </template>
       </v-dialog>
-<!--      <v-dialog v-model="dialogDelete" max-width="35%">-->
-<!--        <v-card>-->
-<!--          <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>-->
-<!--          <v-card-actions>-->
-<!--            <v-spacer></v-spacer>-->
-<!--            <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>-->
-<!--            <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>-->
-<!--            <v-spacer></v-spacer>-->
-<!--          </v-card-actions>-->
-<!--        </v-card>-->
-<!--      </v-dialog>-->
     </validation-observer>
 
   </v-container>
@@ -324,6 +366,7 @@
 import {required, min, max, min_value} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 import axios from "axios";
+import Swal from "sweetalert2";
 // import UploadService from "../services/UploadFilesService";
 
 setInteractionMode('eager')
@@ -375,6 +418,16 @@ export default {
     addItemCondition: '',
     conditions: [],
     addAuctionTitle: '',
+    addAuctionSeller: '',
+    addStartDate: '',
+    addEndDate: '',
+    textFieldProps: {
+      prependIcon: 'mdi-calendar'
+    },
+    timeProps: {
+      useSeconds: true,
+      ampmInTitle: true
+    },
     addAuctionBuyout: '',
     dataLoading: true,
     categoryLoading: true
@@ -386,8 +439,12 @@ export default {
     this.addItemTitle = this.auction.item.title
     this.addItemDescription = this.auction.item.description
     this.addItemWarehouse = this.auction.item.warehouse.name
-    this.addItemCategory = this.auction.item.category.name
+    this.addItemSubCategory = this.auction.item.category.name
+    // console.log(this.auction.item.category.master_category_id)
     this.addAuctionTitle = this.auction.title
+    this.addAuctionSeller = this.auction.seller
+    this.addStartDate = new Date(this.auction.start_datetime)
+    this.addEndDate = new Date(this.auction.end_datetime)
     this.addAuctionBuyout = this.auction.buyout
 
   },
@@ -424,7 +481,6 @@ export default {
             console.log(error)
             this.categoryLoading = false;
           })
-      console.log(this.addItemCategory)
     },
 
     getWarehouse() {
@@ -444,18 +500,28 @@ export default {
 
     updateAuction() {
       axios.put('/auction/' + this.auction.id, {
-        title: this.addAuctionTitle,
-        buyout: this.addAuctionBuyout,
+
         title_item: this.addItemTitle,
         description: this.addItemDescription,
         category: this.addItemCategory,
         condition: this.addItemCondition,
         warehouse_id: this.addItemWarehouse,
+        title: this.addAuctionTitle,
+        seller: this.addAuctionSeller,
+        start_datetime: this.this.addStartDate.toISOString().replace('Z', ' ').replace('T', ' '),
+        end_datetime: this.this.addEndDate.toISOString().replace('Z', ' ').replace('T', ' '),
+        buyout: this.addAuctionBuyout,
       })
           .then(response => {
                 if (response) {
-                  window.alert('bravo kretenu nemas sweetalert')
-                  this.loading = false;
+                  Swal.fire({
+                    title: 'Done!',
+                    text: 'User updated successfully.',
+                    icon: 'success'
+                  }).then(() => {
+                    this.showDialog = false;
+                    this.loading = false;
+                  })
                 }
               }
           )
@@ -466,8 +532,6 @@ export default {
           })
     },
   }
-
-  //todo : ovdje ide logika methods() i axios
 }
 </script>
 

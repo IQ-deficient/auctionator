@@ -58,8 +58,23 @@
                   </template>
                   <template v-slot:default="dialog">
                     <v-card class="pa-4">
+                      <v-card-actions class="justify-end">
+                        <v-row class="justify-end">
+                          <v-btn
+                              small
+                              text
+                              fab
+                              @click="dialog.value = false;
+                          currentImage = undefined;
+                          previewImage = undefined;
+                          progress = 0;
+                          message = '';"
+                          >
+                            <v-icon>mdi-close</v-icon>
+                          </v-btn>
+                        </v-row>
+                      </v-card-actions>
                       <v-card-text>
-                        <div>
                           <v-row no-gutters justify="center" align="center">
                             <v-col cols="8">
                               <v-file-input
@@ -110,19 +125,7 @@
                               </v-list-item-group>
                             </v-list>
                           </v-card>
-                        </div>
                       </v-card-text>
-                      <v-card-actions class="justify-end">
-                        <v-btn
-                            text
-                            @click="dialog.value = false;
-                          currentImage = undefined;
-                          previewImage = undefined;
-                          progress = 0;
-                          message = '';"
-                        >Close
-                        </v-btn>
-                      </v-card-actions>
                     </v-card>
                   </template>
                 </v-dialog>
@@ -199,6 +202,18 @@
                   <template v-slot:default="dialog"
                   >
                     <v-card class="pa-4">
+                      <v-row class="justify-end">
+                        <v-card-actions class="justify-end">
+                          <v-btn
+                              small
+                              fab
+                              text
+                              @click="dialog.value = false"
+                          >
+                            <v-icon>mdi-close</v-icon>
+                          </v-btn>
+                        </v-card-actions>
+                      </v-row>
                       <v-card-text>
                         <div>
                           <validation-provider
@@ -270,13 +285,6 @@
                           Update password
                         </v-btn>
                       </v-card-text>
-                      <v-card-actions class="justify-end">
-                        <v-btn
-                            text
-                            @click="dialog.value = false"
-                        >Close
-                        </v-btn>
-                      </v-card-actions>
                     </v-card>
                   </template>
                 </v-dialog>

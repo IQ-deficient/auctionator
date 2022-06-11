@@ -398,7 +398,9 @@ export default {
     if (this.category == '' || this.category == null) {
       this.$router.push('/pageNotFound')
     }
-    this.getLoggedUser()
+    if(window.localStorage.getItem('token')){
+      this.getLoggedUser()
+    }
     this.showAuction()
   },
 

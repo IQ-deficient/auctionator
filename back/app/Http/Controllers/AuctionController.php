@@ -60,7 +60,7 @@ class AuctionController extends Controller
         }
 
         // Only if Administrator or Manager is currently logged in return desired data
-        if (in_array('Administrator', $roles) || in_array('Manager', $roles))
+        if (in_array('Administrator', $roles) || in_array('Auctioneer', $roles))
             return ['created' => $created, 'ongoing' => $ongoing, 'sold' => $sold, 'expired' => $expired, 'na' => $na];
 
         return response('You do not have permissions for requested data!', 400);

@@ -69,9 +69,19 @@
               </template>
               <template v-slot:default="dialog">
                 <v-card color="#2c3e50">
+                  <v-card-actions class="justify-end">
+                    <v-btn
+                        small
+                        fab
+                        @click="dialog.value = false"
+                        dark
+                    >
+                      <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                  </v-card-actions>
                   <v-card-text>
                     <div class="pa-1">
-                      <v-toolbar-title class="pa-4">
+                      <v-toolbar-title>
                         <table style="width: 100%">
                           <tr>
                             <td>
@@ -295,14 +305,6 @@
                       Create
                     </v-btn>
                   </v-card-text>
-                  <v-card-actions class="justify-end">
-                    <v-btn
-                        text
-                        @click="dialog.value = false"
-                        dark
-                    >Close
-                    </v-btn>
-                  </v-card-actions>
                 </v-card>
               </template>
             </v-dialog>
@@ -569,10 +571,8 @@ export default {
     //         if (response.data) {
     //           this.user_roles = response.data
     //         }
-    //         // todo: KOMENTAR
     //         if (!this.user_roles.includes('Administrator')) {
     //           this.$router.push('/pageNotFound')
-    //           // todo: dodati message u swal2
     //         }
     //       })
     //       .catch(error => {
@@ -616,13 +616,10 @@ export default {
   },
 
   mounted() {
-
-    console.log(this.allowedRoles)
-
     if (!this.allowedRoles) {
       this.$router.push('/pageNotFound')
     }
-    document.title = 'Administration - Auction House'
+    document.title = 'User Management - Auction House'
   }
 }
 </script>
