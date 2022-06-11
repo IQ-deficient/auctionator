@@ -2,7 +2,7 @@
   <div style="margin-top: 4%">
     <v-card
         class="pa-6"
-        max-width="48%"
+        max-width="38%"
         style="margin: 0 auto"
     >
       <v-row class="justify-start">
