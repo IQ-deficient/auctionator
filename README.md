@@ -22,6 +22,7 @@ cd..
 cd back
 php artisan jwt:secret
 php artisan key:generate
+php artisan storage:link
 php artisan migrate:fresh --seed
 ```
 - Serve the application in Terminal
