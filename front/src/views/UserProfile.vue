@@ -144,7 +144,6 @@
                               v-model="username"
                               label="Username"
                               append-icon="mdi-account-edit-outline"
-                              shaped
                               dark
                               disabled
                 ></v-text-field>
@@ -157,7 +156,6 @@
                     :loading="pageLoading"
                     label="Email"
                     append-icon="mdi-email-edit-outline"
-                    shaped
                     dark
                     disabled
                 ></v-text-field>

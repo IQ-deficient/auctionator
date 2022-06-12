@@ -186,10 +186,11 @@ export default {
             }
             return response.data;
           })
+        // TODO: OVO NE RADI NA CATCH; STRANICA SE RELOADUJE AKO SE UNESU POGRESNI KREDENCIJALI
           .catch(error => {
             this.loading = false
             this.error = error.response.data;
-            // console.log(this.error)
+            console.log(this.error)
             if (error.response.data.error == "Something went wrong.") {
               Swal.fire(
                   'Oops!',
