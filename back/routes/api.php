@@ -76,6 +76,7 @@ Route::group([
 //    Route::get('/categories', [CategoryController::class, 'index']);
 //    Route::get('/active_categories', [CategoryController::class, 'getActive']);
     Route::get('/parent_categories', [CategoryController::class, 'getParentCategories']);       // core categories
+    Route::get('/category/{category}', [CategoryController::class, 'show']);
     Route::post('/child_categories_conditions', [CategoryController::class, 'getChildCategoriesAndConditions']);    // for master category
 
     // CategoryCondition
