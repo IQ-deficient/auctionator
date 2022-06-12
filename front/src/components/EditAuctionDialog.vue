@@ -451,7 +451,7 @@ export default {
     this.getWarehouse()
     this.addItemTitle = this.auction.item.title
     this.addItemDescription = this.auction.item.description
-    this.addItemWarehouse = this.auction.item.warehouse.name
+    this.addItemWarehouse = this.auction.item.warehouse
     this.addAuctionTitle = this.auction.title
     this.addAuctionSeller = this.auction.seller
     this.addStartDate = new Date(this.auction.start_datetime)
@@ -529,17 +529,17 @@ export default {
     },
 
     updateAuction() {
+      console.log(this)
       axios.put('/auction/' + this.auction.id, {
-
         title_item: this.addItemTitle,
         description: this.addItemDescription,
-        category: this.addItemCategory,
+        category: this.addItemSubCategory,
         condition: this.addItemCondition,
-        warehouse_id: this.addItemWarehouse,
+        warehouse_id: this.addItemWarehouse.id,
         title: this.addAuctionTitle,
         seller: this.addAuctionSeller,
-        start_datetime: this.this.addStartDate.toISOString().replace('Z', ' ').replace('T', ' '),
-        end_datetime: this.this.addEndDate.toISOString().replace('Z', ' ').replace('T', ' '),
+        start_datetime: this.addStartDate.toISOString().replace('Z', ' ').replace('T', ' '),
+        end_datetime: this.addEndDate.toISOString().replace('Z', ' ').replace('T', ' '),
         buyout: this.addAuctionBuyout,
       })
         .then(response => {

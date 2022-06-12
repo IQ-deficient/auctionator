@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-data-table
+      ref="table"
       :loading="dataLoading"
       style="width: 95%; margin: 0 auto; padding-top: 6px"
       :headers="headers"
@@ -429,12 +430,19 @@
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-icon v-if="selectStatus == 'Created'"
+        <v-icon v-if="item.is_active == false"
+                class="mr-2"
+                color="secondary"
+        >
+          mdi-pencil
+        </v-icon>
+        <v-icon v-else-if="selectStatus == 'Created'"
                 class="mr-2"
                 @click="editAuction(item)"
         >
           mdi-pencil
         </v-icon>
+
         <!--          <v-icon-->
         <!--              @click="deleteAuction(item)"-->
         <!--          >-->
@@ -622,8 +630,6 @@ export default {
             // console.log(response.data)
             this.auctions = response.data
             this.tableData = this.auctions.created
-            console.log(response.data)
-            // }
           }
           // this.selectStatus = this.statuses[0]
           // console.log(this.selectStatus)
