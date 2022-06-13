@@ -15,54 +15,55 @@
           </v-row>
           <v-row>
             <v-col
-                cols="12"
-                sm="12"
+              cols="12"
+              sm="12"
             >
               <validation-provider
-                  v-slot="{ errors }"
-                  name="Email"
-                  rules="required|email"
+                v-slot="{ errors }"
+                name="Email"
+                rules="required|email"
               >
                 <v-text-field
-                    v-model="email"
-                    :error-messages="errors"
-                    label="E-mail"
-                    clearable
+                  v-model="email"
+                  :error-messages="errors"
+                  label="E-mail"
+                  clearable
                 ></v-text-field>
               </validation-provider>
             </v-col>
-            </v-row>
-            <v-row>
-              <v-col
-                  cols="12"
-                  sm="12"
+          </v-row>
+          <v-row>
+            <v-col
+              cols="12"
+              sm="12"
+            >
+              <validation-provider
+                v-slot="{ errors }"
+                name="Password"
+                rules="required|min:8|max:128"
               >
-                <validation-provider
-                    v-slot="{ errors }"
-                    name="Password"
-                    rules="required|min:8|max:128"
-                >
-                  <v-text-field
-                      v-model="password"
-                      :error-messages="errors"
-                      label="Password"
-                      :type="showPassword ? 'text' : 'password'"
-                      :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                      @click:append="showPassword = !showPassword"
-                      clearable
-                  ></v-text-field>
-                </validation-provider>
-              </v-col>
-            </v-row>
+                <v-text-field
+                  v-model="password"
+                  :error-messages="errors"
+                  label="Password"
+                  :type="showPassword ? 'text' : 'password'"
+                  :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                  @click:append="showPassword = !showPassword"
+                  clearable
+                ></v-text-field>
+              </validation-provider>
+            </v-col>
+          </v-row>
 
           <v-row class="ma-4">
             <v-btn
-                width="100%"
-                type="submit"
-                class="mb-1"
-                color="primary"
-                @click="login()"
-                @submit.prevent="invalid"
+              :loading="loading"
+              width="100%"
+              type="submit"
+              class="mb-1"
+              color="primary"
+              @click="login()"
+              @submit.prevent="invalid"
             >
               <v-icon left class="mr-2">mdi-login</v-icon>
               Login
@@ -94,8 +95,8 @@
     </div>
     <router-link to="/register" style="text-decoration: none">
       <v-btn
-          color="accent"
-          class="mt-4">
+        color="accent"
+        class="mt-4">
         Create your account
       </v-btn>
     </router-link>
@@ -152,6 +153,7 @@ export default {
     password: '',
     checkbox: null,
     showPassword: false,
+    loading: false,
   }),
 
   methods: {
@@ -175,30 +177,30 @@ export default {
         email: this.email,
         password: this.password,
       }, config)
-          .then(response => {
-            if (response) {
-              localStorage.setItem("token", JSON.stringify(response.data.access_token));
-              localStorage.setItem("user_roles", response.data.user_roles);
-              // localStorage.setItem('expires_in', JSON.stringify(response.data.expires_in));
-              this.$router.push('/home');
-              this.$router.go(0)
-              this.loading = false;
-            }
-            return response.data;
-          })
+        .then(response => {
+          if (response) {
+            localStorage.setItem("token", JSON.stringify(response.data.access_token));
+            localStorage.setItem("user_roles", response.data.user_roles);
+            // localStorage.setItem('expires_in', JSON.stringify(response.data.expires_in));
+            this.$router.push('/home');
+            this.$router.go(0)
+            this.loading = false;
+          }
+          return response.data;
+        })
         // TODO: OVO NE RADI NA CATCH; STRANICA SE RELOADUJE AKO SE UNESU POGRESNI KREDENCIJALI
-          .catch(error => {
-            this.loading = false
-            this.error = error.response.data;
-            console.log(this.error)
-            if (error.response.data.error == "Something went wrong.") {
-              Swal.fire(
-                  'Oops!',
-                  'Email and password don\'t match.',
-                  'error'
-              )
-            }
-          })
+        .catch(error => {
+          this.loading = false
+          this.error = error.response.data;
+          console.log(this.error)
+          if (error.response.data.error == "Something went wrong.") {
+            Swal.fire(
+              'Oops!',
+              'Email and password don\'t match.',
+              'error'
+            )
+          }
+        })
     },
   },
 

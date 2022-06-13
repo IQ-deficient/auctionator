@@ -404,7 +404,7 @@
                            type="submit"
                            color="primary"
                            class="mt-6"
-
+                           :loading="loading"
                            @click="createAuction()"
                     >
                       <v-icon left class="mr-1">mdi-pencil-plus-outline</v-icon>
@@ -553,6 +553,7 @@ export default {
     isAdmin: window.localStorage.user_roles.includes('Administrator'),
     allowedRoles: window.localStorage.user_roles.includes('Administrator') || window.localStorage.user_roles.includes('Auctioneer'),
     dataLoading: false,
+    loading: false,
   }),
 
   created() {
@@ -621,7 +622,7 @@ export default {
         });
     },
     getAuctions() {
-      this.dataLoading = true;
+      this.dataLoading = true
       this.auctions = []
       axios.get('/auctions')
         .then(response => {
@@ -633,15 +634,15 @@ export default {
           }
           // this.selectStatus = this.statuses[0]
           // console.log(this.selectStatus)
-          this.dataLoading = false;
+          this.dataLoading = false
         })
         .catch(error => {
           console.log(error)
-          this.dataLoading = false;
+          this.dataLoading = false
         })
     },
     getStatuses() {
-      this.dataLoading = true;
+      this.dataLoading = true
       axios.get('/statuses')
         .then(response => {
           if (response.data) {
@@ -650,29 +651,29 @@ export default {
           }
           this.selectStatus = this.statuses[0].status
           // console.log(this.selectStatus)
-          this.dataLoading = false;
+          this.dataLoading = false
         })
         .catch(error => {
           console.log(error)
-          this.dataLoading = false;
+          this.dataLoading = false
         })
     },
     getParentCategories() {
-      this.dataLoading = true;
+      this.dataLoading = true
       axios.get('/parent_categories')
         .then(response => {
           if (response.data) {
             this.categories = response.data
           }
-          this.dataLoading = false;
+          this.dataLoading = false
         })
         .catch(error => {
           console.log(error)
-          this.dataLoading = false;
+          this.dataLoading = false
         })
     },
     getSubCategoriesAndConditions() {
-      this.dataLoading = true;
+      this.dataLoading = true
       axios.post('/child_categories_conditions', {
         category: this.addItemCategory
       })
@@ -681,31 +682,32 @@ export default {
             this.subCategories = response.data.categories
             this.conditions = response.data.conditions
           }
-          this.dataLoading = false;
+          this.dataLoading = false
         })
         .catch(error => {
           console.log(error)
-          this.dataLoading = false;
+          this.dataLoading = false
         })
       // console.log(this.addItemCategory)
 
     },
     getWarehouse() {
-      this.dataLoading = true;
+      this.dataLoading = true
       axios.get('/active_warehouses')
         .then(response => {
           if (response.data) {
             this.warehouses = response.data
             // console.log(response.data)
           }
-          this.dataLoading = false;
+          this.dataLoading = false
         })
         .catch(error => {
           console.log(error)
-          this.dataLoading = false;
+          this.dataLoading = false
         })
     },
     createAuction() {
+      this.loading = true
       // console.log(this.addItemWarehouse.id)
       axios.post('/auction', {
         title_item: this.addItemTitle,
@@ -722,7 +724,7 @@ export default {
         .then(response => {
             if (response) {
               window.alert('bravo kretenu nemas sweetalert')
-              this.loading = false;
+              this.loading = false
               this.modal = false
               this.getAuctions()
             }

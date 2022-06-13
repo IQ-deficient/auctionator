@@ -343,6 +343,7 @@
                 </v-card>
               </div>
               <v-btn large
+                     :loading="loading"
                      dark
                      type="submit"
                      color="primary"
@@ -442,7 +443,8 @@ export default {
     },
     addAuctionBuyout: '',
     dataLoading: true,
-    categoryLoading: true
+    categoryLoading: true,
+    loading: false
   }),
 
   created() {
@@ -529,7 +531,7 @@ export default {
     },
 
     updateAuction() {
-      console.log(this)
+      this.loading = true
       axios.put('/auction/' + this.auction.id, {
         title_item: this.addItemTitle,
         description: this.addItemDescription,
@@ -549,8 +551,8 @@ export default {
                 text: 'User updated successfully.',
                 icon: 'success'
               }).then(() => {
-                this.showDialog = false;
-                this.loading = false;
+                this.showDialog = false
+                this.loading = false
               })
             }
           }
@@ -558,7 +560,7 @@ export default {
         .catch(error => {
           console.log(error)
           this.loading = false
-          this.error = error.response.data.message;
+          this.error = error.response.data.message
         })
     },
 
