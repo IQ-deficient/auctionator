@@ -7,19 +7,11 @@ class MultipleImageUpload {
         let formData = new FormData();
         formData.append("image", file);
 
-        axios.get('/auth/user')
-            .then(response => {
-                if (response.data) {
-                    return axios.post("/image/" + response.data.id, formData, {
-                        headers: {
-                            "Content-Type": "multipart/form-data"
-                        }, onUploadProgress
-                    });
-                }
-            })
-            .catch(error => {
-                console.log(error)
-            })
+        return axios.post("/image/1", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }, onUploadProgress
+        });
     }
 
     getFiles() {

@@ -15,7 +15,7 @@ class CreateImagesTable extends Migration
     {
         Schema::create('images', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->binary('image');    // This column type should do the trick
+            $table->string('image', 255);    // This column type should do the trick
             $table->unsignedBigInteger('item_id');
             $table->timestamps();
 

@@ -407,15 +407,20 @@ class AuctionController extends Controller
     public function addItemImagesTest(Request $request, Item $item)
     {
         $validator = Validator::make($request->all(), [
-            'image' => 'required',
-            'image.*' => 'required|mimes:jpeg,png,jpg|max:2048'
+//            'image' => 'required',
+//            'image.*' => 'required|mimes:jpeg,png,jpg|max:2048'
+            'image' => 'required|mimes:jpeg,png,jpg|max:2048'
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
 
-        foreach ($request->image as $image) {
+        $image = $request->image;
+
+        // later todo: get image array from frontend instead of calling api for each
+
+//        foreach ($request->image as $image) {
 
             // Format the name for image being stored
             $originalName = explode(
@@ -426,15 +431,15 @@ class AuctionController extends Controller
             $filename = "{$originalName}-{$time}.{$extension}";
 
             // Store the image in specified folder
-            $dest_path = 'storage/user_images/' . $filename;
-            $image->storeAs('/user_images', $filename, ['disk' => 'public']);
+            $dest_path = 'storage/item_images/' . $filename;
+            $image->storeAs('/item_images', $filename, ['disk' => 'public']);
 
             Image::create([
                 'image' => $dest_path,
                 'item_id' => 1
             ]);
 
-        }
+//        }
 
         return Item::query()->where('id', 1)->first();
     }
