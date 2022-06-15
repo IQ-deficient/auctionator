@@ -62,7 +62,6 @@ Route::group([
 //    Route::get('/active_auctions', [AuctionController::class, 'getActive']);
     Route::get('/auction/{auction}', [AuctionController::class, 'show']);       // Show one specific Auction by ID
     Route::put('/auction/{auction}', [AuctionController::class, 'update']);
-    Route::post('/image/{auction}', [AuctionController::class, 'addItemImagesTest']);       // store image test
     Route::delete('/auction/{auction}', [AuctionController::class, 'destroy']);
     Route::delete('/auction_soft/{auction}', [AuctionController::class, 'softDestroyAndRestore']);     // NA
 
@@ -104,6 +103,7 @@ Route::group([
 
     // Items
 //    Route::get('/items', [ItemController::class, 'index']);
+    Route::post('/images/{item}', [ItemController::class, 'addItemImage']);       // store image test
 
     // Roles
     Route::get('/roles', [RoleController::class, 'index']);

@@ -3,19 +3,15 @@ import axios from "axios";
 
 class MultipleImageUpload {
 
-    upload(file, onUploadProgress) {
+    upload(file, item_id, onUploadProgress) {
         let formData = new FormData();
         formData.append("image", file);
 
-        return axios.post("/image/1", formData, {
+        return axios.post("/images/" + item_id, formData, {
             headers: {
                 "Content-Type": "multipart/form-data"
             }, onUploadProgress
         });
-    }
-
-    getFiles() {
-        //not needed
     }
 }
 

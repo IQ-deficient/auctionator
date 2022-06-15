@@ -151,7 +151,7 @@ class AuctionController extends Controller
     /**
      * Store a newly created resource in storage.
      * @param Request $request
-     * @return Builder|JsonResponse|Model|object|null
+     * @return array
      */
     public function store(Request $request)
     {
@@ -171,8 +171,6 @@ class AuctionController extends Controller
             'category' => 'required|string|max:64|exists:categories,name',
             'condition' => 'required|string|max:32|exists:conditions,name', // condition is based on category
             'warehouse_id' => 'required|integer|exists:warehouses,id',
-            'image' => 'required',
-            'image.*' => 'required|mimes:jpeg,png,jpg|max:2048'
         ]);
 
         if ($validator->fails()) {
@@ -192,13 +190,6 @@ class AuctionController extends Controller
             'warehouse_id' => $request->warehouse_id,
         ]);
 
-        foreach ($request->image as $image) {
-            // store this image and assign it to an item
-        }
-
-        // TODO: ADD IMAGES FOR THIS ITEM
-        // todo: separate method !!!
-
         // Lastly, make the auction with all required data together with item and return it
         $auction = Auction::create([
             'title' => $request->title,
@@ -212,7 +203,11 @@ class AuctionController extends Controller
             'user_id' => Auth::id(),            // Auctioneer that is responsible for creation of this auction
         ]);
 
-        return Auction::query()->where('id', $auction->id)->first();
+        return [
+            'auction' => Auction::query()->where('id', $auction->id)->first(),
+            'item_id' => $item->id
+        ];
+
     }
 
     /**
@@ -398,50 +393,5 @@ class AuctionController extends Controller
         return $auction;
     }
 
-    /**
-     * Add Images to Item Object and store them.
-     * @param Request $request
-     * @param User $user
-     * @return Builder|JsonResponse|Model|object|null
-     */
-    public function addItemImagesTest(Request $request, Item $item)
-    {
-        $validator = Validator::make($request->all(), [
-//            'image' => 'required',
-//            'image.*' => 'required|mimes:jpeg,png,jpg|max:2048'
-            'image' => 'required|mimes:jpeg,png,jpg|max:2048'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-
-        $image = $request->image;
-
-        // later todo: get image array from frontend instead of calling api for each
-
-//        foreach ($request->image as $image) {
-
-            // Format the name for image being stored
-            $originalName = explode(
-                ".",
-                preg_replace("/[^A-Za-z0-9.!?]/", '', $image->getClientOriginalName()), 2)[0];
-            $time = now()->getTimestamp();
-            $extension = $image->getClientOriginalExtension();
-            $filename = "{$originalName}-{$time}.{$extension}";
-
-            // Store the image in specified folder
-            $dest_path = 'storage/item_images/' . $filename;
-            $image->storeAs('/item_images', $filename, ['disk' => 'public']);
-
-            Image::create([
-                'image' => $dest_path,
-                'item_id' => 1
-            ]);
-
-//        }
-
-        return Item::query()->where('id', 1)->first();
-    }
 
 }
