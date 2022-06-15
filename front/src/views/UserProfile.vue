@@ -76,7 +76,7 @@
                       </v-card-actions>
                       <v-card-text>
                           <v-row no-gutters justify="center" align="center">
-                            <v-col cols="8">
+                            <v-col cols="12" sm="8">
                               <v-file-input
                                   v-model="imageUpload"
                                   show-size
@@ -85,7 +85,7 @@
                                   @change="selectImage"
                               ></v-file-input>
                             </v-col>
-                            <v-col cols="4" class="pl-2">
+                            <v-col cols="12" sm="4" class="pl-2">
                               <v-btn color="primary" dark @click="upload">
                                 <v-icon left dark>mdi-cloud-upload</v-icon>
                                 Upload

@@ -154,85 +154,65 @@
                       </validation-provider>
                     </v-col>
                   </v-row>
-                  <v-dialog
-                    transition="scale-transition"
-                    max-width="35%"
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <a
-                        v-bind="attrs"
-                        v-on="on"
+                  <div>
+                    <div v-if="progressInfos">
+                      <div class="mb-2"
+                           v-for="(progressInfo, index) in progressInfos"
+                           :key="index"
                       >
-                        <v-icon large>
-                          mdi-pencil-outline
-                        </v-icon>
-                      </a>
-                    </template>
-                    <template v-slot:default="dialog">
-                      <v-card>
-                        <v-card-text>
-                          <div class="pa-4">
-                            <v-row no-gutters justify="center" align="center">
-                              <v-col cols="8">
-                                <v-file-input
-                                  show-size
-                                  label="Select Image"
-                                  accept="image/*"
-                                  @change="selectImage"
-                                ></v-file-input>
-                              </v-col>
-                              <v-col cols="4" class="pl-2">
-                                <v-btn color="primary" dark @click="upload">
-                                  <v-icon left dark>mdi-cloud-upload</v-icon>
-                                  Upload
-                                </v-btn>
-                              </v-col>
-                            </v-row>
-                            <div v-if="progress">
-                              <div>
-                                <v-progress-linear
-                                  v-model="progress"
-                                  color="light-blue"
-                                  height="25"
-                                  reactive
-                                >
-                                  <strong>{{ progress }} %</strong>
-                                </v-progress-linear>
-                              </div>
-                            </div>
-
-                            <div v-if="previewImage">
-                              <div>
-                                <img style="width: 100%" class="preview my-3" :src="previewImage" alt=""/>
-                              </div>
-                            </div>
-
-                            <v-alert v-if="message" border="left" color="blue-grey" dark>
-                              {{ message }}
-                            </v-alert>
-
-                            <v-card v-if="imageInfos.length > 0" class="mx-auto">
-                              <v-list>
-                                <v-subheader>List of Images</v-subheader>
-                                <v-list-item-group color="primary">
-                                  <v-list-item v-for="(image, index) in imageInfos" :key="index">
-                                    <a :href="image.url">{{ image.name }}</a>
-                                  </v-list-item>
-                                </v-list-item-group>
-                              </v-list>
-                            </v-card>
+                        <span>{{progressInfo.fileName}}</span>
+                        <div class="progress">
+                          <div class="progress-bar progress-bar-info"
+                               role="progressbar"
+                               :aria-valuenow="progressInfo.percentage"
+                               aria-valuemin="0"
+                               aria-valuemax="100"
+                               :style="{ width: progressInfo.percentage + '%' }"
+                          >
+                            {{progressInfo.percentage}}%
                           </div>
-                        </v-card-text>
-                        <v-card-actions class="justify-end">
-                          <v-btn
-                            text
-                            @click="dialog.value = false"
-                          >Close
-                          </v-btn>
-                        </v-card-actions>
-                      </v-card>
-                    </template>
-                  </v-dialog>
+                        </div>
+                      </div>
+                    </div>
+                    <v-row no-gutters justify="center" align="center">
+                      <v-col cols="8">
+                        <v-file-input multiple type="file"
+                                      v-model="imageUpload"
+                                      show-size
+                                      label="Select Image"
+                                      accept="image/*"
+                                      @change="selectImage"
+                        ></v-file-input>
+                      </v-col>
+                      <v-col cols="4" class="pl-2">
+                        <v-btn color="primary"
+                               dark
+                               :disabled="!selectedFiles"
+                               @click="uploadImages">
+                          <v-icon left dark>mdi-cloud-upload</v-icon>
+                          Upload
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                    <div v-if="message" class="alert alert-light" role="alert">
+                      <ul>
+                        <li v-for="(ms, i) in message.split('\n')" :key="i">
+                          {{ ms }}
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="card">
+                      <div class="card-header">List of Files</div>
+                      <ul class="list-group list-group-flush">
+                        <li class="list-group-item"
+                            v-for="(file, index) in fileInfos"
+                            :key="index"
+                        >
+                          <a :href="file.url">{{ file.name }}</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
                 </v-card>
                 <v-toolbar-title class="pa-4">
                   <table style="width: 100%">
@@ -380,7 +360,7 @@ import {required, min, max, min_value} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 import axios from "axios";
 import Swal from "sweetalert2";
-// import UploadService from "../services/UploadFilesService";
+import MultipleImageUpload from "../services/MultipleImageUpload";
 
 setInteractionMode('eager')
 
@@ -444,7 +424,21 @@ export default {
     addAuctionBuyout: '',
     dataLoading: true,
     categoryLoading: true,
-    loading: false
+    loading: false,
+
+    //image data
+    //
+    // currentImage: undefined,
+    // previewImage: undefined,
+    // progress: 0,
+    // message: "",
+    // imageInfos: [],
+    imageUpload: null,
+
+    selectedFiles: undefined,
+    progressInfos: [],
+    message: "",
+    fileInfos: [],
   }),
 
   created() {
@@ -528,6 +522,46 @@ export default {
           console.log(error)
           this.dataLoading = false
         })
+    },
+
+    selectImage() {
+      // this.currentImage = image;
+      // this.previewImage = URL.createObjectURL(this.currentImage);
+      // this.progress = 0;
+      // this.message = "";
+      this.progressInfos = [];
+      this.selectedFiles = event.target.files;
+    },
+
+    uploadImages() {
+      this.message = "";
+      for (let i = 0; i < this.selectedFiles.length; i++) {
+        console.log(this.selectedFiles.name)
+        this.upload(i, this.selectedFiles[i]);
+      }
+    },
+
+    upload(idx, file) {
+      this.progressInfos[idx] = { percentage: 0, fileName: file.name };
+      MultipleImageUpload.upload(file, (event) => {
+        this.progressInfos[idx].percentage = Math.round(100 * event.loaded / event.total);
+        console.log(idx)
+        console.log(this.progressInfos[idx])
+        console.log(file)
+      })
+              .then((response) => {
+
+                let prevMessage = this.message ? this.message + "\n" : "";
+                this.message = prevMessage + response.data.message;
+                return MultipleImageUpload.getFiles();
+              })
+              .then((files) => {
+                this.fileInfos = files.data;
+              })
+              .catch(() => {
+                this.progressInfos[idx].percentage = 0;
+                this.message = "Could not upload the file:" + file.name;
+              });
     },
 
     updateAuction() {
