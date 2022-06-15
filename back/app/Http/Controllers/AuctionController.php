@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateAuctionRequest;
 use App\Models\Bid;
 use App\Models\Category;
 use App\Models\History;
+use App\Models\Image;
 use App\Models\Item;
 use App\Models\User;
 use Carbon\Carbon;
@@ -23,6 +24,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class AuctionController extends Controller
@@ -169,6 +171,8 @@ class AuctionController extends Controller
             'category' => 'required|string|max:64|exists:categories,name',
             'condition' => 'required|string|max:32|exists:conditions,name', // condition is based on category
             'warehouse_id' => 'required|integer|exists:warehouses,id',
+            'image' => 'required',
+            'image.*' => 'required|mimes:jpeg,png,jpg|max:2048'
         ]);
 
         if ($validator->fails()) {
@@ -187,6 +191,13 @@ class AuctionController extends Controller
             'condition' => $request->condition,
             'warehouse_id' => $request->warehouse_id,
         ]);
+
+        foreach ($request->image as $image) {
+            // store this image and assign it to an item
+        }
+
+        // TODO: ADD IMAGES FOR THIS ITEM
+        // todo: separate method !!!
 
         // Lastly, make the auction with all required data together with item and return it
         $auction = Auction::create([
@@ -385,6 +396,47 @@ class AuctionController extends Controller
         }
 
         return $auction;
+    }
+
+    /**
+     * Add Images to Item Object and store them.
+     * @param Request $request
+     * @param User $user
+     * @return Builder|JsonResponse|Model|object|null
+     */
+    public function addItemImagesTest(Request $request, Item $item)
+    {
+        $validator = Validator::make($request->all(), [
+            'image' => 'required',
+            'image.*' => 'required|mimes:jpeg,png,jpg|max:2048'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        foreach ($request->image as $image) {
+
+            // Format the name for image being stored
+            $originalName = explode(
+                ".",
+                preg_replace("/[^A-Za-z0-9.!?]/", '', $image->getClientOriginalName()), 2)[0];
+            $time = now()->getTimestamp();
+            $extension = $image->getClientOriginalExtension();
+            $filename = "{$originalName}-{$time}.{$extension}";
+
+            // Store the image in specified folder
+            $dest_path = 'storage/user_images/' . $filename;
+            $image->storeAs('/user_images', $filename, ['disk' => 'public']);
+
+            Image::create([
+                'image' => $dest_path,
+                'item_id' => 1
+            ]);
+
+        }
+
+        return Item::query()->where('id', 1)->first();
     }
 
 }
