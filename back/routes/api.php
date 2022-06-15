@@ -51,8 +51,6 @@ Route::post('/filtered_auctions', [AuctionController::class, 'getFiltered']);   
 Route::get('/menu_categories', [CategoryController::class, 'getMenuCategories']);   // All Categories formatted for Menu
 Route::get('/active_countries', [CountryController::class, 'getActive']);  // Used in registration
 
-Route::post('/image/{user}', [UserController::class, 'changeUserImage'])->name('test_image_route');       // update image
-
 // This Middleware should require User being Authenticated and his JWT token to be granted access to these routes
 Route::group([
     'middleware' => ['auth:api', 'check_user']
@@ -64,6 +62,7 @@ Route::group([
 //    Route::get('/active_auctions', [AuctionController::class, 'getActive']);
     Route::get('/auction/{auction}', [AuctionController::class, 'show']);       // Show one specific Auction by ID
     Route::put('/auction/{auction}', [AuctionController::class, 'update']);
+    Route::post('/image/{auction}', [AuctionController::class, 'addItemImagesTest']);       // store image test
     Route::delete('/auction/{auction}', [AuctionController::class, 'destroy']);
     Route::delete('/auction_soft/{auction}', [AuctionController::class, 'softDestroyAndRestore']);     // NA
 
@@ -119,6 +118,7 @@ Route::group([
     Route::post('/employee', [UserController::class, 'registerEmployee']);      // Administrator inserts new personnel
     Route::get('/employees', [UserController::class, 'getEmployeeRoles']);      // Worker roles
     Route::put('/user/{user}', [UserController::class, 'update']);     // update profile auth user
+    Route::post('/image/{user}', [UserController::class, 'changeUserImage'])->name('test_image_route');       // update image
     Route::put('/manage/{user}', [UserController::class, 'manage']);     // manage user profiles
     Route::put('/password/{user}', [UserController::class, 'changePassword']);       // update password
     Route::delete('/user/{user}', [UserController::class, 'destroy']);      // deactivate user
