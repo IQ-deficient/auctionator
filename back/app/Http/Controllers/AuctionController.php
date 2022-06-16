@@ -133,6 +133,15 @@ class AuctionController extends Controller
             ->where('end_datetime', '>=', Carbon::now())      // and NOT ended
             ->get();
 
+
+        // For query auctions, fetch all Image paths for Item and bind them to each Auction
+        foreach ($auctions as $auction) {
+            $images = Image::query()
+                ->where('item_id', $auction->item->id)
+                ->get();
+            $auction->images = $images;
+        }
+
         // Also...
         $conditions = Category::getConditionsByCategory($request->category);
 

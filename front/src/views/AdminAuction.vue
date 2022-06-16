@@ -642,7 +642,7 @@ export default {
         .then((response) => {
           let prevMessage = this.message ? this.message + "\n" : "";
           this.message = prevMessage + response.data.message;
-          return MultipleImageUpload.getFiles();
+          // return MultipleImageUpload.getFiles();
         })
         .then((files) => {
           this.fileInfos = files.data;

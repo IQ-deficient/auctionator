@@ -560,7 +560,7 @@ export default {
         seller: this.addAuctionSeller,
         start_datetime: this.addStartDate.toISOString().replace('Z', ' ').replace('T', ' '),
         end_datetime: this.addEndDate.toISOString().replace('Z', ' ').replace('T', ' '),
-        buyout: this.addAuctionBuyout,
+        buyout: this.addAuctionBuyout
       })
         .then(response => {
             if (response) {

@@ -62,7 +62,7 @@
             color="tertiary"
           >
             <v-img
-              src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+              :src="require('../../../back/public/' + auction.images[0].image)"
               class="h-50"
               height="200px"
             ></v-img>
@@ -105,9 +105,9 @@
                       <div class="pt-5">
                         <v-carousel hide-delimiters style="height: 300px">
                           <v-carousel-item
-                            v-for="(item,i) in pictures"
+                            v-for="(item,i) in auction.images"
                             :key="i"
-                            :src="item.src"
+                            :src="require('../../../back/public/' + item.image)"
                           ></v-carousel-item>
                         </v-carousel>
                         <div>
@@ -371,8 +371,8 @@ export default {
         })
     },
 
-      // todo: objasni milosu komunikacije i for loop i komponente
-      postBid(auction_id) {
+    // todo: objasni milosu komunikacije i for loop i komponente
+    postBid(auction_id) {
       this.loading = true
       axios.post('/bid', {
         value: this.bidInput,
@@ -398,7 +398,7 @@ export default {
     if (this.category == '' || this.category == null) {
       this.$router.push('/pageNotFound')
     }
-    if(window.localStorage.getItem('token')){
+    if (window.localStorage.getItem('token')) {
       this.getLoggedUser()
     }
     this.showAuction()
