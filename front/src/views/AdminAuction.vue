@@ -16,6 +16,10 @@
           flat
           class="mb-8"
         >
+          <v-btn :loading="dataLoading" color="primary" class="mr-3"
+                 @click="getAuctions()">
+            <v-icon>mdi-database-refresh-outline</v-icon>
+          </v-btn>
           <v-toolbar-title><h2>Auctions</h2></v-toolbar-title>
           <v-divider
             class="mx-4"
@@ -74,7 +78,7 @@
                     <v-btn
                       small
                       fab
-                      @click="dialog.value = false"
+                      @click="dialog.value = false; clearForm()"
                       dark
                     >
                       <v-icon>mdi-close</v-icon>
@@ -424,6 +428,7 @@
       v-if="editAuctionDialog"
       @close="editAuctionDialog = false"
       :show-dialog="editAuctionDialog"
+      @reload="getAuctions()"
       :auction="chosenAuction"
     />
   </div>
@@ -765,6 +770,19 @@ export default {
           this.error = error.response.data.message;
         })
     },
+
+    clearForm() {
+      this.addItemTitle = ''
+      this.addItemDescription = ''
+      this.addItemSubCategory = ''
+      this.addItemCondition = ''
+      this.addItemWarehouse = ''
+      this.addAuctionTitle = ''
+      this.addAuctionSeller = ''
+      this.addStartDate = new Date()
+      this.addEndDate = new Date()
+      this.addAuctionBuyout = ''
+    }
   },
 
   mounted() {
