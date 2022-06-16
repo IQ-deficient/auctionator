@@ -143,7 +143,6 @@
                                 :items="warehouses"
                                 item-text="name"
                                 required
-                                clearable
                                 return-object
                               >
                               </v-select>
@@ -162,7 +161,6 @@
                                 :items="categories"
                                 item-text="name"
                                 required
-                                clearable
                                 @change="getSubCategoriesAndConditions()"
                               >
                               </v-select>
@@ -183,7 +181,6 @@
                                 :items="subCategories"
                                 item-text="name"
                                 required
-                                clearable
                                 :disabled="!addItemCategory"
                               >
                               </v-select>
@@ -202,47 +199,30 @@
                                 :items="conditions"
                                 item-text="condition"
                                 required
-                                clearable
                                 :disabled="!addItemCategory"
                               >
                               </v-select>
                             </validation-provider>
                           </v-col>
                         </v-row>
-
-                        <!--                                <v-card v-if="imageInfos.length > 0" class="mx-auto">-->
-                        <!--                                  <v-list>-->
-                        <!--                                    <v-subheader>List of Images</v-subheader>-->
-                        <!--                                    <v-list-item-group color="primary">-->
-                        <!--                                      <v-list-item v-for="(image, index) in imageInfos" :key="index">-->
-                        <!--                                        <a :href="image.url">{{ image.name }}</a>-->
-                        <!--                                      </v-list-item>-->
-                        <!--                                    </v-list-item-group>-->
-                        <!--                                  </v-list>-->
-                        <!--                                </v-card>-->
-                        <!--                              </v-card-text>-->
-                        <div>
-                          <div v-if="progressInfos">
-                            <div class="mb-2"
-                                 v-for="(progressInfo, index) in progressInfos"
-                                 :key="index"
-                            >
-                              <span>{{ progressInfo.fileName }}</span>
-                              <div class="progress">
-                                <div class="progress-bar progress-bar-info"
-                                     role="progressbar"
-                                     :aria-valuenow="progressInfo.percentage"
-                                     aria-valuemin="0"
-                                     aria-valuemax="100"
-                                     :style="{ width: progressInfo.percentage + '%' }"
-                                >
-                                  {{ progressInfo.percentage }}%
-                                </div>
-                              </div>
-                            </div>
-                          </div>
+                      </v-card>
+                      <v-toolbar-title class="pa-4">
+                        <table style="width: 100%">
+                          <tr>
+                            <td>
+                              <hr/>
+                            </td>
+                            <td style="width:1px; padding: 10px; white-space: nowrap;">
+                              <h2 style="color: white">Image upload</h2></td>
+                            <td>
+                              <hr/>
+                            </td>
+                          </tr>
+                        </table>
+                      </v-toolbar-title>
+                          <v-card class="pa-4">
                           <v-row no-gutters justify="center" align="center">
-                            <v-col cols="8">
+                            <v-col cols="12" sm="12">
                               <v-file-input multiple type="file"
                                             v-model="imageUpload"
                                             show-size
@@ -251,37 +231,36 @@
                                             @change="selectImage"
                               ></v-file-input>
                             </v-col>
-                            <v-col cols="4" class="pl-2">
-                              <v-btn color="primary"
-                                     dark
-                                     :disabled="!selectedFiles"
-                                     @click="uploadImages">
-                                <v-icon left dark>mdi-cloud-upload</v-icon>
-                                Upload
-                              </v-btn>
+                          </v-row>
+                            <v-row no-gutters justify="center" align="center" style="width: 100%" class="my-1" v-for="(ms, i) in messages" :key="i">
+                              <v-col cols="12" sm="12">
+                                <div v-if="messages">
+                                  <v-list-item class="list-group list-group-flush">
+                                    <v-list-item-content>
+                                      <v-alert color="error" dark>
+                                        {{ ms }}
+                                      </v-alert>
+                                    </v-list-item-content>
+                                  </v-list-item>
+                                </div>
+                              </v-col>
+                            </v-row>
+                            <v-row no-gutters justify="center" align="center">
+                              <v-col cols="12" sm="12">
+                              <div v-if="previewImages">
+                                <v-list-item class="list-group list-group-flush">
+                                  <v-list-item-content class="mx-1"
+                                                       v-for="(file, index) in previewImages"
+                                                       :key="index"
+                                  >
+                                    <v-img style="width: 100%" class="preview my-3" :src="file"></v-img>
+                                  </v-list-item-content>
+                                </v-list-item>
+                              </div>
+
                             </v-col>
                           </v-row>
-                          <div v-if="message" class="alert alert-light" role="alert">
-                            <ul>
-                              <li v-for="(ms, i) in message.split('\n')" :key="i">
-                                {{ ms }}
-                              </li>
-                            </ul>
-                          </div>
-                          <div class="card">
-                            <div class="card-header">List of Files</div>
-                            <ul class="list-group list-group-flush">
-                              <li class="list-group-item"
-                                  v-for="(file, index) in fileInfos"
-                                  :key="index"
-                              >
-                                <a :href="file.url">{{ file.name }}</a>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-
-                      </v-card>
+                          </v-card>
                       <v-toolbar-title class="pa-4">
                         <table style="width: 100%">
                           <tr>
@@ -412,8 +391,6 @@
                 <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <!--                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>-->
-                  <!--                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>-->
                   <v-spacer></v-spacer>
                 </v-card-actions>
               </v-card>
@@ -542,21 +519,23 @@ export default {
     allowedRoles: window.localStorage.user_roles.includes('Administrator') || window.localStorage.user_roles.includes('Auctioneer'),
     dataLoading: false,
     loading: false,
+    isValid: false,
 
     //image data
     //
-    // currentImage: undefined,
-    // previewImage: undefined,
+    previewImages: undefined,
     // progress: 0,
     // message: "",
     // imageInfos: [],
     imageUpload: null,
+    imageName: '',
 
     selectedFiles: undefined,
     progressInfos: [],
     message: "",
+    messages: undefined,
     fileInfos: [],
-
+    extensions: [".jpg", ".jpeg", ".png"]
 
   }),
 
@@ -598,32 +577,64 @@ export default {
       this.$refs.observer.reset()
     },
     selectImage() {
-      // this.currentImage = image;
-      // this.previewImage = URL.createObjectURL(this.currentImage);
       // this.progress = 0;
       // this.message = "";
       this.progressInfos = [];
+      this.previewImages = [];
       this.selectedFiles = event.target.files;
+      for (let i = 0; i < this.selectedFiles.length; i++) {
+        // console.log(this.selectedFiles[i])
+        this.previewImages.push(URL.createObjectURL(this.selectedFiles[i]))
+      }
     },
 
     uploadImages(item_id) {
       this.message = "";
+      this.messages = [];
+      if (this.selectedFiles) {
       for (let i = 0; i < this.selectedFiles.length; i++) {
-        console.log(this.selectedFiles.name)
-        this.upload(i, this.selectedFiles[i], item_id);
+        this.imageName = this.selectedFiles[i].name
+        this.fileSize = this.selectedFiles[i].size
+        if (this.selectedFiles.length > 5){
+          this.message = "You may upload up to 5 images.";
+          this.messages.push(this.message)
+          return
+        } else {
+          for (let j = 0; j < this.extensions.length; j++) {
+            this.currentExtension = this.extensions[j];
+            if (this.imageName.substr(this.imageName.length - this.currentExtension.length,
+                    this.currentExtension.length).toLowerCase() == this.currentExtension.toLowerCase()) {
+              this.isValid = true;
+            }
+          }
+          if (!this.isValid) {
+            this.message = "Sorry, '" + this.imageName + "' is invalid, allowed extensions are: " + this.extensions.join(", ") + ".";
+            this.messages.push(this.message)
+          }
+          if (this.fileSize > 2097152) {
+            this.message = "Sorry, '" + this.imageName + "' is invalid, file size cannot be greater than 2MB.";
+            this.messages.push(this.message)
+          }
+          this.upload(i, this.selectedFiles[i], item_id);
+        }
       }
+      } else {
+          this.message = "Please select an image.";
+        this.messages.push(this.message)
+        return;
+        }
     },
 
     upload(idx, file, item_id) {
       this.progressInfos[idx] = {percentage: 0, fileName: file.name};
+
       MultipleImageUpload.upload(file, item_id, (event) => {
         this.progressInfos[idx].percentage = Math.round(100 * event.loaded / event.total);
-        console.log(idx)
-        console.log(this.progressInfos[idx])
-        console.log(file)
+        // console.log(idx)
+        // console.log(this.progressInfos[idx])
+        // console.log(file)
       })
         .then((response) => {
-
           let prevMessage = this.message ? this.message + "\n" : "";
           this.message = prevMessage + response.data.message;
           return MultipleImageUpload.getFiles();

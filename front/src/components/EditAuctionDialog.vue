@@ -85,7 +85,6 @@
                           :items="warehouses"
                           item-text="name"
                           required
-                          clearable
                           return-object
                         >
                         </v-select>
@@ -105,7 +104,6 @@
                           :items="categories"
                           item-text="name"
                           required
-                          clearable
                           @change="getSubCategoriesAndConditions()"
                         >
                         </v-select>
@@ -127,7 +125,6 @@
                           :items="subCategories"
                           item-text="name"
                           required
-                          clearable
                           :disabled="!addItemCategory"
                         >
                         </v-select>
@@ -147,72 +144,71 @@
                           :items="conditions"
                           item-text="condition"
                           required
-                          clearable
                           :disabled="!addItemCategory"
                         >
                         </v-select>
                       </validation-provider>
                     </v-col>
                   </v-row>
-                  <div>
-                    <div v-if="progressInfos">
-                      <div class="mb-2"
-                           v-for="(progressInfo, index) in progressInfos"
-                           :key="index"
-                      >
-                        <span>{{progressInfo.fileName}}</span>
-                        <div class="progress">
-                          <div class="progress-bar progress-bar-info"
-                               role="progressbar"
-                               :aria-valuenow="progressInfo.percentage"
-                               aria-valuemin="0"
-                               aria-valuemax="100"
-                               :style="{ width: progressInfo.percentage + '%' }"
-                          >
-                            {{progressInfo.percentage}}%
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <v-row no-gutters justify="center" align="center">
-                      <v-col cols="8">
-                        <v-file-input multiple type="file"
-                                      v-model="imageUpload"
-                                      show-size
-                                      label="Select Image"
-                                      accept="image/*"
-                                      @change="selectImage"
-                        ></v-file-input>
-                      </v-col>
-                      <v-col cols="4" class="pl-2">
-                        <v-btn color="primary"
-                               dark
-                               :disabled="!selectedFiles"
-                               @click="uploadImages">
-                          <v-icon left dark>mdi-cloud-upload</v-icon>
-                          Upload
-                        </v-btn>
-                      </v-col>
-                    </v-row>
-                    <div v-if="message" class="alert alert-light" role="alert">
-                      <ul>
-                        <li v-for="(ms, i) in message.split('\n')" :key="i">
-                          {{ ms }}
-                        </li>
-                      </ul>
-                    </div>
-                    <div class="card">
-                      <div class="card-header">List of Files</div>
-                      <ul class="list-group list-group-flush">
-                        <li class="list-group-item"
-                            v-for="(file, index) in fileInfos"
-                            :key="index"
-                        >
-                          <a :href="file.url">{{ file.name }}</a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
+<!--                  <div>-->
+<!--                    <div v-if="progressInfos">-->
+<!--                      <div class="mb-2"-->
+<!--                           v-for="(progressInfo, index) in progressInfos"-->
+<!--                           :key="index"-->
+<!--                      >-->
+<!--                        <span>{{progressInfo.fileName}}</span>-->
+<!--                        <div class="progress">-->
+<!--                          <div class="progress-bar progress-bar-info"-->
+<!--                               role="progressbar"-->
+<!--                               :aria-valuenow="progressInfo.percentage"-->
+<!--                               aria-valuemin="0"-->
+<!--                               aria-valuemax="100"-->
+<!--                               :style="{ width: progressInfo.percentage + '%' }"-->
+<!--                          >-->
+<!--                            {{progressInfo.percentage}}%-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                    <v-row no-gutters justify="center" align="center">-->
+<!--                      <v-col cols="8">-->
+<!--                        <v-file-input multiple type="file"-->
+<!--                                      v-model="imageUpload"-->
+<!--                                      show-size-->
+<!--                                      label="Select Image"-->
+<!--                                      accept="image/*"-->
+<!--                                      @change="selectImage"-->
+<!--                        ></v-file-input>-->
+<!--                      </v-col>-->
+<!--                      <v-col cols="4" class="pl-2">-->
+<!--                        <v-btn color="primary"-->
+<!--                               dark-->
+<!--                               :disabled="!selectedFiles"-->
+<!--                               @click="uploadImages">-->
+<!--                          <v-icon left dark>mdi-cloud-upload</v-icon>-->
+<!--                          Upload-->
+<!--                        </v-btn>-->
+<!--                      </v-col>-->
+<!--                    </v-row>-->
+<!--                    <div v-if="message" class="alert alert-light" role="alert">-->
+<!--                      <ul>-->
+<!--                        <li v-for="(ms, i) in message.split('\n')" :key="i">-->
+<!--                          {{ ms }}-->
+<!--                        </li>-->
+<!--                      </ul>-->
+<!--                    </div>-->
+<!--                    <div class="card">-->
+<!--                      <div class="card-header">List of Files</div>-->
+<!--                      <ul class="list-group list-group-flush">-->
+<!--                        <li class="list-group-item"-->
+<!--                            v-for="(file, index) in fileInfos"-->
+<!--                            :key="index"-->
+<!--                        >-->
+<!--                          <a :href="file.url">{{ file.name }}</a>-->
+<!--                        </li>-->
+<!--                      </ul>-->
+<!--                    </div>-->
+<!--                  </div>-->
                 </v-card>
                 <v-toolbar-title class="pa-4">
                   <table style="width: 100%">
@@ -339,19 +335,7 @@
           </v-card>
         </template>
       </v-dialog>
-      <!--      <v-dialog v-model="dialogDelete" max-width="35%">-->
-      <!--        <v-card>-->
-      <!--          <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>-->
-      <!--          <v-card-actions>-->
-      <!--            <v-spacer></v-spacer>-->
-      <!--            <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>-->
-      <!--            <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>-->
-      <!--            <v-spacer></v-spacer>-->
-      <!--          </v-card-actions>-->
-      <!--        </v-card>-->
-      <!--      </v-dialog>-->
     </validation-observer>
-
   </v-container>
 </template>
 
@@ -360,7 +344,7 @@ import {required, min, max, min_value} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 import axios from "axios";
 import Swal from "sweetalert2";
-import MultipleImageUpload from "../services/MultipleImageUpload";
+// import MultipleImageUpload from "../services/MultipleImageUpload";
 
 setInteractionMode('eager')
 
@@ -433,12 +417,12 @@ export default {
     // progress: 0,
     // message: "",
     // imageInfos: [],
-    imageUpload: null,
-
-    selectedFiles: undefined,
-    progressInfos: [],
-    message: "",
-    fileInfos: [],
+    // imageUpload: null,
+    //
+    // selectedFiles: undefined,
+    // progressInfos: [],
+    // message: "",
+    // fileInfos: [],
   }),
 
   created() {
@@ -524,45 +508,45 @@ export default {
         })
     },
 
-    selectImage() {
-      // this.currentImage = image;
-      // this.previewImage = URL.createObjectURL(this.currentImage);
-      // this.progress = 0;
-      // this.message = "";
-      this.progressInfos = [];
-      this.selectedFiles = event.target.files;
-    },
-
-    uploadImages() {
-      this.message = "";
-      for (let i = 0; i < this.selectedFiles.length; i++) {
-        console.log(this.selectedFiles.name)
-        this.upload(i, this.selectedFiles[i]);
-      }
-    },
-
-    upload(idx, file) {
-      this.progressInfos[idx] = { percentage: 0, fileName: file.name };
-      MultipleImageUpload.upload(file, (event) => {
-        this.progressInfos[idx].percentage = Math.round(100 * event.loaded / event.total);
-        console.log(idx)
-        console.log(this.progressInfos[idx])
-        console.log(file)
-      })
-              .then((response) => {
-
-                let prevMessage = this.message ? this.message + "\n" : "";
-                this.message = prevMessage + response.data.message;
-                return MultipleImageUpload.getFiles();
-              })
-              .then((files) => {
-                this.fileInfos = files.data;
-              })
-              .catch(() => {
-                this.progressInfos[idx].percentage = 0;
-                this.message = "Could not upload the file:" + file.name;
-              });
-    },
+    // selectImage() {
+    //   // this.currentImage = image;
+    //   // this.previewImage = URL.createObjectURL(this.currentImage);
+    //   // this.progress = 0;
+    //   // this.message = "";
+    //   this.progressInfos = [];
+    //   this.selectedFiles = event.target.files;
+    // },
+    //
+    // uploadImages() {
+    //   this.message = "";
+    //   for (let i = 0; i < this.selectedFiles.length; i++) {
+    //     console.log(this.selectedFiles.name)
+    //     this.upload(i, this.selectedFiles[i]);
+    //   }
+    // },
+    //
+    // upload(idx, file) {
+    //   this.progressInfos[idx] = { percentage: 0, fileName: file.name };
+    //   MultipleImageUpload.upload(file, (event) => {
+    //     this.progressInfos[idx].percentage = Math.round(100 * event.loaded / event.total);
+    //     console.log(idx)
+    //     console.log(this.progressInfos[idx])
+    //     console.log(file)
+    //   })
+    //           .then((response) => {
+    //
+    //             let prevMessage = this.message ? this.message + "\n" : "";
+    //             this.message = prevMessage + response.data.message;
+    //             return MultipleImageUpload.getFiles();
+    //           })
+    //           .then((files) => {
+    //             this.fileInfos = files.data;
+    //           })
+    //           .catch(() => {
+    //             this.progressInfos[idx].percentage = 0;
+    //             this.message = "Could not upload the file:" + file.name;
+    //           });
+    // },
 
     updateAuction() {
       this.loading = true

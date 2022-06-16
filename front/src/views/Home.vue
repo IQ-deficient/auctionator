@@ -24,7 +24,6 @@ export default {
       'Bid and History pages should be made functional at least',
       'Add Sweetalert props where needed',
       'Add functional Loading attribute to components that need it',
-      'Multi Image upload',
       'Clean up Todo-s throughout the code',
       'Proofread code and seeders for profanity',
       'Fix the issue where after failed Login attempt page reloads and gives no message',

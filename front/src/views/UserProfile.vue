@@ -105,7 +105,7 @@
                             </div>
                           </div>
 
-                          <v-alert v-if="message" border="left" color="error" dark>
+                          <v-alert v-if="message" color="error" dark>
                             {{ message }}
                           </v-alert>
 
@@ -730,6 +730,8 @@ export default {
       this.previewImage = URL.createObjectURL(this.currentImage);
       this.progress = 0;
       this.message = "";
+      // console.log(this.currentImage)
+      // console.log(this.previewImage)
     },
     upload() {
 
@@ -744,7 +746,7 @@ export default {
         }
 
         if (!this.isValid) {
-          this.message = "Sorry, " + this.imageName + " is invalid, allowed extensions are: " + this.extensions.join(", ");
+          this.message = "Sorry, " + this.imageName + " is invalid, allowed extensions are: " + this.extensions.join(", " + "!");
           return;
         }
       } else {
