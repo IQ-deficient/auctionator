@@ -54,138 +54,196 @@
     </div>
     <div v-else>
       <validation-observer>
-        <v-row style="justify-content: center">
+        <v-row style="justify-content: start;" class="ma-2">
           <v-card
             v-for="auction in auctions" :key="auction.id"
-            class="ma-5 card-body d-flex flex-column h-100"
-            max-width="22%"
+            class="mx-1 card-body d-flex flex-column h-100"
+            max-width="19%"
+            min-width="19%"
+
             color="tertiary"
           >
+            <v-row>
+              <v-col cols="12" sm="12">
             <v-img
+                    style="background-color: #1a202c"
+                    contain
               :src="require('../../../back/public/' + auction.images[0].image)"
-              class="h-50"
-              height="200px"
+              min-height="275px"
+              max-height="275px"
+
             ></v-img>
-
-            <v-card-title style="word-break: normal">
-              {{ auction.title }}
-            </v-card-title>
-            <br>
-            <v-card-subtitle>
-              {{ auction.item.title }}
-            </v-card-subtitle>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" sm="12">
+                <v-card-title style="word-break: normal; justify-content: start" class="text-sm-body-1">
+                  {{ auction.title }}
+                </v-card-title>
+              </v-col>
+            </v-row>
             <hr>
-            <v-card-text class="text-sm-h6">
-              <div color="primary" v-if="auction.bid != null"> {{ "Current bid: " + auction.bid.value + "€" }}</div>
-              <div style="color: #42b983" v-else> {{ "No bids on this item!" }}</div>
-            </v-card-text>
-
+            <v-row>
+              <v-col cols="12" sm="12">
+                <v-card-title v-if="auction.bid != null" style="justify-content: start" class="text-sm-body-1">
+                  {{ "Current bid: " + auction.bid.value + "€" }}
+                </v-card-title>
+                <v-card-title v-else style="color: #42b983; justify-content: start" class="text-sm-body-1">
+                  {{ "No bids on this item!" }}
+                </v-card-title>
+                <v-card-title v-if="auction.buyout != null" style="justify-content: start" class="text-sm-body-1" color="primary">
+                  {{ "Buyout price: " + auction.buyout + "€" }}
+                </v-card-title>
+                <v-card-title v-else style="justify-content: start">
+                  NA
+                </v-card-title>
+              </v-col>
+            </v-row>
+            <br>
             <v-card-actions>
-              <v-spacer></v-spacer>
               <v-dialog
                 transition="dialog-bottom-transition"
-                max-width="35%"
+                max-width="75%"
               >
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn v-if="role == 'Client'"
-                         class="mx-1"
-                         color="primary"
-                         v-bind="attrs"
-                         v-on="on"
-                  >Bid
-                  </v-btn>
-                  <v-card-text class="v-text-field--full-width">
-                    <div v-if="auction.buyout != null"> {{ "Buyout price: " + auction.buyout + "€" }}</div>
-                    <div v-else> {{ "NA" }}</div>
-                  </v-card-text>
+                  <v-row>
+                    <v-col cols="12" sm="12">
+                    <v-btn v-if="role == 'Client'" style="position: absolute; bottom: 8px; right: 8px"
+                           color="primary"
+                           v-bind="attrs"
+                           v-on="on"
+                    ><v-icon left>mdi-cart</v-icon>Buy
+                    </v-btn>
+                    </v-col>
+                  </v-row>
                 </template>
                 <template v-slot:default="dialog">
                   <v-card>
                     <v-card-text>
-                      <div class="pt-5">
-                        <v-carousel hide-delimiters style="height: 300px">
-                          <v-carousel-item
-                            v-for="(item,i) in auction.images"
-                            :key="i"
-                            :src="require('../../../back/public/' + item.image)"
-                          ></v-carousel-item>
-                        </v-carousel>
-                        <div>
-                          <v-card-text class="text-sm-h5">
-                            {{ auction.item.title }}
-                          </v-card-text>
-                          <hr>
-                        </div>
-                        <v-card-text class="text-sm-h6" style="word-break: normal; justify-content: start">
-                          <div v-if="auction.bid != null"> {{ "Current bid: " + auction.bid.value + "€" }}</div>
-                          <div style="color: #42b983" v-else> {{ "No bids on this item!" }}</div>
-                        </v-card-text>
-                        <v-card-text class="text-sm-h6" style="word-break: normal">
-                          <div v-if="auction.buyout != null"> {{ "Buyout price: " + auction.buyout + "€" }}</div>
-                          <div v-else> {{ "NA" }}</div>
-                        </v-card-text>
-                        <validation-provider
-                          v-slot="{ errors }"
-                          name="bidInput"
-                          clearable
-                        >
+                      <v-row>
+                        <v-col cols="12" sm="5" class="pt-8">
+                          <v-carousel hide-delimiters style="height: 100%">
+                            <v-carousel-item
+                                    style="background-color: #1a202c"
+                                    contain
+                                    v-for="(item,i) in auction.images"
+                                    :key="i"
+                                    :src="require('../../../back/public/' + item.image)"
+                            ></v-carousel-item>
+                          </v-carousel>
+                        </v-col>
+                        <v-col cols="12" sm="7">
+                            <v-row>
+                              <v-col cols="12" sm="11">
+                                <v-card-title class="text-lg-h5" style="justify-content: start">
+                                  {{ auction.item.title }}
+                                  <v-card-title class="text-sm-body-1; " style="justify-content: start">
+                                    <v-divider class="mr-4" vertical></v-divider>
+
+                                    {{ auction.item.condition }}
+                                  </v-card-title>
+
+                                  <v-btn class="mx-2"
+                                          large
+                                          icon
+                                          @click="show1 = !show1"
+                                  >
+                                    <v-icon>{{ show1 ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+                                  </v-btn>
+                                </v-card-title>
+                                <v-row>
+
+                                </v-row>
+
+                              </v-col>
+                              <v-col cols="12" sm="1">
+                                <v-card-actions style="justify-content: center">
+                                  <v-btn
+                                          class="my-2"
+                                          small
+                                          fab
+                                          @click="dialog.value = false"
+                                  >
+                                    <v-icon>mdi-close</v-icon>
+                                  </v-btn>
+                                </v-card-actions>
+                              </v-col>
+                                <v-divider></v-divider>
+                            </v-row>
                           <v-row>
-                            <v-card-title style="word-break: normal" class="mb-4">
-                              Your bid:
-                            </v-card-title>
-                            <v-text-field
-                              v-model="bidInput"
-                              :error-messages="errors"
-                              hint="*Must be at least 3% higher than the current value."
-                              clearable
-                            >
-                            </v-text-field>
                           </v-row>
-                        </validation-provider>
-                      </div>
-                      <v-row style="justify-content: center" class="mt-2">
-                        <div>
-                          <v-btn large
-                                 type="submit"
-                                 color="primary"
-                                 class="mr-4"
-                                 @click="postBid(auction.id)"
-                          >
-                            <v-icon left class="mr-1">mdi-gavel</v-icon>
-                            Place bid
-                          </v-btn>
-                          <v-btn large
-                                 type="submit"
-                                 color="success"
-                          >
-                            <v-icon left class="mr-1">mdi-cash-multiple</v-icon>
-                            Buyout
-                          </v-btn>
-                        </div>
+                            <v-expand-transition>
+                              <div v-show="show1">
+                                <v-card-title style="word-break: normal; text-align: start" class="text-sm-body-2">
+                                  {{ auction.item.description }}
+                                </v-card-title>
+                                <v-divider></v-divider>
+                              </div>
+                            </v-expand-transition>
+                            <v-row>
+                              <v-col cols="12" sm="12">
+                                <v-card-title style="word-break: normal; justify-content: start" class="text-sm-body-1">
+                                  {{ auction.title }}
+                                </v-card-title>
+                                <v-divider></v-divider>
+                                <v-card-title v-if="auction.buyout != null" style="justify-content: start" color="primary">
+                                  {{ "Buyout price: " + auction.buyout + "€" }}
+                                </v-card-title>
+                                <v-card-title v-else style="justify-content: start">
+                                  NA
+                                </v-card-title>
+                              </v-col>
+                            </v-row>
+                            <v-row>
+                              <v-col cols="12" sm="12">
+                                <v-card-title v-if="auction.bid != null" style="justify-content: start" color="primary">
+                                  {{ "Current bid: " + auction.bid.value + "€" }}
+                                </v-card-title>
+                                <v-card-title v-else style="color: #42b983; justify-content: start">
+                                  {{ "No bids on this item!" }}
+                                </v-card-title>
+                              </v-col>
+                            </v-row>
+                            <validation-provider
+                                    v-slot="{ errors }"
+                                    name="bidInput"
+                                    clearable
+                            >
+                              <v-row>
+                                <v-card-title style="word-break: normal" class="mb-4">
+                                  Your bid:
+                                </v-card-title>
+                                <v-text-field
+                                        v-model="bidInput"
+                                        :error-messages="errors"
+                                        hint="*Must be at least 3% higher than the current value."
+                                        clearable
+                                >
+                                </v-text-field>
+                              </v-row>
+                            </validation-provider>
+                          <v-row style="justify-content: center" class="mt-2">
+                              <v-btn large
+                                     type="submit"
+                                     color="primary"
+                                     class="mr-4"
+                                     @click="postBid(auction.id)"
+                              >
+                                <v-icon left class="mr-1">mdi-gavel</v-icon>
+                                Place bid
+                              </v-btn>
+                              <v-btn large
+                                     type="submit"
+                                     color="success"
+                                     @click="buyout(auction.id)"
+                              >
+                                <v-icon left class="mr-1">mdi-cash-multiple</v-icon>
+                                Buyout
+                              </v-btn>
+                          </v-row>
+                        </v-col>
                       </v-row>
                     </v-card-text>
-                    <v-card-actions class="justify-end">
-                      <v-btn
-                        icon
-                        @click="show1 = !show1"
-                      >
-                        <v-icon>{{ show1 ? 'mdi-chevron-right' : 'mdi-chevron-left' }}</v-icon>
-                      </v-btn>
-                      <v-spacer></v-spacer>
-                      <v-btn
-                        text
-                        @click="dialog.value = false"
-                      >Close
-                      </v-btn>
-                    </v-card-actions>
-                    <v-expand-transition>
-                      <div v-show="show1">
-                        <v-divider></v-divider>
-                        <v-card-text>
-                          {{ auction.item.description }}
-                        </v-card-text>
-                      </div>
-                    </v-expand-transition>
                   </v-card>
                 </template>
               </v-dialog>
@@ -246,35 +304,18 @@ export default {
   data() {
     return {
       loading: false,
-      pictures: [
-        {
-          src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-        },
-        {
-          src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg',
-        },
-        {
-          src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg',
-        },
-        {
-          src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
-        },
-      ],
       items: [
         {
           text: 'Home',
           disabled: false,
-          href: '/home',
         },
         {
           text: 'Main category placeholder',
           disabled: true,
-          href: 'breadcrumbs_link_1',
         },
         {
           text: localStorage.getItem('search_category'),
           disabled: true,
-          href: 'breadcrumbs_link_2',
         },
       ],
       search: null,
@@ -318,7 +359,6 @@ export default {
       })
         .then(response => {
           if (response.data) {
-            console.log(response.data.auctions.id)
             this.auctions = response.data.auctions
             this.conditions = response.data.conditions
             // for (let i = 0; i < response.data.length; i++) {
@@ -370,7 +410,20 @@ export default {
           this.pageLoading = false
         })
     },
-
+    buyout(auction_id) {
+      this.loading = true
+      axios.post('/history', {
+        auction_id: auction_id,
+      }).then(response => {
+        if (response.data) {
+          this.loading = false
+        }
+      }).catch(error => {
+        console.log(auction_id)
+        console.log(error)
+        this.loading = false
+      })
+    },
     // todo: objasni milosu komunikacije i for loop i komponente
     postBid(auction_id) {
       this.loading = true
@@ -385,10 +438,11 @@ export default {
           }
         })
         .catch(error => {
+          console.log(auction_id)
           console.log(error)
           this.loading = false
         })
-    }
+    },
   },
 
   created() {
@@ -401,7 +455,7 @@ export default {
     if (window.localStorage.getItem('token')) {
       this.getLoggedUser()
     }
-    this.showAuction()
+    this.showAuction();
   },
 
   mounted() {
