@@ -9,12 +9,15 @@
         sort-by="title"
         class="elevation-1; rounded-card; mt-10"
     >
-
       <template v-slot:top>
         <v-toolbar
             flat
             class="mb-8"
         >
+          <v-btn :loading="dataLoading" color="primary" class="mr-3"
+                 @click="getUsers()">
+            <v-icon>mdi-database-refresh-outline</v-icon>
+          </v-btn>
           <v-toolbar-title><h2>Users</h2></v-toolbar-title>
           <v-divider
               class="mx-4"
@@ -38,6 +41,7 @@
             ></v-divider>
             <v-col cols="12" md="4" v-if="isAdmin">
               <v-select
+                  :loading="dataLoading"
                   single-line
                   hide-details
                   v-model="selectRole"
@@ -52,8 +56,9 @@
           <v-spacer></v-spacer>
           <validation-observer ref="observer" v-slot="{ invalid }" tag="form" @submit.prevent="createUser()">
             <v-dialog
-                v-model="dialog"
+                v-model="modal"
                 max-width="60%"
+                ref="form"
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-btn v-if="isAdmin"
@@ -64,7 +69,7 @@
                        v-on="on"
                 >
                   <v-icon left>mdi-account-multiple-plus-outline</v-icon>
-                  Create employee
+                  Enroll an employee
                 </v-btn>
               </template>
               <template v-slot:default="dialog">
@@ -340,6 +345,7 @@
     <edit-user
         v-if="editUserDialogue"
         @close="editUserDialogue = false"
+        @reload="getUsers()"
         :edit-type="selectRole"
         :show-dialog="editUserDialogue"
         :user="chosenUser"
@@ -398,6 +404,7 @@ export default {
 
   data: () => ({
     dialog: false,
+    modal: false,
     dialogDelete: false,
     headers: [
       {
@@ -482,6 +489,7 @@ export default {
         this.tableData = this.users.managers_auctioneers
       }
     },
+
     submit() {
       this.$refs.observer.validate()
     },
@@ -495,11 +503,11 @@ export default {
       this.email = ''
       this.password = ''
       this.checkbox = null
-      this.$refs.observer.reset()
+      this.$refs.form.reset()
     },
 
     getUsers() {
-      this.dataLoading = true;
+      this.dataLoading = true
       this.users = []
       axios.get('/users')
           .then(response => {
@@ -507,12 +515,12 @@ export default {
               this.users = response.data
               this.tableData = response.data.clients
             }
-            this.selectRole = this.roles[0]
-            this.dataLoading = false;
+            this.selectRole = this.r$oles[0]
+            this.dataLoading = false
           })
           .catch(error => {
             console.log(error)
-            this.dataLoading = false;
+            this.dataLoading = false
           })
     },
 
@@ -592,7 +600,6 @@ export default {
         password: this.password,
         password_confirmation: this.confirmPassword,
         roles: this.selectEmployeeRoles
-
       })
           .then(response => {
                 if (response) {
@@ -600,19 +607,36 @@ export default {
                     title: 'Done!',
                     text: 'Employee created successfully.',
                     icon: 'success'
-                  }).then(() => {
-                    this.showDialog = false;
-                    this.loading = false;
                   })
+                  this.loading = false
+                  this.modal = false
+                  this.getUsers()
+                  this.clearForm()
                 }
               }
           )
           .catch(error => {
             console.log(error)
             this.loading = false
-            this.error = error.response.data.message;
+            this.error = error.response.data.message
           })
     },
+
+    clearForm() {
+      this.username = ''
+      this.firstName = ''
+      this.lastName = ''
+      this.email = ''
+      this.selectCountry = ''
+      this.phoneNumber = ''
+      this.password = ''
+      this.confirmPassword = ''
+      this.selectEmployeeRoles = ''
+      // this.$refs.observer.clear()
+      // this.errors.clear()
+      // this.$validator.reset()
+
+    }
   },
 
   mounted() {

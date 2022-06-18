@@ -394,6 +394,8 @@ export default {
       })
           .then(response => {
                 if (response) {
+                  this.$emit('close')
+                  this.$emit('reload')
                   Swal.fire({
                     title: 'Done!',
                     text: 'User updated successfully.',

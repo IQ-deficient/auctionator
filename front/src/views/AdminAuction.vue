@@ -78,7 +78,7 @@
                     <v-btn
                       small
                       fab
-                      @click="dialog.value = false; clearForm()"
+                      @click="dialog.value = false"
                       dark
                     >
                       <v-icon>mdi-close</v-icon>
@@ -224,47 +224,48 @@
                           </tr>
                         </table>
                       </v-toolbar-title>
-                          <v-card class="pa-4">
-                          <v-row no-gutters justify="center" align="center">
-                            <v-col cols="12" sm="12">
-                              <v-file-input multiple type="file"
-                                            v-model="imageUpload"
-                                            show-size
-                                            label="Select Image"
-                                            accept="image/*"
-                                            @change="selectImage"
-                              ></v-file-input>
-                            </v-col>
-                          </v-row>
-                            <v-row no-gutters justify="center" align="center" style="width: 100%" class="my-1" v-for="(ms, i) in messages" :key="i">
-                              <v-col cols="12" sm="12">
-                                <div v-if="messages">
-                                  <v-list-item class="list-group list-group-flush">
-                                    <v-list-item-content>
-                                      <v-alert color="error" dark>
-                                        {{ ms }}
-                                      </v-alert>
-                                    </v-list-item-content>
-                                  </v-list-item>
-                                </div>
-                              </v-col>
-                            </v-row>
-                            <v-row no-gutters justify="center" align="center">
-                              <v-col cols="12" sm="12">
-                              <div v-if="previewImages">
-                                <v-list-item class="list-group list-group-flush">
-                                  <v-list-item-content class="mx-1"
-                                                       v-for="(file, index) in previewImages"
-                                                       :key="index"
-                                  >
-                                    <v-img style="width: 100%" class="preview my-3" :src="file"></v-img>
-                                  </v-list-item-content>
-                                </v-list-item>
-                              </div>
+                      <v-card class="pa-4">
+                        <v-row no-gutters justify="center" align="center">
+                          <v-col cols="12" sm="12">
+                            <v-file-input multiple type="file"
+                                          v-model="imageUpload"
+                                          show-size
+                                          label="Select Image"
+                                          accept="image/*"
+                                          @change="selectImage"
+                            ></v-file-input>
+                          </v-col>
+                        </v-row>
+                        <v-row no-gutters justify="center" align="center" style="width: 100%" class="my-1"
+                               v-for="(ms, i) in messages" :key="i">
+                          <v-col cols="12" sm="12">
+                            <div v-if="messages">
+                              <v-list-item class="list-group list-group-flush">
+                                <v-list-item-content>
+                                  <v-alert color="error" dark>
+                                    {{ ms }}
+                                  </v-alert>
+                                </v-list-item-content>
+                              </v-list-item>
+                            </div>
+                          </v-col>
+                        </v-row>
+                        <v-row no-gutters justify="center" align="center">
+                          <v-col cols="12" sm="12">
+                            <div v-if="previewImages">
+                              <v-list-item class="list-group list-group-flush">
+                                <v-list-item-content class="mx-1"
+                                                     v-for="(file, index) in previewImages"
+                                                     :key="index"
+                                >
+                                  <v-img style="width: 100%" class="preview my-3" :src="file"></v-img>
+                                </v-list-item-content>
+                              </v-list-item>
+                            </div>
 
-                            </v-col>
-                          </v-row>
-                          </v-card>
+                          </v-col>
+                        </v-row>
+                      </v-card>
                       <v-toolbar-title class="pa-4">
                         <table style="width: 100%">
                           <tr>
@@ -598,37 +599,37 @@ export default {
       this.message = "";
       this.messages = [];
       if (this.selectedFiles) {
-      for (let i = 0; i < this.selectedFiles.length; i++) {
-        this.imageName = this.selectedFiles[i].name
-        this.fileSize = this.selectedFiles[i].size
-        if (this.selectedFiles.length > 5){
-          this.message = "You may upload up to 5 images.";
-          this.messages.push(this.message)
-          return
-        } else {
-          for (let j = 0; j < this.extensions.length; j++) {
-            this.currentExtension = this.extensions[j];
-            if (this.imageName.substr(this.imageName.length - this.currentExtension.length,
-                    this.currentExtension.length).toLowerCase() == this.currentExtension.toLowerCase()) {
-              this.isValid = true;
+        for (let i = 0; i < this.selectedFiles.length; i++) {
+          this.imageName = this.selectedFiles[i].name
+          this.fileSize = this.selectedFiles[i].size
+          if (this.selectedFiles.length > 5) {
+            this.message = "You may upload up to 5 images.";
+            this.messages.push(this.message)
+            return
+          } else {
+            for (let j = 0; j < this.extensions.length; j++) {
+              this.currentExtension = this.extensions[j];
+              if (this.imageName.substr(this.imageName.length - this.currentExtension.length,
+                this.currentExtension.length).toLowerCase() == this.currentExtension.toLowerCase()) {
+                this.isValid = true;
+              }
             }
+            if (!this.isValid) {
+              this.message = "Sorry, '" + this.imageName + "' is invalid, allowed extensions are: " + this.extensions.join(", ") + ".";
+              this.messages.push(this.message)
+            }
+            if (this.fileSize > 2097152) {
+              this.message = "Sorry, '" + this.imageName + "' is invalid, file size cannot be greater than 2MB.";
+              this.messages.push(this.message)
+            }
+            this.upload(i, this.selectedFiles[i], item_id);
           }
-          if (!this.isValid) {
-            this.message = "Sorry, '" + this.imageName + "' is invalid, allowed extensions are: " + this.extensions.join(", ") + ".";
-            this.messages.push(this.message)
-          }
-          if (this.fileSize > 2097152) {
-            this.message = "Sorry, '" + this.imageName + "' is invalid, file size cannot be greater than 2MB.";
-            this.messages.push(this.message)
-          }
-          this.upload(i, this.selectedFiles[i], item_id);
         }
-      }
       } else {
-          this.message = "Please select an image.";
+        this.message = "Please select an image.";
         this.messages.push(this.message)
         return;
-        }
+      }
     },
 
     upload(idx, file, item_id) {
@@ -755,7 +756,7 @@ export default {
         buyout: this.addAuctionBuyout,
       })
         .then(response => {
-            if (response) {
+          if (response) {
             Swal.fire({
               title: 'Done!',
               text: 'Auction has been created successfully.',
@@ -767,8 +768,8 @@ export default {
               this.getAuctions()
               this.clearForm()
             })
-          }}
-        )
+          }
+        })
         .catch(error => {
           console.log(error)
           this.loading = false
