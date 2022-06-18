@@ -65,14 +65,25 @@
           >
             <v-row>
               <v-col cols="12" sm="12">
-            <v-img
-                    style="background-color: #1a202c"
-                    contain
-              :src="require('../../../back/public/' + auction.images[0].image)"
-              min-height="275px"
-              max-height="275px"
-
-            ></v-img>
+                <v-img
+                  v-if="auction.images.length != 0"
+                  style="background-color: #1a202c"
+                  contain
+                  :src="require('../../../back/public/' + auction.images[0].image)"
+                  alt="Item image"
+                  min-height="275px"
+                  max-height="275px"
+                ></v-img>
+                <v-img
+                  v-else
+                  style="background-color: #1a202c"
+                  contain
+                  src="../assets/no-items.svg"
+                  alt="No item image"
+                  min-height="275px"
+                  max-height="275px"
+                >
+                </v-img>
               </v-col>
             </v-row>
             <v-row>
@@ -91,7 +102,8 @@
                 <v-card-title v-else style="color: #42b983; justify-content: start" class="text-sm-body-1">
                   {{ "No bids on this item!" }}
                 </v-card-title>
-                <v-card-title v-if="auction.buyout != null" style="justify-content: start" class="text-sm-body-1" color="primary">
+                <v-card-title v-if="auction.buyout != null" style="justify-content: start" class="text-sm-body-1"
+                              color="primary">
                   {{ "Buyout price: " + auction.buyout + "€" }}
                 </v-card-title>
                 <v-card-title v-else style="justify-content: start">
@@ -108,12 +120,14 @@
                 <template v-slot:activator="{ on, attrs }">
                   <v-row>
                     <v-col cols="12" sm="12">
-                    <v-btn v-if="role == 'Client'" style="position: absolute; bottom: 8px; right: 8px"
-                           color="primary"
-                           v-bind="attrs"
-                           v-on="on"
-                    ><v-icon left>mdi-cart</v-icon>Buy
-                    </v-btn>
+                      <v-btn v-if="role == 'Client'" style="position: absolute; bottom: 8px; right: 8px"
+                             color="primary"
+                             v-bind="attrs"
+                             v-on="on"
+                      >
+                        <v-icon left>mdi-cart</v-icon>
+                        Buy
+                      </v-btn>
                     </v-col>
                   </v-row>
                 </template>
@@ -122,124 +136,135 @@
                     <v-card-text>
                       <v-row>
                         <v-col cols="12" sm="5" class="pt-8">
-                          <v-carousel hide-delimiters style="height: 100%">
+                          <v-carousel
+                            v-if="auction.images.length != 0"
+                            hide-delimiters style="height: 100%">
                             <v-carousel-item
-                                    style="background-color: #1a202c"
-                                    contain
-                                    v-for="(item,i) in auction.images"
-                                    :key="i"
-                                    :src="require('../../../back/public/' + item.image)"
+                              style="background-color: #1a202c"
+                              contain
+                              v-for="(item,i) in auction.images"
+                              :key="i"
+                              :src="require('../../../back/public/' + item.image)"
                             ></v-carousel-item>
+                          </v-carousel>
+                          <v-carousel
+                            v-else>
+                            <v-carousel-item>
+                              <v-img
+                                src="../assets/no-items.svg"
+                              ></v-img>
+                            </v-carousel-item>
                           </v-carousel>
                         </v-col>
                         <v-col cols="12" sm="7">
-                            <v-row>
-                              <v-col cols="12" sm="11">
-                                <v-card-title class="text-lg-h5" style="justify-content: start">
-                                  {{ auction.item.title }}
-                                  <v-card-title class="text-sm-body-1; " style="justify-content: start">
-                                    <v-divider class="mr-4" vertical></v-divider>
+                          <v-row>
+                            <v-col cols="12" sm="11">
+                              <v-card-title class="text-lg-h5" style="justify-content: start">
+                                {{ auction.item.title }}
+                                <v-card-title class="text-sm-body-1; " style="justify-content: start">
+                                  <v-divider class="mr-4" vertical></v-divider>
 
-                                    {{ auction.item.condition }}
-                                  </v-card-title>
-
-                                  <v-btn class="mx-2"
-                                          large
-                                          icon
-                                          @click="show1 = !show1"
-                                  >
-                                    <v-icon>{{ show1 ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-                                  </v-btn>
+                                  {{ auction.item.condition }}
                                 </v-card-title>
-                                <v-row>
 
-                                </v-row>
+                                <v-btn class="mx-2"
+                                       large
+                                       icon
+                                       @click="show1 = !show1"
+                                >
+                                  <v-icon>{{ show1 ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+                                </v-btn>
+                              </v-card-title>
+                              <v-row>
 
-                              </v-col>
-                              <v-col cols="12" sm="1">
-                                <v-card-actions style="justify-content: center">
-                                  <v-btn
-                                          class="my-2"
-                                          small
-                                          fab
-                                          @click="dialog.value = false"
-                                  >
-                                    <v-icon>mdi-close</v-icon>
-                                  </v-btn>
-                                </v-card-actions>
-                              </v-col>
-                                <v-divider></v-divider>
-                            </v-row>
+                              </v-row>
+
+                            </v-col>
+                            <v-col cols="12" sm="1">
+                              <v-card-actions style="justify-content: center">
+                                <v-btn
+                                  class="my-2"
+                                  small
+                                  fab
+                                  @click="dialog.value = false"
+                                >
+                                  <v-icon>mdi-close</v-icon>
+                                </v-btn>
+                              </v-card-actions>
+                            </v-col>
+                            <v-divider></v-divider>
+                          </v-row>
                           <v-row>
                           </v-row>
-                            <v-expand-transition>
-                              <div v-show="show1">
-                                <v-card-title style="word-break: normal; text-align: start" class="text-sm-body-2">
-                                  {{ auction.item.description }}
-                                </v-card-title>
-                                <v-divider></v-divider>
-                              </div>
-                            </v-expand-transition>
+                          <v-expand-transition>
+                            <div v-show="show1">
+                              <v-card-title style="word-break: normal; text-align: start" class="text-sm-body-2">
+                                {{ auction.item.description }}
+                              </v-card-title>
+                              <v-divider></v-divider>
+                            </div>
+                          </v-expand-transition>
+                          <v-row>
+                            <v-col cols="12" sm="12">
+                              <v-card-title style="word-break: normal; justify-content: start" class="text-sm-body-1">
+                                {{ auction.title }}
+                              </v-card-title>
+                              <v-divider></v-divider>
+                              <v-card-title v-if="auction.buyout != null" style="justify-content: start"
+                                            color="primary">
+                                {{ "Buyout price: " + auction.buyout + "€" }}
+                              </v-card-title>
+                              <v-card-title v-else style="justify-content: start">
+                                NA
+                              </v-card-title>
+                            </v-col>
+                          </v-row>
+                          <v-row>
+                            <v-col cols="12" sm="12">
+                              <v-card-title v-if="auction.bid != null" style="justify-content: start" color="primary">
+                                {{ "Current bid: " + auction.bid.value + "€" }}
+                              </v-card-title>
+                              <v-card-title v-else style="color: #42b983; justify-content: start">
+                                {{ "No bids on this item!" }}
+                              </v-card-title>
+                            </v-col>
+                          </v-row>
+                          <validation-provider
+                            v-slot="{ errors }"
+                            name="bidInput"
+                            clearable
+                          >
                             <v-row>
-                              <v-col cols="12" sm="12">
-                                <v-card-title style="word-break: normal; justify-content: start" class="text-sm-body-1">
-                                  {{ auction.title }}
-                                </v-card-title>
-                                <v-divider></v-divider>
-                                <v-card-title v-if="auction.buyout != null" style="justify-content: start" color="primary">
-                                  {{ "Buyout price: " + auction.buyout + "€" }}
-                                </v-card-title>
-                                <v-card-title v-else style="justify-content: start">
-                                  NA
-                                </v-card-title>
-                              </v-col>
+                              <v-card-title style="word-break: normal" class="mb-4">
+                                Your bid:
+                              </v-card-title>
+                              <v-text-field
+                                v-model="bidInput"
+                                :error-messages="errors"
+                                hint="*Must be at least 3% higher than the current value."
+                                clearable
+                              >
+                              </v-text-field>
                             </v-row>
-                            <v-row>
-                              <v-col cols="12" sm="12">
-                                <v-card-title v-if="auction.bid != null" style="justify-content: start" color="primary">
-                                  {{ "Current bid: " + auction.bid.value + "€" }}
-                                </v-card-title>
-                                <v-card-title v-else style="color: #42b983; justify-content: start">
-                                  {{ "No bids on this item!" }}
-                                </v-card-title>
-                              </v-col>
-                            </v-row>
-                            <validation-provider
-                                    v-slot="{ errors }"
-                                    name="bidInput"
-                                    clearable
-                            >
-                              <v-row>
-                                <v-card-title style="word-break: normal" class="mb-4">
-                                  Your bid:
-                                </v-card-title>
-                                <v-text-field
-                                        v-model="bidInput"
-                                        :error-messages="errors"
-                                        hint="*Must be at least 3% higher than the current value."
-                                        clearable
-                                >
-                                </v-text-field>
-                              </v-row>
-                            </validation-provider>
+                          </validation-provider>
                           <v-row style="justify-content: center" class="mt-2">
-                              <v-btn large
-                                     type="submit"
-                                     color="primary"
-                                     class="mr-4"
-                                     @click="postBid(auction.id)"
-                              >
-                                <v-icon left class="mr-1">mdi-gavel</v-icon>
-                                Place bid
-                              </v-btn>
-                              <v-btn large
-                                     type="submit"
-                                     color="success"
-                                     @click="buyout(auction.id)"
-                              >
-                                <v-icon left class="mr-1">mdi-cash-multiple</v-icon>
-                                Buyout
-                              </v-btn>
+                            <v-btn large
+                                   type="submit"
+                                   color="primary"
+                                   class="mr-4"
+                                   @click="postBid(auction.id)"
+                            >
+                              <v-icon left class="mr-1">mdi-gavel</v-icon>
+                              Place bid
+                            </v-btn>
+                            <v-btn large
+                                   type="submit"
+                                   color="success"
+                                   @click="buyout(auction.id)"
+                            >
+                              <v-icon left class="mr-1">mdi-cash-multiple</v-icon>
+                              Buyout
+                            </v-btn>
                           </v-row>
                         </v-col>
                       </v-row>
@@ -351,7 +376,7 @@ export default {
       }, 500)
     },
 
-    showAuction() {
+    showAuctions() {
       this.dataLoading = true
       this.auctions = []
       axios.post('/filtered_auctions', {
@@ -448,14 +473,15 @@ export default {
   created() {
     // Local Storage variable used to update the category a user searches by from Menu (Navbar.vue)
     this.category = localStorage.getItem('search_category')
-    console.log(this.category)
+    // console.log(this.category)
     if (this.category == '' || this.category == null) {
       this.$router.push('/pageNotFound')
     }
     if (window.localStorage.getItem('token')) {
       this.getLoggedUser()
     }
-    this.showAuction();
+    this.showAuctions()
+
   },
 
   mounted() {
