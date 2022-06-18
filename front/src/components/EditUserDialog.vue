@@ -392,26 +392,25 @@ export default {
         phone_number: this.phoneNumber,
         roles: this.checkedRoles
       })
-          .then(response => {
-                if (response) {
-                  this.$emit('close')
-                  this.$emit('reload')
-                  Swal.fire({
-                    title: 'Done!',
-                    text: 'User updated successfully.',
-                    icon: 'success'
-                  }).then(() => {
-                    this.showDialog = false;
-                    this.loading = false;
-                  })
-                }
-              }
-          )
-          .catch(error => {
-            console.log(error)
-            this.loading = false
-            this.error = error.response.data.message;
-          })
+        .then(response => {
+            if (response) {
+              this.$emit('close')
+              this.$emit('reload')
+              Swal.fire({
+                title: 'Done!',
+                text: 'User updated successfully.',
+                icon: 'success'
+              })
+              this.showDialog = false;
+              this.loading = false;
+            }
+          }
+        )
+        .catch(error => {
+          console.log(error)
+          this.loading = false
+          this.error = error.response.data.message;
+        })
     },
 
   }

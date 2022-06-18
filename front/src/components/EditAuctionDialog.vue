@@ -570,10 +570,9 @@ export default {
                 title: 'Done!',
                 text: 'Auction updated successfully.',
                 icon: 'success'
-              }).then(() => {
-                this.showDialog = false
-                this.loading = false
               })
+              this.showDialog = false
+              this.loading = false
             }
           })
         .catch(error => {

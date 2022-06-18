@@ -761,13 +761,12 @@ export default {
               title: 'Done!',
               text: 'Auction has been created successfully.',
               icon: 'success'
-            }).then(() => {
-              this.uploadImages(response.data.item_id)
-              this.loading = false
-              this.modal = false
-              this.getAuctions()
-              this.clearForm()
             })
+            this.uploadImages(response.data.item_id)
+            this.loading = false
+            this.modal = false
+            this.getAuctions()
+            this.clearForm()
           }
         })
         .catch(error => {

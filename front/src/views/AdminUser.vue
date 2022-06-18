@@ -515,7 +515,7 @@ export default {
               this.users = response.data
               this.tableData = response.data.clients
             }
-            this.selectRole = this.r$oles[0]
+            this.selectRole = this.roles[0]
             this.dataLoading = false
           })
           .catch(error => {
