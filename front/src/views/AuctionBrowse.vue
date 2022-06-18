@@ -54,10 +54,10 @@
     </div>
     <div v-else>
       <validation-observer>
-        <v-row style="justify-content: start;" class="ma-2">
+        <v-row style="justify-content: start;" class="ma-1">
           <v-card
             v-for="auction in auctions" :key="auction.id"
-            class="mx-1 card-body d-flex flex-column h-100"
+            class="mx-1 my-1 card-body d-flex flex-column h-100"
             max-width="19%"
             min-width="19%"
 

@@ -440,6 +440,7 @@ import {required, min, max, min_value} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 import MultipleImageUpload from "../services/MultipleImageUpload";
 import EditAuctionDialog from "../components/EditAuctionDialog";
+import Swal from "sweetalert2";
 
 setInteractionMode('eager')
 
@@ -755,14 +756,18 @@ export default {
       })
         .then(response => {
             if (response) {
-              // After we are sure Item and Auction for said item is created we upload Images for it
+            Swal.fire({
+              title: 'Done!',
+              text: 'Auction has been created successfully.',
+              icon: 'success'
+            }).then(() => {
               this.uploadImages(response.data.item_id)
-              window.alert('bravo kretenu nemas sweetalert')
               this.loading = false
               this.modal = false
               this.getAuctions()
-            }
-          }
+              this.clearForm()
+            })
+          }}
         )
         .catch(error => {
           console.log(error)
@@ -774,10 +779,14 @@ export default {
     clearForm() {
       this.addItemTitle = ''
       this.addItemDescription = ''
+      this.addItemCategory = ''
       this.addItemSubCategory = ''
       this.addItemCondition = ''
       this.addItemWarehouse = ''
       this.addAuctionTitle = ''
+      this.imageUpload = null
+      this.previewImages = undefined
+      this.messages = undefined
       this.addAuctionSeller = ''
       this.addStartDate = new Date()
       this.addEndDate = new Date()

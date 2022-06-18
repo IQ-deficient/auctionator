@@ -568,7 +568,7 @@ export default {
               this.$emit('reload')
               Swal.fire({
                 title: 'Done!',
-                text: 'User updated successfully.',
+                text: 'Auction updated successfully.',
                 icon: 'success'
               }).then(() => {
                 this.showDialog = false
