@@ -209,6 +209,7 @@
                   <v-row>
                     <v-col>
                       <v-select
+                          :loading="dataLoading"
                           v-if="editType == 'Employees'"
                           v-model="checkedRoles"
                           label="Select user roles"

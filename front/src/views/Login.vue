@@ -188,7 +188,6 @@ export default {
           }
           return response.data;
         })
-        // TODO: OVO NE RADI NA CATCH; STRANICA SE RELOADUJE AKO SE UNESU POGRESNI KREDENCIJALI
         .catch(error => {
           this.loading = false
           this.error = error.response.data;

@@ -1,6 +1,7 @@
 "use strict";
 
 import Vue from 'vue';
+// import router from "../router";
 import axios from "axios";
 // import Swal from "sweetalert2";
 
@@ -54,7 +55,8 @@ _axios.interceptors.request.use(
 axios.interceptors.response.use(function (response) {
     return response;
 }, function (error) {
-    if (401 === error.response.status) {
+    // console.log(error.response.data.message)
+    if ("Unauthenticated." === error.response.data.message) {
         localStorage.clear();
         // Swal.fire({
         //     title: "Session Expired",
@@ -69,6 +71,8 @@ axios.interceptors.response.use(function (response) {
         //         window.location = '/login';
         //     }
         // });
+        // router.push('/login')
+        // this.$router.push('/login')
         window.location = '/login'
     } else {
         return Promise.reject(error);

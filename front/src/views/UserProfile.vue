@@ -746,7 +746,7 @@ export default {
         }
 
         if (!this.isValid) {
-          this.message = "Sorry, " + this.imageName + " is invalid, allowed extensions are: " + this.extensions.join(", " + "!");
+          this.message = "Sorry, " + this.imageName + " is invalid, allowed extensions are: " + this.extensions.join(", ") + ".";
           return;
         }
       } else {
@@ -761,7 +761,8 @@ export default {
       this.loading = true
       this.progress = 0;
       UploadService.upload(this.currentImage, (event) => {
-        this.progress = Math.round((100 * event.loaded) / event.total);
+        this.progress = Math.round((100 * event.loaded) / event.total)
+        this.userImage = this.loggedUser.image
         Swal.fire({
           title: 'Done!',
           text: 'Your profile image has been updated.',
@@ -793,6 +794,7 @@ export default {
     }
     document.title = 'Edit Profile - Auction House'
   },
+
   created() {
     this.getGenders();
     this.getLoggedUser();

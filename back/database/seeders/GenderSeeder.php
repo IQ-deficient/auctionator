@@ -30,6 +30,20 @@ class GenderSeeder extends Seeder
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
+            [
+                'id' => 3,
+                'name' => 'Retarded', // the spectrum
+                'is_active' => true,
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            ],
+//            [
+//                'id' => 2,
+//                'name' => 'Female', // ljmao
+//                'is_active' => true,
+//                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+//                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+//            ],
         ];
 
         DB::table('genders')->insert($seeds);
