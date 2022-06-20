@@ -29,6 +29,12 @@ class UserRoleSeeder extends Seeder
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
             [
+                'username' => 'ljubomir.admin',
+                'role' => 'Administrator',
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            ],
+            [
                 'username' => 'mirko',
                 'role' => 'Manager',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -65,13 +71,13 @@ class UserRoleSeeder extends Seeder
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
             [
-                'username' => 'nemanja.auctioneer',
+                'username' => 'zoran.auctioneer',
                 'role' => 'Auctioneer',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
             [
-                'username' => 'borko.auctioneer',
+                'username' => 'petar.auctioneer',
                 'role' => 'Auctioneer',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -95,7 +101,7 @@ class UserRoleSeeder extends Seeder
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
             [
-                'username' => 'vladimir.123',
+                'username' => 'veselin.123',
                 'role' => 'Client',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),

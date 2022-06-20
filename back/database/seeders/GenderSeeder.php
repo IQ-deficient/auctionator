@@ -25,21 +25,35 @@ class GenderSeeder extends Seeder
             ],
             [
                 'id' => 2,
-                'name' => 'Dishwasher', // Insert sitcom bass boosted laughter track
+                'name' => 'Female', // lmao
                 'is_active' => true,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
             [
                 'id' => 3,
-                'name' => 'Retarded', // the spectrum
+                'name' => 'Other',
                 'is_active' => true,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
-//            [
+            [
+                'id' => 4,
+                'name' => 'Rather would not say',
+                'is_active' => true,
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            ],
+            //            [
 //                'id' => 2,
-//                'name' => 'Female', // ljmao
+//                'name' => 'Dishwasher', // Insert sitcom bass boosted laughter track
+//                'is_active' => true,
+//                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+//                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+//            ],
+//            [
+//                'id' => 3,
+//                'name' => 'Mentally Impaired', // the spectrum
 //                'is_active' => true,
 //                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
 //                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),

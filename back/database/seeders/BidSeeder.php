@@ -17,22 +17,25 @@ class BidSeeder extends Seeder
     {
         $seeds = [
             [
+                'id' => 1,
                 'value' => 40000.00,
-                'username' => 'luka.123',
-                'is_active' => true,
-                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
-            ],
-            [
-                'value' => 0.75,
                 'username' => 'lazar.123',
                 'is_active' => true,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
             [
+                'id' => 2,
                 'value' => 0.25,
-                'username' => 'vladimir.123',
+                'username' => 'lazar.123',
+                'is_active' => true,
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            ],
+            [
+                'id' => 3,
+                'value' => 0.75,
+                'username' => 'lazar.123',
                 'is_active' => true,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),

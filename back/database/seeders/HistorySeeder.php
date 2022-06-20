@@ -23,7 +23,6 @@ class HistorySeeder extends Seeder
                 'final_price' => 0.75,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
-
             ],
         ];
 
