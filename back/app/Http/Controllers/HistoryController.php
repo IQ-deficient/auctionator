@@ -8,6 +8,7 @@ use App\Models\Bid;
 use App\Models\History;
 use App\Http\Requests\StoreHistoryRequest;
 use App\Http\Requests\UpdateHistoryRequest;
+use App\Models\Image;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -44,9 +45,18 @@ class HistoryController extends Controller
         abort_if(!in_array('Client', $roles), 403, 'Only Clients can preview the history of their purchases.');
 
         // Return all History instances for this user meaning any Auction that has finished, and they now own
-        return History::query()
+        $histories = History::query()
             ->where('username', $username)
             ->get();
+
+        foreach ($histories as $history){
+            $images = Image::query()
+                ->where('item_id', $history->auction_id)
+                ->get();
+            $history->images = $images;
+        }
+
+        return $histories;
     }
 
     /**

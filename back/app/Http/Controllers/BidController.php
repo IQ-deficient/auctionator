@@ -6,6 +6,7 @@ use App\Models\Auction;
 use App\Models\Bid;
 use App\Http\Requests\StoreBidRequest;
 use App\Http\Requests\UpdateBidRequest;
+use App\Models\Image;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -54,6 +55,10 @@ class BidController extends Controller
                 ->whereIn('status', ['Created', 'Ongoing'])
                 ->first();
             $bid->auction = $auction;
+            $images = Image::query()
+                ->where('item_id', $auction->item->id)
+                ->get();
+            $bid->images = $images;
             if ($auction) $bids[] = $bid;
         }
 

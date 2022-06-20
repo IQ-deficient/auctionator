@@ -4,6 +4,7 @@ Auction (english style) web app formerly made to satisfy the bare minimum requir
 ## Features
 - Laravel 8.x
 - Vue 2 + Vuetify
+- JSON Web Token
 
 ## Installation from root
 ```bash
