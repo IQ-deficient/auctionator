@@ -3,6 +3,7 @@
     <v-data-table
         style="width: 95%; margin: 0 auto; padding-top: 6px"
         :headers="headers"
+        :loading="dataLoading"
         :items="tableData"
         :search="search"
         sort-by="title"
@@ -40,7 +41,7 @@
             class="mr-2"
             @click="showAuction(item)"
         >
-          mdi-magnify
+          mdi-dots-horizontal-circle-outline
         </v-icon>
       </template>
     </v-data-table>
@@ -69,14 +70,16 @@ export default {
     dialogDelete: false,
     headers: [
       {text: '', align: 'start', sortable: false, value: 'auction.title'},
-      {text: 'Sold for:', value: 'final_price'},
-      {text: 'Won at:', value: 'updated_at'},
-      {text: 'Details', value: 'actions', sortable: false},
+      {text: 'Bid amount (€):', value: 'value'},
+      {text: 'Bid time:', value: 'updated_at'},
+      {text: 'Ends on:', value: 'auction.end_datetime'},
+      {text: 'Item details', value: 'actions', sortable: false},
     ],
     search: '',
     showAuctionDialog: false,
     chosenAuction: '',
     tableData: [],
+    dataLoading: false
   }),
 
   created() {
@@ -86,16 +89,19 @@ export default {
   methods: {
 
     getBids() {
+      this.dataLoading = true
       this.bids = []
-      axios.get('/bids')
+      axios.get('/user_bids')
           .then(response => {
             if (response.data) {
               console.log(response.data)
               this.bids = response.data
               this.tableData = response.data
+              this.dataLoading = false
             }
           })
           .catch(error => {
+            this.dataLoading = false
             console.log(error)
           })
     },
@@ -108,10 +114,10 @@ export default {
 
   mounted() {
     // todo: comment
-    // if (!window.localStorage.user_roles.includes('Administrator')){
-    //   this.$router.push('/pageNotFound')
-    // }
-    // document.title = 'Admin Auctions - Auction House'
+    if (!window.localStorage.user_roles.includes('Client')){
+      this.$router.push('/pageNotFound')
+    }
+    document.title = 'Your bids - Auction House'
   }
 
 }
