@@ -76,9 +76,8 @@
                 ></v-img>
                 <v-img
                   v-else
-                  style="background-color: #1a202c"
                   contain
-                  src="../assets/no-items.svg"
+                  src="../assets/no-image-item.svg"
                   alt="No item image"
                   min-height="275px"
                   max-height="275px"
@@ -86,6 +85,7 @@
                 </v-img>
               </v-col>
             </v-row>
+            <hr>
             <v-row>
               <v-col cols="12" sm="12">
                 <v-card-title style="word-break: normal; justify-content: start" class="text-sm-body-1">
@@ -113,9 +113,10 @@
             </v-row>
             <br>
             <v-card-actions>
-              <v-dialog
+              <v-dialog v-model="modal"
                 transition="dialog-bottom-transition"
                 max-width="75%"
+                persistent
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-row>
@@ -148,11 +149,13 @@
                             ></v-carousel-item>
                           </v-carousel>
                           <v-carousel
-                            v-else>
-                            <v-carousel-item>
-                              <v-img
-                                src="../assets/no-items.svg"
-                              ></v-img>
+                            v-else
+                            hide-delimiters style="height: 100%">
+                          <v-carousel-item
+                          contain src="../assets/no-image-item.svg">
+<!--                              <v-img-->
+<!--                                src="../assets/no-image-item.svg"-->
+<!--                              ></v-img>-->
                             </v-carousel-item>
                           </v-carousel>
                         </v-col>
@@ -175,10 +178,6 @@
                                   <v-icon>{{ show1 ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
                                 </v-btn>
                               </v-card-title>
-                              <v-row>
-
-                              </v-row>
-
                             </v-col>
                             <v-col cols="12" sm="1">
                               <v-card-actions style="justify-content: center">
@@ -267,20 +266,16 @@
                             </v-btn>
                           </v-row>
                         </v-col>
+                        <v-card-title style="position: absolute; bottom: 8px; right: 8px"
+                                      class="text-sm-body-1">
+                          {{ "Expires at: " + auction.end_datetime }}
+                        </v-card-title>
                       </v-row>
                     </v-card-text>
                   </v-card>
                 </template>
               </v-dialog>
             </v-card-actions>
-            <!--        <v-expand-transition>-->
-            <!--          <div v-show="show">-->
-            <!--            <v-divider></v-divider>-->
-            <!--            <v-card-text>-->
-            <!--              Item description placeholder xd-->
-            <!--            </v-card-text>-->
-            <!--          </div>-->
-            <!--        </v-expand-transition>-->
           </v-card>
         </v-row>
 
@@ -295,6 +290,7 @@
 import axios from "axios";
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 import {digits, max, regex, required} from "vee-validate/dist/rules";
+import Swal from "sweetalert2"
 
 setInteractionMode('eager')
 
@@ -355,7 +351,8 @@ export default {
       conditions: [],
       role: localStorage.getItem('user_roles'),
       username: '',
-      auction_id: ''
+      auction_id: '',
+      modal: false,
     }
   },
 
@@ -397,7 +394,7 @@ export default {
           this.dataLoading = false
         })
     },
-
+    // This auction is no longer eligible for bids.
     getAuctionId() {
       this.dataLoading = true
       axios.get('/auction/', {
@@ -435,39 +432,100 @@ export default {
           this.pageLoading = false
         })
     },
+
     buyout(auction_id) {
-      this.loading = true
-      axios.post('/history', {
-        auction_id: auction_id,
-      }).then(response => {
-        if (response.data) {
-          this.loading = false
+      Swal.fire({
+        title: 'Are you sure you want to buy this item?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#8f5782',
+        cancelButtonColor: '#757e93',
+        confirmButtonText: "Yes, I'm sure!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.loading = true
+          axios.post('/history', {
+            auction_id: auction_id,
+          }).then(response => {
+            if (response.data) {
+              Swal.fire(
+                      'Success!',
+                      "You can review your bought items on the 'History' page.",
+                      'success'
+              )
+              this.loading = false
+              this.modal = false
+              this.showAuctions()
+              this.clearForm()
+            }
+          }).catch(error => {
+            if (error.response.status == 404 || error.response.status == 410) {
+              Swal.fire({
+                icon: 'error',
+                text: 'This auction no longer exists.',
+              })
+              console.log(error)
+              this.loading = false
+            }
+          })
         }
-      }).catch(error => {
-        console.log(auction_id)
-        console.log(error)
-        this.loading = false
       })
     },
+
     // todo: objasni milosu komunikacije i for loop i komponente
     postBid(auction_id) {
-      this.loading = true
-      axios.post('/bid', {
-        value: this.bidInput,
-        auction_id: auction_id
+      Swal.fire({
+        title: 'Are you sure you want to bid on this item?',
+        // text: "You won't be able to revert this!",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#8f5782',
+        cancelButtonColor: '#757e93',
+        confirmButtonText: "Yes, I'm sure!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.loading = true
+          axios.post('/bid', {
+            value: this.bidInput,
+            auction_id: auction_id
+          }).then(response => {
+                    if (response.data) {
+                        Swal.fire(
+                            'Congratulations!',
+                            "You can take a look at your current bids on the 'Bids' page.",
+                            'success'
+                        )
+                      this.loading = false
+                      this.modal = false
+                      this.showAuctions()
+                      this.clearForm()
+                    }
+                  })
+                  .catch(error => {
+                      if (error.response.status == '400') {
+                          Swal.fire({
+                              icon: 'error',
+                              title: 'You already own the highest bid for this auction.',
+                          })
+                          console.log(error)
+                          this.loading = false
+                        
+                      } else if (error.response.status == 404 || error.response.status == 410) {
+                        Swal.fire({
+                          icon: 'error',
+                          text: 'This auction no longer exists.',
+                        })
+                        console.log(error)
+                        this.loading = false
+                      }
+                  })
+        }
       })
-        .then(response => {
-          if (response.data) {
-
-            this.loading = false
-          }
-        })
-        .catch(error => {
-          console.log(auction_id)
-          console.log(error)
-          this.loading = false
-        })
     },
+
+    clearForm() {
+      this.bidInput = null;
+    }
   },
 
   created() {

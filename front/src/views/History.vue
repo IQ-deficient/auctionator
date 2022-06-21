@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-data-table
+            :loading="dataLoading"
         style="width: 95%; margin: 0 auto; padding-top: 6px"
         :headers="headers"
         :items="tableData"
@@ -37,10 +38,10 @@
       </template>
       <template v-slot:item.actions="{ item }">
         <v-icon
-            class="mr-2"
-            @click="showAuction(item)"
+                class="mr-2"
+                @click="showAuction(item)"
         >
-          mdi-magnify
+          mdi-dots-horizontal-circle-outline
         </v-icon>
       </template>
     </v-data-table>
@@ -71,7 +72,7 @@ export default {
     dialogDelete: false,
     headers: [
       {text: '', align: 'start', sortable: false, value: 'auction.title'},
-      {text: 'Sold for:', value: 'final_price'},
+      {text: 'Sold for (€):', value: 'final_price'},
       {text: 'Won at:', value: 'updated_at'},
       {text: 'Details', value: 'actions', sortable: false},
     ],
@@ -79,6 +80,7 @@ export default {
     showAuctionDialog: false,
     chosenAuction: '',
     tableData: [],
+    dataLoading: false
   }),
 
   created() {
@@ -88,17 +90,20 @@ export default {
   methods: {
 
     getHistory() {
+      this.dataLoading = true
       this.histories = []
-      axios.get('/histories')
+      axios.get('/user_histories')
           .then(response => {
             if (response.data) {
               console.log(response.data)
               this.histories = response.data
               this.tableData = response.data
+              this.dataLoading = false
             }
           })
           .catch(error => {
             console.log(error)
+            this.dataLoading = false
           })
     },
 

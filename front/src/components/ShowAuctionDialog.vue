@@ -24,8 +24,8 @@
                     <td>
                       <hr/>
                     </td>
-                    <td style="width:1px; padding: 10px; white-space: nowrap;"><h2 style="color: white">Item
-                      details</h2></td>
+                    <td style="width:1px; padding: 10px; white-space: nowrap;">
+                      <h2 style="color: white">Item details</h2></td>
                     <td>
                       <hr/>
                     </td>
@@ -48,19 +48,21 @@
                         ></v-carousel-item>
                       </v-carousel>
                       <v-carousel
-                              v-else>
-                        <v-carousel-item>
-                          <v-img
-                                  src="../assets/no-items.svg"
-                          ></v-img>
+                              v-else
+                              hide-delimiters style="height: 100%">
+                        <v-carousel-item
+                                contain src="../assets/no-image-item.svg">
+                          <!--                              <v-img-->
+                          <!--                                src="../assets/no-image-item.svg"-->
+                          <!--                              ></v-img>-->
                         </v-carousel-item>
                       </v-carousel>
                     </v-col>
                     <v-col cols="12" sm="7">
                       <v-row>
                         <v-col cols="12" sm="12">
-                          <v-card-title class="text-sm-body-1"
-                          >Title:<v-spacer></v-spacer>{{ auction_data.auction.item.title }}
+                          <v-card-title class="text-sm-body-1">
+                            Item:<v-spacer></v-spacer>{{ auction_data.auction.item.title }}
                           </v-card-title>
                         </v-col>
                       </v-row>
@@ -69,7 +71,8 @@
                       </v-col>
                       <v-row>
                         <v-col cols="12" sm="12">
-                          <v-card-title class="text-sm-body-1">Description:
+                          <v-card-title class="text-sm-body-1">
+                            About:
                             <v-spacer></v-spacer>
                             <v-card-title class="text-sm-body-2" style="justify-content: end">
                               {{ auction_data.auction.item.description }}
@@ -139,7 +142,6 @@ export default {
     itemSubCategory: '',
     itemCondition: '',
     images: [],
-
   }),
 
   created() {
