@@ -405,25 +405,45 @@
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-icon v-if="item.is_active == false"
-                class="mr-2"
-                color="secondary"
-        >
-          mdi-pencil
-        </v-icon>
-        <v-icon v-else-if="selectStatus == 'Created'"
-                class="mr-2"
-                @click="editAuction(item)"
-        >
-          mdi-pencil
-        </v-icon>
+        <v-row>
+          <v-col cols="12" sm="4">
+            <v-icon v-if="item.is_active == false"
+                    class="mr-2"
+                    color="secondary"
+            >
+              mdi-pencil
+            </v-icon>
+            <v-icon v-else-if="selectStatus == 'Created'"
+                    class="mr-2"
+                    color="primary"
+                    @click="editAuction(item)"
+            >
+              mdi-pencil
+            </v-icon>
+          </v-col>
+          <v-col cols="12" sm="4">
+            <v-icon
+                    color="primary"
+                    class="mr-2"
+                    @click="hardDelete(item)"
+            >
+              mdi-delete-forever
+            </v-icon>
+          </v-col>
+          <v-col cols="12" sm="4">
+            <v-icon
+                    class="mr-2"
+                    color="secondary"
+            >
+              mdi-delete-clock
+            </v-icon>
+          </v-col>
+        </v-row>
 
-        <!--          <v-icon-->
-        <!--              @click="deleteAuction(item)"-->
-        <!--          >-->
-        <!--            mdi-delete-->
-        <!--          </v-icon>-->
+
+
       </template>
+
     </v-data-table>
     <edit-auction
       v-if="editAuctionDialog"
@@ -478,6 +498,7 @@ export default {
     dialog: false,
     dialogDelete: false,
     headers: [
+      {text: '', align: 'start', sortable: false, value: 'id'},
       {text: '', align: 'start', sortable: false, value: 'title'},
       {text: 'Seller', value: 'seller'},
       {text: 'Highest bidder', value: '.bid.username'},
@@ -527,7 +548,7 @@ export default {
     dataLoading: false,
     loading: false,
     isValid: false,
-
+    auction_id: null,
     //image data
     //
     previewImages: undefined,
@@ -543,7 +564,6 @@ export default {
     messages: undefined,
     fileInfos: [],
     extensions: [".jpg", ".jpeg", ".png"]
-
   }),
 
   created() {
@@ -570,19 +590,23 @@ export default {
         this.tableData = this.auctions
       }
     },
+
     submit() {
       this.$refs.observer.validate()
     },
+
     editAuction(item) {
       this.editAuctionDialog = true
       this.chosenAuction = item
     },
+
     clear() {
       this.email = ''
       this.password = ''
       this.checkbox = null
       this.$refs.observer.reset()
     },
+
     selectImage() {
       // this.progress = 0;
       // this.message = "";
@@ -655,15 +679,48 @@ export default {
         });
     },
 
+    hardDelete(item) {
+      Swal.fire({
+        title: 'Are you sure you want to delete this auction?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#8f5782',
+        cancelButtonColor: '#757e93',
+        confirmButtonText: "Yes, I'm sure!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.loading = true;
+          axios.delete('auction/' + item.id)
+                  .then(response => {
+                    if (response.data) {
+                      Swal.fire(
+                              'Success!',
+                              "Chosen auction has been permanently removed.",
+                              'success',
+                      )
+                      this.loading = false
+                    }
+                  })
+                  .catch(error => {
+                    console.log(error)
+                    this.dataLoading = false
+                  })
+        }
+      })
+    },
+
     getAuctions() {
       this.dataLoading = true
       this.auctions = []
       axios.get('/auctions')
         .then(response => {
+          this.auctions = response.data
+
           if (response.data) {
             // for (let i = 0; i < response.data.length; i++) {
-            // console.log(response.data)
+            console.log(response.data)
             this.auctions = response.data
+
             this.tableData = this.auctions.created
           }
           // this.selectStatus = this.statuses[0]
@@ -675,6 +732,7 @@ export default {
           this.dataLoading = false
         })
     },
+
     getStatuses() {
       this.dataLoading = true
       axios.get('/statuses')
@@ -692,6 +750,7 @@ export default {
           this.dataLoading = false
         })
     },
+
     getParentCategories() {
       this.dataLoading = true
       axios.get('/parent_categories')
@@ -706,6 +765,7 @@ export default {
           this.dataLoading = false
         })
     },
+
     getSubCategoriesAndConditions() {
       this.dataLoading = true
       axios.post('/child_categories_conditions', {
@@ -725,6 +785,7 @@ export default {
       // console.log(this.addItemCategory)
 
     },
+
     getWarehouse() {
       this.dataLoading = true
       axios.get('/active_warehouses')
@@ -740,6 +801,7 @@ export default {
           this.dataLoading = false
         })
     },
+
     createAuction() {
       this.loading = true
       // console.log(this.addItemWarehouse.id)
@@ -798,9 +860,6 @@ export default {
     if (!this.allowedRoles) {
       this.$router.push('/pageNotFound')
     }
-    // MultipleImageUpload.getFiles().then((response) => {
-    //   this.fileInfos = response.data;
-    // });
 
     document.title = 'Auction Management - Auction House'
   }
