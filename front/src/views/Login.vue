@@ -199,6 +199,13 @@ export default {
               'error'
             )
           }
+          if (error.response.data.message == "This user is inactive!") {
+            Swal.fire(
+              'This account has been suspended.',
+              'If you think this is a mistake, please contact our management team.',
+              'error'
+            )
+          }
         })
     },
   },

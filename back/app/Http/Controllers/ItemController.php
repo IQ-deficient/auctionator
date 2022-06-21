@@ -19,8 +19,8 @@ class ItemController extends Controller
     /**
      * Add Images to Item Object and store them.
      * @param Request $request
-     * @param User $user
-     * @return Builder|JsonResponse|Model|object|null
+     * @param Item $item
+     * @return Item|JsonResponse
      */
     public function addItemImage(Request $request, Item $item)
     {

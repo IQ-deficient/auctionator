@@ -3,7 +3,7 @@
 import Vue from 'vue';
 // import router from "../router";
 import axios from "axios";
-// import Swal from "sweetalert2";
+import Swal from "sweetalert2";
 
 // Full config:  https://github.com/axios/axios#request-config
 axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || 'http://127.0.0.1:8000/api';
@@ -74,6 +74,16 @@ axios.interceptors.response.use(function (response) {
         // router.push('/login')
         // this.$router.push('/login')
         window.location = '/login'
+    } else if ("This account has been suspended." === error.response.data) {
+        localStorage.clear();
+        Swal.fire(
+            'This account has been suspended.',
+            'If you think this is a mistake, please contact our management team.',
+            'error'
+        )
+            .then((result) => {
+                if (result.isConfirmed) window.location = '/home'
+            })
     } else {
         return Promise.reject(error);
     }
