@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-toolbar
-      dark
-      color="accent"
+        dark
+        color="accent"
     >
       <v-toolbar-title>Looking for something specific?</v-toolbar-title>
       <v-autocomplete style="width: 50%"
@@ -23,8 +23,8 @@
     </v-toolbar>
     <v-app-bar dark style="background-color: #1a202c">
       <v-breadcrumbs
-        :items="items"
-        large
+          :items="items"
+          large
       >
         <template v-slot:divider>
           <v-icon>mdi-chevron-right</v-icon>
@@ -41,10 +41,10 @@
 
     <div v-if="dataLoading" class="mt-16">
       <v-progress-circular
-        :size="100"
-        :width="7"
-        color="white"
-        indeterminate
+          :size="100"
+          :width="7"
+          color="white"
+          indeterminate
       ></v-progress-circular>
     </div>
     <div v-else-if="auctions == ''">
@@ -56,30 +56,30 @@
       <validation-observer>
         <v-row style="justify-content: start;" class="ma-1">
           <v-card
-            v-for="auction in auctions" :key="auction.id"
-            class="mx-1 my-1 card-body d-flex flex-column h-100"
-            max-width="19%"
-            min-width="19%"
-            color="tertiary"
+              v-for="auction in auctions" :key="auction.id"
+              class="mx-1 my-1 card-body d-flex flex-column h-100"
+              max-width="19%"
+              min-width="19%"
+              color="tertiary"
           >
             <v-row>
               <v-col cols="12" sm="12">
                 <v-img
-                  v-if="auction.images.length != 0"
-                  style="background-color: #1a202c"
-                  contain
-                  :src="require('../../../back/public/' + auction.images[0].image)"
-                  alt="Item image"
-                  min-height="275px"
-                  max-height="275px"
+                    v-if="auction.images.length != 0"
+                    style="background-color: #1a202c"
+                    contain
+                    :src="require('../../../back/public/' + auction.images[0].image)"
+                    alt="Item image"
+                    min-height="275px"
+                    max-height="275px"
                 ></v-img>
                 <v-img
-                  v-else
-                  contain
-                  src="../assets/no-image-item.svg"
-                  alt="No item image"
-                  min-height="275px"
-                  max-height="275px"
+                    v-else
+                    contain
+                    src="../assets/no-image-item.svg"
+                    alt="No item image"
+                    min-height="275px"
+                    max-height="275px"
                 >
                 </v-img>
               </v-col>
@@ -111,16 +111,16 @@
               </v-col>
             </v-row>
             <br>
-            <v-card-actions>
+            <v-card-actions v-if="role == 'Client'">
               <v-dialog
-                transition="dialog-bottom-transition"
-                max-width="75%"
-                persistent
+                  transition="dialog-bottom-transition"
+                  max-width="75%"
+                  persistent
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-row>
                     <v-col cols="12" sm="12">
-                      <v-btn v-if="role == 'Client'" style="position: absolute; bottom: 8px; right: 8px"
+                      <v-btn style="position: absolute; bottom: 8px; right: 8px"
                              color="primary"
                              v-bind="attrs"
                              v-on="on"
@@ -137,24 +137,24 @@
                       <v-row>
                         <v-col cols="12" sm="5" class="pt-8">
                           <v-carousel
-                            v-if="auction.images.length != 0"
-                            hide-delimiters style="height: 100%">
+                              v-if="auction.images.length != 0"
+                              hide-delimiters style="height: 100%">
                             <v-carousel-item
-                              style="background-color: #1a202c"
-                              contain
-                              v-for="(item,i) in auction.images"
-                              :key="i"
-                              :src="require('../../../back/public/' + item.image)"
+                                style="background-color: #1a202c"
+                                contain
+                                v-for="(item,i) in auction.images"
+                                :key="i"
+                                :src="require('../../../back/public/' + item.image)"
                             ></v-carousel-item>
                           </v-carousel>
                           <v-carousel
-                            v-else
-                            hide-delimiters style="height: 100%">
-                          <v-carousel-item
-                          contain src="../assets/no-image-item.svg">
-<!--                              <v-img-->
-<!--                                src="../assets/no-image-item.svg"-->
-<!--                              ></v-img>-->
+                              v-else
+                              hide-delimiters style="height: 100%">
+                            <v-carousel-item
+                                contain src="../assets/no-image-item.svg">
+                              <!--                              <v-img-->
+                              <!--                                src="../assets/no-image-item.svg"-->
+                              <!--                              ></v-img>-->
                             </v-carousel-item>
                           </v-carousel>
                         </v-col>
@@ -181,10 +181,10 @@
                             <v-col cols="12" sm="1">
                               <v-card-actions style="justify-content: center">
                                 <v-btn
-                                  class="my-2"
-                                  small
-                                  fab
-                                  @click="dialog.value = false"
+                                    class="my-2"
+                                    small
+                                    fab
+                                    @click="dialog.value = false; clearForm()"
                                 >
                                   <v-icon>mdi-close</v-icon>
                                 </v-btn>
@@ -228,19 +228,19 @@
                             </v-col>
                           </v-row>
                           <validation-provider
-                            v-slot="{ errors }"
-                            name="bidInput"
-                            clearable
+                              v-slot="{ errors }"
+                              name="bidInput"
+                              clearable
                           >
                             <v-row>
                               <v-card-title style="word-break: normal" class="mb-4">
                                 Your bid:
                               </v-card-title>
                               <v-text-field
-                                v-model="bidInput"
-                                :error-messages="errors"
-                                hint="*Must be at least 3% higher than the current value."
-                                clearable
+                                  v-model="bidInput"
+                                  :error-messages="errors"
+                                  hint="*Must be at least 3% higher than the current value."
+                                  clearable
                               >
                               </v-text-field>
                             </v-row>
@@ -265,12 +265,16 @@
                             </v-btn>
                           </v-row>
                         </v-col>
+                      </v-row>
+                    </v-card-text>
+<!--                    <v-row>-->
+                      <v-col cols="12" sm="12">
                         <v-card-title style="position: absolute; bottom: 8px; right: 8px"
                                       class="text-sm-body-1">
                           {{ "Expires at: " + auction.end_datetime }}
                         </v-card-title>
-                      </v-row>
-                    </v-card-text>
+                      </v-col>
+<!--                    </v-row>-->
                   </v-card>
                 </template>
               </v-dialog>
@@ -378,20 +382,20 @@ export default {
       axios.post('/filtered_auctions', {
         category: this.category
       })
-        .then(response => {
-          if (response.data) {
-            this.auctions = response.data.auctions
-            this.conditions = response.data.conditions
-            // for (let i = 0; i < response.data.length; i++) {
-            //   // console.log(response.data)//   this.auctions = response.data
-            // }
-          }
-          this.dataLoading = false
-        })
-        .catch(error => {
-          console.log(error)
-          this.dataLoading = false
-        })
+          .then(response => {
+            if (response.data) {
+              this.auctions = response.data.auctions
+              this.conditions = response.data.conditions
+              // for (let i = 0; i < response.data.length; i++) {
+              //   // console.log(response.data)//   this.auctions = response.data
+              // }
+            }
+            this.dataLoading = false
+          })
+          .catch(error => {
+            console.log(error)
+            this.dataLoading = false
+          })
     },
     // This auction is no longer eligible for bids.
     getAuctionId() {
@@ -399,37 +403,37 @@ export default {
       axios.get('/auction/', {
         category: this.category
       })
-        .then(response => {
-          if (response.data) {
-            console.log(response.data.auctions)
-            this.auctions = response.data.auctions
-            this.auction_id = response.data.id
-            this.conditions = response.data.conditions
-            // for (let i = 0; i < response.data.length; i++) {
-            //   // console.log(response.data)//   this.auctions = response.data
-            // }
-          }
-          this.dataLoading = false
-        })
-        .catch(error => {
-          console.log(error)
-          this.dataLoading = false
-        })
+          .then(response => {
+            if (response.data) {
+              console.log(response.data.auctions)
+              this.auctions = response.data.auctions
+              this.auction_id = response.data.id
+              this.conditions = response.data.conditions
+              // for (let i = 0; i < response.data.length; i++) {
+              //   // console.log(response.data)//   this.auctions = response.data
+              // }
+            }
+            this.dataLoading = false
+          })
+          .catch(error => {
+            console.log(error)
+            this.dataLoading = false
+          })
     },
 
     getLoggedUser() {
       this.pageLoading = true
       axios.get('/auth/user')
-        .then(response => {
-          if (response.data) {
-            this.username = response.data.username
+          .then(response => {
+            if (response.data) {
+              this.username = response.data.username
+              this.pageLoading = false
+            }
+          })
+          .catch(error => {
+            console.log(error)
             this.pageLoading = false
-          }
-        })
-        .catch(error => {
-          console.log(error)
-          this.pageLoading = false
-        })
+          })
     },
 
     buyout(auction_id) {
@@ -448,9 +452,9 @@ export default {
           }).then(response => {
             if (response.data) {
               Swal.fire(
-                      'Success!',
-                      "You can review your bought items on the 'History' page.",
-                      'success'
+                  'Success!',
+                  "You can review your bought items on the 'History' page.",
+                  'success'
               )
               this.loading = false
               this.modal = false
@@ -465,6 +469,9 @@ export default {
               })
               console.log(error)
               this.loading = false
+              this.modal = false
+              this.showAuctions()
+              this.clearForm()
             }
           })
         }
@@ -488,36 +495,44 @@ export default {
             value: this.bidInput,
             auction_id: auction_id
           }).then(response => {
-                    if (response.data) {
-                        Swal.fire(
-                            'Congratulations!',
-                            "You can take a look at your current bids on the 'Bids' page.",
-                            'success'
-                        )
-                      this.loading = false
-                      this.modal = false
-                      this.showAuctions()
-                      this.clearForm()
-                    }
+            if (response.data) {
+              Swal.fire(
+                  'Congratulations!',
+                  "You can take a look at your current bids on the 'Bids' page.",
+                  'success'
+              )
+              this.loading = false
+              this.modal = false
+              this.showAuctions()
+              this.clearForm()
+            }
+          })
+              .catch(error => {
+                if (error.response.status == '400') {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'You already own the highest bid for this auction.',
                   })
-                  .catch(error => {
-                      if (error.response.status == '400') {
-                          Swal.fire({
-                              icon: 'error',
-                              title: 'You already own the highest bid for this auction.',
-                          })
-                          console.log(error)
-                          this.loading = false
-                        
-                      } else if (error.response.status == 404 || error.response.status == 410) {
-                        Swal.fire({
-                          icon: 'error',
-                          text: 'This auction no longer exists.',
-                        })
-                        console.log(error)
-                        this.loading = false
-                      }
+                  console.log(error)
+                  this.loading = false
+                  this.modal = false
+                  this.showAuctions()
+                  this.clearForm()
+
+                } else if (error.response.status == 404 || error.response.status == 410) {
+                  Swal.fire({
+                    icon: 'error',
+                    text: 'This auction no longer exists.',
                   })
+                  console.log(error)
+                  this.loading = false
+                  this.modal = false
+                  this.showAuctions()
+                  this.clearForm()
+                }
+                console.log(error)
+                this.loading = false
+              })
         }
       })
     },
