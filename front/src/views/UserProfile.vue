@@ -708,6 +708,9 @@ export default {
                   )
                   this.passwordDialog = false
                   this.modal = false
+                  this.old_password = ''
+                  this.newPassword = ''
+                  this.confirmNewPassword = ''
                 }
               }
           )
@@ -717,9 +720,16 @@ export default {
             this.error = error.response.data;
             if (error.response.data.message == "Old password is not correct.") {
               Swal.fire(
-                  'Oops!',
+                  'Password mismatch!',
                   'Old password is incorrect.',
                   'error'
+              )
+            }
+            else if (error.response.data.message == "New password is identical to old password."){
+              Swal.fire(
+                'Oops!',
+                'New password is identical to old password.',
+                'error'
               )
             }
           })

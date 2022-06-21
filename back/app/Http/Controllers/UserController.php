@@ -308,6 +308,9 @@ class UserController extends Controller
         // Old password from input must be same as the one already in database for change to occur
         abort_if(!Hash::check($request->old_password, $user->password), 400, 'Old password is not correct.');
 
+        // New password can't be identical to old password
+        abort_if(Hash::check($request->password, $user->password), 400, 'New password is identical to old password.');
+
         // Change the user password into hashed value and return User object
         $user->update([
             'password' => bcrypt($request->password)
