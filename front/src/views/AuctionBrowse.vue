@@ -60,7 +60,6 @@
             class="mx-1 my-1 card-body d-flex flex-column h-100"
             max-width="19%"
             min-width="19%"
-
             color="tertiary"
           >
             <v-row>
@@ -113,7 +112,7 @@
             </v-row>
             <br>
             <v-card-actions>
-              <v-dialog v-model="modal"
+              <v-dialog
                 transition="dialog-bottom-transition"
                 max-width="75%"
                 persistent

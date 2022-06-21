@@ -7,6 +7,7 @@ use App\Models\Bid;
 use App\Http\Requests\StoreBidRequest;
 use App\Http\Requests\UpdateBidRequest;
 use App\Models\Image;
+use App\Models\Item;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -41,11 +42,10 @@ class BidController extends Controller
         abort_if(!in_array('Client', $roles), 403, 'Only Clients can preview the history of their purchases.');
 
         // Find all the bids this User has made
-        $user_bids = Bid::query()
+        $user_bids = Bid::orderBy('created_at', 'desc')
+            ->where('is_active', true)
             ->where('username', $username)
             ->get();
-
-        $bids = [];
 
         // For each Bid we've found, add an Auction that has this bid as bid_id and add whole object to return array if this auction is functional
         foreach ($user_bids as $bid) {
@@ -55,15 +55,15 @@ class BidController extends Controller
                 ->whereIn('status', ['Created', 'Ongoing'])
                 ->first();
             $bid->auction = $auction;
-            $images = Image::query()
-                ->where('item_id', $auction->item->id)
-                ->get();
-            $bid->images = $images;
-            if ($auction) $bids[] = $bid;
+            if ($auction) {
+                $images = Image::query()
+                    ->where('item_id', $auction->item_id)
+                    ->get();
+                $bid->images = $images;
+            }
         }
 
-        return $bids;
-
+        return $user_bids;
     }
 
     public function getActive()

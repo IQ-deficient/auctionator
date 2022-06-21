@@ -128,11 +128,10 @@ class AuctionController extends Controller
                     ->where('category', $request->category)     // get item IDs for select category
                     ->pluck('id')
             )
-            ->where('status', '!=', 'NA')
+            ->whereIn('status', ['Created', 'Ongoing'])
             ->where('start_datetime', '<=', Carbon::now())      // only auctions that have started (because of queuing)
             ->where('end_datetime', '>=', Carbon::now())      // and NOT ended
             ->get();
-
 
         // For query auctions, fetch all Image paths for Item and bind them to each Auction
         foreach ($auctions as $auction) {
