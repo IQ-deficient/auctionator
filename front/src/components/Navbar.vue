@@ -1,25 +1,24 @@
 <template>
   <div>
-    <!--    Globalni tag navigacione trake -->
-    <v-toolbar
+    <v-toolbar color="tertiary"
         light
-        color="tertiary"
         height="75"
     >
-      <!--      Fioka sa elementima kategorija i potkategorija-->
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" style="color: black; margin-left: 10px"></v-app-bar-nav-icon>
       <router-link to="/home">
-        <!--        Logo aplikacije sa likom na /home-->
         <v-img src="../assets/architecture-icon.svg"
                style="margin-left: 28px"
                max-height="60px"
                max-width="60px"
         ></v-img>
       </router-link>
-
       <v-divider id="divider" vertical style="margin-left: 28px; border-right: 2px solid black"></v-divider>
-
       <v-toolbar-title style="margin-left: 28px">Auction House</v-toolbar-title>
+      <div class="ml-12">
+        <router-link style="text-decoration: none" to="/"><v-btn text>Home</v-btn></router-link>
+        <router-link style="text-decoration: none" to="/about"><v-btn text>About</v-btn></router-link>
+        <router-link style="text-decoration: none" to="/contact"><v-btn text>Contact</v-btn></router-link>
+      </div>
       <v-spacer></v-spacer>
       <div v-if="token == null">
         <router-link to="/register/" style="text-decoration: none">
@@ -29,7 +28,6 @@
             <span class="hidden-sm-and-down">Sign up</span>
           </v-btn>
         </router-link>
-
         <router-link to="/login/" style="text-decoration: none">
           <v-btn value="center"
                  color="primary" class="ml-2">

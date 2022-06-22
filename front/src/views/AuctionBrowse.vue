@@ -21,7 +21,7 @@
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
     </v-toolbar>
-    <v-app-bar dark style="background-color: #1a202c">
+    <v-app-bar dark color="info">
       <v-breadcrumbs
           :items="items"
           large
@@ -511,8 +511,8 @@ export default {
         title: 'Are you sure you want to buy this item?',
         icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#8f5782',
-        cancelButtonColor: '#757e93',
+        confirmButtonColor: '#1A475A',
+        cancelButtonColor: '#757E93',
         confirmButtonText: "Yes, I'm sure!"
       }).then((result) => {
         if (result.isConfirmed) {

@@ -1,35 +1,23 @@
 <template>
-  <div class="">
-    <h1 style="color: white" class="pt-6 pb-2 text-decoration-underline">Welcome, here is your Reminder list</h1>
-    <h5 style="color: white" class="pb-6 text-decoration-underline">These are the things that need to be checked</h5>
-    <ul style="color: chartreuse">
-      <li v-for="item in todoList" v-bind:key="item">
-        {{ item }}
-      </li>
-    </ul>
-  </div>
+  <v-main>
+    <Hero />
+    <Gallery />
+    <LatestPost />
+  </v-main>
 </template>
 
 <script>
-// @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
+import Hero from "../components/Hero";
+import Gallery from "../components/Gallery";
+import LatestPost from "../components/LatestPost";
 
 export default {
-  name: 'Home',
-  components: {
-    // HelloWorld
-  },
-  data: () => ({
-    todoList: [
-      'Design home page',
-      'Add Sweetalert props where needed',
-      'Add functional Loading attribute to components that need it',
-      'Clean up Todo-s throughout the code',
-    ]
-  }),
+  name: "Home",
 
-  mounted() {
-    document.title = 'Auction House'
+  components: {
+    Hero,
+    Gallery,
+    LatestPost
   }
-}
+};
 </script>

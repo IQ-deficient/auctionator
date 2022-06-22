@@ -9,6 +9,7 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 import DatetimePicker from 'vuetify-datetime-picker';
 
 Vue.config.productionTip = false
+
 const options = {
   confirmButtonColor: '#41b882',
   cancelButtonColor: '#ff7674',

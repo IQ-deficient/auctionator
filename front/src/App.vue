@@ -1,10 +1,11 @@
 <template>
-  <v-app style="background-color: #4a5568">
+  <v-app style="background-color: #193E49">
     <Loader></Loader>
     <div style="min-height: 100%">
       <Navbar>
         <router-link to="/home"></router-link>
         <router-link to="/about"></router-link>
+        <router-link to="/contact"></router-link>
         <router-link to="/register"></router-link>
         <router-link to="/login"></router-link>
       </Navbar>
@@ -12,16 +13,8 @@
         <router-view/>
       </div>
     </div>
-<!--    Navigaciona traka sa definisanim rutama unutar njenih tagova-->
     <Footer></Footer>
   </v-app>
-<!--  <div id="app">-->
-<!--    <div id="nav">-->
-<!--      <router-link to="/">Home</router-link> |-->
-<!--      <router-link to="/about">About</router-link>-->
-<!--    </div>-->
-<!--    <router-view/>-->
-<!--  </div>-->
 </template>
 
 <script>
@@ -45,7 +38,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #e7d8d2;
 }
 
 #nav {
