@@ -511,9 +511,10 @@ export default {
                 if (error.response.status == '400') {
                   Swal.fire({
                     icon: 'error',
-                    title: 'You already own the highest bid for this auction.',
+                    title: error.response.data.message,
                   })
                   console.log(error)
+                  // console.log(error.response.data.message)
                   this.loading = false
                   this.modal = false
                   this.showAuctions()
@@ -522,7 +523,7 @@ export default {
                 } else if (error.response.status == 404 || error.response.status == 410) {
                   Swal.fire({
                     icon: 'error',
-                    text: 'This auction no longer exists.',
+                    title: error.response.data.message,
                   })
                   console.log(error)
                   this.loading = false
