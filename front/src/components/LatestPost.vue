@@ -37,21 +37,21 @@ export default {
         title: "Top western road trips",
         subtitle: "1,000 miles of wonder",
         description: "His ubique laboramus ne. Expetenda assueverit sed ad. Id nec malis lucilius delicatissimi. Nec assum sonet suscipit ex, diam deterruisset ut usu, ad dicat fabellas aliquando eam.",
-        src: require("../src/assets/images/img10.jpg")
+        src: require("../../src/assets/images/img10.jpg")
       },
       {
         id: 2,
         title: "Christmas tales to read",
         subtitle: "2,000 miles of wonder",
         description: "Sea ad habemus assueverit, omnes platonem convenire sit et, at integre pericula quo. Facete adolescens definitionem cu qui, in putant aliquid fierent ius.",
-        src: require("../src/assets/images/img11.jpg")
+        src: require("../../src/assets/images/img11.jpg")
       },
       {
         id: 3,
         title: "20 movies not to miss in 2020",
         subtitle: "3,000 miles of wonder",
         description: "Aliquam albucius mei ei, debitis torquatos et pro, eos natum scribentur no. Putant verear constituto te qui. Adolescens persequeris vim ei. Vel nullam reprimique te.",
-        src: require("../src/assets/images/img12.jpg")
+        src: require("../../src/assets/images/img12.jpg")
       }
     ]
   })

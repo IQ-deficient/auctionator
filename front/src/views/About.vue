@@ -1,7 +1,7 @@
 <template>
   <v-main>
     <div class="staticHero">
-      <v-img src="../src/assets/images/img13.jpg">
+      <v-img src="../../src/assets/images/img13.jpg">
         <v-row align="end" class="lightbox white--text pa-2 fill-height">
           <v-col>
             <v-container>
@@ -43,19 +43,19 @@ export default {
       items: [
         {
           id: 1,
-          src: require("../src/assets/images/team1.jpg"),
+          src: require("../../src/assets/images/team1.jpg"),
           name: 'Peter Smith',
           title: 'Director'
         },
         {
           id: 2,
-          src: require("../src/assets/images/team2.jpg"),
+          src: require("../../src/assets/images/team2.jpg"),
           name: 'Roy Perry',
           title: 'Photographer'
         },
         {
           id: 3,
-          src: require("../src/assets/images/team3.jpg"),
+          src: require("../../src/assets/images/team3.jpg"),
           name: 'Lisa White',
           title: 'Freelancer'
         }
