@@ -120,7 +120,7 @@ class HistoryController extends Controller
         Mail::to(User::query()->where('email', Auth::user()->email)->first())
             ->send(new MailNotification(
                 'Congratulations. You now own the following Auction: "' . $auction->title . '". Please visit the History tab on our platform for additional information. Thanks.',
-                'You have won an Auction with ID:' . $auction->id
+                'You have won an Auction with an ID:' . $auction->id
             ));
 
         return History::query()->where('id', $history->id)->first();

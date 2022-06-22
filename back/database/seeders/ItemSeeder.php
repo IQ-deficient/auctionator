@@ -48,7 +48,7 @@ class ItemSeeder extends Seeder
             ],
             [
                 'id' => 4,
-                'title' => 'Full stack developer.',
+                'title' => 'Developer Nemanja Kukulicic',
                 'description' => 'A literal human being, being sold on an auction. Using the term human being is generous to say the least, and developer is a term being used too broadly.',
                 'category' => "Misc.",
                 'condition' => '--',
