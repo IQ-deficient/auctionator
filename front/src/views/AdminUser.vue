@@ -329,17 +329,24 @@
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-icon
-            class="mr-2"
-            @click="editUser(item)"
-        >
-          mdi-pencil
-        </v-icon>
-        <!--          <v-icon-->
-        <!--              @click="deleteUser(item)"-->
-        <!--          >-->
-        <!--            mdi-delete-->
-        <!--          </v-icon>-->
+        <v-row>
+          <v-col cols="12" sm="6">
+            <v-icon
+                    color="primary"
+                    @click="editUser(item)"
+            >
+              mdi-pencil
+            </v-icon>
+          </v-col>
+          <v-col cols="12" sm="6">
+            <v-icon
+                    color="primary"
+                    @click="deleteUser(item)"
+            >
+              mdi-account-cancel-outline
+            </v-icon>
+          </v-col>
+        </v-row>
       </template>
     </v-data-table>
     <edit-user
@@ -458,21 +465,6 @@ export default {
     allowedRoles: window.localStorage.user_roles.includes('Administrator') || window.localStorage.user_roles.includes('Manager')
   }),
 
-  // computed: {
-  //   formTitle () {
-  //     return this.editedIndex === -1 ? 'New auction' : 'Edit auction'
-  //   },
-  // },
-
-  // watch: {
-  //   dialog (val) {
-  //     val || this.close()
-  //   },
-  //   dialogDelete (val) {
-  //     val || this.closeDelete()
-  //   },
-  // },
-
   created() {
     // this.getUserRoles()
     this.getUsers()
@@ -482,6 +474,7 @@ export default {
   },
 
   methods: {
+
     updateTableData() {
       if (this.selectRole == 'Clients') {
         this.tableData = this.users.clients
@@ -620,6 +613,46 @@ export default {
             this.loading = false
             this.error = error.response.data.message
           })
+    },
+
+    deleteUser(item) {
+      Swal.fire({
+        title: 'Are you sure you want to permanently ban this user?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#8f5782',
+        cancelButtonColor: '#757e93',
+        confirmButtonText: "Yes, I'm sure!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.loading = true;
+          axios.delete('user/' + item.id)
+                  .then(response => {
+                    if (response.data) {
+                      Swal.fire(
+                              'Success!',
+                              "The user has been permanently banned.",
+                              'success',
+                      )
+                      this.loading = false
+                      this.modal = false
+                      this.getUsers()
+                    }
+                  })
+                  .catch(error => {
+                    if (error.response.status == 404) {
+                      Swal.fire({
+                        icon: 'error',
+                        text: 'Only Managers and Admins are allowed to update User activity status.',
+                      })
+                      console.log(error)
+                      this.loading = false
+                    }
+                    console.log(error)
+                    this.dataLoading = false
+                  })
+        }
+      })
     },
 
     clearForm() {
