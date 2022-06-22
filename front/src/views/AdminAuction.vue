@@ -405,7 +405,7 @@
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-row>
+        <v-row v-if="selectStatus == 'Created'">
           <v-col cols="12" sm="4">
             <v-icon v-if="item.is_active == false"
                     class="mr-2"
@@ -413,7 +413,7 @@
             >
               mdi-pencil
             </v-icon>
-            <v-icon v-else-if="selectStatus == 'Created'"
+            <v-icon v-else
                     class="mr-2"
                     color="primary"
                     @click="editAuction(item)"
@@ -422,25 +422,70 @@
             </v-icon>
           </v-col>
           <v-col cols="12" sm="4">
-            <v-icon
-                color="primary"
-                class="mr-2"
-                @click="hardDelete(item)"
+            <v-icon v-if="item.is_active == false"
+                    class="mr-2"
+                    color="secondary"
             >
-              mdi-delete-forever
+              mdi-delete-clock
             </v-icon>
-          </v-col>
-          <v-col cols="12" sm="4">
-            <v-icon
+            <v-icon v-else
                 class="mr-2"
-                color="secondary"
+                color="primary"
+                @click="disableAuction(item)"
             >
               mdi-delete-clock
             </v-icon>
           </v-col>
+          <v-col cols="12" sm="4">
+            <v-icon
+                    color="primary"
+                    class="mr-2"
+                    @click="hardDelete(item)"
+            >
+              mdi-delete-forever
+            </v-icon>
+          </v-col>
         </v-row>
-
-
+        <v-row v-if="selectStatus == 'Ongoing'">
+          <v-col cols="12" sm="6">
+            <v-icon
+                    class="mr-2"
+                    color="primary"
+                    @click="disableAuction(item)"
+            >
+              mdi-delete-clock
+            </v-icon>
+          </v-col>
+          <v-col cols="12" sm="6">
+            <v-icon
+                    color="primary"
+                    class="mr-2"
+                    @click="hardDelete(item)"
+            >
+              mdi-delete-forever
+            </v-icon>
+          </v-col>
+        </v-row>
+        <v-row v-if="selectStatus == 'NA'">
+          <v-col cols="12" sm="6">
+            <v-icon
+                    class="mr-2"
+                    color="primary"
+                    @click="restoreAuction(item)"
+            >
+              mdi-delete-restore
+            </v-icon>
+          </v-col>
+          <v-col cols="12" sm="6">
+            <v-icon
+                    color="primary"
+                    class="mr-2"
+                    @click="hardDelete(item)"
+            >
+              mdi-delete-forever
+            </v-icon>
+          </v-col>
+        </v-row>
       </template>
 
     </v-data-table>
@@ -676,6 +721,66 @@ export default {
             this.progressInfos[idx].percentage = 0;
             this.message = "Could not upload the file:" + file.name;
           });
+    },
+
+    disableAuction(item) {
+      Swal.fire({
+        title: 'Are you sure you want to disable this auction?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#8f5782',
+        cancelButtonColor: '#757e93',
+        confirmButtonText: "Yes, I'm sure!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.loading = true;
+          axios.delete('auction_soft/' + item.id)
+                  .then(response => {
+                    if (response.data) {
+                      Swal.fire(
+                              'Success!',
+                              "Chosen auction has been temporarily disabled.",
+                              'success',
+                      )
+                      this.loading = false
+                    }
+                  })
+                  .catch(error => {
+                    console.log(error)
+                    this.dataLoading = false
+                  })
+        }
+      })
+    },
+
+    restoreAuction(item) {
+      Swal.fire({
+        title: 'Are you sure you want to disable this auction?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#8f5782',
+        cancelButtonColor: '#757e93',
+        confirmButtonText: "Yes, I'm sure!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.loading = true;
+          axios.delete('auction_soft/' + item.id)
+                  .then(response => {
+                    if (response.data) {
+                      Swal.fire(
+                              'Success!',
+                              "Chosen auction has been restored.",
+                              'success',
+                      )
+                      this.loading = false
+                    }
+                  })
+                  .catch(error => {
+                    console.log(error)
+                    this.dataLoading = false
+                  })
+        }
+      })
     },
 
     hardDelete(item) {
