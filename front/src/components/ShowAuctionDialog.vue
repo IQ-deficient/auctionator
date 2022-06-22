@@ -5,7 +5,7 @@
         max-width="95%"
         persistent
     >
-        <v-card color="#2c3e50">
+        <v-card color="info">
           <v-card-actions class="justify-end">
             <v-btn
                     small

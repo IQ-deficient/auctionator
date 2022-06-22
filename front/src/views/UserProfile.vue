@@ -6,7 +6,7 @@
 
     <validation-observer ref="observer" v-slot="{ invalid }" tag="form" @submit.prevent="updateProfile()">
       <v-card width="50%"
-              style="margin: 0 auto; position: relative; top: -25px" color="info" class="pa-4">
+              style="margin: 0 auto; position: relative; top: -25px" color="#0d111a" class="pa-4">
         <v-row class="">
           <v-col cols="12" sm="12">
             <div style="position: relative; width: 145px; height: 0; margin: 0 auto">

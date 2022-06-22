@@ -2,7 +2,7 @@
   <div>
     <v-toolbar
         dark
-        color="accent"
+        color="info"
     >
       <v-toolbar-title>Looking for something specific?</v-toolbar-title>
       <v-autocomplete style="width: 50%"
@@ -21,7 +21,7 @@
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
     </v-toolbar>
-    <v-app-bar dark color="info">
+    <v-app-bar dark color="#0d111a">
       <v-breadcrumbs
           :items="items"
           large
@@ -66,7 +66,7 @@
               <v-col cols="12" sm="12">
                 <v-img
                     v-if="auction.images.length != 0"
-                    style="background-color: #1a202c"
+                    style="background-color: #0d111a"
                     contain
                     :src="require('../../../back/public/' + auction.images[0].image)"
                     alt="Item image"
@@ -140,7 +140,7 @@
                               v-if="auction.images.length != 0"
                               hide-delimiters style="height: 100%">
                             <v-carousel-item
-                                style="background-color: #1a202c"
+                                style="background-color: #0d111a"
                                 contain
                                 v-for="(item,i) in auction.images"
                                 :key="i"
@@ -222,7 +222,7 @@
                               <v-card-title v-if="auction.bid != null" style="justify-content: start" color="primary">
                                 {{ "Current bid: " + auction.bid.value + "€" }}
                               </v-card-title>
-                              <v-card-title v-else style="color: #42b983; justify-content: start">
+                              <v-card-title v-else style="color: #529363; justify-content: start">
                                 {{ "No bids on this item!" }}
                               </v-card-title>
                             </v-col>
@@ -443,8 +443,8 @@ export default {
         // text: "You won't be able to revert this!",
         icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#8f5782',
-        cancelButtonColor: '#757e93',
+        confirmButtonColor: '#605290',
+        cancelButtonColor: '#819fC9',
         confirmButtonText: "Yes, I'm sure!"
       }).then((result) => {
         if (result.isConfirmed) {
@@ -511,8 +511,8 @@ export default {
         title: 'Are you sure you want to buy this item?',
         icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#1A475A',
-        cancelButtonColor: '#757E93',
+        confirmButtonColor: '#605290',
+        cancelButtonColor: '#819fC9',
         confirmButtonText: "Yes, I'm sure!"
       }).then((result) => {
         if (result.isConfirmed) {

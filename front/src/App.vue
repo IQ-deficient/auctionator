@@ -1,5 +1,5 @@
 <template>
-  <v-app style="background-color: #193E49">
+  <v-app style="background-color: #1C263E">
     <Loader></Loader>
     <div style="min-height: 100%">
       <Navbar>
@@ -18,7 +18,6 @@
 </template>
 
 <script>
-// Ovdje se definisu sve globalne Vue komponente
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Loader from "@/components/Loader";

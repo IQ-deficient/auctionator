@@ -73,7 +73,7 @@
                 </v-btn>
               </template>
               <template v-slot:default="dialog">
-                <v-card color="#2c3e50">
+                <v-card color="info">
                   <v-card-actions class="justify-end">
                     <v-btn
                         small
@@ -734,8 +734,8 @@ export default {
         title: 'Are you sure you want to disable this auction?',
         icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#8f5782',
-        cancelButtonColor: '#757e93',
+        confirmButtonColor: '#605290',
+        cancelButtonColor: '#819fC9',
         confirmButtonText: "Yes, I'm sure!"
       }).then((result) => {
         if (result.isConfirmed) {
@@ -773,8 +773,8 @@ export default {
         title: 'Are you sure you want to restore this auction?',
         icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#8f5782',
-        cancelButtonColor: '#757e93',
+        confirmButtonColor: '#605290',
+        cancelButtonColor: '#819fC9',
         confirmButtonText: "Yes, I'm sure!"
       }).then((result) => {
         if (result.isConfirmed) {
@@ -803,8 +803,8 @@ export default {
         title: 'Are you sure you want to delete this auction?',
         icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#8f5782',
-        cancelButtonColor: '#757e93',
+        confirmButtonColor: '#605290',
+        cancelButtonColor: '#819fC9',
         confirmButtonText: "Yes, I'm sure!"
       }).then((result) => {
         if (result.isConfirmed) {

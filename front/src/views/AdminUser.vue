@@ -73,7 +73,7 @@
                 </v-btn>
               </template>
               <template v-slot:default="dialog">
-                <v-card color="secondary">
+                <v-card color="info">
                   <v-card-actions class="justify-end">
                     <v-btn
                         small
@@ -627,8 +627,8 @@ export default {
         title: 'Are you sure you want to permanently ban this user?',
         icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#1A475A',
-        cancelButtonColor: '#757E93',
+        confirmButtonColor: '#605290',
+        cancelButtonColor: '#819fC9',
         confirmButtonText: "Yes, I'm sure!"
       }).then((result) => {
         if (result.isConfirmed) {
