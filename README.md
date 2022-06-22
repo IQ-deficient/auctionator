@@ -18,7 +18,8 @@ cd..
 
 ## Setup
 - Make sure Apache & MySql are running (XAMPP)
-- Clone .env.example file into .env and configure: DB_DATABASE, MAIL_USERNAME, MAIL_PASSWORD, MAIL_FROM_ADDRESS
+- Clone .env.example file into .env and configure: DB_DATABASE, MAIL_USERNAME, MAIL_FROM_ADDRESS
+- Email being used needs Two-Factor Authentication and Google 'App Password' as MAIL_PASSWORD
 ```bash
 cd back
 php artisan jwt:secret
