@@ -21,15 +21,15 @@ export default {
     return {
       items: [
         {
-          src: require("../../../../../Desktop/Vuetify-Project-Photography-master/Vuetify-Project-Photography-master/src/assets/images/img-carousel1.jpg"),
+          src: require("../src/assets/images/img-carousel1.jpg"),
           title: "We are creative"
         },
         {
-          src: require("../../../../../Desktop/Vuetify-Project-Photography-master/Vuetify-Project-Photography-master/src/assets/images/img-carousel2.jpg"),
+          src: require("../src/assets/images/img-carousel2.jpg"),
           title: "We are hard worker"
         },
         {
-          src: require("../../../../../Desktop/Vuetify-Project-Photography-master/Vuetify-Project-Photography-master/src/assets/images/img-carousel3.jpg"),
+          src: require("../src/assets/images/img-carousel3.jpg"),
           title: "We are professional"
         }
       ]

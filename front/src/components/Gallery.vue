@@ -27,39 +27,39 @@ export default {
       items: [
         {
           id: 1,
-          src: require("../../../../../Desktop/Vuetify-Project-Photography-master/Vuetify-Project-Photography-master/src/assets/images/img1.jpg")
+          src: require("../src/assets/images/img1.jpg")
         },
         {
           id: 2,
-          src: require("../../../../../Desktop/Vuetify-Project-Photography-master/Vuetify-Project-Photography-master/src/assets/images/img2.jpg")
+          src: require("../src/assets/images/img2.jpg")
         },
         {
           id: 3,
-          src: require("../../../../../Desktop/Vuetify-Project-Photography-master/Vuetify-Project-Photography-master/src/assets/images/img3.jpg")
+          src: require("../src/assets/images/img3.jpg")
         },
         {
           id: 4,
-          src: require("../../../../../Desktop/Vuetify-Project-Photography-master/Vuetify-Project-Photography-master/src/assets/images/img4.jpg")
+          src: require("../src/assets/images/img4.jpg")
         },
         {
           id: 5,
-          src: require("../../../../../Desktop/Vuetify-Project-Photography-master/Vuetify-Project-Photography-master/src/assets/images/img5.jpg")
+          src: require("../src/assets/images/img5.jpg")
         },
         {
           id: 6,
-          src: require("../../../../../Desktop/Vuetify-Project-Photography-master/Vuetify-Project-Photography-master/src/assets/images/img6.jpg")
+          src: require("../src/assets/images/img6.jpg")
         },
         {
           id: 7,
-          src: require("../../../../../Desktop/Vuetify-Project-Photography-master/Vuetify-Project-Photography-master/src/assets/images/img7.jpg")
+          src: require("../src/assets/images/img7.jpg")
         },
         {
           id: 8,
-          src: require("../../../../../Desktop/Vuetify-Project-Photography-master/Vuetify-Project-Photography-master/src/assets/images/img8.jpg")
+          src: require("../src/assets/images/img8.jpg")
         },
         {
           id: 9,
-          src: require("../../../../../Desktop/Vuetify-Project-Photography-master/Vuetify-Project-Photography-master/src/assets/images/img9.jpg")
+          src: require("../src/assets/images/img9.jpg")
         }
       ]
     };
