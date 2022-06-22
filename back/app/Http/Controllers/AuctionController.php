@@ -37,10 +37,12 @@ class AuctionController extends Controller
     public function index()
     {
         $roles = User::getUserRoles(Auth::user()->username);
-        $auctions = Auction::all();
-        $created = $ongoing = $sold = $expired = $na = [];      // init return variables
+        $auctions = Auction::query()
+            ->where('is_active', true)
+            ->get();
+        $created = $ongoing = $sold = $expired = $na = [];      // init status return variables
 
-        // Go through each Auction no matter if active and return them separated by status
+        // Go through each Auction and return them separated in variables by status
         foreach ($auctions as $auction) {
             switch ($auction->status) {
                 case "Created":
@@ -60,10 +62,14 @@ class AuctionController extends Controller
                     break;
             }
         }
+        // We will be returning inactive auction separately
+        $inactive = Auction::query()
+            ->where('is_active', false)
+            ->get();
 
         // Only if Administrator or Manager is currently logged in return desired data
         if (in_array('Administrator', $roles) || in_array('Auctioneer', $roles))
-            return ['created' => $created, 'ongoing' => $ongoing, 'sold' => $sold, 'expired' => $expired, 'na' => $na];
+            return ['created' => $created, 'ongoing' => $ongoing, 'sold' => $sold, 'expired' => $expired, 'na' => $na, 'inactive' => $inactive];
 
         return response('You do not have permissions for requested data!', 400);
     }
@@ -321,15 +327,16 @@ class AuctionController extends Controller
             'user_id' => Auth::id()         // Auctioneer that deleted the auction
         ]);
 
-        // Notifying the person that last bid on this Auction before we invalidate that Bid
-        Mail::to(User::query()->where('username', $auction->bid->username)->first())
-            ->send(new MailNotification(
-                'The Auction: "' . $auction->title . '", with an ID:' . $auction->id . ', is now terminated! Please contact our staff for additional information.',
-                'Something has gone wrong!'
-            ));
-
-        // Last and only active bid for this auction will be deactivated
-        Bid::deactivateBid($auction->bid_id);
+        if ($auction->bid) {
+            // Notifying the person that last bid on this Auction before we invalidate that Bid, if there is any
+            Mail::to(User::query()->where('username', $auction->bid->username)->first())
+                ->send(new MailNotification(
+                    'The Auction: "' . $auction->title . '", with an ID:' . $auction->id . ', is now terminated! Please contact our staff for additional information.',
+                    'Something has gone wrong!'
+                ));
+            // Last and only active bid for this auction will be deactivated
+            Bid::deactivateBid($auction->bid_id);
+        }
 
         // returning Model, so it picks up all formatted data
         return Auction::query()->where('id', $auction->id)->first();
@@ -355,10 +362,13 @@ class AuctionController extends Controller
         abort_if(in_array($auction->status, $no_update_statuses) || Carbon::now() >= $auction->end_datetime,
             410, 'This auction has ended and can therefore not be changed.');
 
-        // Get the User that last placed the Bid on this Auction
-        $last_bidder = User::query()
-            ->where('username', $auction->bid->username)
-            ->first();
+
+        if ($auction->bid) {
+            // Get the User that last placed the Bid on this Auction
+            $last_bidder = User::query()
+                ->where('username', $auction->bid->username)
+                ->first();
+        }
 
         // If we are reverting the Auction to regular state, make it fresh by changing status and duration to reflect that
         if ($auction->status == 'NA') {
@@ -375,12 +385,14 @@ class AuctionController extends Controller
                 'user_id' => Auth::id()
             ]);
 
-            // Also mail the person that last owned the Auction (bid) that it is once again available
-            Mail::to($last_bidder)
-                ->send(new MailNotification(
-                    'Great news! The Auction: "' . $auction->title . '" is up and running. You may place your bid once again.',
-                    'Good to go - Auction with ID:' . $auction->id
-                ));
+            if ($auction->bid) {
+                // Also mail the person that last owned the Auction (bid) that it is once again available
+                Mail::to($last_bidder)
+                    ->send(new MailNotification(
+                        'Great news! The Auction: "' . $auction->title . '" is up and running. You may place your bid once again.',
+                        'Good to go - Auction with ID:' . $auction->id
+                    ));
+            }
 
         } else {
             // And when we are making it Not Available, change status and nullify the last bid for that Auction
@@ -391,11 +403,14 @@ class AuctionController extends Controller
                 'user_id' => Auth::id()         // Auctioneer that altered the auction
             ]);
 
-            Mail::to($last_bidder)
-                ->send(new MailNotification(
-                    'We wanted to let you know that the Auction: "' . $auction->title . '" you have had a bid on is currently Not Available. We are terribly sorry for the inconvenience. You will be notified once we figure this out.',
-                    'There is an issue with an auction with ID:' . $auction->id
-                ));
+            if ($auction->bid) {
+                Mail::to($last_bidder)
+                    ->send(new MailNotification(
+                        'We wanted to let you know that the Auction: "' . $auction->title . '" you have had a bid on is currently Not Available. We are terribly sorry for the inconvenience. You will be notified once we figure this out.',
+                        'There is an issue with an auction with ID:' . $auction->id
+                    ));
+            }
+
         }
 
         return $auction;
