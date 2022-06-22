@@ -39,7 +39,7 @@ class GenderSeeder extends Seeder
             ],
             [
                 'id' => 4,
-                'name' => 'Rather would not say',
+                'name' => 'Would rather not say',
                 'is_active' => true,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),

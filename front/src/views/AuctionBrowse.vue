@@ -436,48 +436,6 @@ export default {
           })
     },
 
-    buyout(auction_id) {
-      Swal.fire({
-        title: 'Are you sure you want to buy this item?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#8f5782',
-        cancelButtonColor: '#757e93',
-        confirmButtonText: "Yes, I'm sure!"
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.loading = true
-          axios.post('/history', {
-            auction_id: auction_id,
-          }).then(response => {
-            if (response.data) {
-              Swal.fire(
-                  'Success!',
-                  "You can review your bought items on the 'History' page.",
-                  'success'
-              )
-              this.loading = false
-              this.modal = false
-              this.showAuctions()
-              this.clearForm()
-            }
-          }).catch(error => {
-            if (error.response.status == 404 || error.response.status == 410) {
-              Swal.fire({
-                icon: 'error',
-                text: 'This auction no longer exists.',
-              })
-              console.log(error)
-              this.loading = false
-              this.modal = false
-              this.showAuctions()
-              this.clearForm()
-            }
-          })
-        }
-      })
-    },
-
     // todo: objasni milosu komunikacije i for loop i komponente
     postBid(auction_id) {
       Swal.fire({
@@ -508,7 +466,7 @@ export default {
             }
           })
               .catch(error => {
-                if (error.response.status == '400') {
+                if (error.response.status == 400) {
                   Swal.fire({
                     icon: 'error',
                     title: error.response.data.message,
@@ -530,10 +488,62 @@ export default {
                   this.modal = false
                   this.showAuctions()
                   this.clearForm()
+                } else if (error.response.status == 403) {
+                  Swal.fire({
+                    icon: 'error',
+                    title: error.response.data.message,
+                  })
+                  console.log(error)
+                  this.loading = false
+                  this.modal = false
+                  this.showAuctions()
+                  this.clearForm()
                 }
                 console.log(error)
                 this.loading = false
               })
+        }
+      })
+    },
+
+    buyout(auction_id) {
+      Swal.fire({
+        title: 'Are you sure you want to buy this item?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#8f5782',
+        cancelButtonColor: '#757e93',
+        confirmButtonText: "Yes, I'm sure!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.loading = true
+          axios.post('/history', {
+            auction_id: auction_id,
+          }).then(response => {
+            if (response.data) {
+              Swal.fire(
+                      'Success!',
+                      "You can review your bought items on the 'History' page.",
+                      'success'
+              )
+              this.loading = false
+              this.modal = false
+              this.showAuctions()
+              this.clearForm()
+            }
+          }).catch(error => {
+            if (error.response.status == 404 || error.response.status == 410) {
+              Swal.fire({
+                icon: 'error',
+                text: 'This auction no longer exists.',
+              })
+              console.log(error)
+              this.loading = false
+              this.modal = false
+              this.showAuctions()
+              this.clearForm()
+            }
+          })
         }
       })
     },

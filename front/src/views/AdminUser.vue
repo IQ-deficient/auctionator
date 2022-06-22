@@ -608,11 +608,18 @@ export default {
                 }
               }
           )
-          .catch(error => {
-            console.log(error)
-            this.loading = false
-            this.error = error.response.data.message
-          })
+              .catch(error => {
+                if (error.response.status == 403) {
+                  Swal.fire({
+                    icon: 'error',
+                    text: error.response.data.message,
+                  })
+                  console.log(error)
+                  this.loading = false
+                }
+                console.log(error)
+                this.dataLoading = false
+              })
     },
 
     deleteUser(item) {
@@ -640,10 +647,10 @@ export default {
                     }
                   })
                   .catch(error => {
-                    if (error.response.status == 404) {
+                    if (error.response.status == 400) {
                       Swal.fire({
                         icon: 'error',
-                        text: 'Only Managers and Admins are allowed to update User activity status.',
+                        text: error.response.data.message,
                       })
                       console.log(error)
                       this.loading = false
