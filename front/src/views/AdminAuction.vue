@@ -447,8 +447,14 @@
           </v-col>
         </v-row>
         <v-row v-if="selectStatus == 'Ongoing'">
-          <v-col cols="12" sm="6">
-            <v-icon
+          <v-col cols="12" sm="4">
+            <v-icon v-if="item.is_active == false"
+                    class="mr-2"
+                    color="secondary"
+            >
+              mdi-delete-clock
+            </v-icon>
+            <v-icon v-else
                     class="mr-2"
                     color="primary"
                     @click="disableAuction(item)"
@@ -743,9 +749,18 @@ export default {
                               'success',
                       )
                       this.loading = false
-                    }
+                      this.getAuctions()                    }
                   })
                   .catch(error => {
+                    if (error.response.status == 400 || error.response.status == 410 ||
+                            error.response.status == 422) {
+                      Swal.fire({
+                        icon: 'error',
+                        text: error.response.data.message,
+                      })
+                      console.log(error)
+                      this.loading = false
+                    }
                     console.log(error)
                     this.dataLoading = false
                   })
@@ -755,7 +770,7 @@ export default {
 
     restoreAuction(item) {
       Swal.fire({
-        title: 'Are you sure you want to disable this auction?',
+        title: 'Are you sure you want to restore this auction?',
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#8f5782',
@@ -773,7 +788,7 @@ export default {
                               'success',
                       )
                       this.loading = false
-                    }
+                      this.getAuctions()                    }
                   })
                   .catch(error => {
                     console.log(error)
@@ -803,12 +818,21 @@ export default {
                       'success',
                   )
                   this.loading = false
+                  this.getAuctions()
                 }
               })
-              .catch(error => {
-                console.log(error)
-                this.dataLoading = false
-              })
+                  .catch(error => {
+                    if (error.response.status == 400) {
+                      Swal.fire({
+                        icon: 'error',
+                        text: error.response.data.message,
+                      })
+                      console.log(error)
+                      this.loading = false
+                    }
+                    console.log(error)
+                    this.dataLoading = false
+                  })
         }
       })
     },
