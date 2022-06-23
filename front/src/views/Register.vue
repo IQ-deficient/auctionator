@@ -326,7 +326,7 @@ export default {
             if (response) {
               Swal.fire(
                       'Success!',
-                      "You have been successfully registered.",
+                      "You have been successfully registered. Please sign in.",
                       'success'
               )
               this.$router.push('/login');

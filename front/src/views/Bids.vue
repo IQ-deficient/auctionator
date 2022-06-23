@@ -94,7 +94,7 @@ export default {
       axios.get('/user_bids')
           .then(response => {
             if (response.data) {
-              console.log(response.data)
+              // console.log(response.data)
               this.bids = response.data
               this.tableData = response.data
               this.dataLoading = false

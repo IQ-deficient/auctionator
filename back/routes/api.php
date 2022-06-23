@@ -130,7 +130,7 @@ Route::group([
     Route::resource('/warehouse', WarehouseController::class);
 //    Route::post('/warehouse', [WarehouseController::class, 'store']);
 //    Route::get('/warehouses', [WarehouseController::class, 'index']);
-//    Route::get('/active_warehouses', [WarehouseController::class, 'getActive']);
+    Route::get('/active_warehouses', [WarehouseController::class, 'getActive']);
 //    Route::put('/warehouse/{warehouse}', [WarehouseController::class, 'update']);
 //    Route::delete('/warehouse/{warehouse}', [WarehouseController::class, 'destroy']);
 });
