@@ -212,7 +212,7 @@
 </template>
 
 <script>
-import {required, numeric, email, max, min, alpha, alpha_num} from 'vee-validate/dist/rules'
+import {required, numeric, email, min, max, alpha, alpha_num} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -222,7 +222,6 @@ setInteractionMode('eager')
 extend('required', {
   ...required,
   message: 'The {_field_} field is required.',
-  // message: 'Required.'
 })
 
 extend('email', {
@@ -351,7 +350,6 @@ export default {
                 }
       })
     }
-
   },
 
   created() {
@@ -361,7 +359,9 @@ export default {
   mounted() {
     document.title = 'Register - Auction House'
   }
+
 }
+
 </script>
 
 <style scoped>

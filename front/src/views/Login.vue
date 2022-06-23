@@ -114,7 +114,6 @@ setInteractionMode('eager')
 extend('required', {
   ...required,
   message: 'The {_field_} field is required.',
-  // message: 'Required.'
 })
 
 extend('email', {

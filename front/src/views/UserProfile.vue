@@ -4,7 +4,8 @@
       <div class="fill-height repeating-gradient"></div>
     </v-parallax>
 
-    <validation-observer ref="observer" v-slot="{ invalid }" tag="form" @submit.prevent="updateProfile()">
+    <validation-observer ref="form" v-slot="{ invalid }">
+      <form @submit.prevent="updateProfile">
       <v-card width="50%"
               style="margin: 0 auto; position: relative; top: -25px" color="#0d111a" class="pa-4">
         <v-row class="">
@@ -200,89 +201,85 @@
                   <template v-slot:default="dialog"
                   >
                     <v-card class="pa-4">
-                      <v-row class="justify-end">
-                        <v-card-actions class="justify-end">
-                          <v-btn
-                              small
-                              fab
-                              text
-                              @click="dialog.value = false"
+                      <form>
+                        <v-row class="justify-end">
+                          <v-card-actions class="justify-end">
+                            <v-btn
+                                    small
+                                    fab
+                                    text
+                                    @click="dialog.value = false; clearPasswordDialog"
+                            >
+                              <v-icon>mdi-close</v-icon>
+                            </v-btn>
+                          </v-card-actions>
+                        </v-row>
+                        <v-card-text>
+                          <div>
+                            <validation-provider
+                                    v-slot="{ errors }"
+                                    name="old password"
+                                    rules="required"
+                            >
+                              <v-text-field
+                                      v-model="oldPassword"
+                                      :error-messages="errors"
+                                      label="Old password"
+                                      :type="showOldPassword ? 'text' : 'password'"
+                                      hint="Must be at least 8 characters."
+                                      :append-icon="showOldPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                      @click:append="showOldPassword = !showOldPassword"
+                                      clearable
+                              >
+                              </v-text-field>
+                            </validation-provider>
+                            <validation-provider
+                                    v-slot="{ errors }"
+                                    name="new password"
+                                    rules="required|min:8|max:128"
+                            >
+                              <v-text-field
+                                      v-model="newPassword"
+                                      :error-messages="errors"
+                                      label="New password"
+                                      :type="showNewPassword ? 'text' : 'password'"
+                                      counter
+                                      hint="Must be at least 8 characters."
+                                      :append-icon="showNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                      @click:append="showNewPassword = !showNewPassword"
+                                      clearable
+                              >
+                              </v-text-field>
+                            </validation-provider>
+                            <validation-provider
+                                    v-slot="{ errors }"
+                                    name="password"
+                                    rules="required|min:8|max:128|password:@new password"
+                            >
+                              <v-text-field
+                                      v-model="confirmNewPassword"
+                                      :error-messages="errors"
+                                      label="Confirm new password"
+                                      :type="showConfirmNewPassword ? 'text' : 'password'"
+                                      counter
+                                      hint="Must be at least 8 characters."
+                                      :append-icon="showConfirmNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                      @click:append="showConfirmNewPassword = !showConfirmNewPassword"
+                                      clearable
+                              >
+                              </v-text-field>
+                            </validation-provider>
+                          </div>
+                          <v-btn large
+                                 type="submit"
+                                 color="primary"
+                                 @click="updatePassword"
                           >
-                            <v-icon>mdi-close</v-icon>
+                            <v-icon left class="mr-1">mdi-lock-check</v-icon>
+                            Update password
                           </v-btn>
-                        </v-card-actions>
-                      </v-row>
-                      <v-card-text>
-                        <div>
-                          <validation-provider
-                              v-slot="{ errors }"
-                              name="oldPassword"
-                              rules="required"
-                              clearable
-                          >
-                            <v-text-field
-                                v-model="old_password"
-                                :error-messages="errors"
-                                label="Old password"
-                                :type="showOldPassword ? 'text' : 'password'"
-                                required
-                                hint="Must be at least 8 characters."
-                                :append-icon="showOldPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                                @click:append="showOldPassword = !showOldPassword"
-                                clearable
-                            >
-                            </v-text-field>
-                          </validation-provider>
-                          <validation-provider
-                              v-slot="{ errors }"
-                              name="New password"
-                              rules="required|min:8|max:128"
-                              clearable
-                          >
-                            <v-text-field
-                                v-model="newPassword"
-                                :error-messages="errors"
-                                label="New password"
-                                :type="showNewPassword ? 'text' : 'password'"
-                                counter
-                                required
-                                hint="Must be at least 8 characters."
-                                :append-icon="showNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                                @click:append="showNewPassword = !showNewPassword"
-                                clearable
-                            >
-                            </v-text-field>
-                          </validation-provider>
-                          <validation-provider
-                              v-slot="{ errors }"
-                              name="Password confirmation"
-                              rules="required|min:8|max:128|password:@New password"
-                              clearable
-                          >
-                            <v-text-field
-                                v-model="confirmNewPassword"
-                                :error-messages="errors"
-                                label="Confirm new password"
-                                :type="showConfirmNewPassword ? 'text' : 'password'"
-                                counter
-                                required
-                                hint="Must be at least 8 characters."
-                                :append-icon="showConfirmNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                                @click:append="showConfirmNewPassword = !showConfirmNewPassword"
-                                clearable
-                            >
-                            </v-text-field>
-                          </validation-provider>
-                        </div>
-                        <v-btn large
-                               type="submit"
-                               color="primary"
-                               @click="updatePassword()"
-                        >
-                          <v-icon left class="mr-1">mdi-lock-check</v-icon>
-                          Update password
-                        </v-btn>
-                      </v-card-text>
+                        </v-card-text>
+                      </form>
                     </v-card>
                   </template>
                 </v-dialog>
@@ -295,16 +292,14 @@
               >
                 <validation-provider
                     v-slot="{ errors }"
-                    name="First name"
-                    rules="required|min:3|max:32"
-                    clearable
+                    name="first name"
+                    rules="required|alpha|min:1|max:32"
                 >
                   <v-text-field
                       v-model="firstName"
                       :loading="pageLoading"
                       :error-messages="errors"
                       label="First name"
-                      required
                       dark
                       :disabled="edit"
                       solo-inverted
@@ -318,15 +313,13 @@
                 <validation-provider
                     v-slot="{ errors }"
                     name="Last name"
-                    rules="required|min:3|max:32"
-                    clearable
+                    rules="required|alpha|min:1|max:32"
                 >
                   <v-text-field
                       v-model="lastName"
                       :loading="pageLoading"
                       :error-messages="errors"
                       label="Last name"
-                      required
                       dark
                       :disabled="edit"
                       solo-inverted
@@ -341,7 +334,6 @@
                 <validation-provider
                     v-slot="{ errors }"
                     name="Gender"
-                    clearable
                 >
                   <v-select
                       v-model="selectGender"
@@ -353,6 +345,7 @@
                       dark
                       :disabled="edit"
                       solo-inverted
+                      clearable
                   ></v-select>
                 </validation-provider>
               </v-col>
@@ -362,7 +355,6 @@
                 <validation-provider
                     v-slot="{ errors }"
                     name="Birth date"
-                    clearable
                 >
                   <v-dialog
                       ref="dialog"
@@ -417,7 +409,6 @@
                     v-slot="{ errors }"
                     name="Country"
                     rules="required"
-                    clearable
                 >
                   <v-select
                       v-model="selectCountry"
@@ -440,8 +431,7 @@
                 <validation-provider
                     v-slot="{ errors }"
                     name="Phone number"
-                    rules="required|numeric|min:8|max:15"
-                    clearable
+                    rules="required|numeric|min:6|max:15"
                 >
                   <v-text-field v-if="phoneCode != null"
                                 :prefix="'(' + phoneCode + ')'"
@@ -474,8 +464,7 @@
                 >
                   <v-btn dark
                          large color="primary"
-                         :disabled=" invalid || !firstName || !lastName || !selectCountry ||
-                                    !phoneNumber"
+                         :disabled="invalid"
                          @click="updateProfile()"
                   >
                     <v-icon left>mdi-check</v-icon>
@@ -487,12 +476,13 @@
           </v-container>
         </v-form>
       </v-card>
+      </form>
     </validation-observer>
   </div>
 </template>
 
 <script>
-import {required, digits, max,} from 'vee-validate/dist/rules'
+  import {required, min, max, alpha, numeric} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 import UploadService from "../services/UploadFilesService";
 
@@ -501,38 +491,37 @@ import Swal from "sweetalert2";
 
 setInteractionMode('eager')
 
-extend('digits', {
-  ...digits,
-  message: '{_field_} needs to be a digit.',
-})
+  extend('required', {
+    ...required,
+    message: 'The {_field_} field is required.',
+  })
 
-extend('required', {
-  ...required,
-  // message: '{_field_} can not be empty',
-  message: 'Required.'
-})
+  extend('min', {
+    ...min,
+    message: 'The {_field_} must be at least {min} characters.'
+  })
 
-extend('max', {
-  ...max,
-  message: '{_field_} may not be greater than {length} characters',
-})
+  extend('max', {
+    ...max,
+    message: 'The {_field_} may not be greater than {max} characters.'
+  })
 
-extend('password', {
-  params: ['target'], validate(value, {target}) {
-    return value === target;
-  },
-  message: 'Passwords do not match'
-});
+  extend('alpha', {
+    ...alpha,
+    message: 'The {_field_} may only contain letters.',
+  })
 
-// extend('regex', {
-//   ...regex,
-//   message: '{_field_} {_value_} does not match {regex}',
-// })
+  extend('numeric', {
+    ...numeric,
+    message: 'The {_field_} must be a number.',
+  })
 
-// extend('email', {
-//   ...email,
-//   message: 'Must be a valid email.',
-// })
+  extend('password', {
+    params: ['target'], validate(value, {target}) {
+      return value === target;
+    },
+    message: 'The {_field_} confirmation does not match.'
+  });
 
 export default {
   name: "UserProfile",
@@ -563,7 +552,7 @@ export default {
     countries: [],
     phoneCode: '',
     phoneNumber: '',
-    old_password: '',
+    oldPassword: '',
     newPassword: '',
     confirmNewPassword: '',
     showOldPassword: false,
@@ -582,14 +571,12 @@ export default {
 
   }),
   methods: {
-    submit() {
-      this.$refs.observer.validate()
-    },
-    clear() {
-      this.email = ''
-      this.password = ''
-      this.checkbox = null
-      this.$refs.observer.reset()
+
+    clearPasswordDialog() {
+      this.oldPassword = ''
+      this.newPassword = ''
+      this.confirmNewPassword = ''
+      this.$refs.observer.reset();
     },
 
     getGenders() {
@@ -656,7 +643,9 @@ export default {
     },
 
     updateProfile() {
-      this.loading = true
+      this.$refs.form.validate().then( success => {
+                if (success) {
+                  this.loading = true
       axios.put('/user/' + this.loggedUser.id, {
         first_name: this.firstName,
         last_name: this.lastName,
@@ -690,12 +679,16 @@ export default {
               )
             }
           })
+                }
+      })
     },
 
     updatePassword() {
+      this.$refs.form.validate().then( success => {
+                if (success) {
       this.loading = true
       axios.put('/password/' + this.loggedUser.id, {
-        old_password: this.old_password,
+        old_password: this.oldPassword,
         password: this.newPassword,
         password_confirmation: this.confirmNewPassword
       })
@@ -708,9 +701,7 @@ export default {
                   )
                   this.passwordDialog = false
                   this.modal = false
-                  this.old_password = ''
-                  this.newPassword = ''
-                  this.confirmNewPassword = ''
+                  this.clearPasswordDialog()
                 }
               }
           )
@@ -732,7 +723,10 @@ export default {
                 'error'
               )
             }
+
           })
+                }
+      })
     },
 
     selectImage(image) {
@@ -743,8 +737,8 @@ export default {
       // console.log(this.currentImage)
       // console.log(this.previewImage)
     },
-    upload() {
 
+    upload() {
       if (this.currentImage) {
         this.imageName = this.currentImage.name
         for (let j = 0; j < this.extensions.length; j++) {
@@ -754,7 +748,6 @@ export default {
             this.isValid = true;
           }
         }
-
         if (!this.isValid) {
           this.message = "Sorry, " + this.imageName + " is invalid, allowed extensions are: " + this.extensions.join(", ") + ".";
           return;
