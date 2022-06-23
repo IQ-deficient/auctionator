@@ -1,5 +1,5 @@
 # Auction House Web Application
-Auction (english style) web app formerly made to satisfy the bare minimum required to get my bachelors degree, currently serving to improve my knowledge in web development.
+Auction (english style) web application serving to improve my knowledge in web development.
 
 ## Features
 - Laravel 8.x

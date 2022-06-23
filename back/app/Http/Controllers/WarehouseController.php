@@ -6,6 +6,9 @@ use App\Models\Warehouse;
 use App\Http\Requests\StoreWarehouseRequest;
 use App\Http\Requests\UpdateWarehouseRequest;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -35,7 +38,7 @@ class WarehouseController extends Controller
     /**
      * Store a newly created resource in storage.
      * @param Request $request
-     * @return mixed
+     * @return Builder|JsonResponse|Model|object|null
      */
     public function store(Request $request)
     {
@@ -59,18 +62,18 @@ class WarehouseController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\Warehouse $warehouse
-     * @return Response
+     * @param Warehouse $warehouse
+     * @return Warehouse
      */
     public function show(Warehouse $warehouse)
     {
-        //
+        return $warehouse;
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Models\Warehouse $warehouse
+     * @param Warehouse $warehouse
      * @return Response
      */
     public function edit(Warehouse $warehouse)
@@ -82,7 +85,7 @@ class WarehouseController extends Controller
      * Update the specified resource in storage.
      * @param Request $request
      * @param Warehouse $warehouse
-     * @return mixed
+     * @return Builder|Model|JsonResponse|object|null
      */
     public function update(Request $request, Warehouse $warehouse)
     {
@@ -105,7 +108,7 @@ class WarehouseController extends Controller
 
     /**
      * Alter activity status for the specified resource in storage.
-     * @return mixed
+     * @return Builder|Model|object|null
      */
     public function destroy(Warehouse $warehouse)
     {

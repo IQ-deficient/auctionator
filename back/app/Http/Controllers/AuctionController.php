@@ -226,7 +226,7 @@ class AuctionController extends Controller
 
     /**
      * Display the specified resource.
-     * @param \App\Models\Auction $auction
+     * @param Auction $auction
      * @return Auction
      */
     public function show(Auction $auction)
@@ -236,7 +236,7 @@ class AuctionController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     * @param \App\Models\Auction $auction
+     * @param Auction $auction
      * @return Response
      */
     public function edit(Auction $auction)
