@@ -1,8 +1,8 @@
 <template>
   <div style="margin-top: 6%">
     <v-card class="pa-6" max-width="28%" style="margin: 0 auto">
-<!--      <validation-observer ref="observer" v-slot="{ invalid }">-->
-            <validation-observer ref="form">
+      <!--      <validation-observer ref="observer" v-slot="{ invalid }">-->
+      <validation-observer ref="form">
         <form @submit.prevent="login">
           <v-row class="justify-start">
             <v-img src="../assets/architecture-icon.svg"
@@ -62,7 +62,6 @@
               class="mb-1"
               type="submit"
               color="primary"
-              @click="login()"
             >
               <v-icon left class="mr-2">mdi-login</v-icon>
               Login
@@ -149,52 +148,52 @@ export default {
   methods: {
 
     login() {
-      this.$refs.form.validate().then( success => {
-      if (success) {
-        const config = {
-          headers: {'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))},
-          key: "token"
-        };
+      this.$refs.form.validate().then(success => {
+        if (success) {
+          const config = {
+            headers: {'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))},
+            key: "token"
+          };
 
-        this.loading = true
-        axios.post('/auth/login', {
-          email: this.email,
-          password: this.password,
-        }, config)
-                .then(response => {
-                  if (response) {
-                    localStorage.setItem("token", JSON.stringify(response.data.access_token));
-                    localStorage.setItem("user_roles", response.data.user_roles);
-                    // localStorage.setItem('expires_in', JSON.stringify(response.data.expires_in));
-                    this.$router.push('/home');
-                    this.$router.go(0)
-                    this.loading = false;
-                  }
-                  this.$nextTick(() => {
-                    this.$refs.form.reset();
-                  });
-                  return response.data;
-                })
-                .catch(error => {
-                  this.loading = false
-                  this.error = error.response.data;
-                  console.log(this.error)
-                  if (error.response.data.error == "Something went wrong.") {
-                    Swal.fire(
-                            'Oops!',
-                            'Email and password don\'t match.',
-                            'error'
-                    )
-                  }
-                  if (error.response.data.message == "This user is inactive!") {
-                    Swal.fire(
-                            'This account has been suspended.',
-                            'If you think this is a mistake, please contact our management team.',
-                            'error'
-                    )
-                  }
-                })
-      }
+          this.loading = true
+          axios.post('/auth/login', {
+            email: this.email,
+            password: this.password,
+          }, config)
+            .then(response => {
+              if (response) {
+                localStorage.setItem("token", JSON.stringify(response.data.access_token));
+                localStorage.setItem("user_roles", response.data.user_roles);
+                // localStorage.setItem('expires_in', JSON.stringify(response.data.expires_in));
+                this.$router.push('/home');
+                this.$router.go(0)
+                this.loading = false;
+              }
+              this.$nextTick(() => {
+                this.$refs.form.reset();
+              });
+              return response.data;
+            })
+            .catch(error => {
+              this.loading = false
+              this.error = error.response.data;
+              console.log(this.error)
+              if (error.response.data.error == "Something went wrong.") {
+                Swal.fire(
+                  'Oops!',
+                  'Email and password don\'t match.',
+                  'error'
+                )
+              }
+              if (error.response.data.message == "This user is inactive!") {
+                Swal.fire(
+                  'This account has been suspended.',
+                  'If you think this is a mistake, please contact our management team.',
+                  'error'
+                )
+              }
+            })
+        }
       })
 
     },

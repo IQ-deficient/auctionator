@@ -852,7 +852,7 @@ export default {
             // for (let i = 0; i < response.data.length; i++) {
             // console.log(response.data)
             this.auctions = response.data
-
+            // todo: this .created meddles with proper status and auctions being shown together
             this.tableData = this.auctions.created
           }
           // this.selectStatus = this.statuses[0]
