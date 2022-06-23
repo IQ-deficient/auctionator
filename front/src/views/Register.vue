@@ -14,16 +14,15 @@
         <v-divider vertical style="margin-left: 18px; border-right: 2px solid black"></v-divider>
         <v-card-title style="margin-left: 8px">Create a new account</v-card-title>
       </v-row>
-      <validation-observer ref="observer" tag="form" @submit.prevent="register()"
-      >
-        <form @submit.prevent="submit">
+      <validation-observer ref="form">
+        <form @submit.prevent="register">
           <v-row>
             <v-col cols="12"
                    sm="6">
               <validation-provider
                   v-slot="{ errors }"
-                  name="First name"
-                  rules="required|min:1|max:32"
+                  name="first name"
+                  rules="required|alpha|min:1|max:32"
               >
                 <v-text-field
                     v-model="firstName"
@@ -38,8 +37,8 @@
                    sm="6">
               <validation-provider
                   v-slot="{ errors }"
-                  name="Last name"
-                  rules="required|min:1|max:32"
+                  name="last name"
+                  rules="required|alpha|min:1|max:32"
               >
                 <v-text-field
                     v-model="lastName"
@@ -55,8 +54,8 @@
                    sm="12">
               <validation-provider
                   v-slot="{ errors }"
-                  name="Username"
-                  rules="required|min:3|max:32"
+                  name="username"
+                  rules="required|alpha_num|min:3|max:32"
               >
                 <v-text-field
                     v-model="username"
@@ -64,7 +63,6 @@
                     label="Username"
                     clearable
                 ></v-text-field>
-                <span>{{ errors[0] }}</span>
               </validation-provider>
             </v-col>
           </v-row>
@@ -73,7 +71,7 @@
                    sm="6">
               <validation-provider
                   v-slot="{ errors }"
-                  name="Country"
+                  name="country"
                   rules="required"
                   clearable
               >
@@ -92,8 +90,8 @@
                    sm="6">
               <validation-provider
                   v-slot="{ errors }"
-                  name="Phone number"
-                  rules="required|numeric|min:8|max:15"
+                  name="phone number"
+                  rules="required|numeric|min:6|max:15"
                   clearable
               >
                 <v-text-field v-if="phoneCode != null"
@@ -116,7 +114,7 @@
             <v-col cols="12" sm="12">
               <validation-provider
                   v-slot="{ errors }"
-                  name="Email"
+                  name="email"
                   rules="required|email|min:10|max:254"
               >
                 <v-text-field
@@ -132,8 +130,8 @@
             <v-col cols="12" sm="12">
               <validation-provider
                   v-slot="{ errors }"
-                  name="Password"
-                  rules="required"
+                  name="password"
+                  rules="required|min:8|max:128"
                   clearable
               >
                 <v-text-field
@@ -154,9 +152,10 @@
           <v-row>
             <v-col cols="12" sm="12">
               <validation-provider
-                  v-slot="{ errors }"
-                  name="Password confirmation"
-                  rules="required"
+                      v-slot="{ errors }"
+                      name="password"
+                      rules="required|min:8|max:128"
+                      clearable
               >
                 <v-text-field
                     v-model="confirmPassword"
@@ -176,7 +175,7 @@
                 width="100%"
                 type="submit"
                 color="primary"
-                @click="register()"
+                @click="register"
             >
               <v-icon
                   left
@@ -213,57 +212,55 @@
 </template>
 
 <script>
-import {required, numeric, email, max, min} from 'vee-validate/dist/rules'
+import {required, numeric, email, max, min, alpha, alpha_num} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 import axios from "axios";
-// import Swal from "sweetalert2";
+import Swal from "sweetalert2";
 
 setInteractionMode('eager')
 
-extend('numeric', {
-  ...numeric,
-  message: '{_field_} must be a number.',
-})
-
 extend('required', {
   ...required,
-  // message: '{_field_} can not be empty',
-  message: 'Required.'
+  message: 'The {_field_} field is required.',
+  // message: 'Required.'
+})
+
+extend('email', {
+  ...email,
+  message: 'The {_field_} must be a valid email address.',
 })
 
 extend('min', {
   ...min,
-  message: '{_field_} must be at least {length} characters.',
+  message: 'The {_field_} must be at least {min} characters.'
 })
 
 extend('max', {
   ...max,
-  message: '{_field_} may not be greater than {length} characters.',
+  message: 'The {_field_} may not be greater than {max} characters.'
+})
+
+extend('alpha', {
+  ...alpha,
+  message: 'The {_field_} may only contain letters.',
+})
+
+extend('alpha_num', {
+  ...alpha_num,
+  message: 'The {_field_} may only contain letters and numbers.',
+})
+
+extend('numeric', {
+  ...numeric,
+  message: 'The {_field_} must be a number.',
 })
 
 extend('password', {
   params: ['target'], validate(value, {target}) {
     return value === target;
   },
-  message: 'Passwords do not match.'
+  message: 'The {_field_} confirmation does not match.'
 });
-
-extend('email', {
-  ...email,
-  message: 'Must be a valid email.',
-})
-
-extend('email', {
-  ...email,
-  message: 'Must be a valid email.',
-})
-
-// extend('taken', {
-//   message: "{_field _} already taken.",
-//   validate: value => {
-//     return "Condition that evaluates to true of false"
-//   }
-// })
 
 export default {
   name: "Register",
@@ -288,24 +285,7 @@ export default {
     showConfirmPass: false,
   }),
 
-  // watch: {
-  //   loading (val) {
-  //     if (!val) return
-  //
-  //     setTimeout(() => (this.loading = false), 3000)
-  //   },
-  // },
-
   methods: {
-    submit() {
-      this.$refs.observer.validate()
-    },
-    clear() {
-      this.email = ''
-      this.password = ''
-      this.checkbox = null
-      this.$refs.observer.reset()
-    },
 
     getCountries() {
       axios.get('/active_countries')
@@ -330,9 +310,8 @@ export default {
     },
 
     register() {
-      // this.$refs.observer.setErrors({
-      //   username: ['The username has already been taken.']
-      // });
+      this.$refs.form.validate().then( success => {
+                if (success) {
       this.loading = true
       axios.post('auth/register', {
         first_name: this.firstName,
@@ -346,18 +325,33 @@ export default {
       })
           .then(response => {
             if (response) {
+              Swal.fire(
+                      'Success!',
+                      "You have been successfully registered.",
+                      'success'
+              )
               this.$router.push('/login');
               this.loading = false;
             }
             return response.data;
           })
-          .catch(error => {
-            console.log(error.response.data)
+              .catch(error => {
+                if (error.response.data.message == 400) {
+                  Swal.fire({
+                    icon: 'error',
+                    text: error.response.data.message,
+                  })
+                  console.log(error)
+                  this.loading = false
+                  // console.log(error.response.data)
+                }
             this.loading = false
             this.error = error.response.data.message;
-            this.$refs.observer.setErrors(error.response.data)
           })
-    },
+                }
+      })
+    }
+
   },
 
   created() {
