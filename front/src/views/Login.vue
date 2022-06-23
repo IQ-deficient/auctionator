@@ -1,9 +1,9 @@
 <template>
   <div style="margin-top: 6%">
     <v-card class="pa-6" max-width="28%" style="margin: 0 auto">
-      <validation-observer ref="observer" v-slot="{ invalid }" tag="form" @submit.prevent="login()"
-      >
-        <form @submit.prevent="submit">
+<!--      <validation-observer ref="observer" v-slot="{ invalid }">-->
+            <validation-observer ref="form">
+        <form @submit.prevent="login">
           <v-row class="justify-start">
             <v-img src="../assets/architecture-icon.svg"
                    style="margin-left: 0px"
@@ -20,7 +20,7 @@
             >
               <validation-provider
                 v-slot="{ errors }"
-                name="Email"
+                name="email"
                 rules="required|email"
               >
                 <v-text-field
@@ -39,7 +39,7 @@
             >
               <validation-provider
                 v-slot="{ errors }"
-                name="Password"
+                name="password"
                 rules="required|min:8|max:128"
               >
                 <v-text-field
@@ -59,11 +59,10 @@
             <v-btn
               :loading="loading"
               width="100%"
-              type="submit"
               class="mb-1"
+              type="submit"
               color="primary"
               @click="login()"
-              @submit.prevent="invalid"
             >
               <v-icon left class="mr-2">mdi-login</v-icon>
               Login
@@ -106,39 +105,32 @@
 <script>
 
 import axios from "axios";
-import {required, digits, email, max, regex} from 'vee-validate/dist/rules'
+import {required, email, min, max} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 import Swal from "sweetalert2";
 
 setInteractionMode('eager')
 
-
-extend('digits', {
-  ...digits,
-  message: '{_field_} needs to be {length} digits. ({_value_})',
-})
-
 extend('required', {
   ...required,
-  // message: '{_field_} can not be empty',
-  message: 'Required.'
-})
-
-extend('max', {
-  ...max,
-  message: '{_field_} may not be greater than {length} characters',
-})
-
-extend('regex', {
-  ...regex,
-  message: '{_field_} {_value_} does not match {regex}',
+  message: 'The {_field_} field is required.',
+  // message: 'Required.'
 })
 
 extend('email', {
   ...email,
-  message: 'Must be a valid email.',
+  message: 'The {_field_} must be a valid email address.',
 })
 
+extend('min', {
+  ...min,
+  message: 'The {_field_} must be at least {min} characters.'
+})
+
+extend('max', {
+  ...max,
+  message: 'The {_field_} may not be greater than {max} characters.'
+})
 
 export default {
   name: "Login",
@@ -151,68 +143,68 @@ export default {
   data: () => ({
     email: '',
     password: '',
-    checkbox: null,
     showPassword: false,
     loading: false,
   }),
 
   methods: {
-    submit() {
-      this.$refs.observer.validate()
-    },
-    clear() {
-      this.email = ''
-      this.password = ''
-      this.checkbox = null
-      this.$refs.observer.reset()
-    },
-    login() {
-      const config = {
-        headers: {'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))},
-        key: "token"
-      };
 
-      this.loading = true
-      axios.post('/auth/login', {
-        email: this.email,
-        password: this.password,
-      }, config)
-        .then(response => {
-          if (response) {
-            localStorage.setItem("token", JSON.stringify(response.data.access_token));
-            localStorage.setItem("user_roles", response.data.user_roles);
-            // localStorage.setItem('expires_in', JSON.stringify(response.data.expires_in));
-            this.$router.push('/home');
-            this.$router.go(0)
-            this.loading = false;
-          }
-          return response.data;
-        })
-        .catch(error => {
-          this.loading = false
-          this.error = error.response.data;
-          console.log(this.error)
-          if (error.response.data.error == "Something went wrong.") {
-            Swal.fire(
-              'Oops!',
-              'Email and password don\'t match.',
-              'error'
-            )
-          }
-          if (error.response.data.message == "This user is inactive!") {
-            Swal.fire(
-              'This account has been suspended.',
-              'If you think this is a mistake, please contact our management team.',
-              'error'
-            )
-          }
-        })
+    login() {
+      this.$refs.form.validate().then( success => {
+      if (success) {
+        const config = {
+          headers: {'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))},
+          key: "token"
+        };
+
+        this.loading = true
+        axios.post('/auth/login', {
+          email: this.email,
+          password: this.password,
+        }, config)
+                .then(response => {
+                  if (response) {
+                    localStorage.setItem("token", JSON.stringify(response.data.access_token));
+                    localStorage.setItem("user_roles", response.data.user_roles);
+                    // localStorage.setItem('expires_in', JSON.stringify(response.data.expires_in));
+                    this.$router.push('/home');
+                    this.$router.go(0)
+                    this.loading = false;
+                  }
+                  this.$nextTick(() => {
+                    this.$refs.form.reset();
+                  });
+                  return response.data;
+                })
+                .catch(error => {
+                  this.loading = false
+                  this.error = error.response.data;
+                  console.log(this.error)
+                  if (error.response.data.error == "Something went wrong.") {
+                    Swal.fire(
+                            'Oops!',
+                            'Email and password don\'t match.',
+                            'error'
+                    )
+                  }
+                  if (error.response.data.message == "This user is inactive!") {
+                    Swal.fire(
+                            'This account has been suspended.',
+                            'If you think this is a mistake, please contact our management team.',
+                            'error'
+                    )
+                  }
+                })
+      }
+      })
+
     },
   },
 
   mounted() {
     document.title = 'Login - Auction House'
-  }
+  },
+
 }
 </script>
 
