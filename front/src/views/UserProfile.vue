@@ -4,8 +4,8 @@
       <div class="fill-height repeating-gradient"></div>
     </v-parallax>
 
-    <validation-observer ref="form" v-slot="{ invalid }">
-      <form @submit.prevent="updateProfile">
+    <validation-observer ref="form">
+      <form @submit.prevent="updateProfile" ref="profile">
       <v-card width="50%"
               style="margin: 0 auto; position: relative; top: -25px" color="#0d111a" class="pa-4">
         <v-row class="">
@@ -256,7 +256,7 @@
                                     name="password"
                                     rules="required|min:8|max:128|password:@new password"
                             >
-                              <v-text-field
+                              <v-text-field class="mb-4"
                                       v-model="confirmNewPassword"
                                       :error-messages="errors"
                                       label="Confirm new password"
@@ -464,7 +464,6 @@
                 >
                   <v-btn dark
                          large color="primary"
-                         :disabled="invalid"
                          @click="updateProfile()"
                   >
                     <v-icon left>mdi-check</v-icon>
@@ -644,42 +643,42 @@ export default {
 
     updateProfile() {
       this.$refs.form.validate().then( success => {
-                if (success) {
-                  this.loading = true
-      axios.put('/user/' + this.loggedUser.id, {
-        first_name: this.firstName,
-        last_name: this.lastName,
-        gender: this.selectGender,
-        birthdate: this.birthdate,
-        country: this.selectCountry.name,
-        phone_number: this.phoneNumber,
-      })
-          .then(response => {
-                if (response) {
-                  Swal.fire(
-                      'Done!',
-                      'Your information has been updated.',
-                      'success'
-                  )
-
-                  this.edit = true
-                  this.loading = false;
-                }
-              }
-          )
-          .catch(error => {
-            this.loading = false
-            this.error = error.response.data;
-            // console.log(error.response.data.phone_number)
-            if (error.response.data.phone_number == "The phone number has already been taken.") {
-              Swal.fire(
-                  'Oops!',
-                  'The phone number has already been taken.',
-                  'error'
-              )
-            }
+        if (success) {
+          this.loading = true
+          axios.put('/user/' + this.loggedUser.id, {
+            first_name: this.firstName,
+            last_name: this.lastName,
+            gender: this.selectGender,
+            birthdate: this.birthdate,
+            country: this.selectCountry.name,
+            phone_number: this.phoneNumber,
           })
-                }
+                  .then(response => {
+                            if (response) {
+                              Swal.fire(
+                                      'Done!',
+                                      'Your information has been updated.',
+                                      'success'
+                              )
+
+                              this.edit = true
+                              this.loading = false;
+                            }
+                          }
+                  )
+                  .catch(error => {
+                    this.loading = false
+                    this.error = error.response.data;
+                    // console.log(error.response.data.phone_number)
+                    if (error.response.data.phone_number == "The phone number has already been taken.") {
+                      Swal.fire(
+                              'Oops!',
+                              'The phone number has already been taken.',
+                              'error'
+                      )
+                    }
+                  })
+        }
       })
     },
 

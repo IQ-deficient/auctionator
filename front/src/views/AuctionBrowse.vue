@@ -53,8 +53,9 @@
       <v-card-text class="text-lg-h2" style="color: black">No items found</v-card-text>
     </div>
     <div v-else>
-      <validation-observer>
-        <v-row style="justify-content: start;" class="ma-1">
+      <validation-observer ref="form">
+        <form @submit.prevent="postBid">
+          <v-row style="justify-content: start;" class="ma-1">
           <v-card
               v-for="auction in auctions" :key="auction.id"
               class="mx-1 my-1 card-body d-flex flex-column h-100"
@@ -281,7 +282,7 @@
             </v-card-actions>
           </v-card>
         </v-row>
-
+        </form>
       </validation-observer>
     </div>
 
