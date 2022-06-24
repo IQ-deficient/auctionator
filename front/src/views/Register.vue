@@ -55,7 +55,7 @@
               <validation-provider
                 v-slot="{ errors }"
                 name="username"
-                rules="required|alpha_num|min:3|max:32"
+                rules="required|min:3|max:32"
               >
                 <v-text-field
                   v-model="username"
@@ -120,6 +120,7 @@
                 <v-text-field
                   v-model="email"
                   :error-messages="errors"
+                  hint="example@mail.cpm"
                   label="Email"
                   clearable
                 ></v-text-field>
@@ -139,7 +140,6 @@
                   :error-messages="errors"
                   label="Password"
                   :type="showPassword ? 'text' : 'password'"
-                  :counter="8"
                   hint="Must be at least 8 characters."
                   :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                   @click:append="showPassword = !showPassword"
@@ -153,8 +153,8 @@
             <v-col cols="12" sm="12">
               <validation-provider
                 v-slot="{ errors }"
-                name="password"
-                rules="required|min:8|max:128"
+                name="password confirmation"
+                rules="required|password:@password"
                 clearable
               >
                 <v-text-field
@@ -334,17 +334,30 @@ export default {
               return response.data;
             })
             .catch(error => {
-              if (error.response.data.message == 400) {
+              if (error.response.data['email'] == 'The email has already been taken.') {
                 Swal.fire({
                   icon: 'error',
-                  text: error.response.data.message,
+                  text: error.response.data['email'],
                 })
                 console.log(error)
                 this.loading = false
-                // console.log(error.response.data)
+              } if (error.response.data['phone_number'] == 'The phone number has already been taken.') {
+                Swal.fire({
+                  icon: 'error',
+                  text: error.response.data['phone_number'],
+                })
+                console.log(error)
+                this.loading = false
+              } if (error.response.data['username'] == 'The username has already been taken.') {
+                Swal.fire({
+                  icon: 'error',
+                  text: error.response.data['username'],
+                })
+                console.log(error)
+                this.loading = false
               }
+              console.log(error)
               this.loading = false
-              this.error = error.response.data.message;
             })
         }
       })

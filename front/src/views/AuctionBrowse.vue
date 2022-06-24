@@ -54,7 +54,6 @@
     </div>
     <div v-else>
       <validation-observer ref="form">
-        <form @submit.prevent="postBid">
           <v-row style="justify-content: start;" class="ma-1">
           <v-card
               v-for="auction in auctions" :key="auction.id"
@@ -134,6 +133,7 @@
                 </template>
                 <template v-slot:default="dialog">
                   <v-card>
+                    <form @submit.prevent="postBid(auction.id)">
                     <v-card-text>
                       <v-row>
                         <v-col cols="12" sm="5" class="pt-8">
@@ -180,12 +180,12 @@
                               </v-card-title>
                             </v-col>
                             <v-col cols="12" sm="1">
-                              <v-card-actions style="justify-content: center">
+                              <v-card-actions style="justify-content: end">
                                 <v-btn
                                     class="my-2"
                                     small
                                     fab
-                                    @click="dialog.value = false; clearForm()"
+                                    @click="clearForm(); dialog.value = false;"
                                 >
                                   <v-icon>mdi-close</v-icon>
                                 </v-btn>
@@ -230,7 +230,8 @@
                           </v-row>
                           <validation-provider
                               v-slot="{ errors }"
-                              name="bidInput"
+                              name="bid"
+                              rules="required|numeric"
                               clearable
                           >
                             <v-row>
@@ -251,13 +252,11 @@
                                    type="submit"
                                    color="primary"
                                    class="mr-4"
-                                   @click="postBid(auction.id)"
                             >
                               <v-icon left class="mr-1">mdi-gavel</v-icon>
                               Place bid
                             </v-btn>
                             <v-btn large
-                                   type="submit"
                                    color="success"
                                    @click="buyout(auction.id)"
                             >
@@ -276,13 +275,13 @@
                         </v-card-title>
                       </v-col>
 <!--                    </v-row>-->
+                    </form>
                   </v-card>
                 </template>
               </v-dialog>
             </v-card-actions>
           </v-card>
         </v-row>
-        </form>
       </validation-observer>
     </div>
 
@@ -293,29 +292,19 @@
 <script>
 import axios from "axios";
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
-import {digits, max, regex, required} from "vee-validate/dist/rules";
+import {required, numeric} from "vee-validate/dist/rules";
 import Swal from "sweetalert2"
 
 setInteractionMode('eager')
 
-extend('digits', {
-  ...digits,
-})
-
 extend('required', {
   ...required,
-  // message: '{_field_} can not be empty',
-  message: 'Required.'
+  message: 'The {_field_} field is required.',
 })
 
-extend('max', {
-  ...max,
-  message: '{_field_} may not be greater than {length} characters',
-})
-
-extend('regex', {
-  ...regex,
-  message: '{_field_} {_value_} does not match {regex}',
+extend('numeric', {
+  ...numeric,
+  message: 'The {_field_} must be a number.',
 })
 
 export default {
@@ -387,9 +376,6 @@ export default {
             if (response.data) {
               this.auctions = response.data.auctions
               this.conditions = response.data.conditions
-              // for (let i = 0; i < response.data.length; i++) {
-              //   // console.log(response.data)//   this.auctions = response.data
-              // }
             }
             this.dataLoading = false
           })
@@ -439,71 +425,71 @@ export default {
 
     // todo: objasni milosu komunikacije i for loop i komponente
     postBid(auction_id) {
-      Swal.fire({
-        title: 'Are you sure you want to bid on this item?',
-        // text: "You won't be able to revert this!",
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#605290',
-        cancelButtonColor: '#819fC9',
-        confirmButtonText: "Yes, I'm sure!"
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.loading = true
-          axios.post('/bid', {
-            value: this.bidInput,
-            auction_id: auction_id
-          }).then(response => {
-            if (response.data) {
-              Swal.fire(
-                  'Congratulations!',
-                  "You can take a look at your current bids on the 'Bids' page.",
-                  'success'
-              )
-              this.loading = false
-              this.modal = false
-              this.showAuctions()
-              this.clearForm()
-            }
-          })
-              .catch(error => {
-                if (error.response.status == 400) {
+      this.$refs.form.validate().then(success => {
+                if (success) {
                   Swal.fire({
-                    icon: 'error',
-                    title: error.response.data.message,
+                    title: 'Are you sure you want to bid on this item?',
+                    // text: "You won't be able to revert this!",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#605290',
+                    cancelButtonColor: '#819fC9',
+                    confirmButtonText: "Yes, I'm sure!"
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      this.loading = true
+                      axios.post('/bid', {
+                        value: this.bidInput,
+                        auction_id: auction_id
+                      }).then(response => {
+                        if (response.data) {
+                          Swal.fire(
+                                  'Congratulations!',
+                                  "You can take a look at your current bids on the 'Bids' page.",
+                                  'success'
+                          )
+                          this.loading = false
+                          this.modal = false
+                          this.showAuctions()
+                          this.clearForm()
+                        }
+                      })
+                              .catch(error => {
+                                if (error.response.status == 400) {
+                                  Swal.fire({
+                                    icon: 'error',
+                                    title: error.response.data.message,
+                                  })
+                                  console.log(error)
+                                  // console.log(error.response.data.message)
+                                  this.loading = false
+                                } else if (error.response.status == 404 || error.response.status == 410) {
+                                  Swal.fire({
+                                    icon: 'error',
+                                    title: error.response.data.message,
+                                  })
+                                  console.log(error)
+                                  this.loading = false
+                                  this.modal = false
+                                  this.showAuctions()
+                                  this.clearForm()
+                                } else if (error.response.status == 403) {
+                                  Swal.fire({
+                                    icon: 'error',
+                                    title: error.response.data.message,
+                                  })
+                                  console.log(error)
+                                  this.loading = false
+                                  this.modal = false
+                                  this.showAuctions()
+                                  this.clearForm()
+                                }
+                                console.log(error)
+                                this.loading = false
+                              })
+                    }
                   })
-                  console.log(error)
-                  // console.log(error.response.data.message)
-                  this.loading = false
-                  this.modal = false
-                  this.showAuctions()
-                  this.clearForm()
-
-                } else if (error.response.status == 404 || error.response.status == 410) {
-                  Swal.fire({
-                    icon: 'error',
-                    title: error.response.data.message,
-                  })
-                  console.log(error)
-                  this.loading = false
-                  this.modal = false
-                  this.showAuctions()
-                  this.clearForm()
-                } else if (error.response.status == 403) {
-                  Swal.fire({
-                    icon: 'error',
-                    title: error.response.data.message,
-                  })
-                  console.log(error)
-                  this.loading = false
-                  this.modal = false
-                  this.showAuctions()
-                  this.clearForm()
                 }
-                console.log(error)
-                this.loading = false
-              })
-        }
       })
     },
 
@@ -551,6 +537,7 @@ export default {
 
     clearForm() {
       this.bidInput = null;
+      this.$refs.form.reset();
     }
   },
 

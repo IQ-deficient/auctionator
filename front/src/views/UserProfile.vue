@@ -186,6 +186,7 @@
                 <v-dialog
                     transition="dialog-bottom-transition"
                     max-width="35%"
+                    persistent
                     v-model="passwordDialog"
                 >
                   <template v-slot:activator="{ on, attrs }">
@@ -252,8 +253,8 @@
                             </validation-provider>
                             <validation-provider
                                     v-slot="{ errors }"
-                                    name="password"
-                                    rules="required|min:8|max:128|password:@new password"
+                                    name="password confirmation"
+                                    rules="required|password:@new password"
                             >
                               <v-text-field class="mb-4"
                                       v-model="confirmNewPassword"
