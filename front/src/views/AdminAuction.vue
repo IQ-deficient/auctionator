@@ -303,7 +303,7 @@
                             <validation-provider
                               v-slot="{ errors }"
                               name="Seller"
-                              rules="required|min:3|max:64"
+                              rules="required|min:3|max:32"
                               clearable
                             >
                               <v-text-field
@@ -671,7 +671,8 @@ export default {
       }
     },
 
-    uploadImages(item_id) {
+    // This function will be responsible to validate and show errors based on decided logic like size and file type
+    validateImages() {
       this.message = "";
       this.messages = [];
       if (this.selectedFiles) {
@@ -681,7 +682,7 @@ export default {
           if (this.selectedFiles.length > 5) {
             this.message = "You may upload up to 5 images.";
             this.messages.push(this.message)
-            return
+            return false
           } else {
             for (let j = 0; j < this.extensions.length; j++) {
               this.currentExtension = this.extensions[j];
@@ -693,21 +694,33 @@ export default {
             if (!this.isValid) {
               this.message = "Sorry, '" + this.imageName + "' is invalid, allowed extensions are: " + this.extensions.join(", ") + ".";
               this.messages.push(this.message)
+              return false
             }
             if (this.fileSize > 2097152) {
               this.message = "Sorry, '" + this.imageName + "' is invalid, file size cannot be greater than 2MB.";
               this.messages.push(this.message)
+              return false
             }
-            this.upload(i, this.selectedFiles[i], item_id);
+            // this.upload(i, this.selectedFiles[i], item_id);
           }
         }
       } else {
-        this.message = "Please select an image.";
+        this.message = "Please select an image."
         this.messages.push(this.message)
-        return;
+        return false
+        // return
+      }
+      return true
+    },
+
+    // This method will only be used after validateImages() returns true meaning no validations failed
+    uploadImages(item_id) {
+      for (let i = 0; i < this.selectedFiles.length; i++) {
+        this.upload(i, this.selectedFiles[i], item_id);
       }
     },
 
+    // Finally, this will call an api to store images one by one
     upload(idx, file, item_id) {
       this.progressInfos[idx] = {percentage: 0, fileName: file.name};
 
@@ -935,6 +948,9 @@ export default {
     },
 
     createAuction() {
+      // If this validation fails simply abort further action
+      let aborted = this.validateImages()
+      if (!aborted) return
       this.loading = true
       // console.log(this.addItemWarehouse.id)
       axios.post('/auction', {
@@ -956,6 +972,7 @@ export default {
               text: 'Auction has been created successfully.',
               icon: 'success'
             })
+            // If all is well and Auction was created with an Item, give that item_id to images being stored
             this.uploadImages(response.data.item_id)
             this.loading = false
             this.modal = false

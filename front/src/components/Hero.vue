@@ -26,7 +26,7 @@ export default {
         },
         {
           src: require("../../src/assets/images/img-carousel2.jpg"),
-          title: "We are hard worker"
+          title: "We are hard working"
         },
         {
           src: require("../../src/assets/images/img-carousel3.jpg"),
