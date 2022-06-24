@@ -4,7 +4,7 @@
       <div class="fill-height repeating-gradient"></div>
     </v-parallax>
 
-    <validation-observer ref="form">
+    <validation-observer ref="form" v-slot="{invalid}">
       <form @submit.prevent="updateProfile" ref="profile">
       <v-card width="50%"
               style="margin: 0 auto; position: relative; top: -25px" color="#0d111a" class="pa-4">
@@ -201,14 +201,14 @@
                   <template v-slot:default="dialog"
                   >
                     <v-card class="pa-4">
-                      <form>
+                      <form @submit.prevent="updatePassword">
                         <v-row class="justify-end">
                           <v-card-actions class="justify-end">
                             <v-btn
                                     small
                                     fab
                                     text
-                                    @click="dialog.value = false; clearPasswordDialog"
+                                    @click="clearPasswordDialog(); dialog.value = false;"
                             >
                               <v-icon>mdi-close</v-icon>
                             </v-btn>
@@ -243,7 +243,6 @@
                                       :error-messages="errors"
                                       label="New password"
                                       :type="showNewPassword ? 'text' : 'password'"
-                                      counter
                                       hint="Must be at least 8 characters."
                                       :append-icon="showNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
                                       @click:append="showNewPassword = !showNewPassword"
@@ -261,7 +260,6 @@
                                       :error-messages="errors"
                                       label="Confirm new password"
                                       :type="showConfirmNewPassword ? 'text' : 'password'"
-                                      counter
                                       hint="Must be at least 8 characters."
                                       :append-icon="showConfirmNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
                                       @click:append="showConfirmNewPassword = !showConfirmNewPassword"
@@ -273,7 +271,6 @@
                           <v-btn large
                                  type="submit"
                                  color="primary"
-                                 @click="updatePassword"
                           >
                             <v-icon left class="mr-1">mdi-lock-check</v-icon>
                             Update password
@@ -464,6 +461,7 @@
                 >
                   <v-btn dark
                          large color="primary"
+                         :disabled="invalid"
                          @click="updateProfile()"
                   >
                     <v-icon left>mdi-check</v-icon>
@@ -575,7 +573,7 @@ export default {
       this.oldPassword = ''
       this.newPassword = ''
       this.confirmNewPassword = ''
-      this.$refs.observer.reset();
+      this.$refs.form.reset();
     },
 
     getGenders() {
