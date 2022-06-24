@@ -42,11 +42,16 @@
         </template>
       </v-breadcrumbs>
       <v-spacer></v-spacer>
-      <v-icon>mdi-sort-reverse-variant</v-icon>
-      <v-icon class="mr-6">mdi-arrow-up-thin</v-icon>
-
-      <v-icon>mdi-sort-variant</v-icon>
-      <v-icon>mdi-arrow-down-thin</v-icon>
+      <v-btn
+        @click="sortByPrice('asc')">
+        <v-icon>mdi-sort-reverse-variant</v-icon>
+        <!--        <v-icon>mdi-arrow-up-thin</v-icon>-->
+      </v-btn>
+      <v-btn
+        @click="sortByPrice('desc')">
+        <v-icon>mdi-sort-variant</v-icon>
+        <!--        <v-icon>mdi-arrow-down-thin</v-icon>-->
+      </v-btn>
 
     </v-app-bar>
 
@@ -369,6 +374,15 @@ export default {
   },
 
   methods: {
+
+    sortByPrice(type) {
+      if (type == 'asc') {
+        this.auctions = this.auctions.sort((a, b) => a.buyout - b.buyout)
+      } else {
+        this.auctions = this.auctions.sort((a, b) => b.buyout - a.buyout)
+      }
+    },
+
     filterByString() {
       // When we reset the array in this manner there will always be data to be filtered
       this.auctions = this.initialAuctions
