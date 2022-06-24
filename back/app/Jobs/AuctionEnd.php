@@ -80,7 +80,7 @@ class AuctionEnd implements ShouldQueue
                 ]);
                 // Finally, when we are sure Auction was purchased, send an email
                 Mail::to(User::query()->where('username', $bid->username)->first())
-                    ->send(new MailNotification(
+                    ->queue(new MailNotification(
                         'Congratulations. You now own the following Auction: "' . $auction->title . '". Please visit the History tab on our platform for additional information. Thanks.',
                         'You have won an Auction with ID:' . $auction->id
                     ));

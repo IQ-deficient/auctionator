@@ -118,7 +118,7 @@ class HistoryController extends Controller
 
         // Finally, when we are sure Auction was purchased, send an email
         Mail::to(User::query()->where('email', Auth::user()->email)->first())
-            ->send(new MailNotification(
+            ->queue(new MailNotification(
                 'Congratulations. You now own the following Auction: "' . $auction->title . '". Please visit the History tab on our platform for additional information. Thanks.',
                 'You have won an Auction with an ID:' . $auction->id
             ));

@@ -17,9 +17,9 @@ cd..
 ```
 
 ## Setup
-- Make sure Apache & MySql are running (XAMPP)
 - Clone .env.example file into .env and configure: DB_DATABASE, MAIL_USERNAME, MAIL_FROM_ADDRESS
 - Email being used needs Two-Factor Authentication and Google 'App Password' as MAIL_PASSWORD
+- Make sure MySql database is running
 ```bash
 cd back
 php artisan jwt:secret
@@ -35,6 +35,11 @@ php artisan serve
 ```bash
 cd back
 php artisan schedule:work
+```
+- And in another one run Laravel Queue Listener
+```bash
+cd back
+php artisan queue:listen
 ```
 
 ## Running the application interface

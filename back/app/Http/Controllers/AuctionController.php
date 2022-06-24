@@ -330,7 +330,7 @@ class AuctionController extends Controller
         if ($auction->bid) {
             // Notifying the person that last bid on this Auction before we invalidate that Bid, if there is any
             Mail::to(User::query()->where('username', $auction->bid->username)->first())
-                ->send(new MailNotification(
+                ->queue(new MailNotification(
                     'The Auction: "' . $auction->title . '", with an ID:' . $auction->id . ', is now terminated! Please contact our staff for additional information.',
                     'Something has gone wrong!'
                 ));
@@ -388,7 +388,7 @@ class AuctionController extends Controller
             if ($auction->bid) {
                 // Also mail the person that last owned the Auction (bid) that it is once again available
                 Mail::to($last_bidder)
-                    ->send(new MailNotification(
+                    ->queue(new MailNotification(
                         'Great news! The Auction: "' . $auction->title . '" is up and running. You may place your bid once again.',
                         'Good to go - Auction with ID:' . $auction->id
                     ));
@@ -405,7 +405,7 @@ class AuctionController extends Controller
 
             if ($auction->bid) {
                 Mail::to($last_bidder)
-                    ->send(new MailNotification(
+                    ->queue(new MailNotification(
                         'We wanted to let you know that the Auction: "' . $auction->title . '" you have had a bid on is currently Not Available. We are terribly sorry for the inconvenience. You will be notified once we figure this out.',
                         'There is an issue with an auction with ID:' . $auction->id
                     ));
