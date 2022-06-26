@@ -2,14 +2,14 @@
   <v-main>
     <div class="staticHero">
       <v-img src="../assets/images/img14.jpg">
-      <v-row align="end" class="lightbox white--text pa-2 fill-height">
-        <v-col>
-          <v-container>
-            <div class="headline">Contact Us</div>
-          </v-container>
-        </v-col>
-      </v-row>
-    </v-img>
+        <v-row align="end" class="lightbox white--text pa-2 fill-height">
+          <v-col>
+            <v-container>
+              <div class="headline">Contact Us</div>
+            </v-container>
+          </v-col>
+        </v-row>
+      </v-img>
     </div>
     <div class="block">
       <v-container>
@@ -32,7 +32,7 @@
             </v-row>
             <v-row>
               <v-col cols="12" sm="12">
-            <v-btn :disabled="!valid" color="primary" class="mr-4" @click="validate">Send</v-btn>
+                <v-btn :disabled="!valid" color="primary" class="mr-4" @click="validate">Send</v-btn>
               </v-col>
             </v-row>
           </v-form>
@@ -40,7 +40,9 @@
       </v-container>
     </div>
     <div style="width: 100%">
-      <iframe width="100%" height="450" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=450&amp;hl=en&amp;q=+(Univerzitet%20Mediteran%20Podgorica)&amp;t=&amp;z=16&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"><a href="https://www.gps.ie/wearable-gps/">gps smartwatches</a></iframe>
+      <iframe width="100%" height="450" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
+              src="https://maps.google.com/maps?width=100%25&amp;height=450&amp;hl=en&amp;q=+(Univerzitet%20Mediteran%20Podgorica)&amp;t=&amp;z=16&amp;ie=UTF8&amp;iwloc=B&amp;output=embed">
+        <a href="https://www.gps.ie/wearable-gps/">gps smartwatches</a></iframe>
     </div>
   </v-main>
 </template>

@@ -366,7 +366,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        // TODO: there is a middleware in place that does not allow access to api routes for inactive users
+        // : there is a middleware in place that does not allow access to api routes for inactive users
         //  but in any case we should invalidate token for that user [which is on frontend so that will be a problem]
         // auth()->logout();
 

@@ -341,14 +341,16 @@ export default {
                 })
                 console.log(error)
                 this.loading = false
-              } if (error.response.data['phone_number'] == 'The phone number has already been taken.') {
+              }
+              if (error.response.data['phone_number'] == 'The phone number has already been taken.') {
                 Swal.fire({
                   icon: 'error',
                   text: error.response.data['phone_number'],
                 })
                 console.log(error)
                 this.loading = false
-              } if (error.response.data['username'] == 'The username has already been taken.') {
+              }
+              if (error.response.data['username'] == 'The username has already been taken.') {
                 Swal.fire({
                   icon: 'error',
                   text: error.response.data['username'],
@@ -370,6 +372,9 @@ export default {
 
   mounted() {
     document.title = 'Register - Auction House'
+    if (localStorage.getItem('token')) {
+      this.$router.push('/home')
+    }
   }
 
 }
