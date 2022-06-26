@@ -77,6 +77,10 @@ export default {
     reset() {
       this.$refs.form.reset();
     }
+  },
+
+  mounted() {
+    document.title = 'Contact - Auction House'
   }
 };
 </script>

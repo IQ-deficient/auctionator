@@ -61,6 +61,10 @@ export default {
         }
       ]
     };
+  },
+
+  mounted() {
+    document.title = 'About - Auction House'
   }
 };
 </script>

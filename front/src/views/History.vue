@@ -114,11 +114,10 @@ export default {
   },
 
   mounted() {
-    // todo: comment
-    // if (!window.localStorage.user_roles.includes('Administrator')){
-    //   this.$router.push('/pageNotFound')
-    // }
-    // document.title = 'Admin Auctions - Auction House'
+    if (!window.localStorage.user_roles.includes('Client')){
+      this.$router.push('/pageNotFound')
+    }
+    document.title = 'Owned auctions - Auction House'
   }
 
 }

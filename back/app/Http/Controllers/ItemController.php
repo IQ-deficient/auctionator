@@ -36,7 +36,7 @@ class ItemController extends Controller
 
         $image = $request->image;
 
-        // later todo: get image array from frontend instead of calling api for each
+        // later: get image array from frontend instead of calling api for each
 
 //        foreach ($request->image as $image) {
 

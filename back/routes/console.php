@@ -22,6 +22,6 @@ Artisan::command('initialize', function () {
     Artisan::call('migrate:fresh');
     Artisan::call('db:seed');
     Artisan::call('serve');
-    Artisan::call('schedule:work');
-    $this->info("All system nominal!"); // todo: NOT
+//    Artisan::call('schedule:work');
+    $this->info("All system nominal!");
 })->purpose('Initialize all commands that run the application.');

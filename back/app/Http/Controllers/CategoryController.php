@@ -42,13 +42,15 @@ class CategoryController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        // todo if given category is not a Mater Category return error
-
         // Get an object of master category based on input category name
         $parent = DB::table('categories')
             ->where('is_active', true)
+            ->where('master_category_id', null)
             ->where('name', $request->category)
             ->first();
+
+        // In case request contains category that is not a master category
+        abort_if(!$parent, 422, 'This category is not in the list of top categories.');
 
         // Get all active child categories that are bound to select parent
         $child_categories = DB::table('categories')

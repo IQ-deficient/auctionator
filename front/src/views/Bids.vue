@@ -113,7 +113,7 @@ export default {
   },
 
   mounted() {
-    // todo: comment
+    // Check the fetched roles stored in local storage of the browser for Client because Bids is only accessible by those
     if (!window.localStorage.user_roles.includes('Client')){
       this.$router.push('/pageNotFound')
     }

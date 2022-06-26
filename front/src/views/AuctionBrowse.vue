@@ -462,7 +462,6 @@ export default {
         })
     },
 
-    // todo: objasni milosu komunikacije i for loop i komponente
     postBid(auction_id) {
       this.$refs.form.validate().then(success => {
         if (success) {

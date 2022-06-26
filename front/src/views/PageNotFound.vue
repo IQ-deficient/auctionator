@@ -9,7 +9,10 @@
 
 <script>
 export default {
-  name: "NotFoundComponent"
+  name: "NotFoundComponent",
+  mounted() {
+    document.title = 'Not Found - Auction House'
+  }
 }
 </script>
 

@@ -525,7 +525,7 @@ export default {
                 if (response) {
                   localStorage.clear();
                   this.$router.push('/home');
-                  // todo: vidi moze li bez ovoga ikako (najbolje i bez onog istog smeca u login)
+                  // this and /login uses logic of reloading current page - this should be changed
                   this.$router.go(0)
                   // console.log(response.data)
                   this.loading = false;

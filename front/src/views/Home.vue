@@ -1,8 +1,8 @@
 <template>
   <v-main>
-    <Hero />
-    <Gallery />
-    <LatestPost />
+    <Hero/>
+    <Gallery/>
+    <LatestPost/>
   </v-main>
 </template>
 
@@ -18,6 +18,9 @@ export default {
     Hero,
     Gallery,
     LatestPost
+  },
+  mounted() {
+    document.title = 'Home - Auction House'
   }
 };
 </script>

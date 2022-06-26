@@ -122,7 +122,7 @@ class ItemSeeder extends Seeder
 //            array_push($seeds, $item);
 //        }
 //
-//        // todo: figure the length number to be reactive
+//        // figure the length number to be reactive
 //        $chunks = array_chunk($seeds, 10);
 //
 //        foreach ($chunks as $chunk){
