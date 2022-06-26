@@ -597,7 +597,7 @@ export default {
     allowedRoles: window.localStorage.user_roles.includes('Administrator') || window.localStorage.user_roles.includes('Auctioneer'),
     dataLoading: false,
     loading: false,
-    isValid: false,
+    isValid: true,
     auction_id: null,
     //image data
     //
@@ -676,33 +676,38 @@ export default {
       this.message = "";
       this.messages = [];
       if (this.selectedFiles) {
+
+        if (this.selectedFiles.length > 5) {
+          this.message = "You may upload up to 5 images.";
+          this.messages.push(this.message)
+          return false
+        }
+
         for (let i = 0; i < this.selectedFiles.length; i++) {
+
           this.imageName = this.selectedFiles[i].name
           this.fileSize = this.selectedFiles[i].size
-          if (this.selectedFiles.length > 5) {
-            this.message = "You may upload up to 5 images.";
+
+          for (let j = 0; j < this.extensions.length; j++) {
+            this.currentExtension = this.extensions[j];
+
+            if (this.imageName.substr(this.imageName.length - this.currentExtension.length,
+              this.currentExtension.length).toLowerCase() === this.currentExtension.toLowerCase()) {
+              this.isValid = true
+            }
+          }
+          if (!this.isValid) {
+            this.message = "Sorry, '" + this.imageName + "' is invalid, allowed extensions are: " + this.extensions.join(", ") + ".";
             this.messages.push(this.message)
             return false
-          } else {
-            for (let j = 0; j < this.extensions.length; j++) {
-              this.currentExtension = this.extensions[j];
-              if (this.imageName.substr(this.imageName.length - this.currentExtension.length,
-                this.currentExtension.length).toLowerCase() == this.currentExtension.toLowerCase()) {
-                this.isValid = true;
-              }
-            }
-            if (!this.isValid) {
-              this.message = "Sorry, '" + this.imageName + "' is invalid, allowed extensions are: " + this.extensions.join(", ") + ".";
-              this.messages.push(this.message)
-              return false
-            }
-            if (this.fileSize > 2097152) {
-              this.message = "Sorry, '" + this.imageName + "' is invalid, file size cannot be greater than 2MB.";
-              this.messages.push(this.message)
-              return false
-            }
-            // this.upload(i, this.selectedFiles[i], item_id);
           }
+
+          if (this.fileSize > 2097152) {
+            this.message = "Sorry, '" + this.imageName + "' is invalid, file size cannot be greater than 2MB.";
+            this.messages.push(this.message)
+            return false
+          }
+          // this.upload(i, this.selectedFiles[i], item_id);
         }
       } else {
         this.message = "Please select an image."
@@ -961,8 +966,8 @@ export default {
         warehouse_id: this.addItemWarehouse.id,
         title: this.addAuctionTitle,
         seller: this.addAuctionSeller,
-        start_datetime: this.addStartDate.toISOString().replace('Z', ' ').replace('T', ' '),
-        end_datetime: this.addEndDate.toISOString().replace('Z', ' ').replace('T', ' '),
+        start_datetime: new Date(this.addStartDate.getTime() - this.addStartDate.getTimezoneOffset() * 60000).toISOString().replace('Z', '').replace('T', ' '),
+        end_datetime: new Date(this.addEndDate.getTime() - this.addEndDate.getTimezoneOffset() * 60000).toISOString().replace('Z', '').replace('T', ' '),
         buyout: this.addAuctionBuyout,
       })
         .then(response => {
