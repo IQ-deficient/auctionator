@@ -61,6 +61,12 @@ class AuctionController extends Controller
                     $na[] = $auction;
                     break;
             }
+            if ($auction) {
+                $images = Image::query()
+                    ->where('item_id', $auction->item_id)
+                    ->get();
+                $auction->images = $images;
+            }
         }
         // We will be returning inactive auction separately
         $inactive = Auction::query()

@@ -384,16 +384,29 @@
               </validation-observer>
             </template>
           </v-dialog>
-          <v-dialog v-model="dialogDelete" max-width="35%">
-            <v-card>
-              <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-spacer></v-spacer>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+<!--          <v-dialog v-model="dialogDelete" max-width="35%">-->
+<!--            <v-card>-->
+<!--              <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>-->
+<!--              <v-card-actions>-->
+<!--                <v-spacer></v-spacer>-->
+<!--                <v-spacer></v-spacer>-->
+<!--              </v-card-actions>-->
+<!--            </v-card>-->
+<!--          </v-dialog>-->
         </v-toolbar>
+      </template>
+      <template v-slot:item.views="{ item }">
+        <v-row>
+          <v-col cols="12" sm="12">
+            <v-icon
+                    class="ml-2"
+                    color="primary"
+                    @click="showAdminAuction(item)"
+            >
+              mdi-eye
+            </v-icon>
+          </v-col>
+        </v-row>
       </template>
       <template v-slot:item.actions="{ item }">
         <v-row v-if="selectStatus == 'Created'">
@@ -483,9 +496,21 @@
             </v-icon>
           </v-col>
         </v-row>
+<!--        <v-icon-->
+<!--                color="primary"-->
+<!--                class="mr-2"-->
+<!--                @click="showAdminAuction(item)"-->
+<!--        >-->
+<!--          mdi-eye-->
+<!--        </v-icon>-->
       </template>
-
     </v-data-table>
+    <show-admin-auction
+            v-if="showAdminAuctionDialog"
+            @close="showAdminAuctionDialog = false"
+            :show-dialog="showAdminAuctionDialog"
+            :auction="chosenAuction"
+    />
     <edit-auction
             v-if="editAuctionDialog"
             @close="editAuctionDialog = false"
@@ -502,7 +527,9 @@
   import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
   import MultipleImageUpload from "../services/MultipleImageUpload";
   import EditAuctionDialog from "../components/EditAuctionDialog";
+  import showAdminAuctionDialog from "../components/ShowAdminAuctionDialog";
   import Swal from "sweetalert2";
+
 
   setInteractionMode('eager')
 
@@ -558,11 +585,12 @@
       ValidationProvider,
       ValidationObserver,
       'edit-auction': EditAuctionDialog,
+      'show-admin-auction': showAdminAuctionDialog,
     },
 
     data: () => ({
       dialog: false,
-      dialogDelete: false,
+      // dialogDelete: false,
       headers: [
         {text: '', align: 'start', sortable: false, value: 'id'},
         {text: '', align: 'start', sortable: false, value: 'title'},
@@ -573,6 +601,7 @@
         {text: 'Start date', value: 'start_datetime'},
         {text: 'End date', value: 'end_datetime'},
         {text: 'Auctioneer', value: '.user.username'},
+        {text: 'Details', value: 'views', sortable: false},
         {text: '', value: 'actions', sortable: false},
       ],
       date: '',
@@ -598,6 +627,7 @@
       addAuctionSeller: '',
       addAuctionBuyout: '',
       editAuctionDialog: false,
+      showAdminAuctionDialog: false,
       chosenAuction: '',
       tableData: [],
       textFieldProps: {
@@ -657,6 +687,11 @@
         } else {
           this.tableData = this.auctions
         }
+      },
+
+      showAdminAuction(item) {
+        this.showAdminAuctionDialog = true
+        this.chosenAuction = item
       },
 
       editAuction(item) {
