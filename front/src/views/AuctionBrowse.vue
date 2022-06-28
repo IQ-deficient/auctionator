@@ -1,10 +1,30 @@
 <template>
   <div>
-    <v-toolbar
-      dark
-      color="info"
-    >
-      <v-toolbar-title>Looking for something specific?</v-toolbar-title>
+
+      <v-row class="py-4">
+        <v-col cols="12" sm="12">
+          <v-toolbar
+                  dark
+                  color="info"
+          >
+            <v-toolbar-title>Looking for something specific?</v-toolbar-title>
+            <v-text-field
+                    v-model="searchString"
+                    class="mx-4"
+                    clearable
+                    @keyup.enter="filterByString"
+            ></v-text-field>
+            <v-btn
+                    text
+                    @click="filterByString()"
+            >
+              <v-icon class="pr-2">mdi-magnify</v-icon>
+              <span>Search</span>
+            </v-btn>
+          </v-toolbar>
+        </v-col>
+
+      </v-row>
       <!--      <v-autocomplete style="width: 50%"-->
       <!--                      v-model="select"-->
       <!--                      :loading="loading"-->
@@ -17,21 +37,7 @@
       <!--                      hide-details-->
       <!--                      solo-inverted-->
       <!--      ></v-autocomplete>-->
-      <v-text-field
-        v-model="searchString"
-        class="mx-4"
-        outlined
-        clearable
-        @keyup.enter="filterByString"
-      ></v-text-field>
-      <v-btn
-        class="primary"
-        @click="filterByString()"
-      >
-        <v-icon class="pr-2">mdi-magnify</v-icon>
-        <span>Search items on this page</span>
-      </v-btn>
-    </v-toolbar>
+
     <v-app-bar dark color="#0d111a">
       <v-breadcrumbs
         :items="items"
@@ -42,7 +48,7 @@
         </template>
       </v-breadcrumbs>
       <v-spacer></v-spacer>
-      <v-btn
+      <v-btn class="mr-2"
         @click="sortByPrice('asc')">
         <v-icon>mdi-sort-reverse-variant</v-icon>
         <!--        <v-icon>mdi-arrow-up-thin</v-icon>-->
