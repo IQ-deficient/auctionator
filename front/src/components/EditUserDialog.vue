@@ -1,12 +1,13 @@
 <template>
   <v-container>
-    <validation-observer ref="observer" v-slot="{ invalid }" tag="form" @submit.prevent="updateUser()">
       <v-dialog
           v-model="showDialog"
           max-width="60%"
           persistent
       >
         <template>
+          <validation-observer ref="form" v-slot="{invalid}">
+            <form @submit.prevent="updateUser()">
           <v-card color="info">
             <v-card-actions class="justify-end">
               <v-btn
@@ -35,211 +36,237 @@
                     </tr>
                   </table>
                 </v-toolbar-title>
-                <v-card class="pa-4">
-                  <v-row>
-                    <v-col
-                        cols="12"
-                        sm="6"
-                    >
-                      <validation-provider
-                          v-slot="{ errors }"
-                          name="First name"
-                          rules="required|min:3|max:32"
-                          clearable
-                      >
-                        <v-text-field
-                            :loading="dataLoading"
-                            v-model="firstName"
-                            :error-messages="errors"
-                            label="First name"
-                            required
-                        ></v-text-field>
-                      </validation-provider>
-                    </v-col>
-                    <v-col
-                        cols="12"
-                        sm="6"
-                    >
-                      <validation-provider
-                          v-slot="{ errors }"
-                          name="Last name"
-                          rules="required|min:3|max:32"
-                          clearable
-                      >
-                        <v-text-field
-                            :loading="dataLoading"
-                            v-model="lastName"
-                            :error-messages="errors"
-                            label="Last name"
-                            required
-                        ></v-text-field>
-                      </validation-provider>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col
-                        cols="12"
-                        sm="6">
-                      <validation-provider
-                          v-slot="{ errors }"
-                          name="Gender"
-                          clearable
-                      >
-                        <v-select
-                            :loading="dataLoading"
-                            v-model="selectGender"
-                            :items="genders"
-                            :error-messages="errors"
-                            item-text="name"
-                            label="Gender"
-                        ></v-select>
-                      </validation-provider>
-                    </v-col>
-                    <v-col
-                        cols="12"
-                        sm="6">
-                      <validation-provider
-                          v-slot="{ errors }"
-                          name="Birth date"
-                          clearable
-                      >
-                        <v-dialog
-                            ref="dialog"
-                            v-model="dateDialog"
-                            :return-value.sync="date"
-                            persistent
-                            width="290px"
+                    <v-card class="pa-4">
+                      <v-row>
+                        <v-col
+                            cols="12"
+                            sm="6"
                         >
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-text-field
-                                :loading="dataLoading"
-                                v-model="birthdate"
-                                :error-messages="errors"
-                                label="Pick a date"
-                                append-icon="mdi-cake-variant-outline"
-                                v-bind="attrs"
-                                v-on="on"
-                            ></v-text-field>
-                          </template>
-                          <v-date-picker
-                              v-model="birthdate"
-                              scrollable
+                          <validation-provider
+                                  v-slot="{ errors }"
+                                  name="first name"
+                                  rules="required|alpha|min:1|max:32"
                           >
-                            <v-spacer></v-spacer>
-                            <v-btn
-                                text
-                                color="primary"
-                                @click="dateDialog = false"
+                            <v-text-field
+                                    :loading="dataLoading"
+                                    v-model="firstName"
+                                    :error-messages="errors"
+                                    label="First name"
+                                    clearable
+                            ></v-text-field>
+                          </validation-provider>
+                        </v-col>
+                        <v-col
+                            cols="12"
+                            sm="6"
+                        >
+                          <validation-provider
+                                  v-slot="{ errors }"
+                                  name="last name"
+                                  rules="required|alpha|min:1|max:32"
+                          >
+                            <v-text-field
+                                    :loading="dataLoading"
+                                    v-model="lastName"
+                                    :error-messages="errors"
+                                    label="Last name"
+                                    clearable
+                            ></v-text-field>
+                          </validation-provider>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col
+                            cols="12"
+                            sm="6">
+                          <validation-provider
+                                  v-slot="{ errors }"
+                                  name="country"
+                                  rules="required"
+                                  clearable
+                          >
+                            <v-select
+                                    v-model="selectCountry"
+                                    :loading="dataLoading"
+                                    :items="countries"
+                                    item-text="name"
+                                    :error-messages="errors"
+                                    label="Country"
+                                    return-object
+                                    @change="updateCountryCode()"
+                            ></v-select>
+                          </validation-provider>
+                        </v-col>
+                        <v-col
+                            cols="12"
+                            sm="6">
+<!--                          <validation-provider-->
+<!--                              v-slot="{ errors }"-->
+<!--                              name="Phone number"-->
+<!--                              rules="required|numeric|min:8|max:15"-->
+<!--                              clearable-->
+<!--                          >-->
+<!--                            <v-text-field-->
+<!--                                :loading="dataLoading"-->
+<!--                                :prefix="'(' + phoneCode + ')'"-->
+<!--                                v-model="phoneNumber"-->
+<!--                                :error-messages="errors"-->
+<!--                                label="Phone number"-->
+<!--                                append-icon="mdi-phone-classic"-->
+<!--                            ></v-text-field>-->
+<!--                          </validation-provider>-->
+                          <validation-provider
+                                  v-slot="{ errors }"
+                                  name="phone number"
+                                  rules="required|numeric|min:6|max:15"
+                                  clearable
+                          >
+                            <v-text-field v-if="phoneCode != null"
+                                          :loading="dataLoading"
+                                          :prefix="'(' + phoneCode + ')'"
+                                          v-model="phoneNumber"
+                                          :error-messages="errors"
+                                          label="Phone number"
+                                          append-icon="mdi-phone-classic"
+                            ></v-text-field>
+                            <v-text-field v-else
+                                          :loading="dataLoading"
+                                          v-model="phoneNumber"
+                                          :error-messages="errors"
+                                          label="Phone number"
+                                          append-icon="mdi-phone-classic"
+                            ></v-text-field>
+                          </validation-provider>
+                        </v-col>
+    <!--                    <v-col v-if="isAdmin"-->
+    <!--                           cols="12"-->
+    <!--                           sm="6">-->
+    <!--                      <validation-provider-->
+    <!--                          v-slot="{ errors }"-->
+    <!--                          name="Role"-->
+    <!--                          clearable-->
+    <!--                      >-->
+    <!--                        <v-select-->
+    <!--                            :loading="dataLoading"-->
+    <!--                            v-model="selectRole"-->
+    <!--                            :items="roles"-->
+    <!--                            :error-messages="errors"-->
+    <!--                            item-text="name"-->
+    <!--                            label="Role"-->
+    <!--                            multiple-->
+    <!--                        ></v-select>-->
+    <!--                      </validation-provider>-->
+    <!--                    </v-col>-->
+                      </v-row>
+                      <v-row>
+                        <v-col
+                                cols="12"
+                                sm="6">
+                          <validation-provider
+                                  v-slot="{ errors }"
+                                  name="Gender"
+                                  clearable
+                          >
+                            <v-select
+                                    :loading="dataLoading"
+                                    v-model="selectGender"
+                                    :items="genders"
+                                    :error-messages="errors"
+                                    item-text="name"
+                                    label="Gender"
+                            ></v-select>
+                          </validation-provider>
+                        </v-col>
+                        <v-col
+                                cols="12"
+                                sm="6">
+                          <validation-provider
+                                  v-slot="{ errors }"
+                                  name="Birth date"
+                                  clearable
+                          >
+                            <v-dialog
+                                    ref="dialog"
+                                    v-model="dateDialog"
+                                    :return-value.sync="date"
+                                    persistent
+                                    width="290px"
                             >
-                              Cancel
-                            </v-btn>
-                            <v-btn
-                                text
-                                color="primary"
-                                @click="$refs.dialog.save(date)"
-                            >
-                              OK
-                            </v-btn>
-                          </v-date-picker>
-                        </v-dialog>
-                      </validation-provider>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col
-                        cols="12"
-                        sm="6">
-                      <validation-provider
-                          v-slot="{ errors }"
-                          name="Country"
-                          rules="required"
-                          clearable
-                      >
-                        <v-select
-                            :loading="dataLoading"
-                            v-model="selectCountry"
-                            :items="countries"
-                            item-text="name"
-                            :error-messages="errors"
-                            label="Country"
-                            return-object
-                            @change="updateCountryCode()"
-                        ></v-select>
-                      </validation-provider>
-                    </v-col>
-                    <v-col
-                        cols="12"
-                        sm="6">
-                      <validation-provider
-                          v-slot="{ errors }"
-                          name="Phone number"
-                          rules="required|numeric|min:8|max:15"
-                          clearable
-                      >
-                        <v-text-field
-                            :loading="dataLoading"
-                            :prefix="'(' + phoneCode + ')'"
-                            v-model="phoneNumber"
-                            :error-messages="errors"
-                            label="Phone number"
-                            append-icon="mdi-phone-classic"
-                        ></v-text-field>
-                      </validation-provider>
-                    </v-col>
-<!--                    <v-col v-if="isAdmin"-->
-<!--                           cols="12"-->
-<!--                           sm="6">-->
-<!--                      <validation-provider-->
-<!--                          v-slot="{ errors }"-->
-<!--                          name="Role"-->
-<!--                          clearable-->
-<!--                      >-->
-<!--                        <v-select-->
-<!--                            :loading="dataLoading"-->
-<!--                            v-model="selectRole"-->
-<!--                            :items="roles"-->
-<!--                            :error-messages="errors"-->
-<!--                            item-text="name"-->
-<!--                            label="Role"-->
-<!--                            multiple-->
-<!--                        ></v-select>-->
-<!--                      </validation-provider>-->
-<!--                    </v-col>-->
-                  </v-row>
-                  <v-row>
-                    <v-col>
-                      <v-select
-                          :loading="dataLoading"
-                          v-if="editType == 'Employees'"
-                          v-model="checkedRoles"
-                          label="Select user roles"
-                          multiple
-                          :items="employeeRoles"
-                          item-text="name"
-                      >
-                      </v-select>
-                    </v-col>
-                  </v-row>
-                </v-card>
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-text-field
+                                        :loading="dataLoading"
+                                        v-model="birthdate"
+                                        :error-messages="errors"
+                                        label="Pick a date"
+                                        append-icon="mdi-cake-variant-outline"
+                                        v-bind="attrs"
+                                        v-on="on"
+                                ></v-text-field>
+                              </template>
+                              <v-date-picker
+                                      v-model="birthdate"
+                                      scrollable
+                              >
+                                <v-spacer></v-spacer>
+                                <v-btn
+                                        text
+                                        color="primary"
+                                        @click="dateDialog = false"
+                                >
+                                  Cancel
+                                </v-btn>
+                                <v-btn
+                                        text
+                                        color="primary"
+                                        @click="$refs.dialog.save(date)"
+                                >
+                                  OK
+                                </v-btn>
+                              </v-date-picker>
+                            </v-dialog>
+                          </validation-provider>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col>
+                          <validation-provider
+                                  v-slot="{ errors }"
+                                  name="user roles"
+                                  rules="required"
+                                  clearable
+                          >
+                          <v-select
+                              :loading="dataLoading"
+                              :error-messages="errors"
+                              v-if="editType == 'Employees'"
+                              v-model="checkedRoles"
+                              label="Select user roles"
+                              multiple
+                              :items="employeeRoles"
+                              item-text="name"
+                          >
+                          </v-select>
+                          </validation-provider>
+                        </v-col>
+                      </v-row>
+                    </v-card>
               </div>
               <v-btn large
                      dark
                      type="submit"
                      color="primary"
                      class="mt-6"
-                     :disabled="invalid || !firstName || !lastName || !selectCountry ||
-                                    !phoneNumber"
-                     @click="updateUser()"
+                     :disabled="invalid"
               >
                 <v-icon left class="mr-1">mdi-account-plus-outline</v-icon>
                 Update
               </v-btn>
             </v-card-text>
           </v-card>
+          </form>
+          </validation-observer>
         </template>
       </v-dialog>
-    </validation-observer>
-
   </v-container>
 </template>
 
@@ -383,37 +410,40 @@ export default {
     },
 
     updateUser() {
-      this.loading = true
-      axios.put('/manage/' + this.user.id, {
-        first_name: this.firstName,
-        last_name: this.lastName,
-        gender: this.selectGender,
-        birthdate: this.birthdate,
-        country: this.selectCountry.name,
-        phone_number: this.phoneNumber,
-        roles: this.checkedRoles
+      this.$refs.form.validate().then(success => {
+        if (success) {
+          this.loading = true
+          axios.put('/manage/' + this.user.id, {
+            first_name: this.firstName,
+            last_name: this.lastName,
+            gender: this.selectGender,
+            birthdate: this.birthdate,
+            country: this.selectCountry.name,
+            phone_number: this.phoneNumber,
+            roles: this.checkedRoles
+          })
+                  .then(response => {
+                            if (response) {
+                              this.$emit('close')
+                              this.$emit('reload')
+                              Swal.fire({
+                                title: 'Done!',
+                                text: 'User updated successfully.',
+                                icon: 'success'
+                              })
+                              this.showDialog = false;
+                              this.loading = false;
+                            }
+                          }
+                  )
+                  .catch(error => {
+                    console.log(error)
+                    this.loading = false
+                    this.error = error.response.data.message;
+                  })
+        }
       })
-        .then(response => {
-            if (response) {
-              this.$emit('close')
-              this.$emit('reload')
-              Swal.fire({
-                title: 'Done!',
-                text: 'User updated successfully.',
-                icon: 'success'
-              })
-              this.showDialog = false;
-              this.loading = false;
-            }
-          }
-        )
-        .catch(error => {
-          console.log(error)
-          this.loading = false
-          this.error = error.response.data.message;
-        })
     },
-
   }
 }
 </script>

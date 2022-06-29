@@ -120,7 +120,7 @@
                 <v-text-field
                   v-model="email"
                   :error-messages="errors"
-                  hint="example@mail.cpm"
+                  hint="example@mail.com"
                   label="Email"
                   clearable
                 ></v-text-field>
