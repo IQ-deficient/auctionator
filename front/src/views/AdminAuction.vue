@@ -396,7 +396,7 @@
         </v-toolbar>
       </template>
       <template v-slot:item.views="{ item }">
-        <v-row>
+        <v-row v-if="selectStatus != 'Inactive'">
           <v-col cols="12" sm="12">
             <v-icon
                     class="ml-2"
@@ -825,9 +825,24 @@
                       }
                     })
                     .catch(error => {
+                      if (error.response.data['end_datetime'] == 'The end datetime must be a date after start datetime.') {
+                        Swal.fire({
+                          icon: 'error',
+                          text: error.response.data['end_datetime'],
+                        })
+                        console.log(error)
+                        this.loading = false
+                      }
+                      if (error.response.data['start_datetime'] == 'The start datetime must be a date after today.') {
+                        Swal.fire({
+                          icon: 'error',
+                          text: error.response.data['start_datetime'],
+                        })
+                        console.log(error)
+                        this.loading = false
+                      }
                       console.log(error)
-                      this.loading = false
-                      this.error = error.response.data.message;
+                      this.dataLoading = false
                     })
           }
         })
@@ -897,6 +912,15 @@
                       }
                     })
                     .catch(error => {
+                      if (error.response.status == 400 || error.response.status == 410 ||
+                              error.response.status == 422) {
+                        Swal.fire({
+                          icon: 'error',
+                          title: error.response.data.message,
+                        })
+                        console.log(error)
+                        this.loading = false
+                      }
                       console.log(error)
                       this.dataLoading = false
                     })
