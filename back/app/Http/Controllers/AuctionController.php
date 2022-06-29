@@ -306,8 +306,8 @@ class AuctionController extends Controller
             'title' => $request->title,
             'seller' => $request->seller,
             'buyout' => $request->buyout,
-            'start_datetime' => $request->start_datetime,
-            'end_datetime' => $request->end_datetime,
+//            'start_datetime' => $request->start_datetime,
+//            'end_datetime' => $request->end_datetime,
             'user_id' => Auth::id(),            // Auctioneer that applies changes (in case its someone else than the creator)
         ]);
 
