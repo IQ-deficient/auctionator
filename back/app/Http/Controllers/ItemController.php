@@ -46,14 +46,14 @@ class ItemController extends Controller
             preg_replace("/[^A-Za-z0-9.!?]/", '', $image->getClientOriginalName()), 2)[0];
         $time = now()->getTimestamp();
         $extension = $image->getClientOriginalExtension();
+//        $filename = "{$time}.{$extension}";
         $filename = "{$originalName}-{$time}.{$extension}";
 
         // Store the image in specified folder
-        $dest_path = 'storage/item_images/' . $filename;
         $image->storeAs('/item_images', $filename, ['disk' => 'public']);
 
         Image::create([
-            'image' => $dest_path,
+            'image' => $filename,
             'item_id' => $item->id
         ]);
 

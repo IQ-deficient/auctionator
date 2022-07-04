@@ -18,6 +18,10 @@
                          :src="require('../../../back/public/' + userImage)"
                          lazy-src="../assets/user-image.svg"
                          :alt="loggedUser.first_name">
+                    <v-img
+                            :lazy-src="'/api/test/'+item.image"
+                            :src="'/api/test/'+item.image"
+                    ></v-img>
                     <template v-slot:placeholder>
                       <v-row
                           class="fill-height ma-0"

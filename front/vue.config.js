@@ -1,12 +1,13 @@
+let ip = 'localhost';
+let port = '8000';
+
 module.exports = {
-  transpileDependencies: [
-    'vuetify'
-  ],
-  pages: {
-    index: {
-      // entry for the page
-      entry: 'src/main.js',
-      title: 'Auction House',
+  devServer: {
+    proxy: {
+      '^/api': {
+        target: 'http://' + ip + ':' + port,
+      },
     },
+    disableHostCheck: true
   }
-}
+};

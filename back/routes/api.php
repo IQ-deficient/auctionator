@@ -123,6 +123,7 @@ Route::group([
     Route::put('/password/{user}', [UserController::class, 'changePassword']);       // update password
     Route::delete('/user/{user}', [UserController::class, 'destroy']);      // deactivate user
 
+
     // UserRoles
 //    Route::get('/user_roles', [UserRoleController::class, 'index']);
 
@@ -135,9 +136,8 @@ Route::group([
 //    Route::delete('/warehouse/{warehouse}', [WarehouseController::class, 'destroy']);
 });
 
-
-
-
+//Get image route
+Route::get('/test/{image}', [AuctionController::class, 'getImage']);
 
 
 

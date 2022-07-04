@@ -422,5 +422,9 @@ class AuctionController extends Controller
         return $auction;
     }
 
+    public function getImage ($name) {
+        return response()->file(public_path('storage/item_images/' . $name));
+    }
+
 
 }
