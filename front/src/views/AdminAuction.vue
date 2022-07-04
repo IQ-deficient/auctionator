@@ -7,7 +7,7 @@
             :headers="headers"
             :items="tableData"
             :search="search"
-            sort-by="title"
+            sort-by="id"
             class="elevation-1; rounded-card; mt-10"
     >
 
@@ -670,6 +670,7 @@
     },
 
     methods: {
+
       // text: item => item.name + ' — ' + item.address,
       updateTableData() {
         if (this.selectStatus == 'Created') {
@@ -778,7 +779,7 @@
                 .then((response) => {
                   let prevMessage = this.message ? this.message + "\n" : "";
                   this.message = prevMessage + response.data.message;
-                  return MultipleImageUpload.getFiles();
+                  // return MultipleImageUpload.getFiles();
                 })
                 .then((files) => {
                   this.fileInfos = files.data;
@@ -815,8 +816,9 @@
                           title: 'Done!',
                           text: 'Auction has been created successfully.',
                           icon: 'success'
+                        }).then(() => {
+                          // If all is well and Auction was created with an Item, give that item_id to images being stored
                         })
-                        // If all is well and Auction was created with an Item, give that item_id to images being stored
                         this.uploadImages(response.data.item_id)
                         this.loading = false
                         this.modal = false

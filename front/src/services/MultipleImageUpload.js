@@ -14,9 +14,9 @@ class MultipleImageUpload {
         });
     }
 
-    getFiles() {
-        //not needed
-    }
+    // getFiles() {
+    //     //not needed
+    // }
 }
 
 export default new MultipleImageUpload();

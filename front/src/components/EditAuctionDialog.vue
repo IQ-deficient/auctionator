@@ -252,58 +252,6 @@
                           </validation-provider>
                         </v-col>
                       </v-row>
-                      <v-row>
-                        <v-col cols="6" sm="6">
-                          <validation-provider>
-                            <v-datetime-picker
-                              v-model="addStartDate"
-                              prepend-icon="mdi-calendar"
-                              :text-field-props="textFieldProps"
-                              :time-picker-props="timeProps"
-                            >
-                              <template slot="dateIcon">
-                                <v-icon>mdi-calendar</v-icon>
-                              </template>
-                              <template slot="timeIcon">
-                                <v-icon>mdi-clock</v-icon>
-                              </template>
-                            </v-datetime-picker>
-                          </validation-provider>
-                        </v-col>
-                        <v-col cols="6" sm="6">
-                          <validation-provider>
-                            <v-datetime-picker
-                              v-model="addEndDate"
-                              prepend-icon="mdi-calendar"
-                              :text-field-props="textFieldProps"
-                              :time-picker-props="timeProps"
-                            >
-                              <template slot="dateIcon">
-                                <v-icon>mdi-calendar</v-icon>
-                              </template>
-                              <template slot="timeIcon">
-                                <v-icon>mdi-clock</v-icon>
-                              </template>
-                            </v-datetime-picker>
-                          </validation-provider>
-                        </v-col>
-                        <v-col cols="12" sm="12">
-                          <validation-provider
-                                  v-slot="{ errors }"
-                                  name="buyout"
-                                  rules="required|min_value:1"
-                          >
-                            <v-text-field
-                              v-model="addAuctionBuyout"
-                              :loading="dataLoading"
-                              :error-messages="errors"
-                              label="Buyout"
-                              clearable
-                            >
-                            </v-text-field>
-                          </validation-provider>
-                        </v-col>
-                      </v-row>
                     </v-card>
                   </div>
                   <v-btn large
@@ -566,7 +514,7 @@ export default {
 
     getWarehouse() {
       this.dataLoading = true
-      axios.get('/warehouses')
+      axios.get('/active_warehouses')
         .then(response => {
           if (response.data) {
             this.warehouses = response.data

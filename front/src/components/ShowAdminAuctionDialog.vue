@@ -37,6 +37,7 @@
                             <v-row>
                                 <v-col cols="12" sm="5">
                                     <v-carousel
+                                            :loading="dataLoading"
                                             v-if="auction.images.length != 0"
                                             hide-delimiters style="height: 100%">
                                         <v-carousel-item
@@ -44,10 +45,11 @@
                                                 contain
                                                 v-for="(item,i) in auction.images"
                                                 :key="i"
-                                                :src="require('../../../back/public/' + item.image)"
+                                                :src="require('../../../back/public/storage/item_images/2.jpg')"
                                         ></v-carousel-item>
                                     </v-carousel>
                                     <v-carousel
+                                            :loading="dataLoading"
                                             v-else
                                             hide-delimiters style="height: 100%">
                                         <v-carousel-item
@@ -61,7 +63,9 @@
                                 <v-col cols="12" sm="7">
                                     <v-row>
                                         <v-col cols="12" sm="12">
-                                            <v-card-title class="text-sm-body-1">
+                                            <v-card-title
+                                                    :loading="dataLoading"
+                                                    class="text-sm-body-1">
                                                 Item:
                                                 <v-spacer></v-spacer>
                                                 {{ auction.item.title }}
@@ -76,7 +80,9 @@
                                             <v-card-title class="text-sm-body-1">
                                                 About:
                                                 <v-spacer></v-spacer>
-                                                <v-card-title class="text-sm-body-2" style="justify-content: end">
+                                                <v-card-title
+                                                        :loading="dataLoading"
+                                                        class="text-sm-body-2" style="justify-content: end">
                                                     {{ auction.item.description }}
                                                 </v-card-title>
                                             </v-card-title>
@@ -87,7 +93,9 @@
                                     </v-col>
                                     <v-row>
                                         <v-col cols="12" sm="12">
-                                            <v-card-title class="text-sm-body-1"
+                                            <v-card-title
+                                                    :loading="dataLoading"
+                                                    class="text-sm-body-1"
                                             >Warehouse:
                                                 <v-spacer></v-spacer>
                                                 {{ auction.item.warehouse.name }}
@@ -99,7 +107,9 @@
                                     </v-col>
                                     <v-row>
                                         <v-col cols="12" sm="12">
-                                            <v-card-title class="text-sm-body-1"
+                                            <v-card-title
+                                                    :loading="dataLoading"
+                                                    class="text-sm-body-1"
                                             >Category:
                                                 <v-spacer></v-spacer>
                                                 {{ auction.item.category.name }}
@@ -111,7 +121,9 @@
                                     </v-col>
                                     <v-row>
                                         <v-col cols="12" sm="12">
-                                            <v-card-title class="text-sm-body-1"
+                                            <v-card-title
+                                                    :loading="dataLoading"
+                                                    class="text-sm-body-1"
                                             >Condition:
                                                 <v-spacer></v-spacer>
                                                 {{ auction.item.condition }}
@@ -143,6 +155,7 @@
         },
 
         data: () => ({
+            dataLoading: false,
             itemTitle: '',
             itemDescription: '',
             itemWarehouse: '',
@@ -153,9 +166,49 @@
         }),
 
         created() {
-            // console.log(this.auction)
+            // this.getImgUrl()
+            console.log(this.auction)
         },
-        methods: {}
+
+        computed: {
+            // // If the URL starts with ../assets/, it will be interpreted as a module request.
+            // getImgUrl: function (image) {
+            //     // this.dataLoading = true;
+            //     // for (let i; i < this.auction.images.length; i++) {
+            //     //
+            //     //     // image = this.auction.images
+            //     // }
+            //     // if (require('../../../back/public/' + image)) {
+            //     //     console.log(image)
+            //     //     console.log(this.auctions.images)
+            //     console.log(image)
+            //     return require('../../../back/public/' + image);
+            //     // }
+            //     // else {
+            //     //     return require('../../src/assets/images/img-carousel1.jpg')
+            //     // }
+            // }
+        },
+
+        methods: {
+            // // If the URL starts with ../assets/, it will be interpreted as a module request.
+            // getImgUrl: function (image) {
+            //     // this.dataLoading = true;
+            //     // for (let i; i < this.auction.images.length; i++) {
+            //     //
+            //     //     // image = this.auction.images
+            //     // }
+            //     // if (require('../../../back/public/' + image)) {
+            //     //     console.log(image)
+            //     //     console.log(this.auctions.images)
+            //     console.log(image)
+            //     return require('../../../back/public/' + image);
+            //     // }
+            //     // else {
+            //     //     return require('../../src/assets/images/img-carousel1.jpg')
+            //     // }
+            // }
+        }
     }
 </script>
 
