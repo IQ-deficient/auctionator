@@ -383,7 +383,7 @@ class UserController extends Controller
         return User::query()->where('id', $user->id)->first();
     }
 
-    public function getImage ($name) {
+    public function getUserImage ($name) {
         return response()->file(public_path('storage/user_images/' . $name));
     }
 

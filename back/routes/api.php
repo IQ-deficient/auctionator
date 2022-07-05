@@ -138,10 +138,10 @@ Route::group([
 });
 
 //Get item image route
-Route::get('/test/{image}', [AuctionController::class, 'getImage']);
+Route::get('/test/{image}', [AuctionController::class, 'getItemImage']);
 
 //Get user image route
-Route::get('/user/{image}', [UserController::class, 'getImage']);
+Route::get('/user/{image}', [UserController::class, 'getUserImage']);
 
 
 

@@ -56,7 +56,7 @@
                   <v-avatar size="50">
                     <v-img v-if="userImage"
                            :loading="pageLoading"
-                           :lazy-src="'/api/test/'+ userImage"
+                           :lazy-src="'/api/user/'+ userImage"
                            :src="'/api/user/'+ userImage">
                       <template v-slot:placeholder>
                         <v-row
@@ -75,8 +75,7 @@
                     </v-img>
                     <v-img v-else
                            lazy-src="../assets/user-image-nav.svg"
-                           src="../assets/user-image-nav.svg"
-                           alt="User image placeholder">
+                           src="../assets/user-image-nav.svg">
                     </v-img>
                   </v-avatar>
                 </v-btn>
@@ -89,7 +88,7 @@
                       <v-avatar size="50" class="mb-2">
                         <v-img v-if="userImage"
                                :loading="pageLoading"
-                               :lazy-src="'/api/test/'+ userImage"
+                               :lazy-src="'/api/user/'+ userImage"
                                :src="'/api/user/'+ userImage">
                           <template v-slot:placeholder>
                             <v-row

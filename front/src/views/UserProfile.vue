@@ -38,8 +38,7 @@
                   </v-img>
                   <v-img v-else
                          lazy-src="../assets/user-image.svg"
-                         src="../assets/user-image.svg"
-                         alt="User image placeholder">
+                         src="../assets/user-image.svg">
                   </v-img>
                 </v-avatar>
               </div>
@@ -606,8 +605,6 @@ export default {
               this.phoneNumber = response.data.phone_number
               this.loggedUser = response.data
               if (response.data.image) this.userImage = response.data.image
-              // console.log(response.data.image, 'RESPONSE DATA IMAGE')
-              // console.log(this.userImage, 'USER IMAGE VARIABLE')
               this.pageLoading = false
             }
           })

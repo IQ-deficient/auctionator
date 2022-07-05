@@ -72,22 +72,21 @@
               </template>
               <template v-slot:default="dialog">
                 <validation-observer ref="form">
-                <form @submit.prevent="createUser">
+                <form @submit.prevent="createUser()">
 
-                <v-card color="info">
-                  <v-card-actions class="justify-end">
-                    <v-btn
-                        small
-                        fab
-                        @click="clearForm(); dialog.value = false"
-                        dark
-                    >
-                      <v-icon>mdi-close</v-icon>
-                    </v-btn>
-                  </v-card-actions>
-                  <v-card-text>
-                    <div class="pa-1">
-                      <v-toolbar-title>
+                <v-card color="info" class="pa-4">
+                  <v-card-title>
+                    <v-row class="justify-end">
+                      <v-btn small
+                          fab
+                          @click="clearForm(); dialog.value = false"
+                          dark
+                      >
+                        <v-icon>mdi-close</v-icon>
+                      </v-btn>
+                    </v-row>
+                  </v-card-title>
+                      <v-toolbar-title class="pa-1">
                         <table style="width: 100%">
                           <tr>
                             <td>
@@ -105,10 +104,7 @@
                       </v-toolbar-title>
                       <v-card class="pa-4">
                           <v-row>
-                            <v-col
-                                    cols="12"
-                                    sm="6"
-                            >
+                            <v-col cols="6">
                               <validation-provider
                                       v-slot="{ errors }"
                                       name="first name"
@@ -122,9 +118,7 @@
                                 ></v-text-field>
                               </validation-provider>
                             </v-col>
-                            <v-col
-                                    cols="12"
-                                    sm="6"
+                            <v-col cols="6"
                             >
                               <validation-provider
                                       v-slot="{ errors }"
@@ -141,7 +135,7 @@
                             </v-col>
                           </v-row>
                           <v-row>
-                            <v-col cols="12" sm="12">
+                            <v-col cols="12">
                               <validation-provider
                                       v-slot="{ errors }"
                                       name="username"
@@ -157,8 +151,7 @@
                             </v-col>
                           </v-row>
                           <v-row>
-                            <v-col cols="12"
-                                   sm="6">
+                            <v-col cols="6">
                               <validation-provider
                                       v-slot="{ errors }"
                                       name="country"
@@ -176,8 +169,7 @@
                                 ></v-select>
                               </validation-provider>
                             </v-col>
-                            <v-col cols="12"
-                                   sm="6">
+                            <v-col cols="6">
                               <validation-provider
                                       v-slot="{ errors }"
                                       name="phone number"
@@ -201,7 +193,7 @@
                             </v-col>
                           </v-row>
                           <v-row>
-                            <v-col cols="12" sm="12">
+                            <v-col cols="12">
                               <validation-provider
                                       v-slot="{ errors }"
                                       name="email"
@@ -219,7 +211,7 @@
                             </v-col>
                           </v-row>
                           <v-row>
-                            <v-col cols="12" sm="12">
+                            <v-col cols="12">
                               <validation-provider
                                       v-slot="{ errors }"
                                       name="password"
@@ -241,7 +233,7 @@
                             </v-col>
                           </v-row>
                           <v-row>
-                            <v-col cols="12" sm="12">
+                            <v-col cols="12">
                               <validation-provider
                                       v-slot="{ errors }"
                                       name="password confirmation"
@@ -262,9 +254,7 @@
                             </v-col>
                           </v-row>
                           <v-row>
-                            <v-col
-                                    cols="12"
-                                    sm="12">
+                            <v-col cols="12">
                               <validation-provider
                                       v-slot="{ errors }"
                                       name="employee role"
@@ -283,38 +273,25 @@
                             </v-col>
                           </v-row>
                       </v-card>
-                    </div>
                     <v-btn large
                            dark
                            type="submit"
                            color="primary"
-                           class="mt-6"
+                           class="mt-4"
                     >
                       <v-icon left class="mr-1">mdi-account-plus-outline</v-icon>
                       Create
                     </v-btn>
-                  </v-card-text>
                 </v-card>
                 </form>
                 </validation-observer>
               </template>
             </v-dialog>
-            <!--            <v-dialog v-model="dialogDelete" max-width="35%">-->
-            <!--              <v-card>-->
-            <!--                <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>-->
-            <!--                <v-card-actions>-->
-            <!--                  <v-spacer></v-spacer>-->
-            <!--                  <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>-->
-            <!--                  <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>-->
-            <!--                  <v-spacer></v-spacer>-->
-            <!--                </v-card-actions>-->
-            <!--              </v-card>-->
-            <!--            </v-dialog>-->
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
         <v-row>
-          <v-col cols="12" sm="6">
+          <v-col cols="6">
             <v-icon
                     color="primary"
                     @click="editUser(item)"
@@ -322,7 +299,7 @@
               mdi-pencil
             </v-icon>
           </v-col>
-          <v-col cols="12" sm="6">
+          <v-col cols="6">
             <v-icon
                     color="primary"
                     @click="deleteUser(item)"
@@ -351,7 +328,6 @@ import {required, numeric, email, min, max, alpha, alpha_num} from 'vee-validate
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 import EditUserDialog from "../components/EditUserDialog";
 import Swal from "sweetalert2";
-// import UploadService from "../services/UploadFilesService";
 
 setInteractionMode('eager')
 
@@ -590,20 +566,6 @@ export default {
           })
     },
 
-    getRoles() {
-      this.roles = []
-      axios.get('/roles')
-          .then(response => {
-            if (response.data) {
-              // console.log(response.data)
-              this.roles = response.data
-            }
-          })
-          .catch(error => {
-            console.log(error)
-          })
-    },
-
     getEmployeeRoles() {
       axios.get('/employees')
           .then(response => {
@@ -637,22 +599,6 @@ export default {
     updateCountryCode() {
       this.phoneCode = this.selectCountry.phone_code
     },
-
-    // getUserRoles() {
-    //   this.user_roles = []
-    //   axios.get('/auth_roles')
-    //       .then(response => {
-    //         if (response.data) {
-    //           this.user_roles = response.data
-    //         }
-    //         if (!this.user_roles.includes('Administrator')) {
-    //           this.$router.push('/pageNotFound')
-    //         }
-    //       })
-    //       .catch(error => {
-    //         console.log(error)
-    //       })
-    // },
 
     clearForm() {
       this.username = ''

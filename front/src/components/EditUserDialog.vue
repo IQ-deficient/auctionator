@@ -6,21 +6,21 @@
           persistent
       >
         <template>
-          <validation-observer ref="form" v-slot="{invalid}">
+          <validation-observer ref="form">
             <form @submit.prevent="updateUser()">
-          <v-card color="info">
-            <v-card-actions class="justify-end">
-              <v-btn
-                  small
-                  fab
-                  @click="$emit('close')"
-                  dark
-              ><v-icon>mdi-close</v-icon>
-              </v-btn>
-            </v-card-actions>
-            <v-card-text>
-              <div class="pa-1">
-                <v-toolbar-title class="pa-4">
+          <v-card color="info" class="pa-4">
+            <v-card-title>
+              <v-row class="justify-end">
+                <v-btn
+                        small
+                        fab
+                        @click="$emit('close')"
+                        dark
+                ><v-icon>mdi-close</v-icon>
+                </v-btn>
+              </v-row>
+            </v-card-title>
+                <v-toolbar-title class="pa-1">
                   <table style="width: 100%">
                     <tr>
                       <td>
@@ -38,10 +38,7 @@
                 </v-toolbar-title>
                     <v-card class="pa-4">
                       <v-row>
-                        <v-col
-                            cols="12"
-                            sm="6"
-                        >
+                        <v-col cols="6">
                           <validation-provider
                                   v-slot="{ errors }"
                                   name="first name"
@@ -52,14 +49,10 @@
                                     v-model="firstName"
                                     :error-messages="errors"
                                     label="First name"
-                                    clearable
                             ></v-text-field>
                           </validation-provider>
                         </v-col>
-                        <v-col
-                            cols="12"
-                            sm="6"
-                        >
+                        <v-col cols="6">
                           <validation-provider
                                   v-slot="{ errors }"
                                   name="last name"
@@ -70,20 +63,16 @@
                                     v-model="lastName"
                                     :error-messages="errors"
                                     label="Last name"
-                                    clearable
                             ></v-text-field>
                           </validation-provider>
                         </v-col>
                       </v-row>
                       <v-row>
-                        <v-col
-                            cols="12"
-                            sm="6">
+                        <v-col cols="6">
                           <validation-provider
                                   v-slot="{ errors }"
                                   name="country"
                                   rules="required"
-                                  clearable
                           >
                             <v-select
                                     v-model="selectCountry"
@@ -97,29 +86,11 @@
                             ></v-select>
                           </validation-provider>
                         </v-col>
-                        <v-col
-                            cols="12"
-                            sm="6">
-<!--                          <validation-provider-->
-<!--                              v-slot="{ errors }"-->
-<!--                              name="Phone number"-->
-<!--                              rules="required|numeric|min:8|max:15"-->
-<!--                              clearable-->
-<!--                          >-->
-<!--                            <v-text-field-->
-<!--                                :loading="dataLoading"-->
-<!--                                :prefix="'(' + phoneCode + ')'"-->
-<!--                                v-model="phoneNumber"-->
-<!--                                :error-messages="errors"-->
-<!--                                label="Phone number"-->
-<!--                                append-icon="mdi-phone-classic"-->
-<!--                            ></v-text-field>-->
-<!--                          </validation-provider>-->
+                        <v-col cols="6">
                           <validation-provider
                                   v-slot="{ errors }"
                                   name="phone number"
                                   rules="required|numeric|min:6|max:15"
-                                  clearable
                           >
                             <v-text-field v-if="phoneCode != null"
                                           :loading="dataLoading"
@@ -138,53 +109,18 @@
                             ></v-text-field>
                           </validation-provider>
                         </v-col>
-    <!--                    <v-col v-if="isAdmin"-->
-    <!--                           cols="12"-->
-    <!--                           sm="6">-->
-    <!--                      <validation-provider-->
-    <!--                          v-slot="{ errors }"-->
-    <!--                          name="Role"-->
-    <!--                          clearable-->
-    <!--                      >-->
-    <!--                        <v-select-->
-    <!--                            :loading="dataLoading"-->
-    <!--                            v-model="selectRole"-->
-    <!--                            :items="roles"-->
-    <!--                            :error-messages="errors"-->
-    <!--                            item-text="name"-->
-    <!--                            label="Role"-->
-    <!--                            multiple-->
-    <!--                        ></v-select>-->
-    <!--                      </validation-provider>-->
-    <!--                    </v-col>-->
                       </v-row>
                       <v-row>
-                        <v-col
-                                cols="12"
-                                sm="6">
-                          <validation-provider
-                                  v-slot="{ errors }"
-                                  name="Gender"
-                                  clearable
-                          >
+                        <v-col cols="6">
                             <v-select
                                     :loading="dataLoading"
                                     v-model="selectGender"
                                     :items="genders"
-                                    :error-messages="errors"
                                     item-text="name"
                                     label="Gender"
                             ></v-select>
-                          </validation-provider>
                         </v-col>
-                        <v-col
-                                cols="12"
-                                sm="6">
-                          <validation-provider
-                                  v-slot="{ errors }"
-                                  name="Birth date"
-                                  clearable
-                          >
+                        <v-col cols="6">
                             <v-dialog
                                     ref="dialog"
                                     v-model="dateDialog"
@@ -196,7 +132,6 @@
                                 <v-text-field
                                         :loading="dataLoading"
                                         v-model="birthdate"
-                                        :error-messages="errors"
                                         label="Pick a date"
                                         append-icon="mdi-cake-variant-outline"
                                         v-bind="attrs"
@@ -224,21 +159,18 @@
                                 </v-btn>
                               </v-date-picker>
                             </v-dialog>
-                          </validation-provider>
                         </v-col>
                       </v-row>
-                      <v-row>
+                      <v-row v-if="editType == 'Employees'">
                         <v-col>
                           <validation-provider
                                   v-slot="{ errors }"
                                   name="user roles"
                                   rules="required"
-                                  clearable
                           >
                           <v-select
                               :loading="dataLoading"
                               :error-messages="errors"
-                              v-if="editType == 'Employees'"
                               v-model="checkedRoles"
                               label="Select user roles"
                               multiple
@@ -250,18 +182,15 @@
                         </v-col>
                       </v-row>
                     </v-card>
-              </div>
               <v-btn large
-                     dark
                      type="submit"
+                     dark
                      color="primary"
-                     class="mt-6"
-                     :disabled="invalid"
+                     class="mt-4"
               >
                 <v-icon left class="mr-1">mdi-account-plus-outline</v-icon>
                 Update
               </v-btn>
-            </v-card-text>
           </v-card>
           </form>
           </validation-observer>
@@ -275,7 +204,6 @@ import {required, digits, max,} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 import axios from "axios";
 import Swal from "sweetalert2";
-// import UploadService from "../services/UploadFilesService";
 
 setInteractionMode('eager')
 
@@ -328,10 +256,8 @@ export default {
     roles: [],
     birthdate: '',
     isAdmin: window.localStorage.user_roles.includes('Administrator'),
-
     date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
     dateDialog: false,
-
     selectCountry: '',
     countries: [],
     phoneCode: '',
@@ -421,29 +347,34 @@ export default {
             country: this.selectCountry.name,
             phone_number: this.phoneNumber,
             roles: this.checkedRoles
+          }).then(response => {
+            if (response) {
+              Swal.fire({
+                title: 'Done!',
+                text: 'User updated successfully.',
+                icon: 'success'
+              }).then(() => {
+                this.$emit('close')
+                this.$emit('reload')
+              })
+              this.loading = false
+            }
+          }).catch(error => {
+            if (error.response.status == 409 || error.response.status == 405 ||
+                    error.response.status == 403) {
+              Swal.fire({
+                icon: 'error',
+                text: error.response.data.message,
+              })
+              console.log(error)
+              this.loading = false
+            }
+            console.log(error)
+            this.dataLoading = false
           })
-                  .then(response => {
-                            if (response) {
-                              this.$emit('close')
-                              this.$emit('reload')
-                              Swal.fire({
-                                title: 'Done!',
-                                text: 'User updated successfully.',
-                                icon: 'success'
-                              })
-                              this.showDialog = false;
-                              this.loading = false;
-                            }
-                          }
-                  )
-                  .catch(error => {
-                    console.log(error)
-                    this.loading = false
-                    this.error = error.response.data.message;
-                  })
-        }
-      })
+        }})
     },
+
   }
 }
 </script>
