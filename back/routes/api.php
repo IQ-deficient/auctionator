@@ -141,7 +141,7 @@ Route::group([
 Route::get('/test/{image}', [AuctionController::class, 'getImage']);
 
 //Get user image route
-Route::get('/test/{image}', [UserController::class, 'getImage']);
+Route::get('/user/{image}', [UserController::class, 'getImage']);
 
 
 

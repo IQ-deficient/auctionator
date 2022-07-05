@@ -6,7 +6,7 @@
                 persistent
         >
             <v-card color="info">
-                <div class="row; pa-1" style="float: right">
+                <v-card-title class="justify-end">
                     <v-btn
                             small
                             fab
@@ -15,11 +15,10 @@
                     >
                         <v-icon>mdi-close</v-icon>
                     </v-btn>
-                </div>
-
+                </v-card-title>
                 <div class="pa-1">
                     <v-toolbar-title>
-                        <table style="  width: 100%">
+                        <table style="width: 100%">
                             <tr>
                                 <td>
                                     <hr/>
@@ -62,6 +61,10 @@
                                     <v-carousel-item
                                             contain>
                                         <v-img
+                                                max-height="100%"
+                                                min-height="100%"
+                                                contain
+                                                lazy-src="../assets/no-image-item.svg"
                                                 src="../assets/no-image-item.svg"
                                         ></v-img>
                                     </v-carousel-item>

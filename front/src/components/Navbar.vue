@@ -57,7 +57,7 @@
                     <v-img v-if="userImage"
                            :loading="pageLoading"
                            :lazy-src="'/api/test/'+ userImage"
-                           :src="'/api/test/'+ userImage">
+                           :src="'/api/user/'+ userImage">
                       <template v-slot:placeholder>
                         <v-row
                             class="fill-height ma-0"
@@ -90,7 +90,7 @@
                         <v-img v-if="userImage"
                                :loading="pageLoading"
                                :lazy-src="'/api/test/'+ userImage"
-                               :src="'/api/test/'+ userImage">
+                               :src="'/api/user/'+ userImage">
                           <template v-slot:placeholder>
                             <v-row
                                 class="fill-height ma-0"

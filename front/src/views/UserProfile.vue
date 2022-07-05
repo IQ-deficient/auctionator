@@ -2,8 +2,8 @@
   <div>
     <v-parallax v-if="userImage" height="175"
                 :loading="pageLoading"
-                :lazy-src="'/api/test/'+ userImage"
-                :src="'/api/test/'+ userImage">
+                :lazy-src="'/api/user/'+ userImage"
+                :src="'/api/user/'+ userImage">
       <div class="fill-height repeating-gradient"></div>
     </v-parallax>
     <v-parallax v-else height="175" style="background-color: #819fC9">
@@ -19,8 +19,8 @@
                 <v-avatar size="145">
                   <v-img v-if="userImage"
                          :loading="pageLoading"
-                         :lazy-src="'/api/test/'+ userImage"
-                         :src="'/api/test/'+ userImage">
+                         :lazy-src="'/api/user/'+ userImage"
+                         :src="'/api/user/'+ userImage">
                     <template v-slot:placeholder>
                       <v-row
                           class="fill-height ma-0"
@@ -61,64 +61,64 @@
                     </a>
                   </template>
                   <template v-slot:default="dialog">
-                    <v-card class="pa-1">
-                      <div class="row; pa-1" style="float: right">
+                    <v-card class="pa-3">
+                      <v-card-title class="justify-end">
                         <v-btn
-                              small
-                              text
-                              fab
-                              @click="clearImageForm(); dialog.value = false"
-                          >
-                            <v-icon>mdi-close</v-icon>
-                          </v-btn>
-                      </div>
-                          <v-row no-gutters justify="center" align="center">
-                            <v-col cols="8">
-                              <v-file-input
-                                  v-model="imageUpload"
-                                  show-size
-                                  label="Select Image"
-                                  accept="image/*"
-                                  @change="selectImage"
-                              ></v-file-input>
-                            </v-col>
-                            <v-col cols="4">
-                              <v-btn color="primary" dark @click="upload">
-                                <v-icon left dark>mdi-cloud-upload</v-icon>
-                                Upload
-                              </v-btn>
-                            </v-col>
-                          </v-row>
-                          <div v-if="progress">
-                            <v-progress-linear
+                                small
+                                text
+                                fab
+                                @click="clearImageForm(); dialog.value = false"
+                        >
+                          <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                      </v-card-title>
+                        <v-row justify="center" align="center">
+                          <v-col cols="7">
+                            <v-file-input
+                                    v-model="imageUpload"
+                                    show-size
+                                    label="Select Image"
+                                    accept="image/*"
+                                    @change="selectImage"
+                            ></v-file-input>
+                          </v-col>
+                          <v-col cols="3" class="justify-end">
+                            <v-btn color="primary" dark @click="upload">
+                              <v-icon left dark>mdi-cloud-upload</v-icon>
+                              Upload
+                            </v-btn>
+                          </v-col>
+                        </v-row>
+                        <div v-if="progress">
+                          <v-progress-linear
                                   v-model="progress"
                                   color="success"
                                   height="25"
                                   reactive
-                            >
-                                <strong>{{ progress }} %</strong>
-                              </v-progress-linear>
-                          </div>
-                          <v-alert v-if="message" color="error" dark>
-                            {{ message }}
-                          </v-alert>
-                              <v-img v-if="currentImage"
-                                     style="background-color: #0D111A; width: 100%; height: 30vw; object-fit: cover"
-                                     max-height="100%"
-                                     min-height="100%"
-                                     contain
-                                     :src="previewImage">
-                              </v-img>
-                          <v-card v-if="imageInfos.length > 0" class="mx-auto">
-                            <v-list>
-                              <v-subheader>List of Images</v-subheader>
-                              <v-list-item-group color="primary">
-                                <v-list-item v-for="(image, index) in imageInfos" :key="index">
-                                  <a :href="image.url">{{ image.name }}</a>
-                                </v-list-item>
-                              </v-list-item-group>
-                            </v-list>
-                          </v-card>
+                          >
+                            <strong>{{ progress }} %</strong>
+                          </v-progress-linear>
+                        </div>
+                        <v-alert v-if="message" color="error" dark>
+                          {{ message }}
+                        </v-alert>
+                        <v-img v-if="currentImage"
+                               style="background-color: #0D111A; width: 100%; height: 30vw; object-fit: cover"
+                               max-height="100%"
+                               min-height="100%"
+                               contain
+                               :src="previewImage">
+                        </v-img>
+                        <v-card v-if="imageInfos.length > 0" class="mx-auto">
+                          <v-list>
+                            <v-subheader>List of Images</v-subheader>
+                            <v-list-item-group color="primary">
+                              <v-list-item v-for="(image, index) in imageInfos" :key="index">
+                                <a :href="image.url">{{ image.name }}</a>
+                              </v-list-item>
+                            </v-list-item-group>
+                          </v-list>
+                        </v-card>
                     </v-card>
                   </template>
                 </v-dialog>
@@ -186,25 +186,22 @@
                       Change password
                     </v-btn>
                   </template>
-                  <template v-slot:default="dialog"
-                  >
+                  <template v-slot:default="dialog">
                     <v-card class="pa-4">
+                      <div>
+                        <v-btn
+                                small
+                                fab
+                                text
+                                @click="clearPasswordDialog(); dialog.value = false;"
+                        >
+                          <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                      </div>
                       <validation-observer ref="passwordForm">
                       <form name="passwordForm" @submit.prevent="updatePassword">
-                        <v-row class="justify-end">
-                          <v-card-actions class="justify-end">
-                            <v-btn
-                                    small
-                                    fab
-                                    text
-                                    @click="clearPasswordDialog(); dialog.value = false;"
-                            >
-                              <v-icon>mdi-close</v-icon>
-                            </v-btn>
-                          </v-card-actions>
-                        </v-row>
-                        <v-card-text>
-                          <div>
+                        <v-row>
+                          <v-col cols="12">
                             <validation-provider
                                     v-slot="{ errors }"
                                     name="old password"
@@ -222,6 +219,10 @@
                               >
                               </v-text-field>
                             </validation-provider>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="12">
                             <validation-provider
                                     v-slot="{ errors }"
                                     name="new password"
@@ -239,32 +240,36 @@
                               >
                               </v-text-field>
                             </validation-provider>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="12">
                             <validation-provider
                                     v-slot="{ errors }"
                                     name="password confirmation"
                                     rules="required|password:@new password"
                             >
                               <v-text-field class="mb-4"
-                                      v-model="confirmNewPassword"
-                                      :error-messages="errors"
-                                      label="Confirm new password"
-                                      :type="showConfirmNewPassword ? 'text' : 'password'"
-                                      hint="Must be at least 8 characters."
-                                      :append-icon="showConfirmNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                                      @click:append="showConfirmNewPassword = !showConfirmNewPassword"
-                                      clearable
+                                            v-model="confirmNewPassword"
+                                            :error-messages="errors"
+                                            label="Confirm new password"
+                                            :type="showConfirmNewPassword ? 'text' : 'password'"
+                                            hint="Must be at least 8 characters."
+                                            :append-icon="showConfirmNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                            @click:append="showConfirmNewPassword = !showConfirmNewPassword"
+                                            clearable
                               >
                               </v-text-field>
                             </validation-provider>
-                          </div>
-                          <v-btn large
-                                 type="submit"
-                                 color="primary"
-                          >
-                            <v-icon left class="mr-1">mdi-lock-check</v-icon>
-                            Update password
-                          </v-btn>
-                        </v-card-text>
+                          </v-col>
+                        </v-row>
+                            <v-btn large
+                                   type="submit"
+                                   color="primary"
+                            >
+                              <v-icon left class="mr-1">mdi-lock-check</v-icon>
+                              Update password
+                            </v-btn>
                       </form>
                       </validation-observer>
                     </v-card>
