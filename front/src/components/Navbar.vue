@@ -51,13 +51,13 @@
                     icon
                     x-large
                     v-on="on"
+                    @click="getUserImage()"
                 >
                   <v-avatar size="50">
                     <v-img v-if="userImage"
                            :loading="pageLoading"
-                           :src="require('../../../back/public/' + userImage)"
-                           lazy-src="../assets/user-image-nav.svg"
-                           :alt="loggedUser.first_name">
+                           :lazy-src="'/api/test/'+ userImage"
+                           :src="'/api/test/'+ userImage">
                       <template v-slot:placeholder>
                         <v-row
                             class="fill-height ma-0"
@@ -89,9 +89,8 @@
                       <v-avatar size="50" class="mb-2">
                         <v-img v-if="userImage"
                                :loading="pageLoading"
-                               :src="require('../../../back/public/' + userImage)"
-                               lazy-src="../assets/user-image-nav.svg"
-                               :alt="loggedUser.first_name">
+                               :lazy-src="'/api/test/'+ userImage"
+                               :src="'/api/test/'+ userImage">
                           <template v-slot:placeholder>
                             <v-row
                                 class="fill-height ma-0"
@@ -261,7 +260,6 @@
                         @click="logout()"
                     >
                       <v-icon left class="mr-2">mdi-logout-variant</v-icon>
-
                       Logout
                     </v-btn>
                   </div>
@@ -562,6 +560,21 @@ export default {
             console.log(error)
             this.pageLoading = false
           })
+    },
+
+    getUserImage() {
+      this.pageLoading = true
+      axios.get('/auth/image')
+              .then(response => {
+                if (response.data) {
+                  this.userImage = response.data
+                  this.pageLoading = false
+                }
+              })
+              .catch(error => {
+                console.log(error)
+                this.pageLoading = false
+              })
     },
   },
 

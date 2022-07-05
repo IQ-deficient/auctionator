@@ -349,11 +349,10 @@ class UserController extends Controller
         $filename = "{$originalName}-{$time}.{$extension}";
 
         // Store the image in specified folder
-        $dest_path = 'storage/user_images/' . $filename;
         $request->image->storeAs('/user_images', $filename, ['disk' => 'public']);
 
         $user->update([
-            'image' => $dest_path
+            'image' => $filename
         ]);
 
         return User::query()->where('id', $user->id)->first();
@@ -382,6 +381,10 @@ class UserController extends Controller
         ]);
 
         return User::query()->where('id', $user->id)->first();
+    }
+
+    public function getImage ($name) {
+        return response()->file(public_path('storage/user_images/' . $name));
     }
 
 }

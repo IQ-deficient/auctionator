@@ -44,6 +44,7 @@ Route::group([
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/user', [AuthController::class, 'userProfile']);
+    Route::get('/image', [AuthController::class, 'userImage']);
 });
 
 // Routes that everyone has access to no matter if Authenticated
@@ -136,8 +137,11 @@ Route::group([
 //    Route::delete('/warehouse/{warehouse}', [WarehouseController::class, 'destroy']);
 });
 
-//Get image route
+//Get item image route
 Route::get('/test/{image}', [AuctionController::class, 'getImage']);
+
+//Get user image route
+Route::get('/test/{image}', [UserController::class, 'getImage']);
 
 
 

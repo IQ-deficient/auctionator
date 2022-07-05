@@ -1,27 +1,26 @@
 <template>
   <div>
-    <v-parallax height="175" src="https://cdn.vuetifyjs.com/images/parallax/material2.jpg">
+    <v-parallax v-if="userImage" height="175"
+                :loading="pageLoading"
+                :lazy-src="'/api/test/'+ userImage"
+                :src="'/api/test/'+ userImage">
+      <div class="fill-height repeating-gradient"></div>
+    </v-parallax>
+    <v-parallax v-else height="175" style="background-color: #819fC9">
       <div class="fill-height repeating-gradient"></div>
     </v-parallax>
 
-    <validation-observer ref="form" v-slot="{invalid}">
-      <form @submit.prevent="updateProfile" ref="profile">
       <v-card width="50%"
-              style="margin: 0 auto; position: relative; top: -25px" color="#0d111a" class="pa-4">
+              style="margin: 0 auto; position: relative; top: -25px" color="#0d111a" class="pa-1">
         <v-row class="">
-          <v-col cols="12" sm="12">
+          <v-col cols="12">
             <div style="position: relative; width: 145px; height: 0; margin: 0 auto">
               <div style="position: absolute; top: -120px">
                 <v-avatar size="145">
                   <v-img v-if="userImage"
                          :loading="pageLoading"
-                         :src="require('../../../back/public/' + userImage)"
-                         lazy-src="../assets/user-image.svg"
-                         :alt="loggedUser.first_name">
-                    <v-img
-                            :lazy-src="'/api/test/'+item.image"
-                            :src="'/api/test/'+item.image"
-                    ></v-img>
+                         :lazy-src="'/api/test/'+ userImage"
+                         :src="'/api/test/'+ userImage">
                     <template v-slot:placeholder>
                       <v-row
                           class="fill-height ma-0"
@@ -62,26 +61,19 @@
                     </a>
                   </template>
                   <template v-slot:default="dialog">
-                    <v-card class="pa-4">
-                      <v-card-actions class="justify-end">
-                        <v-row class="justify-end">
-                          <v-btn
+                    <v-card class="pa-1">
+                      <div class="row; pa-1" style="float: right">
+                        <v-btn
                               small
                               text
                               fab
-                              @click="dialog.value = false;
-                          currentImage = undefined;
-                          previewImage = undefined;
-                          progress = 0;
-                          message = '';"
+                              @click="clearImageForm(); dialog.value = false"
                           >
                             <v-icon>mdi-close</v-icon>
                           </v-btn>
-                        </v-row>
-                      </v-card-actions>
-                      <v-card-text>
+                      </div>
                           <v-row no-gutters justify="center" align="center">
-                            <v-col cols="12" sm="8">
+                            <v-col cols="8">
                               <v-file-input
                                   v-model="imageUpload"
                                   show-size
@@ -90,7 +82,7 @@
                                   @change="selectImage"
                               ></v-file-input>
                             </v-col>
-                            <v-col cols="12" sm="4" class="pl-2">
+                            <v-col cols="4">
                               <v-btn color="primary" dark @click="upload">
                                 <v-icon left dark>mdi-cloud-upload</v-icon>
                                 Upload
@@ -98,28 +90,25 @@
                             </v-col>
                           </v-row>
                           <div v-if="progress">
-                            <div>
-                              <v-progress-linear
+                            <v-progress-linear
                                   v-model="progress"
                                   color="success"
                                   height="25"
                                   reactive
-                              >
+                            >
                                 <strong>{{ progress }} %</strong>
                               </v-progress-linear>
-                            </div>
                           </div>
-
                           <v-alert v-if="message" color="error" dark>
                             {{ message }}
                           </v-alert>
-
-                          <div v-if="previewImage">
-                            <div>
-                              <img style="width: 100%" class="preview my-3" :src="previewImage" alt=""/>
-                            </div>
-                          </div>
-
+                              <v-img v-if="currentImage"
+                                     style="background-color: #0D111A; width: 100%; height: 30vw; object-fit: cover"
+                                     max-height="100%"
+                                     min-height="100%"
+                                     contain
+                                     :src="previewImage">
+                              </v-img>
                           <v-card v-if="imageInfos.length > 0" class="mx-auto">
                             <v-list>
                               <v-subheader>List of Images</v-subheader>
@@ -130,7 +119,6 @@
                               </v-list-item-group>
                             </v-list>
                           </v-card>
-                      </v-card-text>
                     </v-card>
                   </template>
                 </v-dialog>
@@ -138,12 +126,9 @@
             </div>
           </v-col>
         </v-row>
-        <v-form>
           <v-container class="pa-4">
             <v-row style="margin-top: auto">
-              <v-col cols="12"
-                     sm="6"
-                     style="margin: 0 auto">
+              <v-col cols="6" style="margin: 0 auto">
                 <v-text-field style="text-align: center"
                               :loading="pageLoading"
                               v-model="username"
@@ -153,9 +138,7 @@
                               disabled
                 ></v-text-field>
               </v-col>
-              <v-col style="margin: 0 auto"
-                     cols="12"
-                     sm="6">
+              <v-col cols="6" style="margin: 0 auto">
                 <v-text-field
                     v-model="email"
                     :loading="pageLoading"
@@ -166,7 +149,7 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-            <v-col cols="12" sm="12" class="mb-6">
+            <v-col cols="12" class="mb-6">
               <div class="row justify-space-between">
                 <div v-if="edit">
                   <v-btn
@@ -206,7 +189,8 @@
                   <template v-slot:default="dialog"
                   >
                     <v-card class="pa-4">
-                      <form @submit.prevent="updatePassword">
+                      <validation-observer ref="passwordForm">
+                      <form name="passwordForm" @submit.prevent="updatePassword">
                         <v-row class="justify-end">
                           <v-card-actions class="justify-end">
                             <v-btn
@@ -282,16 +266,16 @@
                           </v-btn>
                         </v-card-text>
                       </form>
+                      </validation-observer>
                     </v-card>
                   </template>
                 </v-dialog>
               </div>
             </v-col>
-            <v-row style="">
-              <v-col
-                  cols="12"
-                  sm="6"
-              >
+            <validation-observer ref="profileForm" v-slot="{invalid}">
+              <form name="profileForm" @submit.prevent="updateProfile">
+            <v-row>
+              <v-col cols="6">
                 <validation-provider
                     v-slot="{ errors }"
                     name="first name"
@@ -308,10 +292,7 @@
                   ></v-text-field>
                 </validation-provider>
               </v-col>
-              <v-col
-                  cols="12"
-                  sm="6"
-              >
+              <v-col cols="6">
                 <validation-provider
                     v-slot="{ errors }"
                     name="Last name"
@@ -329,10 +310,8 @@
                 </validation-provider>
               </v-col>
             </v-row>
-            <v-row style="">
-              <v-col
-                  cols="12"
-                  sm="6">
+            <v-row>
+              <v-col cols="6">
                 <validation-provider
                     v-slot="{ errors }"
                     name="Gender"
@@ -351,9 +330,7 @@
                   ></v-select>
                 </validation-provider>
               </v-col>
-              <v-col
-                  cols="12"
-                  sm="6">
+              <v-col cols="6">
                 <validation-provider
                     v-slot="{ errors }"
                     name="Birth date"
@@ -403,10 +380,8 @@
                 </validation-provider>
               </v-col>
             </v-row>
-            <v-row style="">
-              <v-col
-                  cols="12"
-                  sm="6">
+            <v-row>
+              <v-col cols="6">
                 <validation-provider
                     v-slot="{ errors }"
                     name="Country"
@@ -427,9 +402,7 @@
                   ></v-select>
                 </validation-provider>
               </v-col>
-              <v-col
-                  cols="12"
-                  sm="6">
+              <v-col cols="6">
                 <validation-provider
                     v-slot="{ errors }"
                     name="Phone number"
@@ -458,12 +431,8 @@
                 </validation-provider>
               </v-col>
             </v-row>
-            <div v-if="!edit">
-              <v-row class="ma-1">
-                <v-col
-                    cols="12"
-                    sm="12"
-                >
+              <v-row v-if="!edit">
+                <v-col cols="12">
                   <v-btn dark
                          large color="primary"
                          :disabled="invalid"
@@ -474,12 +443,11 @@
                   </v-btn>
                 </v-col>
               </v-row>
-            </div>
+              </form>
+            </validation-observer>
+
           </v-container>
-        </v-form>
       </v-card>
-      </form>
-    </validation-observer>
   </div>
 </template>
 
@@ -578,7 +546,7 @@ export default {
       this.oldPassword = ''
       this.newPassword = ''
       this.confirmNewPassword = ''
-      this.$refs.form.reset();
+      this.$refs.passwordForm.reset()
     },
 
     getGenders() {
@@ -644,8 +612,23 @@ export default {
           })
     },
 
+    getUserImage() {
+      this.pageLoading = true
+      axios.get('/auth/image')
+              .then(response => {
+                if (response.data) {
+                  this.userImage = response.data
+                  this.pageLoading = false
+                }
+              })
+              .catch(error => {
+                console.log(error)
+                this.pageLoading = false
+              })
+    },
+
     updateProfile() {
-      this.$refs.form.validate().then( success => {
+      this.$refs.profileForm.validate().then( success => {
         if (success) {
           this.loading = true
           axios.put('/user/' + this.loggedUser.id, {
@@ -686,8 +669,8 @@ export default {
     },
 
     updatePassword() {
-      this.$refs.form.validate().then( success => {
-                if (success) {
+      this.$refs.passwordForm.validate().then( success => {
+        if (success) {
       this.loading = true
       axios.put('/password/' + this.loggedUser.id, {
         old_password: this.oldPassword,
@@ -773,9 +756,9 @@ export default {
           text: 'Your profile image has been updated.',
           icon: 'success'
         }).then(() => {
-          // if (result.isConfirmed) {
-          window.location.reload()
-          // }
+          this.getUserImage()
+          this.clearImageForm()
+          this.imageDialog = false
         })
       }).then((response) => {
         this.message = response.data.message;
@@ -791,6 +774,14 @@ export default {
             this.imageDialog = false
           });
     },
+
+    clearImageForm() {
+      this.imageUpload = null
+      this.currentImage = null
+      this.previewImage = undefined
+      this.progress = 0
+      this.message = ''
+    }
   },
 
   mounted() {

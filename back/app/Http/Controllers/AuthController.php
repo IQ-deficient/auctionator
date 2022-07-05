@@ -135,6 +135,11 @@ class AuthController extends Controller
         return response()->json(auth()->user());
     }
 
+    public function userImage()
+    {
+        return response()->json(auth()->user()->image);
+    }
+
     /**
      * Get the token array structure.
      * @param string $token

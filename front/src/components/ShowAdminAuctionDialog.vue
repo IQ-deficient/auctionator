@@ -6,7 +6,7 @@
                 persistent
         >
             <v-card color="info">
-                <div class="pa-1" style="float: right">
+                <div class="row; pa-1" style="float: right">
                     <v-btn
                             small
                             fab
@@ -19,7 +19,7 @@
 
                 <div class="pa-1">
                     <v-toolbar-title>
-                        <table style="width: 100%">
+                        <table style="  width: 100%">
                             <tr>
                                 <td>
                                     <hr/>
