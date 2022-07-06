@@ -8,8 +8,13 @@
           </v-btn>
         </v-card-text>
         <v-card-text
-          class="pt-0"
-        >Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo interdum. Praesent ut risus eget metus luctus accumsan id ultrices nunc. Sed at orci sed massa consectetur dignissim a sit amet dui. Duis commodo vitae velit et faucibus. Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel diam elementum tempor vel ut orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</v-card-text>
+            class="pt-0">
+          Sodales ut etiam sit amet nisl purus in mollis nunc. At urna condimentum mattis pellentesque. Lectus urna duis
+          convallis convallis tellus. Quis viverra nibh cras pulvinar mattis nunc sed blandit. Elementum sagittis vitae
+          et leo duis ut. Amet est placerat in egestas erat imperdiet. Odio eu feugiat pretium nibh ipsum consequat
+          nisl. Dignissim convallis aenean et tortor at risus. Ullamcorper dignissim cras tincidunt lobortis feugiat
+          vivamus at augue. In est ante in nibh mauris. Nisi est sit amet facilisis magna etiam tempor orci.
+        </v-card-text>
         <v-divider></v-divider>
         <v-card-text>
           {{ new Date().getFullYear() }} —

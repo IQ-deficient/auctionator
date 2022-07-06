@@ -27,39 +27,39 @@ export default {
       items: [
         {
           id: 1,
-          src: require("../../src/assets/images/img1.jpg")
+          src: require("../../src/assets/images/gallery1.jpg")
         },
         {
           id: 2,
-          src: require("../../src/assets/images/img2.jpg")
+          src: require("../../src/assets/images/gallery2.jpg")
         },
         {
           id: 3,
-          src: require("../../src/assets/images/img3.jpg")
+          src: require("../../src/assets/images/gallery3.jpg")
         },
         {
           id: 4,
-          src: require("../../src/assets/images/img4.jpg")
+          src: require("../../src/assets/images/gallery4.jpg")
         },
         {
           id: 5,
-          src: require("../../src/assets/images/img5.jpg")
+          src: require("../../src/assets/images/gallery5.jpg")
         },
         {
           id: 6,
-          src: require("../../src/assets/images/img6.jpg")
+          src: require("../../src/assets/images/gallery6.jpg")
         },
         {
           id: 7,
-          src: require("../../src/assets/images/img7.jpg")
+          src: require("../../src/assets/images/gallery7.jpg")
         },
         {
           id: 8,
-          src: require("../../src/assets/images/img8.jpg")
+          src: require("../../src/assets/images/gallery8.jpg")
         },
         {
           id: 9,
-          src: require("../../src/assets/images/img9.jpg")
+          src: require("../../src/assets/images/gallery9.jpg")
         }
       ]
     };

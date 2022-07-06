@@ -16,9 +16,6 @@
             <v-card-text class="text--primary">
               <div>{{ item.description }}</div>
             </v-card-text>
-            <v-card-actions>
-              <v-btn color="primary" text>More</v-btn>
-            </v-card-actions>
           </v-card>
         </v-col>
       </v-row>
@@ -34,24 +31,24 @@ export default {
     items: [
       {
         id: 1,
-        title: "Top western road trips",
-        subtitle: "1,000 miles of wonder",
-        description: "His ubique laboramus ne. Expetenda assueverit sed ad. Id nec malis lucilius delicatissimi. Nec assum sonet suscipit ex, diam deterruisset ut usu, ad dicat fabellas aliquando eam.",
-        src: require("../../src/assets/images/img10.jpg")
+        title: "Nibh mauris cursus mattis molestie a iaculis at erat pellentesque.",
+        subtitle: "Viverra aliquet eget sit amet tellus cras.",
+        description: "Ultrices gravida dictum fusce ut placerat orci. Rutrum tellus pellentesque eu tincidunt tortor aliquam. Pellentesque elit ullamcorper dignissim cras.",
+        src: require("../../src/assets/images/post1.jpg")
       },
       {
         id: 2,
-        title: "Christmas tales to read",
-        subtitle: "2,000 miles of wonder",
-        description: "Sea ad habemus assueverit, omnes platonem convenire sit et, at integre pericula quo. Facete adolescens definitionem cu qui, in putant aliquid fierent ius.",
-        src: require("../../src/assets/images/img11.jpg")
+        title: "Nisi quis eleifend quam adipiscing vitae proin sagittis nisl.",
+        subtitle: "Venenatis a condimentum vitae sapien pellentesque habitant.",
+        description: "Blandit volutpat maecenas volutpat blandit aliquam etiam erat velit. Ullamcorper sit amet risus nullam. Sit amet est placerat in egestas erat.",
+        src: require("../../src/assets/images/post2.jpg")
       },
       {
         id: 3,
-        title: "20 movies not to miss in 2020",
-        subtitle: "3,000 miles of wonder",
-        description: "Aliquam albucius mei ei, debitis torquatos et pro, eos natum scribentur no. Putant verear constituto te qui. Adolescens persequeris vim ei. Vel nullam reprimique te.",
-        src: require("../../src/assets/images/img12.jpg")
+        title: "Tempor commodo ullamcorper a lacus vestibulum sed.",
+        subtitle: "Amet nisl suscipit adipiscing bibendum est.",
+        description: "Enim ut tellus elementum sagittis. Diam ut venenatis tellus in metus vulputate eu. Dictum at tempor commodo ullamcorper a lacus vestibulum.",
+        src: require("../../src/assets/images/post3.jpg")
       }
     ]
   })

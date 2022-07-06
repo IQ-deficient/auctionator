@@ -1,7 +1,7 @@
 <template>
   <v-main>
     <div class="staticHero">
-      <v-img src="../assets/images/img14.jpg">
+      <v-img src="../assets/images/contact.jpg" max-height="250">
         <v-row align="end" class="lightbox white--text pa-2 fill-height">
           <v-col>
             <v-container>
@@ -17,7 +17,7 @@
           <v-form ref="form" v-model="valid" lazy-validation class="ma-4">
             <v-row>
               <v-col cols="12" sm="12">
-                <v-text-field v-model="name" :counter="10" :rules="nameRules" label="Name" required></v-text-field>
+                <v-text-field v-model="title" :counter="10" :rules="titleRules" label="Subject" required></v-text-field>
               </v-col>
             </v-row>
             <v-row>
@@ -51,10 +51,11 @@ export default {
   name: "Contact",
   data: () => ({
     valid: true,
-    name: "",
-    nameRules: [
-      v => !!v || "Name is required",
-      v => (v && v.length <= 10) || "Name must be less than 10 characters"
+
+    title: "",
+    titleRules: [
+      v => !!v || "Title is required",
+      v => (v && v.length <= 20) || "Title must be less than 10 characters"
     ],
     email: "",
     emailRules: [
@@ -74,8 +75,13 @@ export default {
         this.snackbar = true;
       }
     },
+
     reset() {
       this.$refs.form.reset();
+    },
+
+    sendMail() {
+
     }
   },
 
