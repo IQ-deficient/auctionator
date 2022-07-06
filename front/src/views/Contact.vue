@@ -14,7 +14,7 @@
     <div class="block">
       <v-container>
         <v-card class="ma-1">
-          <v-form ref="form" v-model="valid" lazy-validation class="ma-4">
+          <v-form ref="form" v-model="valid" lazy-validation class="ma-4" @submit.prevent="sendMail()">
             <v-row>
               <v-col cols="12" sm="12">
                 <v-text-field v-model="title" :counter="10" :rules="titleRules" label="Subject" required></v-text-field>
@@ -32,7 +32,7 @@
             </v-row>
             <v-row>
               <v-col cols="12" sm="12">
-                <v-btn :disabled="!valid" color="primary" class="mr-4" @click="validate">Send</v-btn>
+                <v-btn type="submit" :loading="loading" color="primary" class="mr-4">Send</v-btn>
               </v-col>
             </v-row>
           </v-form>
@@ -47,11 +47,14 @@
   </v-main>
 </template>
 <script>
+import axios from "axios";
+import Swal from "sweetalert2";
+
 export default {
   name: "Contact",
   data: () => ({
     valid: true,
-
+    loading: false,
     title: "",
     titleRules: [
       v => !!v || "Title is required",
@@ -81,7 +84,27 @@ export default {
     },
 
     sendMail() {
-
+      this.loading = true
+      axios.post('contact_us', {
+        email: this.email,
+        title: this.title,
+        message: this.message,
+      })
+        .then(response => {
+            if (response) {
+              Swal.fire({
+                title: 'Email Sent!',
+                icon: 'success'
+              })
+              this.loading = false
+              this.reset()
+            }
+          }
+        )
+        .catch(error => {
+          console.log(error)
+          this.dataLoading = false
+        })
     }
   },
 
