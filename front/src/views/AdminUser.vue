@@ -417,8 +417,6 @@ export default {
     countries: [],
     phoneCode: '',
     phoneNumber: '',
-    // closeDelete: '',
-    // deleteItemConfirm: '',
     password: '',
     confirmPassword: '',
     showPassword: false,
@@ -439,9 +437,7 @@ export default {
   }),
 
   created() {
-    // this.getUserRoles()
     this.getUsers()
-    // this.getRoles()
     this.getCountries()
     this.getEmployeeRoles()
   },

@@ -90,11 +90,13 @@ extend('email', {
 
 extend('min', {
   ...min,
+  params: ['min'],
   message: 'The {_field_} must be at least {min} characters.'
 })
 
 extend('max', {
   ...max,
+  params: ['max'],
   message: 'The {_field_} may not be greater than {max} characters.'
 })
 
@@ -110,20 +112,6 @@ export default {
     valid: true,
     loading: false,
     title: "",
-    titleRules: [
-      v => !!v || "Title is required",
-      v => (v && v.length <= 20) || "Title must be less than 10 characters"
-    ],
-    email: "",
-    emailRules: [
-      v => !!v || "E-mail is required",
-      v => /.+@.+\..+/.test(v) || "E-mail must be valid"
-    ],
-    message: "",
-    messageRules: [
-      v => !!v || "Message is required",
-      v => (v && v.length >= 10) || "Message must be more than 10 characters"
-    ],
   }),
 
   methods: {

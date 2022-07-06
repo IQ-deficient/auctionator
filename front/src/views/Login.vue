@@ -120,11 +120,13 @@ extend('email', {
 
 extend('min', {
   ...min,
+  params: ['min'],
   message: 'The {_field_} must be at least {min} characters.'
 })
 
 extend('max', {
   ...max,
+  params: ['max'],
   message: 'The {_field_} may not be greater than {max} characters.'
 })
 

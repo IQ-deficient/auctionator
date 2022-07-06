@@ -201,7 +201,7 @@
 </template>
 
 <script>
-import {required, digits, max,} from 'vee-validate/dist/rules'
+import {required, digits, min, max} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -213,14 +213,21 @@ extend('required', {
   message: 'The {_field_} field is required.',
 })
 
-extend('digits', {
-  ...digits,
-  message: '{_field_} needs to be a digit.',
+extend('min', {
+  ...min,
+  params: ['min'],
+  message: 'The {_field_} must be at least {min} characters.'
 })
 
 extend('max', {
   ...max,
-  message: '{_field_} may not be greater than {length} characters',
+  params: ['max'],
+  message: 'The {_field_} may not be greater than {max} characters.'
+})
+
+extend('digits', {
+  ...digits,
+  message: '{_field_} needs to be a digit.',
 })
 
 extend('password', {
