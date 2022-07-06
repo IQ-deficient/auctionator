@@ -22,8 +22,6 @@
           ></v-divider>
           <v-icon large>mdi-cart</v-icon>
           <v-spacer></v-spacer>
-
-          <!--          <v-row>-->
           <v-col cols="12" md="3">
             <v-text-field
                 v-model="search"
@@ -33,16 +31,20 @@
                 hide-details
             ></v-text-field>
           </v-col>
-          <!--          </v-row>-->
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-icon
-            class="mr-2"
-            @click="showAuction(item)"
-        >
-          mdi-dots-horizontal-circle-outline
-        </v-icon>
+        <v-row>
+          <v-col cols="12" sm="12">
+            <v-icon
+                class="ml-2"
+                color="primary"
+                @click="showAuction(item)"
+            >
+              mdi-eye
+            </v-icon>
+          </v-col>
+        </v-row>
       </template>
     </v-data-table>
     <show-auction
@@ -94,7 +96,6 @@ export default {
       axios.get('/user_bids')
           .then(response => {
             if (response.data) {
-              // console.log(response.data)
               this.bids = response.data
               this.tableData = response.data
               this.dataLoading = false
@@ -113,8 +114,7 @@ export default {
   },
 
   mounted() {
-    // Check the fetched roles stored in local storage of the browser for Client because Bids is only accessible by those
-    if (!window.localStorage.user_roles.includes('Client')){
+    if (!window.localStorage.user_roles.includes('Client')) {
       this.$router.push('/pageNotFound')
     }
     document.title = 'Your bids - Auction House'

@@ -10,79 +10,89 @@
       <div class="fill-height repeating-gradient"></div>
     </v-parallax>
 
-      <v-card width="50%"
-              style="margin: 0 auto; position: relative; top: -25px" color="#0d111a" class="pa-1">
-        <v-row class="">
-          <v-col cols="12">
-            <div style="position: relative; width: 145px; height: 0; margin: 0 auto">
-              <div style="position: absolute; top: -120px">
-                <v-avatar size="145">
-                  <v-img v-if="userImage"
-                         :loading="pageLoading"
-                         :lazy-src="'/api/user/'+ userImage"
-                         :src="'/api/user/'+ userImage">
-                    <template v-slot:placeholder>
-                      <v-row
-                          class="fill-height ma-0"
-                          align="center"
-                          justify="center"
-                      >
-                        <v-progress-circular
-                            indeterminate
-                            width="14"
-                            :size="145"
-                            color="primary"
-                        ></v-progress-circular>
-                      </v-row>
-                    </template>
-                  </v-img>
-                  <v-img v-else
-                         lazy-src="../assets/user-image.svg"
-                         src="../assets/user-image.svg">
-                  </v-img>
-                </v-avatar>
-              </div>
-              <v-row>
-                <v-dialog
-                    v-model="imageDialog"
-                    transition="scale-transition"
-                    max-width="45%"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <a
-                        v-bind="attrs"
-                        v-on="on"
+    <v-card width="50%"
+            style="margin: 0 auto; position: relative; top: -25px" color="#0d111a" class="pa-1">
+      <v-row class="">
+        <v-col cols="12">
+          <div style="position: relative; width: 145px; height: 0; margin: 0 auto">
+            <div style="position: absolute; top: -120px">
+              <v-avatar size="145">
+                <v-img v-if="userImage"
+                       :loading="pageLoading"
+                       :lazy-src="'/api/user/'+ userImage"
+                       :src="'/api/user/'+ userImage">
+                  <template v-slot:placeholder>
+                    <v-row
+                        class="fill-height ma-0"
+                        align="center"
+                        justify="center"
                     >
-                      <v-icon dark large left>
-                        mdi-pencil-outline
-                      </v-icon>
-
-                    </a>
+                      <v-progress-circular
+                          indeterminate
+                          width="14"
+                          :size="145"
+                          color="primary"
+                      ></v-progress-circular>
+                    </v-row>
                   </template>
-                  <template v-slot:default="dialog">
-                    <v-card class="pa-3">
-                      <v-card-title class="justify-end">
-                        <v-btn
-                                small
-                                text
-                                fab
-                                @click="clearImageForm(); dialog.value = false"
-                        >
-                          <v-icon>mdi-close</v-icon>
-                        </v-btn>
-                      </v-card-title>
+                </v-img>
+                <v-img v-else
+                       lazy-src="../assets/user-image.svg"
+                       src="../assets/user-image.svg">
+                </v-img>
+              </v-avatar>
+            </div>
+            <v-row>
+              <v-dialog
+                  v-model="imageDialog"
+                  transition="scale-transition"
+                  max-width="45%"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <a
+                      v-bind="attrs"
+                      v-on="on"
+                  >
+                    <v-icon dark large left>
+                      mdi-pencil-outline
+                    </v-icon>
+
+                  </a>
+                </template>
+                <template v-slot:default="dialog">
+                  <v-card class="pa-3">
+                    <v-card-title class="justify-end">
+                      <v-btn
+                          small
+                          text
+                          fab
+                          @click="clearImageDialog(); dialog.value = false"
+                      >
+                        <v-icon>mdi-close</v-icon>
+                      </v-btn>
+                    </v-card-title>
+                    <validation-observer ref="imageForm">
+                      <form name="imageForm" @submit.prevent="upload()">
                         <v-row justify="center" align="center">
                           <v-col cols="7">
-                            <v-file-input
-                                    v-model="imageUpload"
-                                    show-size
-                                    label="Select Image"
-                                    accept="image/*"
-                                    @change="selectImage"
-                            ></v-file-input>
+                            <validation-provider
+                                v-slot="{ errors }"
+                                name="image"
+                                rules="required|image|mimes:image/jpeg,image/png|size:2000">
+                              <v-file-input
+                                  v-model="imageUpload"
+                                  show-size
+                                  :error-messages="errors"
+                                  label="Select image"
+                                  accept="image/*"
+                                  @change="selectImage"
+                              ></v-file-input>
+                            </validation-provider>
                           </v-col>
                           <v-col cols="3" class="justify-end">
-                            <v-btn color="primary" dark @click="upload">
+                            <v-btn color="primary"
+                                   dark
+                                   type="submit">
                               <v-icon left dark>mdi-cloud-upload</v-icon>
                               Upload
                             </v-btn>
@@ -90,10 +100,10 @@
                         </v-row>
                         <div v-if="progress">
                           <v-progress-linear
-                                  v-model="progress"
-                                  color="success"
-                                  height="25"
-                                  reactive
+                              v-model="progress"
+                              color="success"
+                              height="25"
+                              reactive
                           >
                             <strong>{{ progress }} %</strong>
                           </v-progress-linear>
@@ -118,166 +128,168 @@
                             </v-list-item-group>
                           </v-list>
                         </v-card>
-                    </v-card>
-                  </template>
-                </v-dialog>
-              </v-row>
-            </div>
+                      </form>
+                    </validation-observer>
+                  </v-card>
+                </template>
+              </v-dialog>
+            </v-row>
+          </div>
+        </v-col>
+      </v-row>
+      <v-container class="pa-4">
+        <v-row style="margin-top: auto">
+          <v-col cols="6" style="margin: 0 auto">
+            <v-text-field style="text-align: center"
+                          :loading="pageLoading"
+                          v-model="username"
+                          label="Username"
+                          append-icon="mdi-account-edit-outline"
+                          dark
+                          disabled
+            ></v-text-field>
+          </v-col>
+          <v-col cols="6" style="margin: 0 auto">
+            <v-text-field
+                v-model="email"
+                :loading="pageLoading"
+                label="Email"
+                append-icon="mdi-email-edit-outline"
+                dark
+                disabled
+            ></v-text-field>
           </v-col>
         </v-row>
-          <v-container class="pa-4">
-            <v-row style="margin-top: auto">
-              <v-col cols="6" style="margin: 0 auto">
-                <v-text-field style="text-align: center"
-                              :loading="pageLoading"
-                              v-model="username"
-                              label="Username"
-                              append-icon="mdi-account-edit-outline"
-                              dark
-                              disabled
-                ></v-text-field>
-              </v-col>
-              <v-col cols="6" style="margin: 0 auto">
-                <v-text-field
-                    v-model="email"
-                    :loading="pageLoading"
-                    label="Email"
-                    append-icon="mdi-email-edit-outline"
-                    dark
-                    disabled
-                ></v-text-field>
-              </v-col>
-            </v-row>
-            <v-col cols="12" class="mb-6">
-              <div class="row justify-space-between">
-                <div v-if="edit">
-                  <v-btn
-                      color="accent"
-                      @click="edit = !edit">
+        <v-col cols="12" class="mb-6">
+          <div class="row justify-space-between">
+            <div v-if="edit">
+              <v-btn
+                  color="accent"
+                  @click="edit = !edit">
 
-                    <v-icon left>mdi-pencil</v-icon>
-                    Edit
-                  </v-btn>
-                </div>
-                <div v-else>
-                  <v-btn
-                      color="accent"
-                      @click="edit = !edit">
+                <v-icon left>mdi-pencil</v-icon>
+                Edit
+              </v-btn>
+            </div>
+            <div v-else>
+              <v-btn
+                  color="accent"
+                  @click="edit = !edit">
 
-                    <v-icon left>mdi-close</v-icon>
-                    Cancel
-                  </v-btn>
-                </div>
-                <v-spacer></v-spacer>
-                <v-dialog
-                    transition="dialog-bottom-transition"
-                    max-width="35%"
-                    persistent
-                    v-model="passwordDialog"
+                <v-icon left>mdi-close</v-icon>
+                Cancel
+              </v-btn>
+            </div>
+            <v-spacer></v-spacer>
+            <v-dialog
+                transition="dialog-bottom-transition"
+                max-width="35%"
+                persistent
+                v-model="passwordDialog"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                    color="accent"
+                    v-bind="attrs"
+                    v-on="on"
                 >
-                  <template v-slot:activator="{ on, attrs }">
+                  <v-icon left>mdi-lock-reset</v-icon>
+                  Change password
+                </v-btn>
+              </template>
+              <template v-slot:default="dialog">
+                <v-card class="pa-4">
+                  <div>
                     <v-btn
-                        color="accent"
-                        v-bind="attrs"
-                        v-on="on"
+                        small
+                        fab
+                        text
+                        @click="clearPasswordDialog(); dialog.value = false;"
                     >
-                      <v-icon left>mdi-lock-reset</v-icon>
-                      Change password
+                      <v-icon>mdi-close</v-icon>
                     </v-btn>
-                  </template>
-                  <template v-slot:default="dialog">
-                    <v-card class="pa-4">
-                      <div>
-                        <v-btn
-                                small
-                                fab
-                                text
-                                @click="clearPasswordDialog(); dialog.value = false;"
-                        >
-                          <v-icon>mdi-close</v-icon>
-                        </v-btn>
-                      </div>
-                      <validation-observer ref="passwordForm">
-                      <form name="passwordForm" @submit.prevent="updatePassword">
-                        <v-row>
-                          <v-col cols="12">
-                            <validation-provider
-                                    v-slot="{ errors }"
-                                    name="old password"
-                                    rules="required"
+                  </div>
+                  <validation-observer ref="passwordForm">
+                    <form name="passwordForm" @submit.prevent="updatePassword()">
+                      <v-row>
+                        <v-col cols="12">
+                          <validation-provider
+                              v-slot="{ errors }"
+                              name="old password"
+                              rules="required"
+                          >
+                            <v-text-field
+                                v-model="oldPassword"
+                                :error-messages="errors"
+                                label="Old password"
+                                :type="showOldPassword ? 'text' : 'password'"
+                                hint="Must be at least 8 characters."
+                                :append-icon="showOldPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                @click:append="showOldPassword = !showOldPassword"
+                                clearable
                             >
-                              <v-text-field
-                                      v-model="oldPassword"
-                                      :error-messages="errors"
-                                      label="Old password"
-                                      :type="showOldPassword ? 'text' : 'password'"
-                                      hint="Must be at least 8 characters."
-                                      :append-icon="showOldPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                                      @click:append="showOldPassword = !showOldPassword"
-                                      clearable
-                              >
-                              </v-text-field>
-                            </validation-provider>
-                          </v-col>
-                        </v-row>
-                        <v-row>
-                          <v-col cols="12">
-                            <validation-provider
-                                    v-slot="{ errors }"
-                                    name="new password"
-                                    rules="required|min:8|max:128"
+                            </v-text-field>
+                          </validation-provider>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col cols="12">
+                          <validation-provider
+                              v-slot="{ errors }"
+                              name="new password"
+                              rules="required|min:8|max:128"
+                          >
+                            <v-text-field
+                                v-model="newPassword"
+                                :error-messages="errors"
+                                label="New password"
+                                :type="showNewPassword ? 'text' : 'password'"
+                                hint="Must be at least 8 characters."
+                                :append-icon="showNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                @click:append="showNewPassword = !showNewPassword"
+                                clearable
                             >
-                              <v-text-field
-                                      v-model="newPassword"
-                                      :error-messages="errors"
-                                      label="New password"
-                                      :type="showNewPassword ? 'text' : 'password'"
-                                      hint="Must be at least 8 characters."
-                                      :append-icon="showNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                                      @click:append="showNewPassword = !showNewPassword"
-                                      clearable
-                              >
-                              </v-text-field>
-                            </validation-provider>
-                          </v-col>
-                        </v-row>
-                        <v-row>
-                          <v-col cols="12">
-                            <validation-provider
-                                    v-slot="{ errors }"
-                                    name="password confirmation"
-                                    rules="required|password:@new password"
+                            </v-text-field>
+                          </validation-provider>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col cols="12">
+                          <validation-provider
+                              v-slot="{ errors }"
+                              name="password confirmation"
+                              rules="required|password:@new password"
+                          >
+                            <v-text-field class="mb-4"
+                                          v-model="confirmNewPassword"
+                                          :error-messages="errors"
+                                          label="Confirm new password"
+                                          :type="showConfirmNewPassword ? 'text' : 'password'"
+                                          hint="Must be at least 8 characters."
+                                          :append-icon="showConfirmNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                          @click:append="showConfirmNewPassword = !showConfirmNewPassword"
+                                          clearable
                             >
-                              <v-text-field class="mb-4"
-                                            v-model="confirmNewPassword"
-                                            :error-messages="errors"
-                                            label="Confirm new password"
-                                            :type="showConfirmNewPassword ? 'text' : 'password'"
-                                            hint="Must be at least 8 characters."
-                                            :append-icon="showConfirmNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                                            @click:append="showConfirmNewPassword = !showConfirmNewPassword"
-                                            clearable
-                              >
-                              </v-text-field>
-                            </validation-provider>
-                          </v-col>
-                        </v-row>
-                            <v-btn large
-                                   type="submit"
-                                   color="primary"
-                            >
-                              <v-icon left class="mr-1">mdi-lock-check</v-icon>
-                              Update password
-                            </v-btn>
-                      </form>
-                      </validation-observer>
-                    </v-card>
-                  </template>
-                </v-dialog>
-              </div>
-            </v-col>
-            <validation-observer ref="profileForm" v-slot="{invalid}">
-              <form name="profileForm" @submit.prevent="updateProfile">
+                            </v-text-field>
+                          </validation-provider>
+                        </v-col>
+                      </v-row>
+                      <v-btn large
+                             type="submit"
+                             color="primary"
+                      >
+                        <v-icon left class="mr-1">mdi-lock-check</v-icon>
+                        Update password
+                      </v-btn>
+                    </form>
+                  </validation-observer>
+                </v-card>
+              </template>
+            </v-dialog>
+          </div>
+        </v-col>
+        <validation-observer ref="profileForm" v-slot="{invalid}">
+          <form name="profileForm" @submit.prevent="updateProfile()">
             <v-row>
               <v-col cols="6">
                 <validation-provider
@@ -435,28 +447,27 @@
                 </validation-provider>
               </v-col>
             </v-row>
-              <v-row v-if="!edit">
-                <v-col cols="12">
-                  <v-btn dark
-                         large color="primary"
-                         :disabled="invalid"
-                         @click="updateProfile()"
-                  >
-                    <v-icon left>mdi-check</v-icon>
-                    Save
-                  </v-btn>
-                </v-col>
-              </v-row>
-              </form>
-            </validation-observer>
-
-          </v-container>
-      </v-card>
+            <v-row v-if="!edit">
+              <v-col cols="12">
+                <v-btn dark
+                       large color="primary"
+                       :disabled="invalid"
+                       @click="updateProfile()"
+                >
+                  <v-icon left>mdi-check</v-icon>
+                  Save
+                </v-btn>
+              </v-col>
+            </v-row>
+          </form>
+        </validation-observer>
+      </v-container>
+    </v-card>
   </div>
 </template>
 
 <script>
-  import {required, min, max, alpha, numeric} from 'vee-validate/dist/rules'
+import {required, min, max, alpha, numeric, mimes, size, image} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 import UploadService from "../services/UploadFilesService";
 
@@ -465,37 +476,52 @@ import Swal from "sweetalert2";
 
 setInteractionMode('eager')
 
-  extend('required', {
-    ...required,
-    message: 'The {_field_} field is required.',
-  })
+extend('required', {
+  ...required,
+  message: 'The {_field_} field is required.',
+})
 
-  extend('min', {
-    ...min,
-    message: 'The {_field_} must be at least {min} characters.'
-  })
+extend('min', {
+  ...min,
+  message: 'The {_field_} must be at least {min} characters.'
+})
 
-  extend('max', {
-    ...max,
-    message: 'The {_field_} may not be greater than {max} characters.'
-  })
+extend('max', {
+  ...max,
+  message: 'The {_field_} may not be greater than {max} characters.'
+})
 
-  extend('alpha', {
-    ...alpha,
-    message: 'The {_field_} may only contain letters.',
-  })
+extend('alpha', {
+  ...alpha,
+  message: 'The {_field_} may only contain letters.',
+})
 
-  extend('numeric', {
-    ...numeric,
-    message: 'The {_field_} must be a number.',
-  })
+extend('numeric', {
+  ...numeric,
+  message: 'The {_field_} must be a number.',
+})
 
-  extend('password', {
-    params: ['target'], validate(value, {target}) {
-      return value === target;
-    },
-    message: 'The {_field_} confirmation does not match.'
-  });
+extend('password', {
+  params: ['target'], validate(value, {target}) {
+    return value === target;
+  },
+  message: 'The {_field_} confirmation does not match.'
+});
+
+extend('image', {
+  ...image,
+  message: 'The {_field_} must be an image.'
+})
+
+extend('mimes', {
+  ...mimes,
+  message: 'The {_field_} is invalid, allowed extensions are JPEG and PNG.'
+})
+
+extend('size', {
+  ...size,
+  message: 'The {_field_} size must be under 2 MB.'
+})
 
 export default {
   name: "UserProfile",
@@ -551,6 +577,15 @@ export default {
       this.newPassword = ''
       this.confirmNewPassword = ''
       this.$refs.passwordForm.reset()
+    },
+
+    clearImageDialog() {
+      this.imageUpload = null
+      this.currentImage = null
+      this.previewImage = undefined
+      this.progress = 0
+      this.message = ''
+      this.$refs.imageForm.reset()
     },
 
     getGenders() {
@@ -617,20 +652,20 @@ export default {
     getUserImage() {
       this.pageLoading = true
       axios.get('/auth/image')
-              .then(response => {
-                if (response.data) {
-                  this.userImage = response.data
-                  this.pageLoading = false
-                }
-              })
-              .catch(error => {
-                console.log(error)
-                this.pageLoading = false
-              })
+          .then(response => {
+            if (response.data) {
+              this.userImage = response.data
+              this.pageLoading = false
+            }
+          })
+          .catch(error => {
+            console.log(error)
+            this.pageLoading = false
+          })
     },
 
     updateProfile() {
-      this.$refs.profileForm.validate().then( success => {
+      this.$refs.profileForm.validate().then(success => {
         if (success) {
           this.loading = true
           axios.put('/user/' + this.loggedUser.id, {
@@ -641,78 +676,76 @@ export default {
             country: this.selectCountry.name,
             phone_number: this.phoneNumber,
           })
-                  .then(response => {
-                            if (response) {
-                              Swal.fire(
-                                      'Done!',
-                                      'Your information has been updated.',
-                                      'success'
-                              )
-
-                              this.edit = true
-                              this.loading = false;
-                            }
-                          }
-                  )
-                  .catch(error => {
-                    this.loading = false
-                    this.error = error.response.data;
-                    // console.log(error.response.data.phone_number)
-                    if (error.response.data.phone_number == "The phone number has already been taken.") {
+              .then(response => {
+                    if (response) {
                       Swal.fire(
-                              'Oops!',
-                              'The phone number has already been taken.',
-                              'error'
+                          'Done!',
+                          'Your information has been updated.',
+                          'success'
                       )
+
+                      this.edit = true
+                      this.loading = false;
                     }
-                  })
+                  }
+              )
+              .catch(error => {
+                this.loading = false
+                this.error = error.response.data;
+                if (error.response.data.phone_number == "The phone number has already been taken.") {
+                  Swal.fire(
+                      'Oops!',
+                      'The phone number has already been taken.',
+                      'error'
+                  )
+                }
+              })
         }
       })
     },
 
     updatePassword() {
-      this.$refs.passwordForm.validate().then( success => {
+      this.$refs.passwordForm.validate().then(success => {
         if (success) {
-      this.loading = true
-      axios.put('/password/' + this.loggedUser.id, {
-        old_password: this.oldPassword,
-        password: this.newPassword,
-        password_confirmation: this.confirmNewPassword
-      })
-          .then(response => {
-                if (response) {
-                  Swal.fire(
-                      'Done!',
-                      'Your information has been updated.',
-                      'success'
-                  )
-                  this.passwordDialog = false
-                  this.modal = false
-                  this.clearPasswordDialog()
-                }
-              }
-          )
-          .catch(error => {
-            console.log(error)
-            this.loading = false
-            this.error = error.response.data;
-            if (error.response.data.message == "Old password is not correct.") {
-              Swal.fire(
-                  'Password mismatch!',
-                  'Old password is incorrect.',
-                  'error'
-              )
-            }
-            else if (error.response.data.message == "New password is identical to old password."){
-              Swal.fire(
-                'Oops!',
-                'New password is identical to old password.',
-                'error'
-              )
-            }
-
+          this.loading = true
+          axios.put('/password/' + this.loggedUser.id, {
+            old_password: this.oldPassword,
+            password: this.newPassword,
+            password_confirmation: this.confirmNewPassword
           })
+              .then(response => {
+                    if (response) {
+                      Swal.fire(
+                          'Done!',
+                          'Your information has been updated.',
+                          'success'
+                      )
+                      this.passwordDialog = false
+                      this.modal = false
+                      this.clearPasswordDialog()
+                    }
+                  }
+              )
+              .catch(error => {
+                console.log(error)
+                this.loading = false
+                this.error = error.response.data;
+                if (error.response.data.message == "Old password is not correct.") {
+                  Swal.fire(
+                      'Password mismatch!',
+                      'Old password is incorrect.',
+                      'error'
+                  )
+                } else if (error.response.data.message == "New password is identical to old password.") {
+                  Swal.fire(
+                      'Oops!',
+                      'New password is identical to old password.',
+                      'error'
+                  )
                 }
+
+              })
+        }
       })
     },
 
@@ -721,69 +754,41 @@ export default {
       this.previewImage = URL.createObjectURL(this.currentImage);
       this.progress = 0;
       this.message = "";
-      // console.log(this.currentImage)
-      // console.log(this.previewImage)
     },
 
     upload() {
-      if (this.currentImage) {
-        this.imageName = this.currentImage.name
-        for (let j = 0; j < this.extensions.length; j++) {
-          this.currentExtension = this.extensions[j];
-          if (this.imageName.substr(this.imageName.length - this.currentExtension.length,
-              this.currentExtension.length).toLowerCase() == this.currentExtension.toLowerCase()) {
-            this.isValid = true;
-          }
-        }
-        if (!this.isValid) {
-          this.message = "Sorry, " + this.imageName + " is invalid, allowed extensions are: " + this.extensions.join(", ") + ".";
-          return;
-        }
-      } else {
-        this.message = "Please select an image!";
-        return;
-      }
-
-      if (this.currentImage.size > 2097152) {
-        this.message = "File size cannot be greater than 2MB!";
-        return;
-      }
-      this.loading = true
-      this.progress = 0;
-      UploadService.upload(this.currentImage, (event) => {
-        this.progress = Math.round((100 * event.loaded) / event.total)
-        this.userImage = this.loggedUser.image
-        Swal.fire({
-          title: 'Done!',
-          text: 'Your profile image has been updated.',
-          icon: 'success'
-        }).then(() => {
-          this.getUserImage()
-          this.clearImageForm()
-          this.imageDialog = false
-        })
-      }).then((response) => {
-        this.message = response.data.message;
-        return UploadService.getFiles();
-      })
-          .then((images) => {
-            this.imageInfos = images.data;
+      this.$refs.imageForm.validate().then(success => {
+        if (success) {
+          this.loading = true
+          this.progress = 0;
+          UploadService.upload(this.currentImage, (event) => {
+            this.progress = Math.round((100 * event.loaded) / event.total)
+            this.userImage = this.loggedUser.image
+            Swal.fire({
+              title: 'Done!',
+              text: 'Your profile image has been updated.',
+              icon: 'success'
+            }).then(() => {
+              this.getUserImage()
+              this.clearImageDialog()
+              this.imageDialog = false
+            })
+          }).then((response) => {
+            this.message = response.data.message;
+            return UploadService.getFiles();
           })
-          .catch((err) => {
-            this.progress = 0;
-            this.message = "Could not upload the image! " + err;
-            this.currentImage = undefined;
-            this.imageDialog = false
-          });
+              .then((images) => {
+                this.imageInfos = images.data;
+              })
+              .catch((err) => {
+                this.progress = 0;
+                this.message = "Could not upload the image! " + err;
+                this.currentImage = undefined;
+                this.imageDialog = false
+              });
+        }
+      })
     },
-
-    clearImageForm() {
-      this.imageUpload = null
-      this.currentImage = null
-      this.previewImage = undefined
-      this.progress = 0
-      this.message = ''
-    }
   },
 
   mounted() {

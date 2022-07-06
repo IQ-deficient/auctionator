@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-data-table
-            :loading="dataLoading"
+        :loading="dataLoading"
         style="width: 95%; margin: 0 auto; padding-top: 6px"
         :headers="headers"
         :items="tableData"
@@ -22,27 +22,29 @@
           ></v-divider>
           <v-icon large>mdi-cart</v-icon>
           <v-spacer></v-spacer>
-
-<!--          <v-row>-->
-            <v-col cols="12" md="3">
-              <v-text-field
-                  v-model="search"
-                  append-icon="mdi-magnify"
-                  label="Search"
-                  single-line
-                  hide-details
-              ></v-text-field>
-              </v-col>
-  <!--          </v-row>-->
+          <v-col cols="12" md="3">
+            <v-text-field
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Search"
+                single-line
+                hide-details
+            ></v-text-field>
+          </v-col>
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-icon
-                class="mr-2"
+        <v-row>
+          <v-col cols="12" sm="12">
+            <v-icon
+                class="ml-2"
+                color="primary"
                 @click="showAuction(item)"
-        >
-          mdi-dots-horizontal-circle-outline
-        </v-icon>
+            >
+              mdi-eye
+            </v-icon>
+          </v-col>
+        </v-row>
       </template>
     </v-data-table>
     <show-auction
@@ -91,12 +93,9 @@ export default {
 
     getHistory() {
       this.dataLoading = true
-      this.histories = []
       axios.get('/user_histories')
           .then(response => {
             if (response.data) {
-              console.log(response.data)
-              this.histories = response.data
               this.tableData = response.data
               this.dataLoading = false
             }
@@ -114,7 +113,7 @@ export default {
   },
 
   mounted() {
-    if (!window.localStorage.user_roles.includes('Client')){
+    if (!window.localStorage.user_roles.includes('Client')) {
       this.$router.push('/pageNotFound')
     }
     document.title = 'Owned auctions - Auction House'

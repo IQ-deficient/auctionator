@@ -1,7 +1,6 @@
 <template>
   <div style="margin-top: 6%">
     <v-card class="pa-6" max-width="28%" style="margin: 0 auto">
-      <!--      <validation-observer ref="observer" v-slot="{ invalid }">-->
       <validation-observer ref="form">
         <form @submit.prevent="login">
           <v-row class="justify-start">
@@ -15,53 +14,52 @@
           </v-row>
           <v-row>
             <v-col
-              cols="12"
-              sm="12"
+                cols="12"
+                sm="12"
             >
               <validation-provider
-                v-slot="{ errors }"
-                name="email"
-                rules="required|email"
+                  v-slot="{ errors }"
+                  name="email"
+                  rules="required|email"
               >
                 <v-text-field
-                  v-model="email"
-                  :error-messages="errors"
-                  label="E-mail"
-                  clearable
+                    v-model="email"
+                    :error-messages="errors"
+                    label="E-mail"
+                    clearable
                 ></v-text-field>
               </validation-provider>
             </v-col>
           </v-row>
           <v-row>
             <v-col
-              cols="12"
-              sm="12"
+                cols="12"
+                sm="12"
             >
               <validation-provider
-                v-slot="{ errors }"
-                name="password"
-                rules="required|min:8|max:128"
+                  v-slot="{ errors }"
+                  name="password"
+                  rules="required|min:8|max:128"
               >
                 <v-text-field
-                  v-model="password"
-                  :error-messages="errors"
-                  label="Password"
-                  :type="showPassword ? 'text' : 'password'"
-                  :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                  @click:append="showPassword = !showPassword"
-                  clearable
+                    v-model="password"
+                    :error-messages="errors"
+                    label="Password"
+                    :type="showPassword ? 'text' : 'password'"
+                    :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                    @click:append="showPassword = !showPassword"
+                    clearable
                 ></v-text-field>
               </validation-provider>
             </v-col>
           </v-row>
-
           <v-row class="ma-4">
             <v-btn
-              :loading="loading"
-              width="100%"
-              class="mb-1"
-              type="submit"
-              color="primary"
+                :loading="loading"
+                width="100%"
+                class="mb-1"
+                type="submit"
+                color="primary"
             >
               <v-icon left class="mr-2">mdi-login</v-icon>
               Login
@@ -93,8 +91,8 @@
     </div>
     <router-link to="/register" style="text-decoration: none">
       <v-btn
-        color="accent"
-        class="mt-4">
+          color="accent"
+          class="mt-4">
         Create your account
       </v-btn>
     </router-link>
@@ -160,42 +158,40 @@ export default {
             email: this.email,
             password: this.password,
           }, config)
-            .then(response => {
-              if (response) {
-                localStorage.setItem("token", JSON.stringify(response.data.access_token));
-                localStorage.setItem("user_roles", response.data.user_roles);
-                // localStorage.setItem('expires_in', JSON.stringify(response.data.expires_in));
-                this.$router.push('/home');
-                this.$router.go(0)
-                this.loading = false;
-              }
-              this.$nextTick(() => {
-                this.$refs.form.reset();
-              });
-              return response.data;
-            })
-            .catch(error => {
-              this.loading = false
-              this.error = error.response.data;
-              console.log(this.error)
-              if (error.response.data.error == "Something went wrong.") {
-                Swal.fire(
-                  'Oops!',
-                  'Email and password don\'t match.',
-                  'error'
-                )
-              }
-              if (error.response.data.message == "This user is inactive!") {
-                Swal.fire(
-                  'This account has been suspended.',
-                  'If you think this is a mistake, please contact our management team.',
-                  'error'
-                )
-              }
-            })
+              .then(response => {
+                if (response) {
+                  localStorage.setItem("token", JSON.stringify(response.data.access_token));
+                  localStorage.setItem("user_roles", response.data.user_roles);
+                  this.$router.push('/home');
+                  this.$router.go(0)
+                  this.loading = false;
+                }
+                this.$nextTick(() => {
+                  this.$refs.form.reset();
+                });
+                return response.data;
+              })
+              .catch(error => {
+                this.loading = false
+                this.error = error.response.data;
+                console.log(this.error)
+                if (error.response.data.error == "Something went wrong.") {
+                  Swal.fire(
+                      'Oops!',
+                      'Email and password don\'t match.',
+                      'error'
+                  )
+                }
+                if (error.response.data.message == "This user is inactive!") {
+                  Swal.fire(
+                      'This account has been suspended.',
+                      'If you think this is a mistake, please contact our management team.',
+                      'error'
+                  )
+                }
+              })
         }
       })
-
     },
   },
 

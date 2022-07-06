@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-toolbar color="tertiary"
-        light
-        height="75"
+               light
+               height="75"
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" style="color: black; margin-left: 10px"></v-app-bar-nav-icon>
       <router-link to="/home">
@@ -15,9 +15,15 @@
       <v-divider id="divider" vertical style="margin-left: 28px; border-right: 2px solid black"></v-divider>
       <v-toolbar-title style="margin-left: 28px">Auction House</v-toolbar-title>
       <div class="ml-12">
-        <router-link style="text-decoration: none" to="/"><v-btn text>Home</v-btn></router-link>
-        <router-link style="text-decoration: none" to="/about"><v-btn text>About</v-btn></router-link>
-        <router-link style="text-decoration: none" to="/contact"><v-btn text>Contact</v-btn></router-link>
+        <router-link style="text-decoration: none" to="/">
+          <v-btn text>Home</v-btn>
+        </router-link>
+        <router-link style="text-decoration: none" to="/about">
+          <v-btn text>About</v-btn>
+        </router-link>
+        <router-link style="text-decoration: none" to="/contact">
+          <v-btn text>Contact</v-btn>
+        </router-link>
       </div>
       <v-spacer></v-spacer>
       <div v-if="token == null">
@@ -51,10 +57,10 @@
                     icon
                     x-large
                     v-on="on"
-                    @click="getUserImage()"
                 >
                   <v-avatar size="50">
                     <v-img v-if="userImage"
+                           @click="getUserImage()"
                            :loading="pageLoading"
                            :lazy-src="'/api/user/'+ userImage"
                            :src="'/api/user/'+ userImage">
@@ -84,7 +90,6 @@
                 <v-list-item-content class="justify-center">
                   <div class="mx-auto text-center">
                     <router-link to="/user-profile" style="text-decoration: none">
-
                       <v-avatar size="50" class="mb-2">
                         <v-img v-if="userImage"
                                :loading="pageLoading"
@@ -166,7 +171,6 @@
                         </v-row>
                       </v-container>
                       <v-divider class="my-3"></v-divider>
-
                     </div>
                     <div v-if="role == 'Administrator'">
                       <v-container
@@ -217,7 +221,6 @@
                         </v-row>
                       </v-container>
                       <v-divider class="my-3"></v-divider>
-
                     </div>
                     <div v-if="role.includes('Auctioneer')">
                       <router-link to="/admin-auction" style="text-decoration: none">
@@ -269,7 +272,6 @@
         </v-container>
       </div>
     </v-toolbar>
-
     <v-navigation-drawer style="min-width: 28%; width: fit-content"
                          v-model="drawer"
                          absolute
@@ -292,36 +294,11 @@
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
       </v-list-item>
-
       <v-list class="d-flex flex-column"
               nav
               dense
               min-height="65%"
       >
-        <!--        <v-subheader>REPORTS</v-subheader>-->
-        <!--        <v-list-item-group align="left"-->
-        <!--                           v-model="selectedCategory"-->
-        <!--                           light-->
-        <!--        >-->
-        <!--          <v-list-group-->
-        <!--              :value="false"-->
-        <!--              no-action-->
-        <!--              sub-group>-->
-        <!--            <template v-slot:activator>-->
-        <!--              <v-list-item-content>-->
-        <!--                <v-list-item-title id="category" class="text-h6" style="width: 240px">el</v-list-item-title>-->
-        <!--              </v-list-item-content>-->
-        <!--            </template>-->
-        <!--            <v-list-item-->
-        <!--                v-for="([title], i) in subcategories"-->
-        <!--                :key="i"-->
-        <!--                link-->
-        <!--            >-->
-        <!--              <v-list-item-title v-text="title" style="font-size: 15px"></v-list-item-title>-->
-        <!--            </v-list-item>-->
-        <!--          </v-list-group>-->
-        <!--        </v-list-item-group>-->
-
         <v-treeview
             activatable
             open-on-click
@@ -333,107 +310,8 @@
             :active.sync="selectedCategory"
             @update:active="browseAuctionsByCategory()"
         >
-          <!--          <template v-slot:label="{ item }">-->
-          <!--            <a @click="updateSearchCategory(item)">{{ item.name }}</a>-->
-          <!--          </template>-->
-          <!--        <template v-slot:prepend="{ item, open }">-->
-          <!--          <v-icon v-if="!item.file">-->
-          <!--            {{ open ? 'mdi-folder-open' : 'mdi-folder' }}-->
-          <!--          </v-icon>-->
-          <!--          <v-icon v-else>-->
-          <!--            {{ files[item.file] }}-->
-          <!--          </v-icon>-->
-          <!--        </template>-->
         </v-treeview>
-
       </v-list>
-<!--      <div v-if="token">-->
-<!--        <v-list class="d-flex flex-column"-->
-<!--                nav-->
-<!--                dense-->
-<!--        >-->
-<!--          <div v-if="role == 'Client'">-->
-<!--            <router-link to="/bids" style="text-decoration: none">-->
-<!--              <v-btn style="float: left"-->
-<!--                     color="transparent"-->
-<!--                     depressed-->
-<!--                     class="ma-1"-->
-<!--              >-->
-<!--                <v-icon left class="mr-2">mdi-alarm-multiple</v-icon>-->
-<!--                <span class="hidden-sm-and-down">Bids</span>-->
-<!--              </v-btn>-->
-<!--            </router-link>-->
-<!--          </div>-->
-<!--          <div v-if="role == 'Client'">-->
-<!--            <hr>-->
-<!--            <router-link to="/history" style="text-decoration: none">-->
-<!--              <v-btn style="float: left"-->
-<!--                     color="transparent"-->
-<!--                     depressed-->
-<!--                     class="ma-1"-->
-
-<!--              >-->
-<!--                <v-icon left class="mr-2">mdi-history</v-icon>-->
-<!--                <span class="hidden-sm-and-down">History</span>-->
-<!--              </v-btn>-->
-<!--            </router-link>-->
-<!--          </div>-->
-<!--          <div v-if="role == 'Administrator' || role == 'Auctioneer'">-->
-<!--            <router-link to="/admin-auction" style="text-decoration: none">-->
-<!--              <v-btn style="float: left"-->
-<!--                     color="transparent"-->
-<!--                     depressed-->
-<!--                     class="ma-1"-->
-
-<!--              >-->
-<!--                <v-icon left class="mr-2">mdi-store-search-outline</v-icon>-->
-<!--                <span class="hidden-sm-and-down">Auctions</span>-->
-<!--              </v-btn>-->
-<!--            </router-link>-->
-<!--          </div>-->
-<!--          <div v-if="role == 'Administrator' || role == 'Manager'">-->
-<!--            <hr>-->
-<!--            <router-link to="/admin-user" style="text-decoration: none">-->
-<!--              <v-btn style="float: left"-->
-<!--                     color="transparent"-->
-<!--                     depressed-->
-<!--                     class="ma-1"-->
-
-<!--              >-->
-<!--                <v-icon left class="mr-2">mdi-account-search-outline</v-icon>-->
-<!--                <span class="hidden-sm-and-down">Users</span>-->
-<!--              </v-btn>-->
-<!--            </router-link>-->
-<!--          </div>-->
-<!--          <hr>-->
-<!--          <router-link to="/user-profile" style="text-decoration: none">-->
-<!--            <v-btn style="float: left"-->
-<!--                   color="transparent"-->
-<!--                   depressed-->
-<!--                   class="ma-1"-->
-<!--            >-->
-<!--              <v-icon left class="mr-2">mdi-account-cog-outline</v-icon>-->
-<!--              <span class="hidden-sm-and-down">Account settings</span>-->
-<!--            </v-btn>-->
-<!--          </router-link>-->
-<!--          <div>-->
-
-<!--          </div>-->
-<!--          <v-btn value="center" width="100%" style="text-decoration: none"-->
-<!--                 color="info"-->
-<!--                 depressed-->
-<!--                 @click="logout()"-->
-<!--          >-->
-<!--            <v-icon left class="mr-2">mdi-logout-variant</v-icon>-->
-<!--            <span class="hidden-sm-and-down">Logout</span>-->
-<!--          </v-btn>-->
-<!--        </v-list>-->
-<!--      </div>-->
-
-      <!--      <div class="mt-auto">-->
-      <!--        <hr>-->
-      <!--        -->
-      <!--      </div>-->
     </v-navigation-drawer>
   </div>
 </template>
@@ -488,7 +366,6 @@ export default {
       } else {
         this.$router.go(0)
       }
-
     },
 
     getCategories() {
@@ -496,10 +373,7 @@ export default {
       axios.get('/menu_categories')
           .then(response => {
             if (response.data) {
-              // for (let i = 0; i < response.data.length; i++) {
               this.categories = response.data;
-              // console.log(response.data)
-              // }
             }
           })
           .catch(error => {
@@ -512,9 +386,6 @@ export default {
         headers: {'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))},
         key: "token"
       };
-      // const bodyParameters = {
-      //   key: "token"
-      // };
 
       this.loading = true
       axios.post('/auth/logout', config)
@@ -524,7 +395,6 @@ export default {
                   this.$router.push('/home');
                   // this and /login uses logic of reloading current page - this should be changed
                   this.$router.go(0)
-                  // console.log(response.data)
                   this.loading = false;
                 }
               }
@@ -533,14 +403,10 @@ export default {
             console.log(error)
             localStorage.clear();
             this.$router.go(0)
-            // console.log(JSON.parse(localStorage.getItem('token')).access_token);
             this.loading = false
             this.error = error.response.data.message;
 
           })
-      // sessionStorage.removeItem("key");
-      // localStorage.removeItem("user");
-      // this.$router.push('/home');
     },
 
     getLoggedUser() {
@@ -549,8 +415,6 @@ export default {
           .then(response => {
             if (response.data) {
               this.loggedUser = response.data
-              // this.username = response.data.username
-              // this.email = response.data.email
               if (response.data.image) this.userImage = response.data.image
               this.pageLoading = false
             }
@@ -564,21 +428,20 @@ export default {
     getUserImage() {
       this.pageLoading = true
       axios.get('/auth/image')
-              .then(response => {
-                if (response.data) {
-                  this.userImage = response.data
-                  this.pageLoading = false
-                }
-              })
-              .catch(error => {
-                console.log(error)
-                this.pageLoading = false
-              })
+          .then(response => {
+            if (response.data) {
+              this.userImage = response.data
+              this.pageLoading = false
+            }
+          })
+          .catch(error => {
+            console.log(error)
+            this.pageLoading = false
+          })
     },
   },
 
   watch: {
-
     top(val) {
       this.bottom = !val
     },
