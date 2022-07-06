@@ -51,6 +51,7 @@ Route::group([
 Route::post('/filtered_auctions', [AuctionController::class, 'getFiltered']);   // Live auctions by Category
 Route::get('/menu_categories', [CategoryController::class, 'getMenuCategories']);   // All Categories formatted for Menu
 Route::get('/active_countries', [CountryController::class, 'getActive']);  // Used in registration
+Route::post('/contact_us', [UserController::class, 'sendMail']);        // Contact us page
 
 // This Middleware should require User being Authenticated and his JWT token to be granted access to these routes
 Route::group([
@@ -124,7 +125,6 @@ Route::group([
     Route::put('/password/{user}', [UserController::class, 'changePassword']);       // update password
     Route::delete('/user/{user}', [UserController::class, 'destroy']);      // deactivate user
 
-
     // UserRoles
 //    Route::get('/user_roles', [UserRoleController::class, 'index']);
 
@@ -135,13 +135,16 @@ Route::group([
     Route::get('/active_warehouses', [WarehouseController::class, 'getActive']);
 //    Route::put('/warehouse/{warehouse}', [WarehouseController::class, 'update']);
 //    Route::delete('/warehouse/{warehouse}', [WarehouseController::class, 'destroy']);
+
+    //Get item image route
+    Route::get('/test/{image}', [AuctionController::class, 'getItemImage']);
+
+    //Get user image route
+    Route::get('/user/{image}', [UserController::class, 'getUserImage']);
+
 });
 
-//Get item image route
-Route::get('/test/{image}', [AuctionController::class, 'getItemImage']);
 
-//Get user image route
-Route::get('/user/{image}', [UserController::class, 'getUserImage']);
 
 
 

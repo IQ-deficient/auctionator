@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\MailContact;
+use App\Mail\MailNotification;
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Database\Eloquent\Builder;
@@ -13,6 +15,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -383,8 +386,29 @@ class UserController extends Controller
         return User::query()->where('id', $user->id)->first();
     }
 
-    public function getUserImage ($name) {
+    public function getUserImage($name)
+    {
         return response()->file(public_path('storage/user_images/' . $name));
+    }
+
+    /**
+     * Email authorities about certain topic or question
+     * @return JsonResponse
+     */
+    public function sendMail(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email:rfc,dns',
+            'title' => 'required|string|max:30',
+            'message' => 'required|string|min:10|max:1000',
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        Mail::to(env('CONTACT_US_MAIL'))->send(new MailContact($request->all()));
+
+        return response()->json('Email sent!', 200);
     }
 
 }

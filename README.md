@@ -17,7 +17,7 @@ cd..
 ```
 
 ## Setup
-- Clone .env.example file into .env and configure: DB_DATABASE, MAIL_USERNAME, MAIL_FROM_ADDRESS
+- Clone .env.example file into .env and configure: DB_DATABASE, MAIL_USERNAME, MAIL_FROM_ADDRESS, CONTACT_US_MAIL
 - Email being used needs Two-Factor Authentication and Google 'App Password' as MAIL_PASSWORD
 - Make sure MySql database is running
 ```bash
