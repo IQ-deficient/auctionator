@@ -136,14 +136,13 @@ Route::group([
 //    Route::put('/warehouse/{warehouse}', [WarehouseController::class, 'update']);
 //    Route::delete('/warehouse/{warehouse}', [WarehouseController::class, 'destroy']);
 
-    //Get item image route
-    Route::get('/test/{image}', [AuctionController::class, 'getItemImage']);
-
-    //Get user image route
-    Route::get('/user/{image}', [UserController::class, 'getUserImage']);
-
 });
 
+//Get item image route
+Route::get('/test/{image}', [AuctionController::class, 'getItemImage']);
+
+//Get user image route
+Route::get('/user/{image}', [UserController::class, 'getUserImage']);
 
 
 

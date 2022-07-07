@@ -342,12 +342,12 @@ extend('email', {
 
 extend('min', {
   ...min,
-  message: 'The {_field_} must be at least {min} characters.'
+  message: 'The {_field_} must be at least {length} characters.'
 })
 
 extend('max', {
   ...max,
-  message: 'The {_field_} may not be greater than {max} characters.'
+  message: 'The {_field_} may not be greater than {length} characters.'
 })
 
 extend('alpha', {

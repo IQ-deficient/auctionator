@@ -518,25 +518,18 @@ extend('required', {
 
 extend('min', {
   ...min,
-  params: ['min'],
-  message: 'The {_field_} must be at least {min} characters.'
+  message: 'The {_field_} must be at least {length} characters.'
 })
 
 extend('max', {
   ...max,
-  params: ['max'],
-  message: 'The {_field_} may not be greater than {max} characters.'
+  message: 'The {_field_} may not be greater than {length} characters.'
 })
 
 extend('alpha', {
   ...alpha,
   message: 'The {_field_} may only contain letters.',
 })
-
-// extend('numeric', {
-//   ...numeric,
-//   message: 'The {_field_} must be a number.',
-// })
 
 extend('min_value', {
   ...min_value,
@@ -679,19 +672,6 @@ export default {
     },
 
     uploadImages(item_id) {
-      // this.$refs.form.validate().then(success => {
-      //       if (success && this.selectedFiles.length < 5) {
-      //         this.messages = []
-      //         if (this.selectedFiles && this.selectedFiles.length < 5) {
-      //           for (let i = 0; i < this.selectedFiles.length; i++) {
-      //             this.upload(i, this.selectedFiles[i], item_id);
-      //           }
-      //         } else {
-      //           this.message = 'You may upload up to 5 images.'
-      //           this.messages.push(this.message);
-      //           return
-      //         }
-      //       }})
       for (let i = 0; i < this.selectedFiles.length; i++) {
         this.upload(i, this.selectedFiles[i], item_id);
       }

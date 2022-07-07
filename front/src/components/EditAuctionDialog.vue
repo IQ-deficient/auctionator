@@ -143,65 +143,6 @@
                         </validation-provider>
                       </v-col>
                     </v-row>
-                    <!--                  <div>-->
-                    <!--                    <div v-if="progressInfos">-->
-                    <!--                      <div class="mb-2"-->
-                    <!--                           v-for="(progressInfo, index) in progressInfos"-->
-                    <!--                           :key="index"-->
-                    <!--                      >-->
-                    <!--                        <span>{{progressInfo.fileName}}</span>-->
-                    <!--                        <div class="progress">-->
-                    <!--                          <div class="progress-bar progress-bar-info"-->
-                    <!--                               role="progressbar"-->
-                    <!--                               :aria-valuenow="progressInfo.percentage"-->
-                    <!--                               aria-valuemin="0"-->
-                    <!--                               aria-valuemax="100"-->
-                    <!--                               :style="{ width: progressInfo.percentage + '%' }"-->
-                    <!--                          >-->
-                    <!--                            {{progressInfo.percentage}}%-->
-                    <!--                          </div>-->
-                    <!--                        </div>-->
-                    <!--                      </div>-->
-                    <!--                    </div>-->
-                    <!--                    <v-row no-gutters justify="center" align="center">-->
-                    <!--                      <v-col cols="8">-->
-                    <!--                        <v-file-input multiple type="file"-->
-                    <!--                                      v-model="imageUpload"-->
-                    <!--                                      show-size-->
-                    <!--                                      label="Select Image"-->
-                    <!--                                      accept="image/*"-->
-                    <!--                                      @change="selectImage"-->
-                    <!--                        ></v-file-input>-->
-                    <!--                      </v-col>-->
-                    <!--                      <v-col cols="4" class="pl-2">-->
-                    <!--                        <v-btn color="primary"-->
-                    <!--                               dark-->
-                    <!--                               :disabled="!selectedFiles"-->
-                    <!--                               @click="uploadImages">-->
-                    <!--                          <v-icon left dark>mdi-cloud-upload</v-icon>-->
-                    <!--                          Upload-->
-                    <!--                        </v-btn>-->
-                    <!--                      </v-col>-->
-                    <!--                    </v-row>-->
-                    <!--                    <div v-if="message" class="alert alert-light" role="alert">-->
-                    <!--                      <ul>-->
-                    <!--                        <li v-for="(ms, i) in message.split('\n')" :key="i">-->
-                    <!--                          {{ ms }}-->
-                    <!--                        </li>-->
-                    <!--                      </ul>-->
-                    <!--                    </div>-->
-                    <!--                    <div class="card">-->
-                    <!--                      <div class="card-header">List of Files</div>-->
-                    <!--                      <ul class="list-group list-group-flush">-->
-                    <!--                        <li class="list-group-item"-->
-                    <!--                            v-for="(file, index) in fileInfos"-->
-                    <!--                            :key="index"-->
-                    <!--                        >-->
-                    <!--                          <a :href="file.url">{{ file.name }}</a>-->
-                    <!--                        </li>-->
-                    <!--                      </ul>-->
-                    <!--                    </div>-->
-                    <!--                  </div>-->
                   </v-card>
                   <v-toolbar-title class="pa-4">
                     <table style="width: 100%">
@@ -288,25 +229,18 @@ extend('required', {
 
 extend('min', {
   ...min,
-  params: ['min'],
-  message: 'The {_field_} must be at least {min} characters.'
+  message: 'The {_field_} must be at least {length} characters.'
 })
 
 extend('max', {
   ...max,
-  params: ['max'],
-  message: 'The {_field_} may not be greater than {max} characters.'
+  message: 'The {_field_} may not be greater than {length} characters.'
 })
 
 extend('alpha', {
   ...alpha,
   message: 'The {_field_} may only contain letters.',
 })
-
-// extend('numeric', {
-//   ...numeric,
-//   message: 'The {_field_} must be a number.',
-// })
 
 extend('min_value', {
   ...min_value,
@@ -370,19 +304,6 @@ export default {
     categoryLoading: true,
     loading: false,
 
-    //image data
-    //
-    // currentImage: undefined,
-    // previewImage: undefined,
-    // progress: 0,
-    // message: "",
-    // imageInfos: [],
-    // imageUpload: null,
-    //
-    // selectedFiles: undefined,
-    // progressInfos: [],
-    // message: "",
-    // fileInfos: [],
   }),
 
   created() {
