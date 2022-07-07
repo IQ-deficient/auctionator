@@ -20,11 +20,10 @@ class EnsureUserIsActive
     public function handle(Request $request, Closure $next)
     {
 
-        // Authenticated User is active, so continue with request
         if (Auth::user()->is_active) {
             return $next($request);
         }
-        // Or when the user would have been deactivated by superior roles
+
         return response('This account has been suspended.', 403);
     }
 }

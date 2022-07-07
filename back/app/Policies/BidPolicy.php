@@ -7,7 +7,6 @@ use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class BidPolicy
 {
@@ -31,11 +30,7 @@ class BidPolicy
      */
     public function store(Request $request)
     {
-//        $roles = User::getUserRoles(Auth::user()->username);
-//
-//        return in_array('Client', $roles)
-//            ? Response::allow()
-//            : Response::deny('xd');
+        //
     }
 
     /**

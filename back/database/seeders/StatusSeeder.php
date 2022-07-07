@@ -16,34 +16,33 @@ class StatusSeeder extends Seeder
     public function run()
     {
         $seeds = [
-            // There should be a bunch of statuses for certain phases the auction goes through
             [
                 'id' => 1,
-                'status' => 'Created',  // Freshly made
+                'status' => 'Created',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
             [
                 'id' => 2,
-                'status' => 'Ongoing',  // There is an active bid for this auction
+                'status' => 'Ongoing',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
             [
                 'id' => 3,
-                'status' => 'Expired',  // There were no buyers for the duration of this auction
+                'status' => 'Expired',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
             [
                 'id' => 4,
-                'status' => 'Sold', // Auction either finished with a certain bid value or there was a buyout
+                'status' => 'Sold',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
             [
                 'id' => 5,
-                'status' => 'NA',  // Catastrophe or other issues (just in case) [Not Available]
+                'status' => 'NA',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],

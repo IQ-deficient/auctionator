@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Mail\MailContact;
-use App\Mail\MailNotification;
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Database\Eloquent\Builder;
@@ -32,7 +31,6 @@ class UserController extends Controller
     {
         $roles = User::getUserRoles(Auth::user()->username);
 
-        // Get all active Users that fit the role of Manager and Auctioneer
         $usernames = DB::table('user_roles')
             ->whereIn('role', ['Manager', 'Auctioneer'])
             ->pluck('username');
@@ -41,7 +39,6 @@ class UserController extends Controller
             ->whereIn('username', $usernames)
             ->get();
 
-        // Get all active Users that fit the role of Client
         $usernames = DB::table('user_roles')
             ->where('role', 'Client')
             ->pluck('username');
@@ -50,7 +47,6 @@ class UserController extends Controller
             ->whereIn('username', $usernames)
             ->get();
 
-        // For Manager return Client Users, and for Administrator also compile Managers & Auctioneers in separate variable
         if (in_array('Administrator', $roles)) {
             return ['clients' => $clients, 'managers_auctioneers' => $managers_auctioneers];
         } elseif (in_array('Manager', $roles)) {
@@ -68,7 +64,6 @@ class UserController extends Controller
     {
         $roles = User::getUserRoles(Auth::user()->username);
 
-        // No personnel other than Admins can make User instances for the employed
         abort_if(!in_array('Administrator', $roles), 403, 'Only Administrators are allowed to register employees.');
 
         $validator = Validator::make($request->all(), [
@@ -79,11 +74,8 @@ class UserController extends Controller
             'email' => ['required', 'email:rfc,dns', 'min:10', 'max:254', 'unique:users,email'],
             'country' => 'required|string|max:32|exists:countries,name',
             'phone_number' => ['required', 'digits_between:6,15', 'unique:users,phone_number'],
-//            'gender' => 'nullable|string|max:32|exists:genders,name',
-//            'birthdate' => 'nullable|date',
-//            'image' => 'required',
             'roles' => 'required',
-            'roles.*' => 'required|string|distinct|exists:roles,name'       // Array validator
+            'roles.*' => 'required|string|distinct|exists:roles,name'
         ]);
 
         if ($validator->fails()) {
@@ -95,7 +87,6 @@ class UserController extends Controller
             ['password' => bcrypt($request->password)]
         ));
 
-        // Assign this Employee the chosen Roles
         foreach ($request->roles as $role) {
             UserRole::create([
                 'username' => $user->username,
@@ -132,7 +123,6 @@ class UserController extends Controller
     {
         $auth = Auth::user();
 
-        // Confirm that the User being Updated from api route is the one that is Authenticated
         abort_if($auth->id != $user->id, 409, 'Authenticated User does not match the User being edited.');
 
         /**
@@ -145,10 +135,8 @@ class UserController extends Controller
          * For files, size corresponds to the file size in kilobytes.
          */
         $validator = Validator::make($request->all(), [
-//            'username' => ['required', 'string', 'between:3,32', Rule::when($request->username != $user->username, 'unique:users')],
             'first_name' => 'required|string|between:1,32',
             'last_name' => 'required|string|between:1,32',
-//            'email' => ['required', 'email:rfc,dns', 'between:10,254', Rule::when($request->email != $user->email, 'unique:users')],
             'country' => 'required|string|max:32|exists:countries,name',
             'phone_number' => ['required', 'digits_between:6,15', Rule::when($request->phone_number != $user->phone_number, 'unique:users')],
             'gender' => 'nullable|string|max:32|exists:genders,name',
@@ -159,7 +147,6 @@ class UserController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
-        // Updating username here will result in cascading update of username in child rows because of onUpdate in migrations
         $user->update([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
@@ -184,12 +171,10 @@ class UserController extends Controller
         $auth_roles = User::getUserRoles($auth->username);
         $edit_user_roles = User::getUserRoles($user->username);
 
-        // Confirm that the User being Updated from api route is NOT the one that is Authenticated
         abort_if($auth->id == $user->id, 409, 'Please update your own profile through user profile page.');
 
         if (in_array('Manager', $auth_roles)) {
 
-            // Manager is allowed to only Update Clients
             abort_if(!in_array('Client', $edit_user_roles), 405, 'The User you are trying to edit is not a Client');
 
             $validator = Validator::make($request->all(), [
@@ -216,7 +201,6 @@ class UserController extends Controller
 
         } elseif ((in_array('Administrator', $auth_roles))) {
 
-            // Client and Employee Users have separate logic where dedicated personnel change their data
             if (in_array('Client', $edit_user_roles)) {
 
                 $validator = Validator::make($request->all(), [
@@ -251,19 +235,17 @@ class UserController extends Controller
                     'gender' => 'nullable|string|max:32|exists:genders,name',
                     'birthdate' => 'nullable|date',
                     'roles' => 'required',
-                    'roles.*' => 'required|string|distinct|exists:roles,name'       // Array validator
+                    'roles.*' => 'required|string|distinct|exists:roles,name'
                 ]);
 
                 if ($validator->fails()) {
                     return response()->json($validator->errors(), 422);
                 }
 
-                // Remove all present roles assigned to the User being updated
                 UserRole::query()
                     ->where('username', $user->username)
                     ->delete();
 
-                // Give them new roles based on the input
                 foreach ($request->roles as $role) {
                     UserRole::create([
                         'username' => $user->username,
@@ -280,11 +262,10 @@ class UserController extends Controller
                     'birthdate' => $request->birthdate,
                 ]);
 
-            } // Administrator can Update any User that is not an Admin
+            }
             else abort(405, 'You are not allowed to edit other Administrators');
 
         } else {
-            // Finally, any other Role gets an error, and we abort this action
             abort(403, 'You do not own permissions to perform this action.');
         }
 
@@ -308,13 +289,10 @@ class UserController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
-        // Old password from input must be same as the one already in database for change to occur
         abort_if(!Hash::check($request->old_password, $user->password), 400, 'Old password is not correct.');
 
-        // New password can't be identical to old password
         abort_if(Hash::check($request->password, $user->password), 400, 'New password is identical to old password.');
 
-        // Change the user password into hashed value and return User object
         $user->update([
             'password' => bcrypt($request->password)
         ]);
@@ -331,19 +309,17 @@ class UserController extends Controller
     public function changeUserImage(Request $request, User $user)
     {
         $validator = Validator::make($request->all(), [
-            'image' => 'required|mimes:jpeg,png,jpg|max:2048'  // Check laravel max validation for filesize
+            'image' => 'required|mimes:jpeg,png,jpg|max:2048'
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
-        // Delete previous image from storage if it exists
         $array = explode('/', $user->image);
         $image_name = end($array);
         Storage::disk('public')->delete("user_images/" . $image_name);
 
-        // Format the name for image being stored
         $originalName = explode(
             ".",
             preg_replace("/[^A-Za-z0-9.!?]/", '', $request->image->getClientOriginalName()), 2)[0];
@@ -351,7 +327,6 @@ class UserController extends Controller
         $time = now()->getTimestamp();
         $filename = "{$originalName}-{$time}.{$extension}";
 
-        // Store the image in specified folder
         $request->image->storeAs('/user_images', $filename, ['disk' => 'public']);
 
         $user->update([
@@ -368,11 +343,6 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        // : there is a middleware in place that does not allow access to api routes for inactive users
-        //  but in any case we should invalidate token for that user [which is on frontend so that will be a problem]
-        // auth()->logout();
-
-        // later: When User is being deactivated, all their bids are also permanently deactivated (and restored to previous on on auctions)
 
         $roles = User::getUserRoles(Auth::user()->username);
         abort_if(!(in_array('Manager', $roles) || in_array('Administrator', $roles)),

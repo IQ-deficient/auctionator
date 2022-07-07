@@ -13,10 +13,6 @@ class MultipleImageUpload {
             }, onUploadProgress
         });
     }
-
-    // getFiles() {
-    //     //not needed
-    // }
 }
 
 export default new MultipleImageUpload();

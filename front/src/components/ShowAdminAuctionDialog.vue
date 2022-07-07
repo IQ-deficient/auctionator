@@ -30,7 +30,6 @@
                 </td>
               </tr>
             </table>
-
           </v-toolbar-title>
           <v-card>
             <v-row class="ma-1">

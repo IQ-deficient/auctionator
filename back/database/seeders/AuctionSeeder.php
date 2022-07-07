@@ -17,9 +17,8 @@ class AuctionSeeder extends Seeder
     {
         $seeds = [
             [
-//                'id' => 1,
-                'title' => 'Though the origin is unknown, the beauty of this piece simply shimmers',
-                'seller' => 'Demigod Simons',
+                'title' => 'Though the origin is unknown, the beauty of this piece is shimmering',
+                'seller' => 'Anne-Marie Goulding',
                 'item_id' => 1,
                 'bid_id' => null,
                 'buyout' => 300.00,
@@ -32,8 +31,8 @@ class AuctionSeeder extends Seeder
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
             [
-                'title' => 'Provides ample warmth for the upcoming Ice Age',
-                'seller' => 'Saban Saulic',
+                'title' => 'Provides ample warmth for the upcoming ice age',
+                'seller' => 'Fletcher Gross',
                 'item_id' => 2,
                 'bid_id' => null,
                 'buyout' => 9999.99,
@@ -46,8 +45,8 @@ class AuctionSeeder extends Seeder
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
             [
-                'title' => 'Not for the faint of heart, nor for the shallow wallets',
-                'seller' => 'Dritan Abazovic',
+                'title' => 'Not for the faint of heart, nor for shallow wallets',
+                'seller' => 'Jane Adamson',
                 'item_id' => 3,
                 'bid_id' => 1,
                 'buyout' => 750000.75,
@@ -61,7 +60,7 @@ class AuctionSeeder extends Seeder
             ],
             [
                 'title' => 'The humorous nature of auctions is partially kept alive',
-                'seller' => 'Mental Asylum Patient 23',
+                'seller' => 'Derek Huang',
                 'item_id' => 4,
                 'bid_id' => 3,
                 'buyout' => 1.50,
@@ -74,7 +73,7 @@ class AuctionSeeder extends Seeder
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
             [
-                'title' => 'It is said that ancient politicians got drunk using this goblet',
+                'title' => 'It is said that politicians of old got drunk using this ancient goblet',
                 'seller' => 'Anonymous',
                 'item_id' => 5,
                 'bid_id' => null,
@@ -102,8 +101,8 @@ class AuctionSeeder extends Seeder
                 'updated_at' => Carbon::yesterday()->format('Y-m-d H:i:s'),
             ],
             [
-                'title' => 'Dummy Expired Status Auction for testing purposes',
-                'seller' => 'NPC \'La Kringe\'',
+                'title' => 'Dummy expired status auction for testing purposes',
+                'seller' => 'Dilan Larsen',
                 'item_id' => 7,
                 'bid_id' => null,
                 'buyout' => 9.99,
@@ -116,8 +115,8 @@ class AuctionSeeder extends Seeder
                 'updated_at' => Carbon::yesterday()->format('Y-m-d H:i:s'),
             ],
             [
-                'title' => 'Dummy NA Status Auction for testing purposes',
-                'seller' => 'Invisible Man',
+                'title' => 'Dummy NA status auction for testing purposes',
+                'seller' => 'Kaitlin Nielsen',
                 'item_id' => 8,
                 'bid_id' => null,
                 'buyout' => 2.99,
@@ -130,8 +129,8 @@ class AuctionSeeder extends Seeder
                 'updated_at' => Carbon::yesterday()->format('Y-m-d H:i:s'),
             ],
             [
-                'title' => 'Dummy Inactive Auction for testing purposes',
-                'seller' => 'Das Animus Defecticus SCP',
+                'title' => 'Dummy inactive auction for testing purposes',
+                'seller' => 'Mason Chavez',
                 'item_id' => 9,
                 'bid_id' => null,
                 'buyout' => 4.99,

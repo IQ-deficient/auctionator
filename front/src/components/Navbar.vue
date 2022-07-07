@@ -356,10 +356,8 @@ export default {
   methods: {
 
     browseAuctionsByCategory() {
-      // First, store the selected category in localstorage
-      localStorage.setItem("search_category", this.selectedCategory[0].name);
 
-      // Then, redirect to Auction Browse page, which will load data using the Category string we previously stored
+      localStorage.setItem("search_category", this.selectedCategory[0].name);
       this.drawer = false
       if (this.$router.currentRoute.path !== '/auction-browse') {
         this.$router.push('/auction-browse')
@@ -393,7 +391,6 @@ export default {
                 if (response) {
                   localStorage.clear();
                   this.$router.push('/home');
-                  // this and /login uses logic of reloading current page - this should be changed
                   this.$router.go(0)
                   this.loading = false;
                 }

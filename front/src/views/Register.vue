@@ -31,7 +31,6 @@
                   clearable
                 ></v-text-field>
               </validation-provider>
-
             </v-col>
             <v-col cols="12"
                    sm="6">
@@ -199,7 +198,6 @@
         </tr>
       </table>
     </div>
-
     <router-link to="/login" style="text-decoration: none">
       <v-btn
         color="accent"

@@ -6,9 +6,6 @@ use App\Models\Image;
 use App\Models\Item;
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
-use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -25,8 +22,6 @@ class ItemController extends Controller
     public function addItemImage(Request $request, Item $item)
     {
         $validator = Validator::make($request->all(), [
-//            'image' => 'required',
-//            'image.*' => 'required|mimes:jpeg,png,jpg|max:2048'
             'image' => 'required|mimes:jpeg,png,jpg|max:2048'
         ]);
 
@@ -36,28 +31,19 @@ class ItemController extends Controller
 
         $image = $request->image;
 
-        // later: get image array from frontend instead of calling api for each
-
-//        foreach ($request->image as $image) {
-
-        // Format the name for image being stored
         $originalName = explode(
             ".",
             preg_replace("/[^A-Za-z0-9.!?]/", '', $image->getClientOriginalName()), 2)[0];
         $time = now()->getTimestamp();
         $extension = $image->getClientOriginalExtension();
-//        $filename = "{$time}.{$extension}";
         $filename = "{$originalName}-{$time}.{$extension}";
 
-        // Store the image in specified folder
         $image->storeAs('/item_images', $filename, ['disk' => 'public']);
 
         Image::create([
             'image' => $filename,
             'item_id' => $item->id
         ]);
-
-//        }
 
         return $item;
     }

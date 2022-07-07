@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
@@ -13,7 +12,6 @@ class MailNotification extends Mailable
 
     public $title;
     public $mail_text;
-    // Do not use variable $message !
 
     /**
      * Create a new message instance.
@@ -31,8 +29,6 @@ class MailNotification extends Mailable
      */
     public function build()
     {
-        // Less secure app access setting on Auction House Google Account is turned ON
-        // On the 30th of May 2022, this will be obsolete
 
         return $this->view('mail.notification')
             ->subject($this->title)

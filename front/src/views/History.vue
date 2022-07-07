@@ -68,7 +68,6 @@ export default {
 
   },
 
-
   data: () => ({
     dialog: false,
     dialogDelete: false,

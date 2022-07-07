@@ -21,13 +21,3 @@
 </body>
 
 </html>
-
-{{--@component('mail:message')--}}
-
-{{--    <p style="font-family: 'Comic Sans MS',serif; color: #8f5782">{{$mail_text}}</p>--}}
-{{--    <a href="http://localhost:8080">--}}
-{{--        <p style="font-family: 'Comic Sans MS',serif; text-decoration: none; color: #C0A28D">--}}
-{{--            Click here to visit our platform.--}}
-{{--        </p>--}}
-{{--    </a>--}}
-{{--@endcomponent--}}

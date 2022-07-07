@@ -42,23 +42,19 @@ class CategoryController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        // Get an object of master category based on input category name
         $parent = DB::table('categories')
             ->where('is_active', true)
             ->where('master_category_id', null)
             ->where('name', $request->category)
             ->first();
 
-        // In case request contains category that is not a master category
         abort_if(!$parent, 422, 'This category is not in the list of top categories.');
 
-        // Get all active child categories that are bound to select parent
         $child_categories = DB::table('categories')
             ->where('is_active', true)
             ->where('master_category_id', $parent->id)
             ->get();
 
-        // Finally, get all conditions for same core category from many-to-many table
         $conditions = DB::table('category_conditions')
             ->where('category', $parent->name)
             ->pluck('condition');
@@ -72,13 +68,11 @@ class CategoryController extends Controller
      */
     public function getMenuCategories()
     {
-        // First, drag out all master (parent) categories
         $parents = DB::table('categories')
             ->where('is_active', true)
             ->where('master_category_id', null)
             ->get();
 
-        // Go through each object in masters array and add reference to an array of children for that core category
         foreach ($parents as $parent) {
             $children = DB::table('categories')
                 ->where('is_active', true)

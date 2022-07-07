@@ -1,4 +1,3 @@
-// import http from "../http-common";
 import axios from "axios";
 
 class UploadFilesService {
@@ -21,10 +20,6 @@ class UploadFilesService {
             .catch(error => {
                 console.log(error)
             })
-    }
-
-    getFiles() {
-        //not needed
     }
 }
 

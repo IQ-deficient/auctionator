@@ -9,7 +9,6 @@
     <v-parallax v-else height="175" style="background-color: #819fC9">
       <div class="fill-height repeating-gradient"></div>
     </v-parallax>
-
     <v-card width="50%"
             style="margin: 0 auto; position: relative; top: -25px" color="#0d111a" class="pa-1">
       <v-row class="">
@@ -56,7 +55,6 @@
                     <v-icon dark large left>
                       mdi-pencil-outline
                     </v-icon>
-
                   </a>
                 </template>
                 <template v-slot:default="dialog">
@@ -166,7 +164,6 @@
               <v-btn
                 color="accent"
                 @click="edit = !edit">
-
                 <v-icon left>mdi-pencil</v-icon>
                 Edit
               </v-btn>
@@ -175,7 +172,6 @@
               <v-btn
                 color="accent"
                 @click="edit = !edit">
-
                 <v-icon left>mdi-close</v-icon>
                 Cancel
               </v-btn>
@@ -684,7 +680,6 @@ export default {
                     'Your information has been updated.',
                     'success'
                   )
-
                   this.edit = true
                   this.loading = false;
                 }

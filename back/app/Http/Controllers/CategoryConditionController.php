@@ -29,13 +29,6 @@ class CategoryConditionController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-//        return collect(DB::select("
-//            select `condition`
-//            from category_conditions
-//            where category = ?
-//            ", [$request->category])
-//        );
-
         $category = DB::table('categories')
             ->where('is_active', true)
             ->where('name', $request->category)
@@ -46,7 +39,6 @@ class CategoryConditionController extends Controller
             ->where('id', $category->master_category_id)
             ->pluck('name');
 
-        // Find all available conditions that requested category can be represented as
         return DB::table('category_conditions')
             ->where('category', $parent_category)
             ->pluck('condition');

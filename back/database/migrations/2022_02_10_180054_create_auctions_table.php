@@ -16,19 +16,18 @@ class CreateAuctionsTable extends Migration
     {
         Schema::create('auctions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('title', 128);    // was 32 length (we might need more space for full title)
-            $table->string('seller', 32);   // Client selling the item registered in paperwork
+            $table->string('title', 128);
+            $table->string('seller', 32);
             $table->unsignedBigInteger('item_id');
             $table->unsignedBigInteger('bid_id')->nullable();
-            $table->unsignedDouble('buyout');   // Value in Euro
-            $table->string('status', 32);   // auction lifecycle
+            $table->unsignedDouble('buyout');
+            $table->string('status', 32);
             $table->dateTime('start_datetime')->default(Carbon::now());
             $table->dateTime('end_datetime')->default(Carbon::tomorrow());
             $table->unsignedBigInteger('user_id');
-            $table->boolean('is_active')->default(true);    // new or 'deleted' auctions
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
 
-            // references
             $table->foreign('item_id')->references('id')->on('items');
             $table->foreign('bid_id')->references('id')->on('bids');
             $table->foreign('status')->references('status')->on('statuses');

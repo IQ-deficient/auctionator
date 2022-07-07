@@ -19,8 +19,7 @@ class Item extends Model
     ];
 
     protected $hidden = [
-//        'created_at',
-//        'updated_at',
+        //
     ];
 
     protected $casts = [];
@@ -28,15 +27,9 @@ class Item extends Model
     protected $appends = [];
 
     protected $with = [
-//        'category_all',
         'warehouse',
         'category'
     ];
-
-    public function category_all()
-    {
-        return $this->belongsTo('App\Models\Category', 'category', 'name');
-    }
 
     public function warehouse()
     {

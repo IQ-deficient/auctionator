@@ -19,7 +19,6 @@ class CreateUserRolesTable extends Migration
             $table->string('role', 32);
             $table->timestamps();
 
-            // Cascade on Update simply means that this will also be updated if parent row (username on users) is updated
             $table->foreign('username')->references('username')->on('users')->onUpdate('cascade');
             $table->foreign('role')->references('name')->on('roles');
         });

@@ -16,8 +16,8 @@ class CreateHistoriesTable extends Migration
         Schema::create('histories', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('auction_id');
-            $table->string('username', 32); // User which won an auction!
-            $table->unsignedDouble('final_price'); // Price at which the auction was sold
+            $table->string('username', 32);
+            $table->unsignedDouble('final_price');
             $table->timestamps();
 
             $table->foreign('auction_id')->references('id')->on('auctions');

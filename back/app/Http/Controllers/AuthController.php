@@ -3,18 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\UserRole;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -50,7 +42,6 @@ class AuthController extends Controller
             return response()->json(['error' => 'Something went wrong.'], 401);
         }
 
-        // Find a User that is trying to Authenticate and deny access if their User profile is inactive
         $active_user = User::query()
             ->where('email', $request->email)
             ->first();
@@ -79,23 +70,18 @@ class AuthController extends Controller
             'email' => ['required', 'email:rfc,dns', 'min:10', 'max:254', 'unique:users,email'],
             'country' => 'required|string|max:32|exists:countries,name',
             'birthdate' => 'nullable|date',
-//            'image' => 'required'
-//            'gender' => 'nullable|string|max:32|exists:genders,name',
             'phone_number' => ['required', 'digits_between:6,15', 'unique:users,phone_number'],
         ]);
 
         if ($validator->fails()) {
-//            return response()->json($validator->errors()->toJson(), 400);
             return response()->json($validator->errors(), 400);
         }
 
-        // Generate a new User entry with validated given data, with password hashed appropriately
         $user = User::create(array_merge(
             $validator->validated(),
             ['password' => bcrypt($request->password)]
         ));
 
-        // Assign this User a role of Client
         UserRole::create([
             'username' => $user->username,
             'role' => 'Client'
