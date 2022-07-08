@@ -16,7 +16,7 @@ class Image extends Model
     ];
 
     protected $casts = [
-        //
+//        'image' => 'blob',
     ];
 
     protected function serializeDate(DateTimeInterface $date)

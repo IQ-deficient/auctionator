@@ -1,5 +1,6 @@
 <template>
   <div>
+
     <v-row>
       <v-col cols="12">
         <v-toolbar
@@ -22,6 +23,7 @@
           </v-btn>
         </v-toolbar>
       </v-col>
+
     </v-row>
     <v-app-bar dark color="#0d111a">
       <v-breadcrumbs
@@ -41,7 +43,9 @@
           @click="sortByPrice('desc')">
         <v-icon>mdi-sort-variant</v-icon>
       </v-btn>
+
     </v-app-bar>
+
     <div v-if="dataLoading" class="mt-16">
       <v-progress-circular
           :size="100"
@@ -176,8 +180,10 @@
                                 {{ auction.item.title }}
                                 <v-card-title class="text-sm-body-1; " style="justify-content: start">
                                   <v-divider class="mr-4" vertical></v-divider>
+
                                   {{ auction.item.condition }}
                                 </v-card-title>
+
                                 <v-btn class="mx-2"
                                        large
                                        icon
@@ -188,6 +194,7 @@
                               </v-card-title>
                             </v-col>
                             <v-col cols="11">
+
                             </v-col>
                             <v-divider></v-divider>
                           </v-row>
@@ -277,7 +284,9 @@
         </v-row>
       </validation-observer>
     </div>
+
   </div>
+
 </template>
 
 <script>
@@ -359,6 +368,7 @@ export default {
     },
 
     filterByString() {
+      // When we reset the array in this manner there will always be data to be filtered
       this.auctions = this.initialAuctions
       if (this.searchString == '' || this.searchString == null) return
       let filteredData = []
@@ -529,6 +539,7 @@ export default {
   },
 
   created() {
+    // Local Storage variable used to update the category a user searches by from Menu (Navbar.vue)
     this.category = localStorage.getItem('search_category')
     if (this.category == '' || this.category == null) {
       this.$router.push('/pageNotFound')
@@ -547,6 +558,7 @@ export default {
 }
 
 </script>
+
 
 <style scoped>
 

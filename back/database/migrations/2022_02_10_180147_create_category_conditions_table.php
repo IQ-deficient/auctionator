@@ -19,6 +19,7 @@ class CreateCategoryConditionsTable extends Migration
             $table->string('condition', 32);
             $table->timestamps();
 
+            // References
             $table->foreign('category')->references('name')->on('categories');
             $table->foreign('condition')->references('name')->on('conditions');
         });

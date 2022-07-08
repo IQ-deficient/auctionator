@@ -16,12 +16,13 @@ class CreateItemsTable extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title', 64);
-            $table->string('description', 500);
+            $table->string('description', 500);         // changed from text to string500
             $table->string('category', 64);
             $table->string('condition', 32);
             $table->unsignedBigInteger('warehouse_id');
             $table->timestamps();
 
+            // References
             $table->foreign('category')->references('name')->on('categories');
             $table->foreign('condition')->references('name')->on('conditions');
             $table->foreign('warehouse_id')->references('id')->on('warehouses');

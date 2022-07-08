@@ -15,11 +15,12 @@ class CreateBidsTable extends Migration
     {
         Schema::create('bids', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedDouble('value')->default(0);
+            $table->unsignedDouble('value')->default(0); // Value in Euro
             $table->string('username', 32);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
 
+            // references
             $table->foreign('username')->references('username')->on('users')->onUpdate('cascade');
         });
     }

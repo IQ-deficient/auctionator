@@ -29,6 +29,7 @@ class CountryController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
+
         return Country::query()->where('is_active', true)->get();
     }
 

@@ -24,16 +24,20 @@ class Auction extends Model
     ];
 
     protected $hidden = [
-        //
+//        'created_at',
+//        'updated_at',
+//        'item_id',
+//        'bid_id',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
         'buyout' => 'double',
+//        'start_datetime' => 'dateTime',
     ];
 
     protected $appends = [
-        //
+//        'full_name'
     ];
 
     protected $with = [
@@ -41,6 +45,11 @@ class Auction extends Model
         'bid',
         'user'
     ];
+
+//    public function getFullNameAttribute()
+//    {
+//        return  null;
+//    }
 
     public function item()
     {

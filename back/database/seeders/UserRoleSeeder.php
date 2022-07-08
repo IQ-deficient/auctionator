@@ -46,6 +46,18 @@ class UserRoleSeeder extends Seeder
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
+//            [
+//                'username' => 'mirko',
+//                'role' => 'Client',
+//                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+//                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+//            ],
+//            [
+//                'username' => 'mirko',
+//                'role' => 'Administrator',
+//                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+//                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+//            ],
             [
                 'username' => 'kristijan.manager',
                 'role' => 'Manager',

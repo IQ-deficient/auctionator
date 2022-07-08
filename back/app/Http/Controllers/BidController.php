@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Auction;
 use App\Models\Bid;
+use App\Http\Requests\StoreBidRequest;
 use App\Http\Requests\UpdateBidRequest;
 use App\Models\Image;
+use App\Models\Item;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -39,11 +41,13 @@ class BidController extends Controller
         $roles = User::getUserRoles($username);
         abort_if(!in_array('Client', $roles), 403, 'Only Clients can preview the history of their purchases.');
 
+        // Find all the bids this User has made
         $user_bids = Bid::orderBy('created_at', 'desc')
             ->where('is_active', true)
             ->where('username', $username)
             ->get();
 
+        // For each Bid we've found, add an Auction that has this bid as bid_id and add whole object to return array if this auction is functional
         foreach ($user_bids as $bid) {
             $auction = Auction::query()
                 ->where('is_active', true)
@@ -86,6 +90,7 @@ class BidController extends Controller
     {
         $username = Auth::user()->username;
         $roles = User::getUserRoles($username);
+        // Check if the currently authenticated user is registered as Client
         abort_if(!in_array('Client', $roles), 403, 'Only Clients are allowed to place bids.');
 
         $validator = Validator::make($request->all(), [
@@ -97,39 +102,51 @@ class BidController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
+        // Get Auction Model Object that is active
         $auction = Auction::where([
             ['is_active', true],
             ['id', $request->auction_id]
         ])->first();
 
+        // Just in case someone tries to bid on an inactive auction (previous query did not find it)
         abort_if(!$auction, 404, 'This auction no longer exists.');
 
+        // In case there is an attempt to bid on the unbindable auction, cancel further actions
+        // Since we only work with is_active==true entities here, there is no reason to check for that
         $no_bid_statuses = ['Expired', 'Sold', 'NA'];
         abort_if(in_array($auction->status, $no_bid_statuses) || Carbon::now() >= $auction->end_datetime,
             410, 'This auction is no longer eligible for bids.');
 
+        // Client should not be able to bid with value higher than one of the auction buyout as that really just makes buyout irrelevant
         abort_if($request->value >= $auction->buyout, 400, "The bid value can't be greater than the buyout value.");
 
+        // When there is already existent bid_id for auction in question apply the following actions
         if ($auction->bid_id) {
+            // Check if the user trying to bid already owns the leading bid value
             $current_bid_user = DB::table('bids')
                 ->where('id', $auction->bid_id)
                 ->where('is_active', true)
                 ->value('username');
             abort_if($username == $current_bid_user, 400, "You already own the highest bid for this auction.");
 
+            // Check if the input bid value is lower or equal to current bid value for this auction
             abort_if($request->value <= $auction->bid->value, 400, "New bid value must be greater than current one.");
 
-            $compare_old_value = $auction->bid->value * 1.03;
+            // Make sure new bid value is at least certain amount more than the previous Bid value
+            $compare_old_value = $auction->bid->value * 1.03;           // Currently, by agreement, we are using 3%
             abort_if($compare_old_value >= $request->value, 400, "New bid value must be at least 3% more than current one.");
 
+            // When we are sure that we have a valid new value, we should invalidate the previous (current) bid
             Bid::deactivateBid($auction->bid_id);
         }
 
+        // Make a new bid instance with input values and authenticated user (client)
         $bid = Bid::create([
             'value' => $request->value,
             'username' => Auth::user()->username,
         ]);
 
+        // Alter the auction we are bidding on with freshly created Bid and status
         $auction->update([
             'bid_id' => $bid->id,
             'status' => 'Ongoing',
