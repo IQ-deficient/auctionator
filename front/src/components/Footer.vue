@@ -3,12 +3,27 @@
     <v-footer padless>
       <v-card flat class="text-center">
         <v-card-text>
-          <v-btn v-for="icon in icons" :key="icon" class="mx-4" icon>
-            <v-icon size="24px">{{ icon }}</v-icon>
-          </v-btn>
+          <div
+            v-for="icon in icons"
+            :key="icon"
+            class="mx-4"
+            style="display: inline"
+          >
+            <v-btn
+              class="ma-2"
+              text
+              icon
+              color="primary"
+              :href="icon.link"
+              target="_blank"
+            >
+              <v-icon size="24px">{{ icon.icon }}</v-icon>
+            </v-btn>
+          </div>
         </v-card-text>
         <v-card-text
-            class="pt-0">
+          class="pt-0"
+        >
           Sodales ut etiam sit amet nisl purus in mollis nunc. At urna condimentum mattis pellentesque. Lectus urna duis
           convallis convallis tellus. Quis viverra nibh cras pulvinar mattis nunc sed blandit. Elementum sagittis vitae
           et leo duis ut. Amet est placerat in egestas erat imperdiet. Odio eu feugiat pretium nibh ipsum consequat
@@ -17,8 +32,8 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-text>
-          {{ new Date().getFullYear() }} —
-          <strong>Auction House</strong>
+          <strong> © {{ new Date().getFullYear() }} -
+            Vladimir Gazivoda</strong>
         </v-card-text>
       </v-card>
     </v-footer>
@@ -30,11 +45,18 @@ export default {
   name: "Footer",
   data: () => ({
     icons: [
-      "mdi-facebook",
-      "mdi-twitter",
-      "mdi-google-plus",
-      "mdi-linkedin",
-      "mdi-instagram"
+      {
+        icon: "mdi-github",
+        link: "https://github.com/IQ-deficient"
+      },
+      {
+        icon: "mdi-linkedin",
+        link: "https://www.linkedin.com/in/vladimir-gazivoda/"
+      },
+      {
+        icon: "mdi-instagram",
+        link: "https://www.instagram.com/gruesome_v/"
+      },
     ]
   })
 };

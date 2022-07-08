@@ -1,13 +1,13 @@
 <template>
-  <div style="margin-top: 4%">
+  <div style="margin-top: 2%">
     <v-card
       class="pa-6"
       max-width="38%"
       style="margin: 0 auto"
     >
       <v-row class="justify-start">
-        <v-img src="../assets/architecture-icon.svg"
-               style="margin-left: 0px"
+        <v-img src="../assets/auction-house-logo.png"
+               style="margin-left: 0"
                max-height="70px"
                max-width="70px"
         ></v-img>
@@ -257,7 +257,7 @@ extend('password', {
   params: ['target'], validate(value, {target}) {
     return value === target;
   },
-  message: 'The {_field_} confirmation does not match.'
+  message: 'The {_field_} does not match.'
 });
 
 export default {

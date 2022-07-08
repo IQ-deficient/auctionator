@@ -19,9 +19,9 @@
               <v-row>
                 <v-col cols="12" sm="12">
                   <validation-provider
-                      v-slot="{ errors }"
-                      name="subject"
-                      rules="required|min:1|max:30"
+                    v-slot="{ errors }"
+                    name="subject"
+                    rules="required|min:1|max:30"
                   >
                     <v-text-field :error-messages="errors"
                                   v-model="title" :rules="titleRules" label="Subject" required></v-text-field>
@@ -31,9 +31,9 @@
               <v-row>
                 <v-col cols="12" sm="12">
                   <validation-provider
-                      v-slot="{ errors }"
-                      name="email"
-                      rules="required|email"
+                    v-slot="{ errors }"
+                    name="email"
+                    rules="required|email"
                   >
                     <v-text-field :error-messages="errors"
                                   v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
@@ -43,12 +43,12 @@
               <v-row>
                 <v-col cols="12" sm="12">
                   <validation-provider
-                      v-slot="{ errors }"
-                      name="message"
-                      rules="required|min:10|max:1000"
+                    v-slot="{ errors }"
+                    name="message"
+                    rules="required|min:10|max:1000"
                   >
                     <v-textarea :error-messages="errors"
-                        v-model="message" :rules="messageRules" label="Message" required></v-textarea>
+                                v-model="message" :rules="messageRules" label="Message" required></v-textarea>
                   </validation-provider>
                 </v-col>
               </v-row>
@@ -110,6 +110,28 @@ export default {
     valid: true,
     loading: false,
     title: "",
+    email: "",
+    message: "",
+    rules: [
+      {
+        titleRules: [
+          v => !!v || "Title is required",
+          v => (v && v.length <= 20) || "Title must be less than 10 characters"
+        ],
+      },
+      {
+        emailRules: [
+          v => !!v || "E-mail is required",
+          v => /.+@.+\..+/.test(v) || "E-mail must be valid"
+        ],
+      },
+      {
+        messageRules: [
+          v => !!v || "Message is required",
+          v => (v && v.length >= 10) || "Message must be more than 10 characters"
+        ],
+      }
+    ]
   }),
 
   methods: {
@@ -125,29 +147,30 @@ export default {
 
     sendMail() {
       this.$refs.form.validate().then(success => {
-            if (success) {
-              this.loading = true
-              axios.post('contact_us', {
-                email: this.email,
-                title: this.title,
-                message: this.message,
-              })
-                  .then(response => {
-                        if (response) {
-                          Swal.fire({
-                            title: 'Email Sent!',
-                            icon: 'success'
-                          })
-                          this.loading = false
-                          this.reset()
-                        }
-                      }
-                  )
-                  .catch(error => {
-                    console.log(error)
-                    this.dataLoading = false
+        if (success) {
+          this.loading = true
+          axios.post('contact_us', {
+            email: this.email,
+            title: this.title,
+            message: this.message,
+          })
+            .then(response => {
+                if (response) {
+                  Swal.fire({
+                    title: 'Email Sent!',
+                    icon: 'success'
                   })
-            }})
+                  this.loading = false
+                  this.reset()
+                }
+              }
+            )
+            .catch(error => {
+              console.log(error)
+              this.dataLoading = false
+            })
+        }
+      })
     }
   },
 

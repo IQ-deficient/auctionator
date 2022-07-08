@@ -1,5 +1,5 @@
 <template>
-  <v-app style="background-color: #1C263E">
+  <v-app :style="{background: $vuetify.theme.themes[theme].info}">
     <Loader></Loader>
     <div style="min-height: 100%">
       <Navbar>
@@ -28,6 +28,11 @@ export default {
     return {};
   },
   methods: {},
+  computed:{
+    theme(){
+      return (this.$vuetify.theme.dark) ? 'dark' : 'light'
+    }
+  }
 };
 </script>
 

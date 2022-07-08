@@ -6,7 +6,7 @@
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" style="color: black; margin-left: 10px"></v-app-bar-nav-icon>
       <router-link to="/home">
-        <v-img src="../assets/architecture-icon.svg"
+        <v-img src="../assets/auction-house-logo.png"
                style="margin-left: 28px"
                max-height="60px"
                max-width="60px"

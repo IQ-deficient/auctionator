@@ -4,19 +4,19 @@
     <v-row>
       <v-col cols="12">
         <v-toolbar
-            dark
-            color="info"
+          dark
+          color="info"
         >
           <v-toolbar-title>Looking for something specific?</v-toolbar-title>
           <v-text-field
-              v-model="searchString"
-              class="mx-4"
-              clearable
-              @keyup.enter="filterByString"
+            v-model="searchString"
+            class="mx-4"
+            clearable
+            @keyup.enter="filterByString"
           ></v-text-field>
           <v-btn
-              text
-              @click="filterByString()"
+            text
+            @click="filterByString()"
           >
             <v-icon class="pr-2">mdi-magnify</v-icon>
             <span>Search</span>
@@ -25,22 +25,26 @@
       </v-col>
 
     </v-row>
-    <v-app-bar dark color="#0d111a">
+    <v-app-bar dark color="primary">
       <v-breadcrumbs
-          :items="items"
-          large
+        :items="items"
+        large
       >
         <template v-slot:divider>
           <v-icon>mdi-chevron-right</v-icon>
         </template>
       </v-breadcrumbs>
       <v-spacer></v-spacer>
-      <v-btn class="mr-2"
-             @click="sortByPrice('asc')">
+      <v-btn
+        color="primary"
+        class="mr-2 darken-2"
+        @click="sortByPrice('asc')">
         <v-icon>mdi-sort-reverse-variant</v-icon>
       </v-btn>
       <v-btn
-          @click="sortByPrice('desc')">
+        color="primary"
+        class="mr-2 darken-2"
+        @click="sortByPrice('desc')">
         <v-icon>mdi-sort-variant</v-icon>
       </v-btn>
 
@@ -48,10 +52,10 @@
 
     <div v-if="dataLoading" class="mt-16">
       <v-progress-circular
-          :size="100"
-          :width="7"
-          color="white"
-          indeterminate
+        :size="100"
+        :width="7"
+        color="white"
+        indeterminate
       ></v-progress-circular>
     </div>
     <div v-else-if="auctions == ''">
@@ -63,30 +67,30 @@
       <validation-observer ref="form">
         <v-row style="justify-content: start;" class="ma-1">
           <v-card
-              v-for="auction in auctions" :key="auction.id"
-              class="mx-1 my-1 card-body d-flex flex-column h-100"
-              max-width="19%"
-              min-width="19%"
-              color="tertiary"
+            v-for="auction in auctions" :key="auction.id"
+            class="mx-1 my-1 card-body d-flex flex-column h-100"
+            max-width="19%"
+            min-width="19%"
+            color="tertiary"
           >
             <v-row>
               <v-col cols="12">
                 <v-img
-                    v-if="auction.images.length != 0"
-                    style="background-color: #0d111a"
-                    contain
-                    :lazy-src="'/api/test/'+ auction.images[0].image"
-                    :src="'/api/test/' + auction.images[0].image"
-                    min-height="275px"
-                    max-height="275px"
+                  v-if="auction.images.length != 0"
+                  style="background-color: #0d111a"
+                  contain
+                  :lazy-src="'/api/test/'+ auction.images[0].image"
+                  :src="'/api/test/' + auction.images[0].image"
+                  min-height="275px"
+                  max-height="275px"
                 ></v-img>
                 <v-img
-                    v-else
-                    contain
-                    src="../assets/no-image-item.svg"
-                    alt="No item image"
-                    min-height="275px"
-                    max-height="275px"
+                  v-else
+                  contain
+                  src="../assets/no-image-item.svg"
+                  alt="No item image"
+                  min-height="275px"
+                  max-height="275px"
                 >
                 </v-img>
               </v-col>
@@ -141,9 +145,9 @@
                 <v-card>
                   <v-card-title class="justify-end">
                     <v-btn
-                        small
-                        fab
-                        @click="clearForm(); dialog.value = false;"
+                      small
+                      fab
+                      @click="clearForm(); dialog.value = false;"
                     >
                       <v-icon>mdi-close</v-icon>
                     </v-btn>
@@ -153,23 +157,23 @@
                       <v-row>
                         <v-col cols="5" class="pt-8">
                           <v-carousel
-                              v-if="auction.images.length != 0"
-                              hide-delimiters style="height: 100%">
+                            v-if="auction.images.length != 0"
+                            hide-delimiters style="height: 100%">
                             <v-carousel-item
-                                style="background-color: #0d111a"
-                                contain
-                                v-for="(item,i) in auction.images"
-                                :key="i"
-                                :lazy-src="'/api/test/'+ item.image"
-                                :src="'/api/test/' + item.image"
+                              style="background-color: #0d111a"
+                              contain
+                              v-for="(item,i) in auction.images"
+                              :key="i"
+                              :lazy-src="'/api/test/'+ item.image"
+                              :src="'/api/test/' + item.image"
                             ></v-carousel-item>
                           </v-carousel>
                           <v-carousel
-                              v-else
-                              hide-delimiters style="height: 100%">
+                            v-else
+                            hide-delimiters style="height: 100%">
                             <v-carousel-item
-                                contain
-                                src="../assets/no-image-item.svg">
+                              contain
+                              src="../assets/no-image-item.svg">
                             </v-carousel-item>
                           </v-carousel>
                         </v-col>
@@ -232,20 +236,20 @@
                             </v-col>
                           </v-row>
                           <validation-provider
-                              v-slot="{ errors }"
-                              name="bid"
-                              rules="required|numeric"
-                              clearable
+                            v-slot="{ errors }"
+                            name="bid"
+                            rules="required|numeric"
+                            clearable
                           >
                             <v-row>
                               <v-card-title style="word-break: normal" class="mb-4">
                                 Your bid:
                               </v-card-title>
                               <v-text-field
-                                  v-model="bidInput"
-                                  :error-messages="errors"
-                                  hint="*Must be at least 3% higher than the current value."
-                                  clearable
+                                v-model="bidInput"
+                                :error-messages="errors"
+                                hint="*Must be at least 3% higher than the current value."
+                                clearable
                               >
                               </v-text-field>
                             </v-row>
@@ -320,13 +324,17 @@ export default {
       loading: false,
       items: [
         {
-          text: 'Home',
-          disabled: false,
+          text: 'Category',
+          disabled: true
         },
-        {
-          text: 'Main category placeholder',
-          disabled: true,
-        },
+        // {
+        //   text: 'Home',
+        //   disabled: false,
+        // },
+        // {
+        //   text: 'Main category placeholder',
+        //   disabled: true,
+        // },
         {
           text: localStorage.getItem('search_category'),
           disabled: true,
@@ -394,33 +402,33 @@ export default {
       axios.post('/filtered_auctions', {
         category: this.category
       })
-          .then(response => {
-            if (response.data) {
-              this.auctions = response.data.auctions
-              this.initialAuctions = response.data.auctions
-              this.conditions = response.data.conditions
-            }
-            this.dataLoading = false
-          })
-          .catch(error => {
-            console.log(error)
-            this.dataLoading = false
-          })
+        .then(response => {
+          if (response.data) {
+            this.auctions = response.data.auctions
+            this.initialAuctions = response.data.auctions
+            this.conditions = response.data.conditions
+          }
+          this.dataLoading = false
+        })
+        .catch(error => {
+          console.log(error)
+          this.dataLoading = false
+        })
     },
 
     getLoggedUser() {
       this.pageLoading = true
       axios.get('/auth/user')
-          .then(response => {
-            if (response.data) {
-              this.username = response.data.username
-              this.pageLoading = false
-            }
-          })
-          .catch(error => {
-            console.log(error)
+        .then(response => {
+          if (response.data) {
+            this.username = response.data.username
             this.pageLoading = false
-          })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+          this.pageLoading = false
+        })
     },
 
     postBid(auction_id) {
@@ -442,9 +450,9 @@ export default {
               }).then(response => {
                 if (response.data) {
                   Swal.fire(
-                      'Congratulations!',
-                      "You can take a look at your current bids on the 'Bids' page.",
-                      'success'
+                    'Congratulations!',
+                    "You can take a look at your current bids on the 'Bids' page.",
+                    'success'
                   )
                   this.loading = false
                   this.modal = false
@@ -452,38 +460,38 @@ export default {
                   this.clearForm()
                 }
               })
-                  .catch(error => {
-                    if (error.response.status == 400) {
-                      Swal.fire({
-                        icon: 'error',
-                        title: error.response.data.message,
-                      })
-                      console.log(error)
-                      this.loading = false
-                    } else if (error.response.status == 404 || error.response.status == 410) {
-                      Swal.fire({
-                        icon: 'error',
-                        title: error.response.data.message,
-                      })
-                      console.log(error)
-                      this.loading = false
-                      this.modal = false
-                      this.showAuctions()
-                      this.clearForm()
-                    } else if (error.response.status == 403) {
-                      Swal.fire({
-                        icon: 'error',
-                        title: error.response.data.message,
-                      })
-                      console.log(error)
-                      this.loading = false
-                      this.modal = false
-                      this.showAuctions()
-                      this.clearForm()
-                    }
+                .catch(error => {
+                  if (error.response.status == 400) {
+                    Swal.fire({
+                      icon: 'error',
+                      title: error.response.data.message,
+                    })
                     console.log(error)
                     this.loading = false
-                  })
+                  } else if (error.response.status == 404 || error.response.status == 410) {
+                    Swal.fire({
+                      icon: 'error',
+                      title: error.response.data.message,
+                    })
+                    console.log(error)
+                    this.loading = false
+                    this.modal = false
+                    this.showAuctions()
+                    this.clearForm()
+                  } else if (error.response.status == 403) {
+                    Swal.fire({
+                      icon: 'error',
+                      title: error.response.data.message,
+                    })
+                    console.log(error)
+                    this.loading = false
+                    this.modal = false
+                    this.showAuctions()
+                    this.clearForm()
+                  }
+                  console.log(error)
+                  this.loading = false
+                })
             }
           })
         }
@@ -506,9 +514,9 @@ export default {
           }).then(response => {
             if (response.data) {
               Swal.fire(
-                  'Success!',
-                  "You can review your bought items on the 'History' page.",
-                  'success'
+                'Success!',
+                "You can review your bought items on the 'History' page.",
+                'success'
               )
               this.loading = false
               this.modal = false
