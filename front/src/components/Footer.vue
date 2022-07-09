@@ -4,8 +4,8 @@
       <v-card flat class="text-center">
         <v-card-text>
           <div
-            v-for="icon in icons"
-            :key="icon"
+            v-for="(icon, id) in icons"
+            :key="id"
             class="mx-4"
             style="display: inline"
           >
@@ -46,14 +46,17 @@ export default {
   data: () => ({
     icons: [
       {
+        id: 1,
         icon: "mdi-github",
         link: "https://github.com/IQ-deficient"
       },
       {
+        id: 2,
         icon: "mdi-linkedin",
         link: "https://www.linkedin.com/in/vladimir-gazivoda/"
       },
       {
+        id: 3,
         icon: "mdi-instagram",
         link: "https://www.instagram.com/gruesome_v/"
       },
