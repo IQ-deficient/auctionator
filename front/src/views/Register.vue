@@ -371,7 +371,6 @@ export default {
   },
 
   mounted() {
-    document.title = 'Register - Auction House'
     if (localStorage.getItem('token')) {
       this.$router.push('/home')
     }

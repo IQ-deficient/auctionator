@@ -11,7 +11,6 @@
 export default {
   name: "NotFoundComponent",
   mounted() {
-    document.title = 'Not Found - Auction House'
   }
 }
 </script>

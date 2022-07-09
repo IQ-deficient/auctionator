@@ -796,7 +796,6 @@ export default {
     if (window.localStorage.getItem('token') === null) {
       this.$router.push('/pageNotFound')
     }
-    document.title = 'User Profile - Auction House'
   },
 
   created() {

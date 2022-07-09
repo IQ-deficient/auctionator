@@ -11,51 +11,43 @@ import PageNotFound from "../views/PageNotFound";
 import Bids from '../views/Bids';
 import History from '../views/History';
 
-
 Vue.use(VueRouter)
 
 const routes = [
+
+    {path: '/', redirect: '/home'},
+    {path: '/home', name: 'Home', component: Home, meta: {title: 'Home'}},
+    {path: '/about', name: 'About', component: () => import('../views/About.vue'), meta: {title: 'About'}},
     {
-        path: '/',
-        redirect: '/home'
-    },
-    {
-        path: '/home',
-        name: 'Home',
-        component: Home
-    },
-    {
-        path: '/about',
-        name: 'About',
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    },
-    {
         path: '/contact',
         name: 'Contact',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "about" */ '../views/Contact.vue')
+        component: () => import(/* webpackChunkName: "about" */ '../views/Contact.vue'),
+        meta: {title: 'User Profile'}
     },
-
-    {path: '/login', name: 'Login', component: Login},
-    {path: '/register', name: 'Register', component: Register},
-    {path: '/admin-auction', name: 'AdminAuction', component: AdminAuction},
-    {path: '/admin-user', name: 'AdminUser', component: AdminUser},
-    {path: '/user-profile', name: 'UserProfile', component: UserProfile},
-    {path: '/auction-browse', name: 'AuctionBrowse', component: AuctionBrowse},
-    {path: '/bids', name: 'Bids', component: Bids},
-    {path: '/history', name: 'History', component: History},
-    {path: '/:catchAll(.*)', name: 'NotFound', component: PageNotFound},
+    {path: '/login', name: 'Login', component: Login, meta: {title: 'Login'}},
+    {path: '/register', name: 'Register', component: Register, meta: {title: 'Register'}},
+    {path: '/admin-auction', name: 'AdminAuction', component: AdminAuction, meta: {title: 'Auction Management'}},
+    {path: '/admin-user', name: 'AdminUser', component: AdminUser, meta: {title: 'User Management'}},
+    {path: '/user-profile', name: 'UserProfile', component: UserProfile, meta: {title: 'User Profile'}},
+    {path: '/auction-browse', name: 'AuctionBrowse', component: AuctionBrowse, meta: {title: 'Browse'}},
+    {path: '/bids', name: 'Bids', component: Bids, meta: {title: 'Your Bids'}},
+    {path: '/history', name: 'History', component: History, meta: {title: 'Owned Auctions'}},
+    // Non-existent route catch
+    {path: '/:catchAll(.*)', name: 'NotFound', component: PageNotFound, meta: {title: 'Not Found'}},
 ]
 
 const router = new VueRouter({
     // This now somehow works without any server configuration defined in documentation
     mode: 'history',
     routes
+})
+
+router.beforeEach((to, from, next) => {
+    document.title = to.meta.title + ' - ' + process.env.VUE_APP_TITLE || process.env.VUE_APP_TITLE
+    next()
 })
 
 export default router

@@ -20,7 +20,6 @@ export default {
     LatestPost
   },
   mounted() {
-    document.title = 'Home - Auction House'
   }
 };
 </script>

@@ -117,7 +117,6 @@ export default {
     if (!window.localStorage.user_roles.includes('Client')) {
       this.$router.push('/pageNotFound')
     }
-    document.title = 'Your bids - Auction House'
   }
 
 }

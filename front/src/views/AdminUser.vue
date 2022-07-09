@@ -613,7 +613,6 @@ export default {
     if (!this.allowedRoles) {
       this.$router.push('/pageNotFound')
     }
-    document.title = 'User Management - Auction House'
   }
 }
 </script>

@@ -175,7 +175,6 @@ export default {
   },
 
   mounted() {
-    document.title = 'Contact - Auction House'
   }
 };
 </script>

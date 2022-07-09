@@ -201,7 +201,6 @@ export default {
   },
 
   mounted() {
-    document.title = 'Login - Auction House'
     if (localStorage.getItem('token')) {
       this.$router.push('/home')
     }

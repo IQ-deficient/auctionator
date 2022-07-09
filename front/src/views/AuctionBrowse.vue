@@ -560,7 +560,6 @@ export default {
   },
 
   mounted() {
-    document.title = 'Browse - Auction House'
   }
 
 }

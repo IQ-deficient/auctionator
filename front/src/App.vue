@@ -28,11 +28,14 @@ export default {
     return {};
   },
   methods: {},
-  computed:{
-    theme(){
+  computed: {
+    theme() {
       return (this.$vuetify.theme.dark) ? 'dark' : 'light'
     }
-  }
+  },
+  mounted() {
+  },
+
 };
 </script>
 

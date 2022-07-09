@@ -976,7 +976,6 @@ export default {
     if (!this.allowedRoles) {
       this.$router.push('/pageNotFound')
     }
-    document.title = 'Auction Management - Auction House'
   }
 
 }
