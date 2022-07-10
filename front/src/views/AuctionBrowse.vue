@@ -79,8 +79,8 @@
                   v-if="auction.images.length != 0"
                   style="background-color: #0d111a"
                   contain
-                  :lazy-src="'/api/test/'+ auction.images[0].image"
-                  :src="'/api/test/' + auction.images[0].image"
+                  :lazy-src="'/api/item/'+ auction.images[0].image"
+                  :src="'/api/item/' + auction.images[0].image"
                   min-height="275px"
                   max-height="275px"
                 ></v-img>
@@ -164,8 +164,8 @@
                               contain
                               v-for="(item,i) in auction.images"
                               :key="i"
-                              :lazy-src="'/api/test/'+ item.image"
-                              :src="'/api/test/' + item.image"
+                              :lazy-src="'/api/item/'+ item.image"
+                              :src="'/api/item/' + item.image"
                             ></v-carousel-item>
                           </v-carousel>
                           <v-carousel

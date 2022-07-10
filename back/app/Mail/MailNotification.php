@@ -31,7 +31,7 @@ class MailNotification extends Mailable
      */
     public function build()
     {
-        // Less secure app access setting on Auction House Google Account is turned ON
+        // Less secure app access setting on Auctionator Google Account is turned ON
         // On the 30th of May 2022, this will be obsolete
 
         return $this->view('mail.notification')

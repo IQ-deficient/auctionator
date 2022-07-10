@@ -13,9 +13,9 @@
         ></v-img>
       </router-link>
       <v-divider id="divider" vertical style="margin-left: 28px; border-right: 2px solid black"></v-divider>
-      <v-toolbar-title style="margin-left: 28px">Auction House</v-toolbar-title>
+      <v-toolbar-title style="margin-left: 28px">Auctionator</v-toolbar-title>
       <div class="ml-12">
-        <router-link style="text-decoration: none" to="/">
+        <router-link style="text-decoration: none" to="/home">
           <v-btn text>Home</v-btn>
         </router-link>
         <router-link style="text-decoration: none" to="/about">

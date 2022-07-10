@@ -49,8 +49,8 @@
                         max-height="100%"
                         min-height="100%"
                         contain
-                        :lazy-src="'/api/test/'+ item.image"
-                        :src="'/api/test/' + item.image"
+                        :lazy-src="'/api/item/'+ item.image"
+                        :src="'/api/item/' + item.image"
                     ></v-img>
                   </v-carousel-item>
                 </v-carousel>

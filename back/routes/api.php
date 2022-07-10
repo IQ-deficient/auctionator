@@ -52,7 +52,7 @@ Route::post('/filtered_auctions', [AuctionController::class, 'getFiltered']);   
 Route::get('/menu_categories', [CategoryController::class, 'getMenuCategories']);   // All Categories formatted for Menu
 Route::get('/active_countries', [CountryController::class, 'getActive']);  // Used in registration
 Route::post('/contact_us', [UserController::class, 'sendMail']);        // Contact us page
-Route::get('/test/{image}', [AuctionController::class, 'getItemImage']);    // Get item image route
+Route::get('/item/{image}', [AuctionController::class, 'getItemImage']);    // Get item image route
 
 // This Middleware should require User being Authenticated and his JWT token to be granted access to these routes
 Route::group([
