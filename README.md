@@ -1,4 +1,4 @@
-# Auction House Web Application
+# Auctionator - Auction House Web Application
 Auction (english style) web application serving to improve my knowledge in web development.
 
 ## Features
