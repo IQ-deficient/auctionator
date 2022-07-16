@@ -18,11 +18,11 @@
         <router-link style="text-decoration: none" to="/home">
           <v-btn text>Home</v-btn>
         </router-link>
-        <router-link style="text-decoration: none" to="/about">
-          <v-btn text>About</v-btn>
-        </router-link>
         <router-link style="text-decoration: none" to="/contact">
           <v-btn text>Contact</v-btn>
+        </router-link>
+        <router-link style="text-decoration: none" to="/about">
+          <v-btn text>About</v-btn>
         </router-link>
       </div>
       <v-spacer></v-spacer>

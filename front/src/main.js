@@ -11,8 +11,8 @@ import DatetimePicker from 'vuetify-datetime-picker';
 Vue.config.productionTip = false
 
 const options = {
-  confirmButtonColor: '#41b882',
-  cancelButtonColor: '#ff7674',
+  confirmButtonColor: '#67b15a',
+  cancelButtonColor: '#e4a122',
 };
 Vue.use(VueSweetalert2, options);
 Vue.use(DatetimePicker)

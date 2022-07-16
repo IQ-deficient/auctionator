@@ -12,10 +12,8 @@
               <v-card-title>
                 <v-row class="justify-end">
                   <v-btn
-                      small
-                      fab
                       @click="$emit('close')"
-                      dark
+                      color="secondary"
                   >
                     <v-icon>mdi-close</v-icon>
                   </v-btn>

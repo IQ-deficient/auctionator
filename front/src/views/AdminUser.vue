@@ -1,37 +1,37 @@
 <template>
   <div>
     <v-data-table
-        style="width: 95%; margin: 0 auto; padding-top: 6px"
-        :loading="dataLoading"
-        :headers="headers"
-        :items="tableData"
-        :search="search"
-        sort-by="title"
-        class="elevation-1; rounded-card; mt-10"
+      style="width: 95%; margin: 0 auto; padding-top: 6px"
+      :loading="dataLoading"
+      :headers="headers"
+      :items="tableData"
+      :search="search"
+      sort-by="title"
+      class="elevation-1; rounded-card; mt-10"
     >
       <template v-slot:top>
         <v-toolbar
-            flat
-            class="mb-8"
+          flat
+          class="mb-5"
         >
           <v-btn :loading="dataLoading" color="primary" class="mr-3"
                  @click="getUsers()">
             <v-icon>mdi-database-refresh-outline</v-icon>
           </v-btn>
-          <v-toolbar-title><h2>Users</h2></v-toolbar-title>
+          <v-toolbar-title><h2>User Management</h2></v-toolbar-title>
           <v-divider
-              class="mx-4"
-              inset
-              vertical
+            class="mx-4"
+            inset
+            vertical
           ></v-divider>
           <v-row>
             <v-col cols="12" md="4">
               <v-text-field
-                  v-model="search"
-                  append-icon="mdi-magnify"
-                  label="Search"
-                  single-line
-                  hide-details
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Search"
+                single-line
+                hide-details
               ></v-text-field>
             </v-col>
             <v-divider v-if="isAdmin"
@@ -41,22 +41,22 @@
             ></v-divider>
             <v-col cols="12" md="4" v-if="isAdmin">
               <v-select
-                  :loading="dataLoading"
-                  single-line
-                  hide-details
-                  v-model="selectRole"
-                  :items="roles"
-                  item-text="name"
-                  label="Roles"
-                  @change="updateTableData()"
+                :loading="dataLoading"
+                single-line
+                hide-details
+                v-model="selectRole"
+                :items="roles"
+                item-text="name"
+                label="Roles"
+                @change="updateTableData()"
               ></v-select>
             </v-col>
           </v-row>
           <v-spacer></v-spacer>
           <v-dialog
-              v-model="modal"
-              max-width="60%"
-              ref="form"
+            v-model="modal"
+            max-width="60%"
+            ref="form"
           >
             <template v-slot:activator="{ on, attrs }">
               <v-btn v-if="isAdmin"
@@ -105,30 +105,30 @@
                       <v-row>
                         <v-col cols="6">
                           <validation-provider
-                              v-slot="{ errors }"
-                              name="first name"
-                              rules="required|alpha|min:1|max:32"
+                            v-slot="{ errors }"
+                            name="first name"
+                            rules="required|alpha|min:1|max:32"
                           >
                             <v-text-field
-                                v-model="firstName"
-                                :error-messages="errors"
-                                label="First name"
-                                clearable
+                              v-model="firstName"
+                              :error-messages="errors"
+                              label="First name"
+                              clearable
                             ></v-text-field>
                           </validation-provider>
                         </v-col>
                         <v-col cols="6"
                         >
                           <validation-provider
-                              v-slot="{ errors }"
-                              name="last name"
-                              rules="required|alpha|min:1|max:32"
+                            v-slot="{ errors }"
+                            name="last name"
+                            rules="required|alpha|min:1|max:32"
                           >
                             <v-text-field
-                                v-model="lastName"
-                                :error-messages="errors"
-                                label="Last name"
-                                clearable
+                              v-model="lastName"
+                              :error-messages="errors"
+                              label="Last name"
+                              clearable
                             ></v-text-field>
                           </validation-provider>
                         </v-col>
@@ -136,15 +136,15 @@
                       <v-row>
                         <v-col cols="12">
                           <validation-provider
-                              v-slot="{ errors }"
-                              name="username"
-                              rules="required|min:3|max:32"
+                            v-slot="{ errors }"
+                            name="username"
+                            rules="required|min:3|max:32"
                           >
                             <v-text-field
-                                v-model="username"
-                                :error-messages="errors"
-                                label="Username"
-                                clearable
+                              v-model="username"
+                              :error-messages="errors"
+                              label="Username"
+                              clearable
                             ></v-text-field>
                           </validation-provider>
                         </v-col>
@@ -152,28 +152,28 @@
                       <v-row>
                         <v-col cols="6">
                           <validation-provider
-                              v-slot="{ errors }"
-                              name="country"
-                              rules="required"
-                              clearable
+                            v-slot="{ errors }"
+                            name="country"
+                            rules="required"
+                            clearable
                           >
                             <v-select
-                                v-model="selectCountry"
-                                :items="countries"
-                                item-text="name"
-                                :error-messages="errors"
-                                label="Country"
-                                return-object
-                                @change="updateCountryCode()"
+                              v-model="selectCountry"
+                              :items="countries"
+                              item-text="name"
+                              :error-messages="errors"
+                              label="Country"
+                              return-object
+                              @change="updateCountryCode()"
                             ></v-select>
                           </validation-provider>
                         </v-col>
                         <v-col cols="6">
                           <validation-provider
-                              v-slot="{ errors }"
-                              name="phone number"
-                              rules="required|numeric|min:6|max:15"
-                              clearable
+                            v-slot="{ errors }"
+                            name="phone number"
+                            rules="required|numeric|min:6|max:15"
+                            clearable
                           >
                             <v-text-field v-if="phoneCode != null"
                                           :prefix="'(' + phoneCode + ')'"
@@ -194,17 +194,17 @@
                       <v-row>
                         <v-col cols="12">
                           <validation-provider
-                              v-slot="{ errors }"
-                              name="email"
-                              rules="required|email|min:10|max:254"
+                            v-slot="{ errors }"
+                            name="email"
+                            rules="required|email|min:10|max:254"
                           >
                             <v-text-field
-                                v-model="email"
-                                :error-messages="errors"
-                                hint="example@mail.com"
-                                append-icon="mdi-email"
-                                label="Email"
-                                clearable
+                              v-model="email"
+                              :error-messages="errors"
+                              hint="example@mail.com"
+                              append-icon="mdi-email"
+                              label="Email"
+                              clearable
                             ></v-text-field>
                           </validation-provider>
                         </v-col>
@@ -212,20 +212,20 @@
                       <v-row>
                         <v-col cols="12">
                           <validation-provider
-                              v-slot="{ errors }"
-                              name="password"
-                              rules="required|min:8|max:128"
-                              clearable
+                            v-slot="{ errors }"
+                            name="password"
+                            rules="required|min:8|max:128"
+                            clearable
                           >
                             <v-text-field
-                                v-model="password"
-                                :error-messages="errors"
-                                label="Password"
-                                :type="showPassword ? 'text' : 'password'"
-                                hint="Must be at least 8 characters."
-                                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                                @click:append="showPassword = !showPassword"
-                                clearable
+                              v-model="password"
+                              :error-messages="errors"
+                              label="Password"
+                              :type="showPassword ? 'text' : 'password'"
+                              hint="Must be at least 8 characters."
+                              :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                              @click:append="showPassword = !showPassword"
+                              clearable
                             >
                             </v-text-field>
                           </validation-provider>
@@ -234,19 +234,19 @@
                       <v-row>
                         <v-col cols="12">
                           <validation-provider
-                              v-slot="{ errors }"
-                              name="password confirmation"
-                              rules="required|password:@password"
-                              clearable
+                            v-slot="{ errors }"
+                            name="password confirmation"
+                            rules="required|password:@password"
+                            clearable
                           >
                             <v-text-field
-                                v-model="confirmPassword"
-                                :error-messages="errors"
-                                label="Confirm password"
-                                :type="showConfirmPass ? 'text' : 'password'"
-                                :append-icon="showConfirmPass ? 'mdi-eye' : 'mdi-eye-off'"
-                                @click:append="showConfirmPass = !showConfirmPass"
-                                clearable
+                              v-model="confirmPassword"
+                              :error-messages="errors"
+                              label="Confirm password"
+                              :type="showConfirmPass ? 'text' : 'password'"
+                              :append-icon="showConfirmPass ? 'mdi-eye' : 'mdi-eye-off'"
+                              @click:append="showConfirmPass = !showConfirmPass"
+                              clearable
                             >
                             </v-text-field>
                           </validation-provider>
@@ -255,18 +255,18 @@
                       <v-row>
                         <v-col cols="12">
                           <validation-provider
-                              v-slot="{ errors }"
-                              name="employee role"
-                              rules="required"
+                            v-slot="{ errors }"
+                            name="employee role"
+                            rules="required"
                           >
                             <v-select
-                                v-model="selectEmployeeRoles"
-                                :error-messages="errors"
-                                :items="employee_roles"
-                                label="Choose role"
-                                multiple
-                                chips
-                                persistent-hint
+                              v-model="selectEmployeeRoles"
+                              :error-messages="errors"
+                              :items="employee_roles"
+                              label="Choose role"
+                              multiple
+                              chips
+                              persistent-hint
                             ></v-select>
                           </validation-provider>
                         </v-col>
@@ -290,18 +290,18 @@
       </template>
       <template v-slot:item.actions="{ item }">
         <v-row>
-          <v-col cols="6">
+          <v-col cols="12" sm="4">
             <v-icon
-                color="primary"
-                @click="editUser(item)"
+              color="primary"
+              @click="editUser(item)"
             >
               mdi-pencil
             </v-icon>
           </v-col>
-          <v-col cols="6">
+          <v-col  cols="12" sm="4">
             <v-icon
-                color="primary"
-                @click="deleteUser(item)"
+              color="primary"
+              @click="deleteUser(item)"
             >
               mdi-account-cancel-outline
             </v-icon>
@@ -310,13 +310,13 @@
       </template>
     </v-data-table>
     <edit-user
-        v-if="editUserDialogue"
-        @close="editUserDialogue = false"
-        @reload="getUsers()"
-        :edit-type="selectRole"
-        :show-dialog="editUserDialogue"
-        :user="chosenUser"
-        :employee-roles="employeeRoles"
+      v-if="editUserDialogue"
+      @close="editUserDialogue = false"
+      @reload="getUsers()"
+      :edit-type="selectRole"
+      :show-dialog="editUserDialogue"
+      :user="chosenUser"
+      :employee-roles="employeeRoles"
     />
   </div>
 </template>
@@ -387,20 +387,15 @@ export default {
     modal: false,
     dialogDelete: false,
     headers: [
-      {
-        text: 'ID',
-        align: 'start',
-        sortable: false,
-        value: 'id',
-      },
+      {text: 'ID', align: 'start', sortable: false, value: 'id',},
       {text: 'Username', value: 'username'},
+      {text: 'Email', value: 'email'},
       {text: 'First name', value: 'first_name'},
       {text: 'Last name', value: 'last_name'},
-      {text: 'Email', value: 'email'},
       {text: 'Country', value: 'country'},
       {text: 'Phone number', value: 'phone_number'},
-      {text: '', value: 'actions', sortable: false},
-      {text: '', value: 'roles', sortable: false},
+      {text: 'Actions', value: 'actions', sortable: false},
+      {text: '', value: 'roles', sortable: false, align: 'center'},
     ],
     search: '',
     selectRole: '',
@@ -454,40 +449,40 @@ export default {
 
     deleteUser(item) {
       Swal.fire({
-        title: 'Are you sure you want to permanently ban this user?',
+        title: 'Are you sure you want to permanently remove this user?',
         icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#605290',
-        cancelButtonColor: '#819fC9',
+        confirmButtonColor: '#915A64',
+        cancelButtonColor: '#909C6B',
         confirmButtonText: "Yes, I'm sure!"
       }).then((result) => {
         if (result.isConfirmed) {
           this.loading = true;
           axios.delete('user/' + item.id)
-              .then(response => {
-                if (response.data) {
-                  Swal.fire(
-                      'Success!',
-                      "The user has been permanently banned.",
-                      'success',
-                  )
-                  this.loading = false
-                  this.modal = false
-                  this.getUsers()
-                }
-              })
-              .catch(error => {
-                if (error.response.status == 400) {
-                  Swal.fire({
-                    icon: 'error',
-                    text: error.response.data.message,
-                  })
-                  console.log(error)
-                  this.loading = false
-                }
+            .then(response => {
+              if (response.data) {
+                Swal.fire(
+                  'Success!',
+                  "The user has been suspended.",
+                  'success',
+                )
+                this.loading = false
+                this.modal = false
+                this.getUsers()
+              }
+            })
+            .catch(error => {
+              if (error.response.status == 400) {
+                Swal.fire({
+                  icon: 'error',
+                  text: error.response.data.message,
+                })
                 console.log(error)
-                this.dataLoading = false
-              })
+                this.loading = false
+              }
+              console.log(error)
+              this.dataLoading = false
+            })
         }
       })
     },
@@ -507,32 +502,32 @@ export default {
             password_confirmation: this.confirmPassword,
             roles: this.selectEmployeeRoles
           })
-              .then(response => {
-                    if (response) {
-                      Swal.fire({
-                        title: 'Done!',
-                        text: 'Employee created successfully.',
-                        icon: 'success'
-                      })
-                      this.loading = false
-                      this.modal = false
-                      this.getUsers()
-                      this.clearForm()
-                    }
-                  }
-              )
-              .catch(error => {
-                if (error.response.status == 403) {
+            .then(response => {
+                if (response) {
                   Swal.fire({
-                    icon: 'error',
-                    text: error.response.data.message,
+                    title: 'Done!',
+                    text: 'Employee created successfully.',
+                    icon: 'success'
                   })
-                  console.log(error)
                   this.loading = false
+                  this.modal = false
+                  this.getUsers()
+                  this.clearForm()
                 }
+              }
+            )
+            .catch(error => {
+              if (error.response.status == 403) {
+                Swal.fire({
+                  icon: 'error',
+                  text: error.response.data.message,
+                })
                 console.log(error)
-                this.dataLoading = false
-              })
+                this.loading = false
+              }
+              console.log(error)
+              this.dataLoading = false
+            })
         }
       })
     },
@@ -546,48 +541,48 @@ export default {
       this.dataLoading = true
       this.users = []
       axios.get('/users')
-          .then(response => {
-            if (response.data) {
-              this.users = response.data
-              this.tableData = response.data.clients
-            }
-            this.selectRole = this.roles[0]
-            this.dataLoading = false
-          })
-          .catch(error => {
-            console.log(error)
-            this.dataLoading = false
-          })
+        .then(response => {
+          if (response.data) {
+            this.users = response.data
+            this.tableData = response.data.clients
+          }
+          this.selectRole = this.roles[0]
+          this.dataLoading = false
+        })
+        .catch(error => {
+          console.log(error)
+          this.dataLoading = false
+        })
     },
 
     getEmployeeRoles() {
       axios.get('/employees')
-          .then(response => {
-            if (response.data) {
-              this.employeeRoles = response.data
-            }
-          })
-          .catch(error => {
-            console.log(error)
-          })
+        .then(response => {
+          if (response.data) {
+            this.employeeRoles = response.data
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
 
     getCountries() {
       axios.get('/active_countries')
-          .then(response => {
-            if (response.data) {
-              this.countries = response.data
+        .then(response => {
+          if (response.data) {
+            this.countries = response.data
+          }
+          for (let i = 0; i < this.countries.length; i++) {
+            if (this.countries[i].name == this.selectCountry) {
+              this.selectCountry = this.countries[i]
             }
-            for (let i = 0; i < this.countries.length; i++) {
-              if (this.countries[i].name == this.selectCountry) {
-                this.selectCountry = this.countries[i]
-              }
-            }
-            this.phoneCode = this.selectCountry.phone_code
-          })
-          .catch(error => {
-            console.log(error)
-          })
+          }
+          this.phoneCode = this.selectCountry.phone_code
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
 
     updateCountryCode() {

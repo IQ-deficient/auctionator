@@ -324,7 +324,7 @@ export default {
       loading: false,
       items: [
         {
-          text: 'Category',
+          text: 'Chosen category',
           disabled: true
         },
         // {
@@ -438,8 +438,8 @@ export default {
             title: 'Are you sure you want to bid on this item?',
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#605290',
-            cancelButtonColor: '#819fC9',
+            confirmButtonColor: '#915A64',
+            cancelButtonColor: '#909C6B',
             confirmButtonText: "Yes, I'm sure!"
           }).then((result) => {
             if (result.isConfirmed) {
@@ -503,8 +503,8 @@ export default {
         title: 'Are you sure you want to buy this item?',
         icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#605290',
-        cancelButtonColor: '#819fC9',
+        confirmButtonColor: '#915A64',
+        cancelButtonColor: '#909C6B',
         confirmButtonText: "Yes, I'm sure!"
       }).then((result) => {
         if (result.isConfirmed) {
