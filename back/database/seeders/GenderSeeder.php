@@ -16,48 +16,12 @@ class GenderSeeder extends Seeder
     public function run()
     {
         $seeds = [
-            [
-                'id' => 1,
-                'name' => 'Male',
-                'is_active' => true,
-                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
-            ],
-            [
-                'id' => 2,
-                'name' => 'Female', // lmao
-                'is_active' => true,
-                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
-            ],
-            [
-                'id' => 3,
-                'name' => 'Other',
-                'is_active' => true,
-                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
-            ],
-            [
-                'id' => 4,
-                'name' => 'Would rather not say',
-                'is_active' => true,
-                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
-            ],
-            //            [
-//                'id' => 2,
-//                'name' => 'Dishwasher', // Insert sitcom bass boosted laughter track
-//                'is_active' => true,
-//                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-//                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
-//            ],
-//            [
-//                'id' => 3,
-//                'name' => 'Mentally Impaired', // the spectrum
-//                'is_active' => true,
-//                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-//                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
-//            ],
+            ['id' => 1, 'name' => 'Male', 'is_active' => true, 'created_at' => Carbon::now()->format('Y-m-d H:i:s'), 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),],
+            ['id' => 2, 'name' => 'Female', 'is_active' => true, 'created_at' => Carbon::now()->format('Y-m-d H:i:s'), 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),],
+            ['id' => 3, 'name' => 'Other', 'is_active' => true, 'created_at' => Carbon::now()->format('Y-m-d H:i:s'), 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),],
+            ['id' => 4, 'name' => 'Would rather not say', 'is_active' => true, 'created_at' => Carbon::now()->format('Y-m-d H:i:s'), 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),],
+            // Insert sitcom bass boosted laughter track
+//            ['id' => 2, 'name' => 'Dishwasher', 'is_active' => true, 'created_at' => Carbon::now()->format('Y-m-d H:i:s'), 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),],
         ];
 
         DB::table('genders')->insert($seeds);

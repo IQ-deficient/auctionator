@@ -31,7 +31,7 @@
           <v-btn value="center"
                  color="transparent" depressed>
             <v-icon left class="mr-2">mdi-pencil-box-outline</v-icon>
-            <span class="hidden-sm-and-down">Sign up</span>
+            <span class="hidden-sm-and-down">Register</span>
           </v-btn>
         </router-link>
         <router-link to="/login/" style="text-decoration: none">
