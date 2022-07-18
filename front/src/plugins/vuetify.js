@@ -18,8 +18,8 @@ export default new Vuetify({
                 error: '#f44336',
             },
             dark: {
-                primary: '#99AEA4',
-                secondary: '#B3AE56',
+                primary: '#63726b',
+                secondary: '#868347',
                 accent: '#a98c65',
                 tertiary: '#F8F8F8',
 

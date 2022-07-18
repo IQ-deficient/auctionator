@@ -26,6 +26,14 @@
         </router-link>
       </div>
       <v-spacer></v-spacer>
+      <div>
+        <v-btn
+          @click="changeColorMode()"
+        >
+          <v-icon>mdi-lightbulb-on-outline</v-icon>
+        </v-btn>
+<!--        <v-switch v-model="$vuetify.theme.dark" />-->
+      </div>
       <div v-if="token == null">
         <router-link to="/register/" style="text-decoration: none">
           <v-btn value="center"
@@ -44,19 +52,19 @@
       </div>
       <div v-else>
         <v-container
-            fluid
+          fluid
         >
           <v-row justify="center">
             <v-menu
-                bottom
-                min-width="20%"
-                offset-y
+              bottom
+              min-width="20%"
+              offset-y
             >
               <template v-slot:activator="{ on }">
                 <v-btn
-                    icon
-                    x-large
-                    v-on="on"
+                  icon
+                  x-large
+                  v-on="on"
                 >
                   <v-avatar size="50">
                     <v-img v-if="userImage"
@@ -66,15 +74,15 @@
                            :src="'/api/user/'+ userImage">
                       <template v-slot:placeholder>
                         <v-row
-                            class="fill-height ma-0"
-                            align="center"
-                            justify="center"
+                          class="fill-height ma-0"
+                          align="center"
+                          justify="center"
                         >
                           <v-progress-circular
-                              indeterminate
-                              width="14"
-                              :size="145"
-                              color="primary"
+                            indeterminate
+                            width="14"
+                            :size="145"
+                            color="primary"
                           ></v-progress-circular>
                         </v-row>
                       </template>
@@ -97,15 +105,15 @@
                                :src="'/api/user/'+ userImage">
                           <template v-slot:placeholder>
                             <v-row
-                                class="fill-height ma-0"
-                                align="center"
-                                justify="center"
+                              class="fill-height ma-0"
+                              align="center"
+                              justify="center"
                             >
                               <v-progress-circular
-                                  indeterminate
-                                  width="14"
-                                  :size="145"
-                                  color="primary"
+                                indeterminate
+                                width="14"
+                                :size="145"
+                                color="primary"
                               ></v-progress-circular>
                             </v-row>
                           </template>
@@ -124,19 +132,19 @@
                     <v-divider class="my-3"></v-divider>
                     <div v-if="role == 'Client'">
                       <v-container
-                          fluid
+                        fluid
                       >
                         <v-row justify="center">
                           <v-menu
-                              left
-                              min-width="12%"
-                              offset-x
+                            left
+                            min-width="12%"
+                            offset-x
                           >
                             <template v-slot:activator="{ on }">
                               <v-btn
-                                  depressed
-                                  text
-                                  v-on="on"
+                                depressed
+                                text
+                                v-on="on"
                               >
                                 <v-icon left class="mr-2">mdi-tag-arrow-left-outline</v-icon>
                                 Bid options
@@ -147,8 +155,8 @@
                                 <div class="mx-auto text-center">
                                   <router-link to="/bids" style="text-decoration: none">
                                     <v-btn
-                                        depressed
-                                        text
+                                      depressed
+                                      text
                                     >
                                       <v-icon left class="mr-2">mdi-alarm-multiple</v-icon>
                                       Bids
@@ -157,8 +165,8 @@
                                   <v-divider class="my-1"></v-divider>
                                   <router-link to="/history" style="text-decoration: none">
                                     <v-btn
-                                        depressed
-                                        text
+                                      depressed
+                                      text
                                     >
                                       <v-icon left class="mr-2">mdi-history</v-icon>
                                       History
@@ -174,19 +182,19 @@
                     </div>
                     <div v-if="role == 'Administrator'">
                       <v-container
-                          fluid
+                        fluid
                       >
                         <v-row justify="center">
                           <v-menu
-                              left
-                              min-width="12%"
-                              offset-x
+                            left
+                            min-width="12%"
+                            offset-x
                           >
                             <template v-slot:activator="{ on }">
                               <v-btn
-                                  depressed
-                                  text
-                                  v-on="on"
+                                depressed
+                                text
+                                v-on="on"
                               >
                                 <v-icon left class="mr-2">mdi-shield-crown-outline</v-icon>
                                 Admin Function
@@ -197,8 +205,8 @@
                                 <div class="mx-auto text-center">
                                   <router-link to="/admin-auction" style="text-decoration: none">
                                     <v-btn
-                                        depressed
-                                        text
+                                      depressed
+                                      text
                                     >
                                       <v-icon left class="mr-2">mdi-store-search-outline</v-icon>
                                       Auctions
@@ -207,8 +215,8 @@
                                   <v-divider class="my-1"></v-divider>
                                   <router-link to="/admin-user" style="text-decoration: none">
                                     <v-btn
-                                        depressed
-                                        text
+                                      depressed
+                                      text
                                     >
                                       <v-icon left class="mr-2">mdi-account-search-outline</v-icon>
                                       Users
@@ -223,12 +231,16 @@
                       <v-divider class="my-3"></v-divider>
                     </div>
                     <div v-if="role.includes('Auctioneer')">
-                      <router-link to="/admin-auction" style="text-decoration: none">
+                      <router-link
+                        to="/admin-auction"
+                        style="text-decoration: none">
                         <v-btn
-                            depressed
-                            text
+                          depressed
+                          text
                         >
-                          <v-icon left class="mr-2">mdi-store-search-outline</v-icon>
+                          <v-icon left class="mr-2">
+                            mdi-store-search-outline
+                          </v-icon>
                           Manage Auctions
                         </v-btn>
                       </router-link>
@@ -237,8 +249,8 @@
                     <div v-if="role.includes('Manager')">
                       <router-link to="/admin-user" style="text-decoration: none">
                         <v-btn
-                            depressed
-                            text
+                          depressed
+                          text
                         >
                           <v-icon left class="mr-2">mdi-account-search-outline</v-icon>
                           Manage Users
@@ -249,7 +261,7 @@
 
                     <router-link to="/user-profile" style="text-decoration: none">
                       <v-btn
-                          text
+                        text
                       >
                         <v-icon left class="mr-2">mdi-account-cog-outline</v-icon>
                         Account settings
@@ -257,9 +269,9 @@
                     </router-link>
                     <v-divider class="my-3"></v-divider>
                     <v-btn
-                        depressed
-                        color="primary"
-                        @click="logout()"
+                      depressed
+                      color="primary"
+                      @click="logout()"
                     >
                       <v-icon left class="mr-2">mdi-logout-variant</v-icon>
                       Logout
@@ -272,14 +284,15 @@
         </v-container>
       </div>
     </v-toolbar>
-    <v-navigation-drawer style="min-width: 28%; width: fit-content"
-                         v-model="drawer"
-                         absolute
-                         bottom
-                         temporary
-                         light
-                         height="100vh"
-                         color="tertiary"
+    <v-navigation-drawer
+      style="min-width: 28%; width: fit-content"
+      v-model="drawer"
+      absolute
+      bottom
+      temporary
+      light
+      height="100vh"
+      color="tertiary"
     >
       <v-list-item class="primary" style="height: 75px;" dark>
         <v-list-item-content>
@@ -288,8 +301,8 @@
           </v-list-item-title>
         </v-list-item-content>
         <v-btn
-            icon
-            @click.stop="drawer = !drawer"
+          icon
+          @click.stop="drawer = !drawer"
         >
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
@@ -300,15 +313,15 @@
               min-height="65%"
       >
         <v-treeview
-            activatable
-            open-on-click
-            hoverable
-            transition
-            return-object
-            :items="categories"
-            item-key="name"
-            :active.sync="selectedCategory"
-            @update:active="browseAuctionsByCategory()"
+          activatable
+          open-on-click
+          hoverable
+          transition
+          return-object
+          :items="categories"
+          item-key="name"
+          :active.sync="selectedCategory"
+          @update:active="browseAuctionsByCategory()"
         >
         </v-treeview>
       </v-list>
@@ -355,6 +368,11 @@ export default {
 
   methods: {
 
+    changeColorMode(){
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+      localStorage.setItem("dark_mode", this.$vuetify.theme.dark)
+    },
+
     browseAuctionsByCategory() {
       // First, store the selected category in localstorage
       localStorage.setItem("search_category", this.selectedCategory[0].name);
@@ -371,14 +389,14 @@ export default {
     getCategories() {
       this.categories = []
       axios.get('/menu_categories')
-          .then(response => {
-            if (response.data) {
-              this.categories = response.data;
-            }
-          })
-          .catch(error => {
-            console.log(error)
-          })
+        .then(response => {
+          if (response.data) {
+            this.categories = response.data;
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
 
     logout() {
@@ -389,55 +407,55 @@ export default {
 
       this.loading = true
       axios.post('/auth/logout', config)
-          .then(response => {
-                if (response) {
-                  localStorage.clear();
-                  this.$router.push('/home');
-                  // this and /login uses logic of reloading current page - this should be changed
-                  this.$router.go(0)
-                  this.loading = false;
-                }
-              }
-          )
-          .catch(error => {
-            console.log(error)
-            localStorage.clear();
-            this.$router.go(0)
-            this.loading = false
-            this.error = error.response.data.message;
+        .then(response => {
+            if (response) {
+              localStorage.clear();
+              this.$router.push('/home');
+              // this and /login uses logic of reloading current page - this should be changed
+              this.$router.go(0)
+              this.loading = false;
+            }
+          }
+        )
+        .catch(error => {
+          console.log(error)
+          localStorage.clear();
+          this.$router.go(0)
+          this.loading = false
+          this.error = error.response.data.message;
 
-          })
+        })
     },
 
     getLoggedUser() {
       this.pageLoading = true
       axios.get('/auth/user')
-          .then(response => {
-            if (response.data) {
-              this.loggedUser = response.data
-              if (response.data.image) this.userImage = response.data.image
-              this.pageLoading = false
-            }
-          })
-          .catch(error => {
-            console.log(error)
+        .then(response => {
+          if (response.data) {
+            this.loggedUser = response.data
+            if (response.data.image) this.userImage = response.data.image
             this.pageLoading = false
-          })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+          this.pageLoading = false
+        })
     },
 
     getUserImage() {
       this.pageLoading = true
       axios.get('/auth/image')
-          .then(response => {
-            if (response.data) {
-              this.userImage = response.data
-              this.pageLoading = false
-            }
-          })
-          .catch(error => {
-            console.log(error)
+        .then(response => {
+          if (response.data) {
+            this.userImage = response.data
             this.pageLoading = false
-          })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+          this.pageLoading = false
+        })
     },
   },
 

@@ -34,6 +34,7 @@ export default {
     }
   },
   mounted() {
+    this.$vuetify.theme.dark = localStorage.getItem("dark_mode")
   },
 
 };
