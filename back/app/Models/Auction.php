@@ -24,10 +24,10 @@ class Auction extends Model
     ];
 
     protected $hidden = [
-//        'created_at',
-//        'updated_at',
+        'created_at',
+        'updated_at',
+        'bid_id',
 //        'item_id',
-//        'bid_id',
     ];
 
     protected $casts = [

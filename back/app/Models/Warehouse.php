@@ -20,6 +20,11 @@ class Warehouse extends Model
         'is_active' => 'boolean',
     ];
 
+    protected $hidden = [
+      'created_at',
+      'updated_at',
+    ];
+
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
