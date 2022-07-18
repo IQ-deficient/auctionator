@@ -123,7 +123,7 @@ class AuctionController extends Controller
     public function getFiltered(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'category' => 'required|string|exists:categories,name', // It is critical that we only get auctions for certain category
+            'category' => 'required|string|exists:categories,name', // It is critical that we only get Auctions for certain Category
 //            'title' => 'nullable|string|between:3,128',
         ]);
 
@@ -131,17 +131,17 @@ class AuctionController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        // Fetch all active Auctions whose item is of the category the Client selected
+        // Fetch all active Auctions whose item is of the Category the Client selected
         $auctions = Auction::query()
             ->where('is_active', true)
             ->whereIn(
                 'item_id',
                 DB::table('items')
-                    ->where('category', $request->category)     // get item IDs for select category
+                    ->where('category', $request->category)     // get Item IDs for select Category
                     ->pluck('id')
             )
             ->whereIn('status', ['Created', 'Ongoing'])
-            ->where('start_datetime', '<=', Carbon::now())      // only auctions that have started (because of queuing)
+            ->where('start_datetime', '<=', Carbon::now())      // only Auctions that have started (because of queuing)
             ->where('end_datetime', '>=', Carbon::now())      // and NOT ended
             ->get();
 
@@ -171,7 +171,7 @@ class AuctionController extends Controller
     /**
      * Store a newly created resource in storage.
      * @param Request $request
-     * @return array
+     * @return array|JsonResponse
      */
     public function store(Request $request)
     {
@@ -180,10 +180,13 @@ class AuctionController extends Controller
             400,
             'Only Auctioneers and Admins are allowed to create Auctions.');
 
+        $gte_buyout = env('MIN_BUYOUT');
+
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|between:3,128',
             'seller' => 'required|string|between:3,32',
-            'buyout' => 'required|numeric|gt:0',    // x.xx > 0
+            'min_bid_value' => 'required|numeric|gte:0|lt:buyout',  // X >= 0€ && X > buyout
+            'buyout' => 'required|numeric|gte:' . $gte_buyout,    // X >= 2€
             'start_datetime' => 'required|date|after:today',
             'end_datetime' => 'required|date|after:start_datetime',     // end date_time must be greater than start dt
             'title_item' => 'required|between:3,64',
@@ -216,6 +219,7 @@ class AuctionController extends Controller
             'seller' => $request->seller,
             'item_id' => $item->id,             // Here goes the ID of the item that was made before the auction for it
             'bid_id' => null,           // There is no bid by default
+            'min_bid_value' => $request->min_bid_value,
             'buyout' => $request->buyout,
             'status' => 'Created',          // Fresh auction
             'start_datetime' => $request->start_datetime,
@@ -274,10 +278,13 @@ class AuctionController extends Controller
         // Only the auction without a bid can be changed for certain parameters
         abort_if($auction->bid_id != null, 422, 'Only auctions with no bid can be altered.');
 
+        $gte_buyout = env('MIN_BUYOUT');
+
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|between:3,128',
             'seller' => 'required|string|between:3,32',
-            'buyout' => 'required|numeric|gt:0',
+            'min_bid_value' => 'required|numeric|gte:0|lt:buyout',
+            'buyout' => 'required|numeric|gte:' . $gte_buyout,
             'title_item' => 'required|string|between:3,64',
             'description' => 'required|string|between:3,500',
             'category' => 'required|string|max:64|exists:categories,name',
@@ -305,6 +312,7 @@ class AuctionController extends Controller
         $auction->update([
             'title' => $request->title,
             'seller' => $request->seller,
+            'min_bid_value' => $request->min_bid_value,
             'buyout' => $request->buyout,
 //            'start_datetime' => $request->start_datetime,
 //            'end_datetime' => $request->end_datetime,
@@ -350,7 +358,7 @@ class AuctionController extends Controller
 
     /**
      * Some critical errors lead to Auctions being soft deleted, or rather being made Not Available (for a short time).
-     * This resets the auction to default settings meaning the duration and bid is reset.
+     * This resets the Auction to default settings meaning the duration is reset and Bid defaulted.
      * @return Auction|Model
      */
     public function softDestroyAndRestore(Auction $auction)
@@ -422,7 +430,8 @@ class AuctionController extends Controller
         return $auction;
     }
 
-    public function getItemImage ($name) {
+    public function getItemImage($name)
+    {
         return response()->file(public_path('storage/item_images/' . $name));
     }
 

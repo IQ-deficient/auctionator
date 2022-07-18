@@ -16,16 +16,17 @@ class CreateAuctionsTable extends Migration
     {
         Schema::create('auctions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('title', 128);    // was 32 length (we might need more space for full title)
-            $table->string('seller', 32);   // Client selling the item registered in paperwork
+            $table->string('title', 128);
+            $table->string('seller', 32);   // Client registered in paperwork that is selling the Item
             $table->unsignedBigInteger('item_id');
             $table->unsignedBigInteger('bid_id')->nullable();
-            $table->unsignedDouble('buyout');   // Value in Euro
+            $table->unsignedDouble('min_bid_value');   // Minimum price the bidding for the Auction must start at
+            $table->unsignedDouble('buyout');   // Final purchase value in Euro
             $table->string('status', 32);   // auction lifecycle
             $table->dateTime('start_datetime')->default(Carbon::now());
             $table->dateTime('end_datetime')->default(Carbon::tomorrow());
             $table->unsignedBigInteger('user_id');
-            $table->boolean('is_active')->default(true);    // new or 'deleted' auctions
+            $table->boolean('is_active')->default(true);    // new or 'deleted' Auctions
             $table->timestamps();
 
             // references

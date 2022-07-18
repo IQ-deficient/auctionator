@@ -108,7 +108,7 @@ class BidController extends Controller
             ['id', $request->auction_id]
         ])->first();
 
-        // Just in case someone tries to bid on an inactive auction (previous query did not find it)
+        // Just in case someone tries to bid on an inactive auction (when previous query did not find it)
         abort_if(!$auction, 404, 'This auction no longer exists.');
 
         // In case there is an attempt to bid on the unbindable auction, cancel further actions
@@ -119,6 +119,9 @@ class BidController extends Controller
 
         // Client should not be able to bid with value higher than one of the auction buyout as that really just makes buyout irrelevant
         abort_if($request->value >= $auction->buyout, 400, "The bid value can't be greater than the buyout value.");
+
+        // Client must offer a value greater than min_bid_value for that auction
+        abort_if($request->value < $auction->min_bid_value, 400, "The bid value can't be less than the minimum defined bid value.");
 
         // When there is already existent bid_id for auction in question apply the following actions
         if ($auction->bid_id) {

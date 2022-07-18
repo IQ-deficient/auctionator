@@ -15,6 +15,7 @@ class Auction extends Model
         'seller',
         'item_id',
         'bid_id',
+        'min_bid_value',
         'buyout',
         'status',
         'start_datetime',
@@ -32,6 +33,7 @@ class Auction extends Model
 
     protected $casts = [
         'is_active' => 'boolean',
+        'min_bid_value' => 'double',
         'buyout' => 'double',
 //        'start_datetime' => 'dateTime',
     ];
