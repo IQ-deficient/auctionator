@@ -1,5 +1,5 @@
 # Auctionator - Auction House Web Application
-Auction (english style) web application serving to improve my knowledge in web development.
+Full stack web application serving to improve my knowledge in web development.
 
 ## Features
 - Laravel 8.x
