@@ -227,7 +227,7 @@
                               <validation-provider
                                 v-slot="{ errors }"
                                 name="image"
-                                rules="required|image|mimes:image/jpeg,image/png|size:2000">
+                                rules="required|image|mimes:image/jpeg,image/png,image/jpg|size:2000">
                                 <v-file-input multiple type="file"
                                               v-model="imageUpload"
                                               :error-messages="errors"
@@ -356,7 +356,7 @@
                               <validation-provider
                                 v-slot="{ errors }"
                                 name="buyout"
-                                rules="required|min_value:1"
+                                rules="required|min_value:2"
                               >
                                 <v-text-field
                                   prepend-inner-icon="mdi-currency-eur"
@@ -563,7 +563,7 @@ extend('alpha_spaces', {
 
 extend('min_value', {
   ...min_value,
-  message: 'The {_field_} must be at least 1 euro (€).'
+  message: 'The {_field_} must be at least 2€ (Euro).'
 })
 
 extend('image', {

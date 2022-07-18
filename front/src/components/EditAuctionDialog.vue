@@ -162,7 +162,7 @@
                         <validation-provider
                             v-slot="{ errors }"
                             name="auction title"
-                            rules="required|min:3|max:64"
+                            rules="required|min:3|max:128"
                         >
                           <v-text-field
                               v-model="addAuctionTitle"
@@ -178,7 +178,7 @@
                         <validation-provider
                             v-slot="{ errors }"
                             name="seller"
-                            rules="required|alpha|min:3|max:32"
+                            rules="required|alpha_spaces|min:3|max:32"
                         >
                           <v-text-field
                               v-model="addAuctionSeller"
@@ -213,7 +213,7 @@
 </template>
 
 <script>
-import {required, min, max, alpha, min_value, image, mimes, size} from 'vee-validate/dist/rules'
+import {required, min, max, alpha_spaces, min_value, image, mimes, size} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -235,14 +235,14 @@ extend('max', {
   message: 'The {_field_} may not be greater than {length} characters.'
 })
 
-extend('alpha', {
-  ...alpha,
-  message: 'The {_field_} may only contain letters.',
+extend('alpha_spaces', {
+  ...alpha_spaces,
+  message: 'The {_field_} may only contain letters or spaces.',
 })
 
 extend('min_value', {
   ...min_value,
-  message: 'The {_field_} must be at least 1 euro (€).'
+  message: 'The {_field_} must be at least 2€ (Euro).'
 })
 
 extend('image', {

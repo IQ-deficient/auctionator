@@ -295,7 +295,7 @@
                 <validation-provider
                   v-slot="{ errors }"
                   name="first name"
-                  rules="required|alpha|min:1|max:32"
+                  rules="required|alpha_spaces|min:1|max:32"
                 >
                   <v-text-field
                     v-model="firstName"
@@ -312,7 +312,7 @@
                 <validation-provider
                   v-slot="{ errors }"
                   name="Last name"
-                  rules="required|alpha|min:1|max:32"
+                  rules="required|alpha_spaces|min:1|max:32"
                 >
                   <v-text-field
                     v-model="lastName"
@@ -467,7 +467,7 @@
 </template>
 
 <script>
-import {required, min, max, alpha, numeric, mimes, size, image} from 'vee-validate/dist/rules'
+import {required, min, max, alpha_spaces, numeric, mimes, size, image} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 import UploadService from "../services/UploadFilesService";
 
@@ -491,9 +491,9 @@ extend('max', {
   message: 'The {_field_} may not be greater than {length} characters.'
 })
 
-extend('alpha', {
-  ...alpha,
-  message: 'The {_field_} may only contain letters.',
+extend('alpha_spaces', {
+  ...alpha_spaces,
+  message: 'The {_field_} may only contain letters or spaces.',
 })
 
 extend('numeric', {

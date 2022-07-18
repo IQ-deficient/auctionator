@@ -41,7 +41,7 @@
                     <validation-provider
                         v-slot="{ errors }"
                         name="first name"
-                        rules="required|alpha|min:1|max:32"
+                        rules="required|alpha_spaces|min:1|max:32"
                     >
                       <v-text-field
                           :loading="dataLoading"
@@ -55,7 +55,7 @@
                     <validation-provider
                         v-slot="{ errors }"
                         name="last name"
-                        rules="required|alpha|min:1|max:32"
+                        rules="required|alpha_spaces|min:1|max:32"
                     >
                       <v-text-field
                           :loading="dataLoading"
@@ -199,7 +199,7 @@
 </template>
 
 <script>
-import {required, digits, min, max} from 'vee-validate/dist/rules'
+import {required, digits, min, max, alpha_spaces} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -209,6 +209,11 @@ setInteractionMode('eager')
 extend('required', {
   ...required,
   message: 'The {_field_} field is required.',
+})
+
+extend('alpha_spaces', {
+  ...alpha_spaces,
+  message: 'The {_field_} may only contain letters or spaces.',
 })
 
 extend('min', {

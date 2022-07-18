@@ -149,7 +149,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('marcus.123'),
                 'first_name' => 'Marcus',
                 'last_name' => 'Aurelius',
-                'email' => 'marcus.123@gmail.com',       // change this e-mail in order to test mailing functionality
+                'email' => 'marcus.123@gmail.com',       // change this e-mail in order to test mailing functionality with current seeders
                 'phone_number' => '067000009',
                 'gender' => null,
                 'country' => 'Italy',

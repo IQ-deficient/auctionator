@@ -22,7 +22,7 @@
               <validation-provider
                 v-slot="{ errors }"
                 name="first name"
-                rules="required|alpha|min:1|max:32"
+                rules="required|alpha_spaces|min:1|max:32"
               >
                 <v-text-field
                   v-model="firstName"
@@ -38,7 +38,7 @@
               <validation-provider
                 v-slot="{ errors }"
                 name="last name"
-                rules="required|alpha|min:1|max:32"
+                rules="required|alpha_spaces|min:1|max:32"
               >
                 <v-text-field
                   v-model="lastName"
@@ -211,7 +211,7 @@
 </template>
 
 <script>
-import {required, numeric, email, min, max, alpha, alpha_num} from 'vee-validate/dist/rules'
+import {required, numeric, email, min, max, alpha_spaces, alpha_num} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -238,9 +238,9 @@ extend('max', {
   message: 'The {_field_} may not be greater than {length} characters.'
 })
 
-extend('alpha', {
-  ...alpha,
-  message: 'The {_field_} may only contain letters.',
+extend('alpha_spaces', {
+  ...alpha_spaces,
+  message: 'The {_field_} may only contain letters or spaces.',
 })
 
 extend('alpha_num', {
