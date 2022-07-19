@@ -29,10 +29,15 @@
       <div>
         <v-btn
           @click="changeColorMode()"
+          depressed
+          color="transparent"
+          class="mr-2"
+          small
+          :fab="token != null"
         >
-          <v-icon>mdi-lightbulb-on-outline</v-icon>
+          <v-icon color="warning" v-if="this.$vuetify.theme.dark">mdi-lightbulb-on-outline</v-icon>
+          <v-icon color="info" v-else>mdi-weather-night</v-icon>
         </v-btn>
-<!--        <v-switch v-model="$vuetify.theme.dark" />-->
       </div>
       <div v-if="token == null">
         <router-link to="/register/" style="text-decoration: none">
@@ -67,11 +72,12 @@
                   v-on="on"
                 >
                   <v-avatar size="50">
-                    <v-img v-if="userImage"
-                           @click="getUserImage()"
-                           :loading="pageLoading"
-                           :lazy-src="'/api/user/'+ userImage"
-                           :src="'/api/user/'+ userImage">
+                    <v-img
+                      v-if="userImage"
+                      @click="getUserImage()"
+                      :loading="pageLoading"
+                      :lazy-src="'/api/user/'+ userImage"
+                      :src="'/api/user/'+ userImage">
                       <template v-slot:placeholder>
                         <v-row
                           class="fill-height ma-0"
@@ -87,9 +93,11 @@
                         </v-row>
                       </template>
                     </v-img>
-                    <v-img v-else
-                           lazy-src="../assets/user-image-nav.svg"
-                           src="../assets/user-image-nav.svg">
+                    <v-img
+                      v-else
+                      lazy-src="../assets/user/no-user-image.svg"
+                      src="../assets/user/no-user-image.svg"
+                    >
                     </v-img>
                   </v-avatar>
                 </v-btn>
@@ -118,10 +126,12 @@
                             </v-row>
                           </template>
                         </v-img>
-                        <v-img v-else
-                               lazy-src="../assets/user-image-nav.svg"
-                               src="../assets/user-image-nav.svg"
-                               alt="User image placeholder">
+                        <v-img
+                          v-else
+                          lazy-src="../assets/user/no-user-image.svg"
+                          src="../assets/user/no-user-image.svg"
+                          alt="User image placeholder"
+                        >
                         </v-img>
                       </v-avatar>
                     </router-link>
@@ -368,7 +378,7 @@ export default {
 
   methods: {
 
-    changeColorMode(){
+    changeColorMode() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark
       localStorage.setItem("dark_mode", this.$vuetify.theme.dark)
     },

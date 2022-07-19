@@ -55,7 +55,7 @@ export default {
         },
         {
           id: 2,
-          src: require("../../src/assets/images/about/marc.jpg"),
+          src: require("../assets/about/marc.jpg"),
           name: 'Alec "Marc" Thompson',
           title: 'Don\'t be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...'
         },

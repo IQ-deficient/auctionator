@@ -62,8 +62,8 @@
                         max-height="100%"
                         min-height="100%"
                         contain
-                        lazy-src="../assets/no-image-item.svg"
-                        src="../assets/no-image-item.svg"
+                        lazy-src="../assets/auction/no-image-item.svg"
+                        src="../assets/auction/no-image-item.svg"
                     ></v-img>
                   </v-carousel-item>
                 </v-carousel>

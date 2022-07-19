@@ -60,7 +60,7 @@
     </div>
     <div v-else-if="auctions == ''">
       <v-img dark class="mt-16" style="width: 18%; height: 18%;
-                            margin: 0 auto" src="../assets/no-items.svg"></v-img>
+                            margin: 0 auto" src="../assets/auction/no-items.svg"></v-img>
       <v-card-text class="text-lg-h2" style="color: black">No items found</v-card-text>
     </div>
     <div v-else>
@@ -87,7 +87,7 @@
                 <v-img
                   v-else
                   contain
-                  src="../assets/no-image-item.svg"
+                  src="../assets/auction/no-image-item.svg"
                   alt="No item image"
                   min-height="275px"
                   max-height="275px"
@@ -173,7 +173,7 @@
                             hide-delimiters style="height: 100%">
                             <v-carousel-item
                               contain
-                              src="../assets/no-image-item.svg">
+                              src="../assets/auction/no-image-item.svg">
                             </v-carousel-item>
                           </v-carousel>
                         </v-col>

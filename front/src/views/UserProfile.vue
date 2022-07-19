@@ -36,9 +36,10 @@
                     </v-row>
                   </template>
                 </v-img>
-                <v-img v-else
-                       lazy-src="../assets/user-image.svg"
-                       src="../assets/user-image.svg">
+                <v-img
+                  v-else
+                  lazy-src="../assets/user/no-user-image.svg"
+                  src="../assets/user/no-user-image.svg">
                 </v-img>
               </v-avatar>
             </div>
