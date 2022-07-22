@@ -136,8 +136,8 @@ class BidController extends Controller
             abort_if($request->value <= $auction->bid->value, 400, "New bid value must be greater than current one.");
 
             // Make sure new bid value is at least certain amount more than the previous Bid value
-            $compare_old_value = $auction->bid->value * 1.03;           // Currently, by agreement, we are using 3%
-            abort_if($compare_old_value >= $request->value, 400, "New bid value must be at least 3% more than current one.");
+            $compare_old_value = $auction->bid->value * 1.02;           // Currently, by agreement, we are using 2%
+            abort_if($compare_old_value >= $request->value, 400, "New bid value must be at least 2% more than current one.");
 
             // When we are sure that we have a valid new value, we should invalidate the previous (current) bid
             Bid::deactivateBid($auction->bid_id);

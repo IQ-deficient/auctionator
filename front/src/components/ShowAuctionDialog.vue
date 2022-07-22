@@ -14,7 +14,7 @@
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-card-title>
-        <div class="pa-1">
+        <div class="pa-6">
           <v-toolbar-title>
             <table style="width: 100%">
               <tr>

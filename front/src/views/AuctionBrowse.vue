@@ -1,22 +1,22 @@
 <template>
   <div>
-
     <v-row>
       <v-col cols="12">
         <v-toolbar
           dark
           color="info"
         >
-          <v-toolbar-title>Looking for something specific?</v-toolbar-title>
+          <v-toolbar-title>Search current category distinctly</v-toolbar-title>
           <v-text-field
             v-model="searchString"
-            class="mx-4"
+            class="mt-4 ml-5 mr-5"
             clearable
             @keyup.enter="filterByString"
           ></v-text-field>
           <v-btn
             text
             @click="filterByString()"
+            outlined
           >
             <v-icon class="pr-2">mdi-magnify</v-icon>
             <span>Search</span>
@@ -60,8 +60,9 @@
     </div>
     <div v-else-if="auctions == ''">
       <v-img dark class="mt-16" style="width: 18%; height: 18%;
-                            margin: 0 auto" src="../assets/auction/no-items.svg"></v-img>
+                            margin: 0 auto" src="../assets/auction/no-items-found.svg"></v-img>
       <v-card-text class="text-lg-h2" style="color: black">No items found</v-card-text>
+      <v-card-text class="text-sm-body-1" style="color: black">Try searching other categories</v-card-text>
     </div>
     <div v-else>
       <validation-observer ref="form">
@@ -109,8 +110,8 @@
                 <v-card-title v-if="auction.bid != null" style="justify-content: start" class="text-sm-body-1">
                   {{ "Current bid: " + auction.bid.value + "€" }}
                 </v-card-title>
-                <v-card-title v-else style="color: #42b983; justify-content: start" class="text-sm-body-1">
-                  {{ "No bids on this item!" }}
+                <v-card-title v-else style="color: #42b983; justify-content: start" class="text-lg-h6">
+                  {{ "No bids on this item yet!" }}
                 </v-card-title>
                 <v-card-title v-if="auction.buyout != null" style="justify-content: start" class="text-sm-body-1"
                               color="primary">
@@ -170,7 +171,8 @@
                           </v-carousel>
                           <v-carousel
                             v-else
-                            hide-delimiters style="height: 100%">
+                            hide-delimiters
+                            style="height: 100%">
                             <v-carousel-item
                               contain
                               src="../assets/auction/no-image-item.svg">
@@ -182,25 +184,20 @@
                             <v-col cols="11">
                               <v-card-title class="text-lg-h5" style="justify-content: start">
                                 {{ auction.item.title }}
-                                <v-card-title class="text-sm-body-1; " style="justify-content: start">
-                                  <v-divider class="mr-4" vertical></v-divider>
-
-                                  {{ auction.item.condition }}
-                                </v-card-title>
-
-                                <v-btn class="mx-2"
-                                       large
-                                       icon
-                                       @click="show1 = !show1"
+                              </v-card-title>
+                              <v-card-title>
+                                {{ auction.item.condition }}
+                                <v-divider class="ml-4 mr-0" vertical></v-divider>
+                                <v-btn
+                                  class=""
+                                  large
+                                  icon
+                                  @click="show1 = !show1"
                                 >
                                   <v-icon>{{ show1 ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
                                 </v-btn>
                               </v-card-title>
                             </v-col>
-                            <v-col cols="11">
-
-                            </v-col>
-                            <v-divider></v-divider>
                           </v-row>
                           <v-expand-transition>
                             <div v-show="show1">
@@ -213,12 +210,19 @@
                           <v-row>
                             <v-col cols="12">
                               <v-card-title style="word-break: normal; justify-content: start" class="text-sm-body-1">
-                                {{ auction.title }}
+                                AUCTION: {{ auction.title }}
                               </v-card-title>
                               <v-divider></v-divider>
-                              <v-card-title v-if="auction.buyout != null" style="justify-content: start"
-                                            color="primary">
-                                {{ "Buyout price: " + auction.buyout + "€" }}
+                              <v-card-title
+                                v-if="auction.buyout != null"
+                                style="justify-content: start"
+                                color="primary">
+                                <v-card-text class="text-lg-h5">
+                                  {{ "Buyout price: " + auction.buyout + "€" }}
+                                </v-card-text>
+                                <v-card-text v-if="auction.bid == null" class="text-lg-h6">
+                                  {{ "Minimum required bid value: " + auction.min_bid_value + "€" }}
+                                </v-card-text>
                               </v-card-title>
                               <v-card-title v-else style="justify-content: start">
                                 NA
@@ -227,18 +231,19 @@
                           </v-row>
                           <v-row>
                             <v-col cols="12">
-                              <v-card-title v-if="auction.bid != null" style="justify-content: start" color="primary">
+                              <v-card-text class="text-lg-h6" v-if="auction.bid != null" style="justify-content: start"
+                                           color="primary">
                                 {{ "Current bid: " + auction.bid.value + "€" }}
-                              </v-card-title>
-                              <v-card-title v-else style="color: #529363; justify-content: start">
+                              </v-card-text>
+                              <v-card-text class="text-lg-h6" v-else style="color: #529363; justify-content: start">
                                 {{ "No bids on this item!" }}
-                              </v-card-title>
+                              </v-card-text>
                             </v-col>
                           </v-row>
                           <validation-provider
                             v-slot="{ errors }"
                             name="bid"
-                            rules="required|numeric"
+                            :rules=bidRules(auction)
                             clearable
                           >
                             <v-row>
@@ -246,40 +251,44 @@
                                 Your bid:
                               </v-card-title>
                               <v-text-field
+                                class="mr-3"
                                 v-model="bidInput"
                                 :error-messages="errors"
-                                hint="*Must be at least 3% higher than the current value."
+                                hint="*Must be at least 2% higher than the current highest bid value."
                                 clearable
                               >
                               </v-text-field>
                             </v-row>
                           </validation-provider>
                           <v-row style="justify-content: center" class="mt-2">
-                            <v-btn large
-                                   type="submit"
-                                   color="primary"
-                                   class="mr-4"
+                            <v-btn
+                              large
+                              type="submit"
+                              color="primary"
+                              class="mr-4"
                             >
                               <v-icon left class="mr-1">mdi-gavel</v-icon>
                               Place bid
                             </v-btn>
-                            <v-btn large
-                                   color="success"
-                                   @click="buyout(auction.id)"
+                            <v-btn
+                              large
+                              color="success"
+                              @click="buyout(auction.id)"
                             >
                               <v-icon left class="mr-1">mdi-cash-multiple</v-icon>
                               Buyout
                             </v-btn>
                           </v-row>
+                          <v-col cols="12">
+                            <v-card-text
+                              class="text-sm-body-1"
+                            >
+                              {{ "Expires at: " + auction.end_datetime }}
+                            </v-card-text>
+                          </v-col>
                         </v-col>
                       </v-row>
                     </v-card-text>
-                    <v-col cols="12">
-                      <v-card-title style="position: absolute; bottom: 8px; right: 8px"
-                                    class="text-sm-body-1">
-                        {{ "Expires at: " + auction.end_datetime }}
-                      </v-card-title>
-                    </v-col>
                   </form>
                 </v-card>
               </template>
@@ -296,10 +305,20 @@
 <script>
 import axios from "axios";
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
-import {required, numeric} from "vee-validate/dist/rules";
+import {required, numeric, double, min_value} from "vee-validate/dist/rules";
 import Swal from "sweetalert2"
 
 setInteractionMode('eager')
+
+extend('min_value', {
+  ...min_value,
+  message: 'The {_field_} must at least match the minimum required bid value.'
+})
+
+extend('min_value_bid', {
+  ...min_value,
+  message: 'The {_field_} must be at least 2% higher than the current highest bid value.'
+})
 
 extend('required', {
   ...required,
@@ -309,6 +328,11 @@ extend('required', {
 extend('numeric', {
   ...numeric,
   message: 'The {_field_} must be a number.',
+})
+
+extend('double', {
+  ...double,
+  message: 'The {_field_} must be a number and may contain decimals.',
 })
 
 export default {
@@ -366,6 +390,11 @@ export default {
   },
 
   methods: {
+
+    bidRules(auction) {
+      if (auction.bid == null) return "required|double|min_value:" + auction.min_bid_value
+      return "required|double|min_value_bid:" + (auction.bid.value * 1.02)
+    },
 
     sortByPrice(type) {
       if (type == 'asc') {
