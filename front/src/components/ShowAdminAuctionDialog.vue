@@ -138,6 +138,30 @@
                     </v-card-title>
                   </v-col>
                 </v-row>
+                <v-col cols="12" v-if="auction.winner">
+                  <hr/>
+                </v-col>
+                <v-row v-if="auction.winner">
+                  <v-col cols="6">
+                    <v-card-title
+                      :loading="dataLoading"
+                      class="text-sm-body-1"
+                    >Winner:
+                      <v-spacer></v-spacer>
+                      {{ auction.winner.username }}
+                    </v-card-title>
+                  </v-col>
+                  <v-divider class="my-4" vertical></v-divider>
+                  <v-col cols="6">
+                    <v-card-title
+                      :loading="dataLoading"
+                      class="text-sm-body-1"
+                    >Final Price:
+                      <v-spacer></v-spacer>
+                      {{ auction.winner.final_price }}
+                    </v-card-title>
+                  </v-col>
+                </v-row>
               </v-col>
             </v-row>
           </v-card>

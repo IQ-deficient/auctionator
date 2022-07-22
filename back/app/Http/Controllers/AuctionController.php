@@ -67,6 +67,12 @@ class AuctionController extends Controller
                     ->get();
                 $auction->images = $images;
             }
+            if ($auction->bid_id != null){
+                $winner = History::query()
+                    ->where('auction_id', $auction->id)
+                    ->first();
+                $auction->winner = $winner;
+            }
         }
         // We will be returning inactive auction separately
         $inactive = Auction::query()
