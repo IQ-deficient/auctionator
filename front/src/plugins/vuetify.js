@@ -18,12 +18,12 @@ export default new Vuetify({
                 error: '#f44336',
             },
             dark: {
-                primary: '#63726b',
-                secondary: '#868347',
-                accent: '#a98c65',
-                tertiary: '#F8F8F8',
+                primary: '#55653c',
+                secondary: '#83947B',
+                accent: '#586C6A',
+                tertiary: '#889384',
 
-                info: '#475E6D',
+                info: '#4d5a64',
                 success: '#63af69',
                 warning: '#e09f31',
                 error: '#f44336',

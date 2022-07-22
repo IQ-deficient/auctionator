@@ -185,7 +185,7 @@ class AuctionController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|between:3,128',
             'seller' => 'required|string|between:3,32',
-            'min_bid_value' => 'required|numeric|gte:0|lt:buyout',  // X >= 0€ && X > buyout
+            'min_bid_value' => 'required|numeric|gte:0|lt:buyout',  // X >= 0€ && X < buyout
             'buyout' => 'required|numeric|gte:' . $gte_buyout,    // X >= 2€
             'start_datetime' => 'required|date|after:today',
             'end_datetime' => 'required|date|after:start_datetime',     // end date_time must be greater than start dt

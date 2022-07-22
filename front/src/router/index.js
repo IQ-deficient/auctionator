@@ -45,6 +45,7 @@ const router = new VueRouter({
     routes
 })
 
+// Reactive Page Title based on metadata
 router.beforeEach((to, from, next) => {
     document.title = to.meta.title + ' - ' + process.env.VUE_APP_TITLE || process.env.VUE_APP_TITLE
     next()
