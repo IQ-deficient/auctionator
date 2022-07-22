@@ -419,7 +419,9 @@ export default {
       axios.post('/auth/logout', config)
         .then(response => {
             if (response) {
-              localStorage.clear();
+              // localStorage.clear();
+              localStorage.removeItem('user_roles')
+              localStorage.removeItem('token')
               this.$router.push('/home');
               // this and /login uses logic of reloading current page - this should be changed
               this.$router.go(0)
@@ -429,8 +431,8 @@ export default {
         )
         .catch(error => {
           console.log(error)
-          localStorage.clear();
-          this.$router.go(0)
+          // localStorage.clear();
+          // this.$router.go(0)
           this.loading = false
           this.error = error.response.data.message;
 

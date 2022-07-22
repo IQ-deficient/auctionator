@@ -77,7 +77,7 @@
             </template>
             <template v-slot:default="dialog">
               <validation-observer ref="form">
-                <form @submit.prevent="createAuction(); uploadImages()">
+                <form @submit.prevent="createAuction()">
                   <v-card color="info">
                     <v-card-actions class="justify-end">
                       <v-btn
@@ -291,7 +291,7 @@
                                 rules="required|min:3|max:64"
                               >
                                 <v-text-field
-                                  prepend-inner-icon="mdi-form-textbox"
+                                  prepend-icon="mdi-form-textbox"
                                   v-model="addAuctionTitle"
                                   :error-messages="errors"
                                   label="Auction title"
@@ -307,7 +307,7 @@
                                 rules="required|alpha_spaces|min:3|max:32"
                               >
                                 <v-text-field
-                                  prepend-inner-icon="mdi-account-tie"
+                                  prepend-icon="mdi-account-tie"
                                   v-model="addAuctionSeller"
                                   :error-messages="errors"
                                   label="Seller"
@@ -352,11 +352,27 @@
                             </v-col>
                           </v-row>
                           <v-row>
-                            <v-col cols="12" sm="12">
+                            <v-col cols="6" sm="6">
+                              <validation-provider
+                                v-slot="{ errors }"
+                                name="minimum bid value"
+                                rules="required|double|min_value:0"
+                              >
+                                <v-text-field
+                                  prepend-icon="mdi-currency-eur"
+                                  v-model="minimumBidValue"
+                                  :error-messages="errors"
+                                  label="Minimum BId Value"
+                                  clearable
+                                >
+                                </v-text-field>
+                              </validation-provider>
+                            </v-col>
+                            <v-col cols="6" sm="6">
                               <validation-provider
                                 v-slot="{ errors }"
                                 name="buyout"
-                                rules="required|min_value:2"
+                                :rules=minBuyoutValueRules()
                               >
                                 <v-text-field
                                   prepend-inner-icon="mdi-currency-eur"
@@ -532,7 +548,7 @@
 
 <script>
 import axios from "axios";
-import {required, min, max, alpha_spaces, min_value, image, mimes, size} from 'vee-validate/dist/rules'
+import {required, min, max, alpha_spaces, min_value, image, mimes, size, numeric, double} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 import MultipleImageUpload from "../services/MultipleImageUpload";
 import EditAuctionDialog from "../components/EditAuctionDialog";
@@ -540,6 +556,16 @@ import showAdminAuctionDialog from "../components/ShowAdminAuctionDialog";
 import Swal from "sweetalert2";
 
 setInteractionMode('eager')
+
+extend('double', {
+  ...double,
+  message: 'The {_field_} must be a number and may contain decimals.',
+})
+
+extend('numeric', {
+  ...numeric,
+  message: 'The {_field_} must be a number.',
+})
 
 extend('required', {
   ...required,
@@ -563,7 +589,12 @@ extend('alpha_spaces', {
 
 extend('min_value', {
   ...min_value,
-  message: 'The {_field_} must be at least 2€ (Euro).'
+  message: 'The {_field_} must be at least 0€.'
+})
+
+extend('min_value_buyout', {
+  ...min_value,
+  message: 'The {_field_} must be at least ' + process.env.VUE_APP_MIN_BUYOUT + '€ (Euro).'
 })
 
 extend('image', {
@@ -589,6 +620,8 @@ export default {
     ValidationObserver,
     'edit-auction': EditAuctionDialog,
     'show-admin-auction': showAdminAuctionDialog,
+  },
+  computed: {
   },
 
   data: () => ({
@@ -652,7 +685,9 @@ export default {
     message: "",
     messages: undefined,
     fileInfos: [],
-    extensions: [".jpg", ".jpeg", ".png"]
+    extensions: [".jpg", ".jpeg", ".png"],
+    minimumBuyoutValue: process.env.VUE_APP_MIN_BUYOUT,
+    minimumBidValue: ''
   }),
 
   created() {
@@ -663,6 +698,10 @@ export default {
   },
 
   methods: {
+
+    minBuyoutValueRules() {
+      return "required|double|min_value_buyout:" + process.env.VUE_APP_MIN_BUYOUT + ""
+    },
 
     updateTableData() {
       if (this.selectStatus == 'Created') {
@@ -678,7 +717,7 @@ export default {
       } else if (this.selectStatus == 'Inactive') {
         this.tableData = this.auctions.inactive
       } else {
-        this.tableData = this.auctions
+        this.tableData = []
       }
     },
 
@@ -738,6 +777,7 @@ export default {
             warehouse_id: this.addItemWarehouse.id,
             title: this.addAuctionTitle,
             seller: this.addAuctionSeller,
+            min_bid_value: this.minimumBidValue,
             start_datetime: new Date(this.addStartDate.getTime() - this.addStartDate.getTimezoneOffset() * 60000).toISOString().replace('Z', '').replace('T', ' '),
             end_datetime: new Date(this.addEndDate.getTime() - this.addEndDate.getTimezoneOffset() * 60000).toISOString().replace('Z', '').replace('T', ' '),
             buyout: this.addAuctionBuyout,
@@ -999,6 +1039,7 @@ export default {
       this.addStartDate = new Date()
       this.addEndDate = new Date()
       this.addAuctionBuyout = ''
+      this.minimumBidValue = ''
       this.$refs.form.reset()
     }
   },
@@ -1012,6 +1053,10 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+//tbody {
+//  tr:hover {
+//    background-color: transparent !important;
+//  }
+//}
 </style>

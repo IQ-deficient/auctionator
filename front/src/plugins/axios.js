@@ -57,7 +57,9 @@ axios.interceptors.response.use(function (response) {
 }, function (error) {
     // console.log(error.response.data.message)
     if ("Unauthenticated." === error.response.data.message) {
-        localStorage.clear();
+        // localStorage.clear();
+        localStorage.removeItem('user_roles')
+        localStorage.removeItem('token')
         // Swal.fire({
         //     title: "Session Expired",
         //     text: "Your session has expired. Would you like to be redirected to the login page?",
