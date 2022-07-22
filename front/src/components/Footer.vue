@@ -1,5 +1,4 @@
 <template>
-  <v-container>
     <v-footer padless>
       <v-card flat class="text-center">
         <v-card-text>
@@ -22,7 +21,7 @@
           </div>
         </v-card-text>
         <v-card-text
-          class="pt-0"
+          class="pt-0 pl-10 pr-10"
         >
           Sodales ut etiam sit amet nisl purus in mollis nunc. At urna condimentum mattis pellentesque. Lectus urna duis
           convallis convallis tellus. Quis viverra nibh cras pulvinar mattis nunc sed blandit. Elementum sagittis vitae
@@ -37,7 +36,6 @@
         </v-card-text>
       </v-card>
     </v-footer>
-  </v-container>
 </template>
 
 <script>

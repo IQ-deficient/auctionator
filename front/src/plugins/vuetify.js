@@ -20,10 +20,10 @@ export default new Vuetify({
             dark: {
                 primary: '#55653c',
                 secondary: '#83947B',
-                accent: '#586C6A',
-                tertiary: '#889384',
+                accent: '#643c43',
+                tertiary: '#a8b09b',
 
-                info: '#4d5a64',
+                info: '#586B5F',
                 success: '#63af69',
                 warning: '#e09f31',
                 error: '#f44336',

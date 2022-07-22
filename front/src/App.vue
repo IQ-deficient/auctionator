@@ -34,7 +34,9 @@ export default {
     }
   },
   mounted() {
-    this.$vuetify.theme.dark = localStorage.getItem("dark_mode")
+    // Specific boolean check because browser storage only allows strings
+    const isTrueSet = localStorage.getItem("dark_mode") === 'true'
+    this.$vuetify.theme.dark = isTrueSet
   },
 
 };
