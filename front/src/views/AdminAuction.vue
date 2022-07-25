@@ -273,9 +273,9 @@
                               <td>
                                 <hr/>
                               </td>
-                              <td style="width:1px; padding: 10px; white-space: nowrap;"><h2 style="color: white">
-                                Auction
-                                details</h2></td>
+                              <td style="width:1px; padding: 10px; white-space: nowrap;">
+                                <h2 style="color: white">Auction details</h2>
+                              </td>
                               <td>
                                 <hr/>
                               </td>
@@ -288,7 +288,7 @@
                               <validation-provider
                                 v-slot="{ errors }"
                                 name="auction title"
-                                rules="required|min:3|max:64"
+                                rules="required|min:3|max:128"
                               >
                                 <v-text-field
                                   prepend-icon="mdi-form-textbox"
@@ -557,6 +557,14 @@ import Swal from "sweetalert2";
 
 setInteractionMode('eager')
 
+extend('greater', {
+  params: ['target'],
+  validate(value, { target }) {
+    return value > target;
+  },
+  message: 'The {_field_} must have a greater value than minimum required bid value.'
+});
+
 extend('double', {
   ...double,
   message: 'The {_field_} must be a number and may contain decimals.',
@@ -621,8 +629,7 @@ export default {
     'edit-auction': EditAuctionDialog,
     'show-admin-auction': showAdminAuctionDialog,
   },
-  computed: {
-  },
+  computed: {},
 
   data: () => ({
     dialog: false,
@@ -630,12 +637,13 @@ export default {
       {text: 'ID', align: 'start', sortable: false, value: 'id'},
       {text: 'Title', align: 'start', sortable: false, value: 'title'},
       {text: 'Seller', value: 'seller'},
-      {text: 'Highest bidder', value: '.bid.username'},
-      {text: 'Bid amount (€)', value: '.bid.value'},
+      // {text: 'Highest bidder', value: '.bid.username'},
+      // {text: 'Bid amount (€)', value: '.bid.value'},
+      {text: 'Minimum Bid Value', value: 'min_bid_value'},
       {text: 'Buyout amount (€)', value: 'buyout'},
       {text: 'Start date', value: 'start_datetime', width: 165},
       {text: 'End date', value: 'end_datetime', width: 165},
-      {text: 'Auctioneer', value: '.user.username'},
+      {text: 'Creator', value: '.user.username'},
       {text: 'Details', value: 'views', sortable: false},
       {text: 'Actions', value: 'actions', sortable: false, align: 'center'},
     ],
@@ -700,7 +708,7 @@ export default {
   methods: {
 
     minBuyoutValueRules() {
-      return "required|double|min_value_buyout:" + process.env.VUE_APP_MIN_BUYOUT + ""
+      return "required|greater:@minimum bid value|double|min_value_buyout:" + process.env.VUE_APP_MIN_BUYOUT + ""
     },
 
     updateTableData() {

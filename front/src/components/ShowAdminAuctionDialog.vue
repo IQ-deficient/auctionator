@@ -138,6 +138,30 @@
                     </v-card-title>
                   </v-col>
                 </v-row>
+                <v-col cols="12" v-if="auction.bid != null">
+                  <hr/>
+                </v-col>
+                <v-row v-if="auction.bid != null">
+                  <v-col cols="6">
+                    <v-card-title
+                      :loading="dataLoading"
+                      class="text-sm-body-1"
+                    >Highest bidder:
+                      <v-spacer></v-spacer>
+                      {{ auction.bid.username }}
+                    </v-card-title>
+                  </v-col>
+                  <v-divider class="my-4" vertical></v-divider>
+                  <v-col cols="6">
+                    <v-card-title
+                      :loading="dataLoading"
+                      class="text-sm-body-1"
+                    >Bid ammount:
+                      <v-spacer></v-spacer>
+                      {{ auction.bid.value }}
+                    </v-card-title>
+                  </v-col>
+                </v-row>
                 <v-col cols="12" v-if="auction.winner">
                   <hr/>
                 </v-col>
