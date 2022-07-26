@@ -21,11 +21,11 @@ class CreateAuctionsTable extends Migration
             $table->unsignedBigInteger('item_id');
             $table->unsignedBigInteger('bid_id')->nullable();
             $table->unsignedDouble('min_bid_value');   // Minimum price the bidding for the Auction must start at
-            $table->unsignedDouble('buyout');   // Final purchase value in Euro
+            $table->unsignedDouble('buyout')->default(env('MIN_BUYOUT'));   // Final purchase value in Euro
             $table->string('status', 32);   // auction lifecycle
             $table->dateTime('start_datetime')->default(Carbon::now());
-            $table->dateTime('end_datetime')->default(Carbon::tomorrow());
-            $table->unsignedBigInteger('user_id');
+            $table->dateTime('end_datetime')->default(Carbon::now());
+            $table->unsignedBigInteger('user_id');  // The person responsible for creation of auction
             $table->boolean('is_active')->default(true);    // new or 'deleted' Auctions
             $table->timestamps();
 
