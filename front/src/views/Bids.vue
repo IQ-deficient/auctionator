@@ -14,13 +14,13 @@
             flat
             class="mb-8"
         >
-          <v-toolbar-title><h2>Bids</h2></v-toolbar-title>
+          <v-toolbar-title><h2>Your winning bids</h2></v-toolbar-title>
           <v-divider
               class="mx-4"
               inset
               vertical
           ></v-divider>
-          <v-icon large>mdi-cart</v-icon>
+          <v-icon large>mdi-cash-multiple</v-icon>
           <v-spacer></v-spacer>
           <v-col cols="12" md="3">
             <v-text-field
@@ -71,10 +71,11 @@ export default {
     dialog: false,
     dialogDelete: false,
     headers: [
-      {text: '', align: 'start', sortable: false, value: 'auction.title'},
-      {text: 'Bid amount (€):', value: 'value'},
-      {text: 'Bid time:', value: 'updated_at'},
-      {text: 'Ends on:', value: 'auction.end_datetime'},
+      {text: 'Auction title', align: 'start', sortable: false, value: 'auction.title'},
+      {text: 'Bid amount (€)', value: 'value'},
+      {text: 'Auction buyout', value: 'auction.buyout'},
+      {text: 'Bid time', value: 'updated_at'},
+      {text: 'Ends on', value: 'auction.end_datetime'},
       {text: 'Item details', value: 'actions', sortable: false},
     ],
     search: '',

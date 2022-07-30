@@ -24,7 +24,7 @@
                     rules="required|min:1|max:30"
                   >
                     <v-text-field :error-messages="errors"
-                                  v-model="title" :rules="titleRules" label="Subject" required></v-text-field>
+                                  v-model="title" label="Subject" required></v-text-field>
                   </validation-provider>
                 </v-col>
               </v-row>
@@ -36,7 +36,7 @@
                     rules="required|email"
                   >
                     <v-text-field :error-messages="errors"
-                                  v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
+                                  v-model="email" label="E-mail" required></v-text-field>
                   </validation-provider>
                 </v-col>
               </v-row>
@@ -48,7 +48,7 @@
                     rules="required|min:10|max:1000"
                   >
                     <v-textarea :error-messages="errors"
-                                v-model="message" :rules="messageRules" label="Message" required></v-textarea>
+                                v-model="message" label="Message" required></v-textarea>
                   </validation-provider>
                 </v-col>
               </v-row>
@@ -62,11 +62,6 @@
         </v-card>
       </v-container>
     </div>
-    <div style="width: 100%">
-      <iframe width="100%" height="450" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
-              src="https://maps.google.com/maps?width=100%25&amp;height=450&amp;hl=en&amp;q=+(Univerzitet%20Mediteran%20Podgorica)&amp;t=&amp;z=16&amp;ie=UTF8&amp;iwloc=B&amp;output=embed">
-        <a href="https://www.gps.ie/wearable-gps/">gps smartwatches</a></iframe>
-    </div>
   </v-main>
 </template>
 <script>
@@ -76,7 +71,6 @@ import {required, email, min, max} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider, setInteractionMode} from 'vee-validate'
 
 setInteractionMode('eager')
-
 
 extend('required', {
   ...required,
@@ -175,6 +169,9 @@ export default {
   },
 
   mounted() {
+    // if (window.localStorage.user_roles.includes('Manager') || window.localStorage.user_roles.includes('Auctioneer') || window.localStorage.user_roles.includes('Administrator')) {
+    //   this.$router.push('/pageNotFound')
+    // }
   }
 };
 </script>

@@ -38,6 +38,11 @@
         </v-row>
       </v-container>
     </div>
+    <div style="width: 100%" class="pt-12 pr-15 pl-15">
+      <iframe width="100%" height="450" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
+              src="https://maps.google.com/maps?width=100%25&amp;height=450&amp;hl=en&amp;q=+(Univerzitet%20Mediteran%20Podgorica)&amp;t=&amp;z=16&amp;ie=UTF8&amp;iwloc=B&amp;output=embed">
+        <a href="https://www.gps.ie/wearable-gps/">gps smartwatches</a></iframe>
+    </div>
   </v-main>
 </template>
 
@@ -70,6 +75,9 @@ export default {
   },
 
   mounted() {
+    // if (window.localStorage.user_roles.includes('Manager') || window.localStorage.user_roles.includes('Auctioneer') || window.localStorage.user_roles.includes('Administrator')) {
+    //   this.$router.push('/pageNotFound')
+    // }
   }
 };
 </script>

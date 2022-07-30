@@ -18,10 +18,10 @@
         <router-link style="text-decoration: none" to="/home">
           <v-btn text>Home</v-btn>
         </router-link>
-        <router-link style="text-decoration: none" to="/contact">
+        <router-link :disabled="showContactAbout" style="text-decoration: none" to="/contact">
           <v-btn text>Contact</v-btn>
         </router-link>
-        <router-link style="text-decoration: none" to="/about">
+        <router-link :disabled="showContactAbout" style="text-decoration: none" to="/about">
           <v-btn text>About</v-btn>
         </router-link>
       </div>
@@ -367,6 +367,7 @@ export default {
     pageLoading: false,
     token: localStorage.getItem('token'),
     role: localStorage.getItem('user_roles'),
+    showContactAbout: true,
   }),
 
   created() {
@@ -485,7 +486,14 @@ export default {
       this.right = !val
     },
   },
+
+  mounted() {
+    // if (window.localStorage.user_roles.includes('Manager') || window.localStorage.user_roles.includes('Auctioneer') || window.localStorage.user_roles.includes('Administrator')) {
+    //   this.showContactAbout = false
+    // }
+  }
 }
+
 </script>
 
 <style scoped>

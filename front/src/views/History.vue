@@ -20,7 +20,7 @@
               inset
               vertical
           ></v-divider>
-          <v-icon large>mdi-cart</v-icon>
+          <v-icon large>mdi-folder-account-outline</v-icon>
           <v-spacer></v-spacer>
           <v-col cols="12" md="3">
             <v-text-field
@@ -73,9 +73,9 @@ export default {
     dialog: false,
     dialogDelete: false,
     headers: [
-      {text: '', align: 'start', sortable: false, value: 'auction.title'},
-      {text: 'Sold for (€):', value: 'final_price'},
-      {text: 'Won at:', value: 'updated_at'},
+      {text: 'Auction title', align: 'start', sortable: false, value: 'auction.title'},
+      {text: 'Sold for (€)', value: 'final_price'},
+      {text: 'Won at', value: 'updated_at'},
       {text: 'Details', value: 'actions', sortable: false},
     ],
     search: '',

@@ -123,21 +123,22 @@
               </v-col>
             </v-row>
             <br>
-            <v-dialog v-if="role == 'Client'"
-                      transition="dialog-bottom-transition"
-                      max-width="75%"
-                      persistent
+            <v-dialog
+              transition="dialog-bottom-transition"
+              max-width="75%"
+              persistent
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-row>
                   <v-col cols="12">
-                    <v-btn style="position: absolute; bottom: 8px; right: 8px"
-                           color="primary"
-                           v-bind="attrs"
-                           v-on="on"
+                    <v-btn
+                      style="position: absolute; bottom: 8px; right: 8px"
+                      color="primary"
+                      v-bind="attrs"
+                      v-on="on"
                     >
-                      <v-icon left>mdi-cart</v-icon>
-                      Buy
+                      <v-icon left>mdi-cube-scan</v-icon>
+                      View
                     </v-btn>
                   </v-col>
                 </v-row>
@@ -146,8 +147,7 @@
                 <v-card>
                   <v-card-title class="justify-end">
                     <v-btn
-                      small
-                      fab
+                      color="secondary"
                       @click="clearForm(); dialog.value = false;"
                     >
                       <v-icon>mdi-close</v-icon>
@@ -251,28 +251,32 @@
                                 Your bid:
                               </v-card-title>
                               <v-text-field
+                                :disabled="role != 'Client'"
                                 class="mr-3"
                                 v-model="bidInput"
                                 :error-messages="errors"
                                 hint="*Must be at least 2% higher than the current highest bid value."
                                 clearable
+                                :placeholder="role !== 'Client' ? 'Please login as a Client to place bids.': 'Place your bid price.' "
                               >
                               </v-text-field>
                             </v-row>
                           </validation-provider>
                           <v-row style="justify-content: center" class="mt-2">
                             <v-btn
+                              :disabled="role != 'Client'"
                               large
                               type="submit"
-                              color="primary"
+                              color="accent"
                               class="mr-4"
                             >
                               <v-icon left class="mr-1">mdi-gavel</v-icon>
                               Place bid
                             </v-btn>
                             <v-btn
+                              :disabled="role != 'Client'"
                               large
-                              color="success"
+                              color="primary"
                               @click="buyout(auction.id)"
                             >
                               <v-icon left class="mr-1">mdi-cash-multiple</v-icon>

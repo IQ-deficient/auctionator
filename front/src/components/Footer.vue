@@ -31,7 +31,7 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-text>
-          <strong> © {{ new Date().getFullYear() }} -
+          <strong> © All rights reserved {{ new Date().getFullYear() }} -
             Vladimir Gazivoda</strong>
         </v-card-text>
       </v-card>

@@ -76,10 +76,9 @@
                   <v-card color="info" class="pa-4">
                     <v-card-title>
                       <v-row class="justify-end">
-                        <v-btn small
-                               fab
-                               @click="clearForm(); dialog.value = false"
-                               dark
+                        <v-btn
+                          @click="clearForm(); dialog.value = false"
+                          color="secondary"
                         >
                           <v-icon>mdi-close</v-icon>
                         </v-btn>
@@ -298,7 +297,7 @@
               mdi-pencil
             </v-icon>
           </v-col>
-          <v-col  cols="12" sm="4">
+          <v-col cols="12" sm="4">
             <v-icon
               color="primary"
               @click="deleteUser(item)"

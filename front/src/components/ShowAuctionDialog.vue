@@ -138,6 +138,30 @@
                     </v-card-title>
                   </v-col>
                 </v-row>
+                <v-col cols="12">
+                  <hr/>
+                </v-col>
+                <v-row>
+                  <v-col cols="6">
+                    <v-card-title
+                      :loading="dataLoading"
+                      class="text-sm-body-1"
+                    >Auction buyout:
+                      <v-spacer></v-spacer>
+                      {{ auction_data.auction.buyout }}
+                    </v-card-title>
+                  </v-col>
+                  <v-divider class="my-4" vertical></v-divider>
+                  <v-col cols="6">
+                    <v-card-title
+                      :loading="dataLoading"
+                      class="text-sm-body-1"
+                    >Ends on:
+                      <v-spacer></v-spacer>
+                      {{ auction_data.auction.end_datetime }}
+                    </v-card-title>
+                  </v-col>
+                </v-row>
               </v-col>
             </v-row>
           </v-card>

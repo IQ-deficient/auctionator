@@ -64,9 +64,7 @@
                   <v-card class="pa-3">
                     <v-card-title class="justify-end">
                       <v-btn
-                        small
-                        text
-                        fab
+                        color="secondary"
                         @click="clearImageDialog(); dialog.value = false"
                       >
                         <v-icon>mdi-close</v-icon>
@@ -176,7 +174,6 @@
               <v-btn
                 color="accent"
                 @click="edit = !edit">
-
                 <v-icon left>mdi-close</v-icon>
                 Cancel
               </v-btn>
@@ -202,9 +199,7 @@
                 <v-card class="pa-4">
                   <div>
                     <v-btn
-                      small
-                      fab
-                      text
+                      color="secondary"
                       @click="clearPasswordDialog(); dialog.value = false;"
                     >
                       <v-icon>mdi-close</v-icon>
