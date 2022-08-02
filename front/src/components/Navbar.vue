@@ -207,7 +207,7 @@
                                 v-on="on"
                               >
                                 <v-icon left class="mr-2">mdi-shield-crown-outline</v-icon>
-                                Admin Function
+                                Administration
                               </v-btn>
                             </template>
                             <v-card>

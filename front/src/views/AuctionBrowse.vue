@@ -6,7 +6,7 @@
           dark
           color="info"
         >
-          <v-toolbar-title>Search current category distinctly</v-toolbar-title>
+          <v-toolbar-title>Search current category by keyword</v-toolbar-title>
           <v-text-field
             v-model="searchString"
             class="mt-4 ml-5 mr-5"
