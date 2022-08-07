@@ -912,8 +912,8 @@ export default {
 
     hardDelete(item) {
       Swal.fire({
-        title: 'Are you sure you want to delete this auction?',
-        icon: 'question',
+        title: 'Are you sure you want to permanently deactivate this auction?',
+        icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#915A64',
         cancelButtonColor: '#909C6B',

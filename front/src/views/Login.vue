@@ -7,15 +7,8 @@
     >
       <validation-observer ref="form">
         <form @submit.prevent="login">
-          <v-row class="justify-start">
-            <v-img
-              src="../assets/auction-house-logo.png"
-              style="margin-left: 0"
-              max-height="70px"
-              max-width="70px"
-            ></v-img>
-            <v-divider vertical style="margin-left: 18px; border-right: 2px solid black"></v-divider>
-            <v-card-title style="margin-left: 8px">Sign in</v-card-title>
+          <v-row class="justify-center">
+            <v-card-title>Sign in</v-card-title>
           </v-row>
           <v-row>
             <v-col
@@ -70,14 +63,14 @@
               Login
             </v-btn>
           </v-row>
-          <v-row class="justify-end">
-            <router-link to="/" style="text-decoration: none">
-            <span>
-              <v-icon left class="pa-1">mdi-lock-outline</v-icon>
-              Forgot password?
-            </span>
-            </router-link>
-          </v-row>
+<!--          <v-row class="justify-end">-->
+<!--            <router-link to="/" style="text-decoration: none">-->
+<!--            <span>-->
+<!--              <v-icon left class="pa-1">mdi-lock-outline</v-icon>-->
+<!--              Forgot password?-->
+<!--            </span>-->
+<!--            </router-link>-->
+<!--          </v-row>-->
         </form>
       </validation-observer>
     </v-card>
@@ -87,7 +80,7 @@
           <td>
             <hr/>
           </td>
-          <td style="width: 1px; padding: 0px; white-space: nowrap;">New to our platform?</td>
+          <td style="width:1px; padding: 0 10px; white-space: nowrap;">New to our platform?</td>
           <td>
             <hr/>
           </td>

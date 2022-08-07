@@ -1,15 +1,20 @@
 <template>
   <v-main>
     <div class="staticHero">
-      <v-img src="../assets/images/contact.jpg" max-height="250">
+      <v-img src="../assets/contact/contact_us.jpg" max-height="250">
         <v-row align="end" class="lightbox white--text pa-2 fill-height">
           <v-col>
             <v-container>
-              <div class="headline">Contact Us</div>
+              <div class="headline text-lg-h2">Contact Us</div>
             </v-container>
           </v-col>
         </v-row>
       </v-img>
+    </div>
+    <div class="block">
+      <v-container>
+        <p>You may fill in the following form if you have any questions regarding our platform or company.</p>
+      </v-container>
     </div>
     <div class="block">
       <v-container>

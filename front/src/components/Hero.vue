@@ -22,19 +22,19 @@ export default {
     return {
       items: [
         {
-          src: require("../../src/assets/images/hero1.jpg"),
-          title: "Auctor eu augue ut lectus arcu bibendum."
+          src: require("../assets/home/hero/hero1.jpg"),
+          title: "An online auction house is a great way to sell your items. You can sell anything here, from antiques to old electronics to your old toys. All you need is an Internet connection."
         },
         {
-          src: require("../../src/assets/images/hero2.jpg"),
+          src: require("../assets/home/hero/hero2.jpg"),
           title: "Nunc mattis enim ut tellus elementum sagittis vitae et."
         },
         {
-          src: require("../../src/assets/images/hero3.jpg"),
+          src: require("../assets/home/hero/hero3.jpg"),
           title: "Rhoncus dolor purus non enim praesent elementum facilisis leo."
         }
       ]
-    };
+    }
   }
-};
+}
 </script>

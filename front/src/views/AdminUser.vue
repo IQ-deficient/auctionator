@@ -449,7 +449,7 @@ export default {
     deleteUser(item) {
       Swal.fire({
         title: 'Are you sure you want to permanently remove this user?',
-        icon: 'question',
+        icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#915A64',
         cancelButtonColor: '#909C6B',

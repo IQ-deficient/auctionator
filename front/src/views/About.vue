@@ -1,11 +1,11 @@
 <template>
   <v-main>
     <div class="staticHero">
-      <v-img src="../../src/assets/images/aboutus.jpg" max-height="250">
+      <v-img src="../../src/assets/about/about_us.jpg" max-height="250">
         <v-row align="end" class="lightbox white--text pa-2 fill-height">
           <v-col>
             <v-container>
-              <div class="headline">About Us</div>
+              <div class="headline text-lg-h2">About Us</div>
             </v-container>
           </v-col>
         </v-row>
@@ -13,22 +13,25 @@
     </div>
     <div class="block">
       <v-container>
-        <p>Eget velit aliquet sagittis id consectetur purus ut. Quisque sagittis purus sit amet. Odio facilisis mauris
-          sit amet. Ultrices gravida dictum fusce ut placerat orci nulla pellentesque. Venenatis lectus magna fringilla
-          urna porttitor rhoncus dolor purus. Sed blandit libero volutpat sed cras ornare arcu dui vivamus. Libero
-          volutpat sed cras ornare arcu dui vivamus arcu. Suspendisse sed nisi lacus sed viverra tellus. Ultricies
-          tristique nulla aliquet enim tortor at auctor urna. Condimentum mattis pellentesque id nibh tortor. Magna ac
-          placerat vestibulum lectus. Ultrices eros in cursus turpis massa tincidunt dui ut ornare. Odio ut enim blandit
-          volutpat maecenas.</p>
+        <p>An online auction company is a company that provides an online platform for sellers to list their products
+          for sale. The company manages the transaction process and facilitates the sales between the seller and
+          buyers. It offers various services to make a website where the buyers and sellers can meet and do business. It
+          also helps the buyers and sellers to sell their products to make a profit.</p>
       </v-container>
     </div>
     <div class="block">
       <v-container>
-        <h2 class="text-center">Our Team</h2>
+        <h2 class="text-center pb-3">Company Officials</h2>
         <v-row>
-          <v-col v-for="item in items" :key="item.id" class="d-flex child-flex" cols="12" sm="4">
+          <v-col v-for="item in items" :key="item.id" class="d-flex child-flex" cols="12" sm="3">
             <v-card flat tile class="mx-auto">
-              <v-img :src="item.src" aspect-ratio="1" class="grey lighten-2"></v-img>
+              <v-img :src="item.src" aspect-ratio="1" class="grey lighten-2">
+                <template v-slot:placeholder>
+                  <v-row class="fill-height ma-0" align="center" justify="center">
+                    <v-progress-circular indeterminate color="grey lighten-1"></v-progress-circular>
+                  </v-row>
+                </template>
+              </v-img>
               <v-card-text class="text--primary text-center">
                 <div class="title">{{ item.name }}</div>
                 <p>{{ item.title }}</p>
@@ -39,9 +42,11 @@
       </v-container>
     </div>
     <div style="width: 100%" class="pt-12 pr-15 pl-15">
-      <iframe width="100%" height="450" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
-              src="https://maps.google.com/maps?width=100%25&amp;height=450&amp;hl=en&amp;q=+(Univerzitet%20Mediteran%20Podgorica)&amp;t=&amp;z=16&amp;ie=UTF8&amp;iwloc=B&amp;output=embed">
-        <a href="https://www.gps.ie/wearable-gps/">gps smartwatches</a></iframe>
+      <iframe
+        width="100%" height="550" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
+        src="https://maps.google.com/maps?width=100%25&amp;height=550&amp;hl=en&amp;q=+(Univerzitet%20Mediteran%20Podgorica)&amp;t=&amp;z=16&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+      >
+      </iframe>
     </div>
   </v-main>
 </template>
@@ -54,9 +59,9 @@ export default {
       items: [
         {
           id: 1,
-          src: require("../../src/assets/images/team1.jpg"),
-          name: 'Peter Smith',
-          title: 'Admin'
+          src: require("../assets/about/employee_1.jpg"),
+          name: 'Shuaib Velasquez',
+          title: 'Jump out of an airplane and reinvent the wheel.'
         },
         {
           id: 2,
@@ -66,9 +71,15 @@ export default {
         },
         {
           id: 3,
-          src: require("../../src/assets/images/team3.jpg"),
-          name: 'Lisa White',
-          title: 'Manager'
+          src: require("../../src/assets/about/employee_2.jpg"),
+          name: 'Jakob Lowry',
+          title: 'Every time I thought I was being rejected from something good, I was actually being re-directed to something better.'
+        },
+        {
+          id: 4,
+          src: require("../../src/assets/about/employee_3.jpg"),
+          name: 'Reilly Shelton',
+          title: 'Don’t waste your time in anger, regrets, worries, and grudges. Life is too short to be unhappy.'
         }
       ]
     };

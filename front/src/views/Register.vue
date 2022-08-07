@@ -5,14 +5,8 @@
       max-width="38%"
       style="margin: 0 auto"
     >
-      <v-row class="justify-start">
-        <v-img src="../assets/auction-house-logo.png"
-               style="margin-left: 0"
-               max-height="70px"
-               max-width="70px"
-        ></v-img>
-        <v-divider vertical style="margin-left: 18px; border-right: 2px solid black"></v-divider>
-        <v-card-title style="margin-left: 8px">Create a new account</v-card-title>
+      <v-row class="justify-center">
+        <v-card-title>Create a new account</v-card-title>
       </v-row>
       <validation-observer ref="form">
         <form @submit.prevent="register">
@@ -73,7 +67,6 @@
                 v-slot="{ errors }"
                 name="country"
                 rules="required"
-                clearable
               >
                 <v-select
                   v-model="selectCountry"
@@ -83,6 +76,7 @@
                   label="Country"
                   return-object
                   @change="updateCountryCode()"
+                  clearable
                 ></v-select>
               </validation-provider>
             </v-col>
@@ -92,7 +86,6 @@
                 v-slot="{ errors }"
                 name="phone number"
                 rules="required|numeric|min:6|max:15"
-                clearable
               >
                 <v-text-field v-if="phoneCode != null"
                               :prefix="'(' + phoneCode + ')'"
@@ -100,12 +93,14 @@
                               :error-messages="errors"
                               label="Phone number"
                               append-icon="mdi-phone-classic"
+                              clearable
                 ></v-text-field>
                 <v-text-field v-else
                               v-model="phoneNumber"
                               :error-messages="errors"
                               label="Phone number"
                               append-icon="mdi-phone-classic"
+                              clearable
                 ></v-text-field>
               </validation-provider>
             </v-col>
@@ -133,7 +128,6 @@
                 v-slot="{ errors }"
                 name="password"
                 rules="required|min:8|max:128"
-                clearable
               >
                 <v-text-field
                   v-model="password"
@@ -155,7 +149,6 @@
                 v-slot="{ errors }"
                 name="password confirmation"
                 rules="required|password:@password"
-                clearable
               >
                 <v-text-field
                   v-model="confirmPassword"

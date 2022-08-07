@@ -1,41 +1,44 @@
 <template>
-    <v-footer padless>
-      <v-card flat class="text-center">
-        <v-card-text>
-          <div
-            v-for="(icon, id) in icons"
-            :key="id"
-            class="mx-4"
-            style="display: inline"
-          >
-            <v-btn
-              class="ma-2"
-              text
-              icon
-              color="primary"
-              :href="icon.link"
-              target="_blank"
-            >
-              <v-icon size="24px">{{ icon.icon }}</v-icon>
-            </v-btn>
-          </div>
-        </v-card-text>
-        <v-card-text
-          class="pt-0 pl-10 pr-10"
+  <v-footer padless>
+    <v-card
+      flat
+      tile
+      class="text-center"
+      width="100%"
+    >
+      <v-card-text block>
+        <div
+          v-for="(icon, id) in icons"
+          :key="id"
+          class="mx-4"
+          style="display: inline"
         >
-          Sodales ut etiam sit amet nisl purus in mollis nunc. At urna condimentum mattis pellentesque. Lectus urna duis
-          convallis convallis tellus. Quis viverra nibh cras pulvinar mattis nunc sed blandit. Elementum sagittis vitae
-          et leo duis ut. Amet est placerat in egestas erat imperdiet. Odio eu feugiat pretium nibh ipsum consequat
-          nisl. Dignissim convallis aenean et tortor at risus. Ullamcorper dignissim cras tincidunt lobortis feugiat
-          vivamus at augue. In est ante in nibh mauris. Nisi est sit amet facilisis magna etiam tempor orci.
-        </v-card-text>
-        <v-divider></v-divider>
-        <v-card-text>
-          <strong> © All rights reserved {{ new Date().getFullYear() }} -
-            Vladimir Gazivoda</strong>
-        </v-card-text>
-      </v-card>
-    </v-footer>
+          <v-btn
+            class="ma-2"
+            text
+            icon
+            color="primary"
+            :href="icon.link"
+            target="_blank"
+          >
+            <v-icon size="24px">{{ icon.icon }}</v-icon>
+          </v-btn>
+        </div>
+      </v-card-text>
+      <v-card-text
+        class="pt-0 pl-10 pr-10"
+      >
+        Online auction house platform for buyers and sellers of valuables. Buy and sell gold, coins, jewelry, precious
+        metals, antiques, and collectibles. Buy or sell items from around the world through our secure, fast, and
+        efficient platform.
+      </v-card-text>
+      <v-divider></v-divider>
+      <v-card-text>
+        <strong> © All rights reserved {{ new Date().getFullYear() }} -
+          Vladimir Gazivoda</strong>
+      </v-card-text>
+    </v-card>
+  </v-footer>
 </template>
 
 <script>
