@@ -97,14 +97,14 @@
                                     v-model="phoneNumber"
                                     :error-messages="errors"
                                     label="Phone number"
-                                    append-icon="mdi-phone-classic"
+                                    append-icon="mdi-phone"
                       ></v-text-field>
                       <v-text-field v-else
                                     :loading="dataLoading"
                                     v-model="phoneNumber"
                                     :error-messages="errors"
                                     label="Phone number"
-                                    append-icon="mdi-phone-classic"
+                                    append-icon="mdi-phone"
                       ></v-text-field>
                     </validation-provider>
                   </v-col>

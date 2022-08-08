@@ -92,14 +92,14 @@
                               v-model="phoneNumber"
                               :error-messages="errors"
                               label="Phone number"
-                              append-icon="mdi-phone-classic"
+                              append-icon="mdi-phone"
                               clearable
                 ></v-text-field>
                 <v-text-field v-else
                               v-model="phoneNumber"
                               :error-messages="errors"
                               label="Phone number"
-                              append-icon="mdi-phone-classic"
+                              append-icon="mdi-phone"
                               clearable
                 ></v-text-field>
               </validation-provider>
@@ -115,7 +115,7 @@
                 <v-text-field
                   v-model="email"
                   :error-messages="errors"
-                  hint="example@mail.com"
+                  placeholder="example@mail.com"
                   label="Email"
                   clearable
                 ></v-text-field>

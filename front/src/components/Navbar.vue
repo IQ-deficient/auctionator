@@ -4,7 +4,12 @@
                light
                height="75"
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" style="color: black; margin-left: 10px"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon
+        @click.stop="drawer = !drawer"
+        style="color: black;
+        margin-left: 10px">
+        <v-icon>mdi-view-headline</v-icon>
+      </v-app-bar-nav-icon>
       <router-link to="/home">
         <v-img src="../assets/auction-house-logo.png"
                style="margin-left: 28px"
@@ -105,36 +110,36 @@
               <v-card>
                 <v-list-item-content class="justify-center">
                   <div class="mx-auto text-center pt-2">
-<!--                    <router-link to="/user-profile" style="text-decoration: none">-->
-<!--                      <v-avatar size="50" class="mb-2">-->
-<!--                        <v-img v-if="userImage"-->
-<!--                               :loading="pageLoading"-->
-<!--                               :lazy-src="'/api/user/'+ userImage"-->
-<!--                               :src="'/api/user/'+ userImage">-->
-<!--                          <template v-slot:placeholder>-->
-<!--                            <v-row-->
-<!--                              class="fill-height ma-0"-->
-<!--                              align="center"-->
-<!--                              justify="center"-->
-<!--                            >-->
-<!--                              <v-progress-circular-->
-<!--                                indeterminate-->
-<!--                                width="14"-->
-<!--                                :size="145"-->
-<!--                                color="primary"-->
-<!--                              ></v-progress-circular>-->
-<!--                            </v-row>-->
-<!--                          </template>-->
-<!--                        </v-img>-->
-<!--                        <v-img-->
-<!--                          v-else-->
-<!--                          lazy-src="../assets/user/no-user-image.svg"-->
-<!--                          src="../assets/user/no-user-image.svg"-->
-<!--                          alt="User image placeholder"-->
-<!--                        >-->
-<!--                        </v-img>-->
-<!--                      </v-avatar>-->
-<!--                    </router-link>-->
+                    <!--                    <router-link to="/user-profile" style="text-decoration: none">-->
+                    <!--                      <v-avatar size="50" class="mb-2">-->
+                    <!--                        <v-img v-if="userImage"-->
+                    <!--                               :loading="pageLoading"-->
+                    <!--                               :lazy-src="'/api/user/'+ userImage"-->
+                    <!--                               :src="'/api/user/'+ userImage">-->
+                    <!--                          <template v-slot:placeholder>-->
+                    <!--                            <v-row-->
+                    <!--                              class="fill-height ma-0"-->
+                    <!--                              align="center"-->
+                    <!--                              justify="center"-->
+                    <!--                            >-->
+                    <!--                              <v-progress-circular-->
+                    <!--                                indeterminate-->
+                    <!--                                width="14"-->
+                    <!--                                :size="145"-->
+                    <!--                                color="primary"-->
+                    <!--                              ></v-progress-circular>-->
+                    <!--                            </v-row>-->
+                    <!--                          </template>-->
+                    <!--                        </v-img>-->
+                    <!--                        <v-img-->
+                    <!--                          v-else-->
+                    <!--                          lazy-src="../assets/user/no-user-image.svg"-->
+                    <!--                          src="../assets/user/no-user-image.svg"-->
+                    <!--                          alt="User image placeholder"-->
+                    <!--                        >-->
+                    <!--                        </v-img>-->
+                    <!--                      </v-avatar>-->
+                    <!--                    </router-link>-->
                     <h3>{{ this.loggedUser.username }}</h3>
                     <p class="text-caption mt-1">
                       {{ this.loggedUser.email }}
@@ -307,7 +312,7 @@
       <v-list-item class="primary" style="height: 75px;" dark>
         <v-list-item-content>
           <v-list-item-title class="text-h5" style="">
-            Browse
+            Browse auctions
           </v-list-item-title>
         </v-list-item-content>
         <v-btn

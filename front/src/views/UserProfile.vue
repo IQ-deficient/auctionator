@@ -421,7 +421,7 @@
                                 v-model="phoneNumber"
                                 :error-messages="errors"
                                 label="Phone number"
-                                append-icon="mdi-phone-classic"
+                                append-icon="mdi-phone"
                                 :disabled="edit"
                                 solo-inverted
                   ></v-text-field>
@@ -429,7 +429,7 @@
                                 v-model="phoneNumber"
                                 :error-messages="errors"
                                 label="Phone number"
-                                append-icon="mdi-phone-classic"
+                                append-icon="mdi-phone"
                                 :disabled="edit"
                                 solo-inverted
                   ></v-text-field>
