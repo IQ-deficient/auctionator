@@ -16,7 +16,7 @@
         <p>You may fill in the following form if you have any questions regarding our platform or company.</p>
       </v-container>
     </div>
-    <div class="block">
+    <div class="block pt-5">
       <v-container>
         <v-card class="ma-1">
           <validation-observer ref="form">
@@ -65,6 +65,14 @@
             </v-form>
           </validation-observer>
         </v-card>
+      </v-container>
+    </div>
+    <div class="block pt-10">
+      <h2 class="text-center">Other contact info</h2>
+      <v-container>
+        <p>In case you would prefer to contact us by other means, feel free to use the following contacts.</p>
+        <p><v-icon>mdi-phone</v-icon> 067-777-777</p>
+        <p><v-icon>mdi-email-outline</v-icon> auctionhouse.fit@gmail.com</p>
       </v-container>
     </div>
   </v-main>

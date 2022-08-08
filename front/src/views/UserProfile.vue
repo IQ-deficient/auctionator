@@ -1,18 +1,21 @@
 <template>
-  <div>
-    <v-parallax v-if="userImage" height="175"
-                :loading="pageLoading"
-                :lazy-src="'/api/user/'+ userImage"
-                :src="'/api/user/'+ userImage">
-      <div class="fill-height repeating-gradient"></div>
-    </v-parallax>
-    <v-parallax v-else height="175" style="background-color: #819fC9">
-      <div class="fill-height repeating-gradient"></div>
-    </v-parallax>
+  <div style="position:relative; top: 200px">
+    <!--    <v-parallax v-if="userImage" height="175"-->
+    <!--                :loading="pageLoading"-->
+    <!--                :lazy-src="'/api/user/'+ userImage"-->
+    <!--                :src="'/api/user/'+ userImage">-->
+    <!--      <div class="fill-height repeating-gradient"></div>-->
+    <!--    </v-parallax>-->
+    <!--    <v-parallax v-else height="175" style="background-color: #819fC9">-->
+    <!--      <div class="fill-height repeating-gradient"></div>-->
+    <!--    </v-parallax>-->
 
-    <v-card width="50%"
-            style="margin: 0 auto; position: relative; top: -25px" color="#0d111a" class="pa-1">
-      <v-row class="">
+    <v-card
+      width="50%"
+      style="margin: 0 auto; position: relative; top: -25px"
+      class="pa-1"
+    >
+      <v-row class="justify-center">
         <v-col cols="12">
           <div style="position: relative; width: 145px; height: 0; margin: 0 auto">
             <div style="position: absolute; top: -120px">
@@ -55,21 +58,12 @@
                     v-on="on"
                   >
                     <v-icon dark large left>
-                      mdi-pencil-outline
+                      mdi-image-edit-outline
                     </v-icon>
-
                   </a>
                 </template>
                 <template v-slot:default="dialog">
                   <v-card class="pa-3">
-                    <v-card-title class="justify-end">
-                      <v-btn
-                        color="secondary"
-                        @click="clearImageDialog(); dialog.value = false"
-                      >
-                        <v-icon>mdi-close</v-icon>
-                      </v-btn>
-                    </v-card-title>
                     <validation-observer ref="imageForm">
                       <form name="imageForm" @submit.prevent="upload()">
                         <v-row justify="center" align="center">
@@ -96,6 +90,12 @@
                               Upload
                             </v-btn>
                           </v-col>
+                          <v-btn
+                            color="secondary"
+                            @click="clearImageDialog(); dialog.value = false"
+                          >
+                            <v-icon>mdi-close</v-icon>
+                          </v-btn>
                         </v-row>
                         <div v-if="progress">
                           <v-progress-linear
@@ -139,13 +139,14 @@
       <v-container class="pa-4">
         <v-row style="margin-top: auto">
           <v-col cols="6" style="margin: 0 auto">
-            <v-text-field style="text-align: center"
-                          :loading="pageLoading"
-                          v-model="username"
-                          label="Username"
-                          append-icon="mdi-account-edit-outline"
-                          dark
-                          disabled
+            <v-text-field
+              style="text-align: center"
+              :loading="pageLoading"
+              v-model="username"
+              label="Username"
+              append-icon="mdi-account-edit-outline"
+              dark
+              disabled
             ></v-text-field>
           </v-col>
           <v-col cols="6" style="margin: 0 auto">
@@ -167,7 +168,7 @@
                 @click="edit = !edit">
 
                 <v-icon left>mdi-pencil</v-icon>
-                Edit
+                Edit data
               </v-btn>
             </div>
             <div v-else>
@@ -359,7 +360,7 @@
                         v-model="birthdate"
                         :loading="pageLoading"
                         :error-messages="errors"
-                        label="Pick a date"
+                        label="Birthdate"
                         append-icon="mdi-cake-variant-outline"
                         dark
                         :disabled="edit"
@@ -445,13 +446,15 @@
             </v-row>
             <v-row v-if="!edit">
               <v-col cols="12">
-                <v-btn dark
-                       large color="primary"
-                       :disabled="invalid"
-                       @click="updateProfile()"
+                <v-btn
+                  dark
+                  large color="primary"
+                  :disabled="invalid"
+                  @click="updateProfile()"
+                  :loading="loading"
                 >
                   <v-icon left>mdi-check</v-icon>
-                  Save
+                  Confirm
                 </v-btn>
               </v-col>
             </v-row>
@@ -563,8 +566,8 @@ export default {
     userImage: "",
     pageLoading: false,
     isValid: false,
-    extensions: [".jpg", ".jpeg", ".png"]
-
+    extensions: [".jpg", ".jpeg", ".png"],
+    loading: false,
   }),
   methods: {
 
@@ -680,9 +683,8 @@ export default {
                     'Your information has been updated.',
                     'success'
                   )
-
                   this.edit = true
-                  this.loading = false;
+                  this.loading = false
                 }
               }
             )

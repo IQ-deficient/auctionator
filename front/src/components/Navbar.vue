@@ -104,37 +104,37 @@
               </template>
               <v-card>
                 <v-list-item-content class="justify-center">
-                  <div class="mx-auto text-center">
-                    <router-link to="/user-profile" style="text-decoration: none">
-                      <v-avatar size="50" class="mb-2">
-                        <v-img v-if="userImage"
-                               :loading="pageLoading"
-                               :lazy-src="'/api/user/'+ userImage"
-                               :src="'/api/user/'+ userImage">
-                          <template v-slot:placeholder>
-                            <v-row
-                              class="fill-height ma-0"
-                              align="center"
-                              justify="center"
-                            >
-                              <v-progress-circular
-                                indeterminate
-                                width="14"
-                                :size="145"
-                                color="primary"
-                              ></v-progress-circular>
-                            </v-row>
-                          </template>
-                        </v-img>
-                        <v-img
-                          v-else
-                          lazy-src="../assets/user/no-user-image.svg"
-                          src="../assets/user/no-user-image.svg"
-                          alt="User image placeholder"
-                        >
-                        </v-img>
-                      </v-avatar>
-                    </router-link>
+                  <div class="mx-auto text-center pt-2">
+<!--                    <router-link to="/user-profile" style="text-decoration: none">-->
+<!--                      <v-avatar size="50" class="mb-2">-->
+<!--                        <v-img v-if="userImage"-->
+<!--                               :loading="pageLoading"-->
+<!--                               :lazy-src="'/api/user/'+ userImage"-->
+<!--                               :src="'/api/user/'+ userImage">-->
+<!--                          <template v-slot:placeholder>-->
+<!--                            <v-row-->
+<!--                              class="fill-height ma-0"-->
+<!--                              align="center"-->
+<!--                              justify="center"-->
+<!--                            >-->
+<!--                              <v-progress-circular-->
+<!--                                indeterminate-->
+<!--                                width="14"-->
+<!--                                :size="145"-->
+<!--                                color="primary"-->
+<!--                              ></v-progress-circular>-->
+<!--                            </v-row>-->
+<!--                          </template>-->
+<!--                        </v-img>-->
+<!--                        <v-img-->
+<!--                          v-else-->
+<!--                          lazy-src="../assets/user/no-user-image.svg"-->
+<!--                          src="../assets/user/no-user-image.svg"-->
+<!--                          alt="User image placeholder"-->
+<!--                        >-->
+<!--                        </v-img>-->
+<!--                      </v-avatar>-->
+<!--                    </router-link>-->
                     <h3>{{ this.loggedUser.username }}</h3>
                     <p class="text-caption mt-1">
                       {{ this.loggedUser.email }}
@@ -156,8 +156,8 @@
                                 text
                                 v-on="on"
                               >
-                                <v-icon left class="mr-2">mdi-tag-arrow-left-outline</v-icon>
-                                Bid options
+                                <v-icon left class="mr-2">mdi-menu-open</v-icon>
+                                History
                               </v-btn>
                             </template>
                             <v-card>
@@ -169,7 +169,7 @@
                                       text
                                     >
                                       <v-icon left class="mr-2">mdi-alarm-multiple</v-icon>
-                                      Bids
+                                      Placed bids
                                     </v-btn>
                                   </router-link>
                                   <v-divider class="my-1"></v-divider>
@@ -178,8 +178,8 @@
                                       depressed
                                       text
                                     >
-                                      <v-icon left class="mr-2">mdi-history</v-icon>
-                                      History
+                                      <v-icon left class="mr-2">mdi-clipboard-text-clock-outline</v-icon>
+                                      Won auctions
                                     </v-btn>
                                   </router-link>
                                 </div>
@@ -273,7 +273,7 @@
                       <v-btn
                         text
                       >
-                        <v-icon left class="mr-2">mdi-account-cog-outline</v-icon>
+                        <v-icon left class="mr-2">mdi-clipboard-account</v-icon>
                         Account settings
                       </v-btn>
                     </router-link>

@@ -41,7 +41,12 @@
         </v-row>
       </v-container>
     </div>
-    <div style="width: 100%" class="pt-12 pr-15 pl-15">
+    <div class="block pt-5">
+      <v-container>
+        <h2 class="text-center">Where we're located</h2>
+      </v-container>
+    </div>
+    <div style="width: 100%" class="pr-15 pl-15">
       <iframe
         width="100%" height="550" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
         src="https://maps.google.com/maps?width=100%25&amp;height=550&amp;hl=en&amp;q=+(Univerzitet%20Mediteran%20Podgorica)&amp;t=&amp;z=16&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
