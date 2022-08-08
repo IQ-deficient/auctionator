@@ -57,7 +57,7 @@
                     v-bind="attrs"
                     v-on="on"
                   >
-                    <v-icon dark large left>
+                    <v-icon large class="pl-1 pt-2">
                       mdi-image-edit-outline
                     </v-icon>
                   </a>
@@ -84,9 +84,8 @@
                           </v-col>
                           <v-col cols="3" class="justify-end">
                             <v-btn color="primary"
-                                   dark
                                    type="submit">
-                              <v-icon left dark>mdi-cloud-upload</v-icon>
+                              <v-icon left>mdi-cloud-upload</v-icon>
                               Upload
                             </v-btn>
                           </v-col>
@@ -107,7 +106,7 @@
                             <strong>{{ progress }} %</strong>
                           </v-progress-linear>
                         </div>
-                        <v-alert v-if="message" color="error" dark>
+                        <v-alert v-if="message" color="error">
                           {{ message }}
                         </v-alert>
                         <v-img v-if="currentImage"
@@ -145,7 +144,6 @@
               v-model="username"
               label="Username"
               append-icon="mdi-account-edit-outline"
-              dark
               disabled
             ></v-text-field>
           </v-col>
@@ -155,7 +153,6 @@
               :loading="pageLoading"
               label="Email"
               append-icon="mdi-email-edit-outline"
-              dark
               disabled
             ></v-text-field>
           </v-col>
@@ -271,9 +268,11 @@
                           </validation-provider>
                         </v-col>
                       </v-row>
-                      <v-btn large
-                             type="submit"
-                             color="primary"
+                      <v-btn
+                        :loading="loading"
+                        large
+                        type="submit"
+                        color="primary"
                       >
                         <v-icon left class="mr-1">mdi-lock-check</v-icon>
                         Update password
@@ -299,7 +298,6 @@
                     :loading="pageLoading"
                     :error-messages="errors"
                     label="First name"
-                    dark
                     :disabled="edit"
                     solo-inverted
                   ></v-text-field>
@@ -316,7 +314,6 @@
                     :loading="pageLoading"
                     :error-messages="errors"
                     label="Last name"
-                    dark
                     :disabled="edit"
                     solo-inverted
                   ></v-text-field>
@@ -336,7 +333,6 @@
                     :error-messages="errors"
                     item-text="name"
                     label="Gender"
-                    dark
                     :disabled="edit"
                     solo-inverted
                     clearable
@@ -362,7 +358,6 @@
                         :error-messages="errors"
                         label="Birthdate"
                         append-icon="mdi-cake-variant-outline"
-                        dark
                         :disabled="edit"
                         solo-inverted
                         v-bind="attrs"
@@ -407,7 +402,6 @@
                     item-text="name"
                     :error-messages="errors"
                     label="Country"
-                    dark
                     :disabled="edit"
                     solo-inverted
                     return-object
@@ -428,7 +422,6 @@
                                 :error-messages="errors"
                                 label="Phone number"
                                 append-icon="mdi-phone-classic"
-                                dark
                                 :disabled="edit"
                                 solo-inverted
                   ></v-text-field>
@@ -437,7 +430,6 @@
                                 :error-messages="errors"
                                 label="Phone number"
                                 append-icon="mdi-phone-classic"
-                                dark
                                 :disabled="edit"
                                 solo-inverted
                   ></v-text-field>
@@ -447,7 +439,6 @@
             <v-row v-if="!edit">
               <v-col cols="12">
                 <v-btn
-                  dark
                   large color="primary"
                   :disabled="invalid"
                   @click="updateProfile()"
