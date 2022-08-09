@@ -92,14 +92,12 @@
                               v-model="phoneNumber"
                               :error-messages="errors"
                               label="Phone number"
-                              append-icon="mdi-phone"
                               clearable
                 ></v-text-field>
                 <v-text-field v-else
                               v-model="phoneNumber"
                               :error-messages="errors"
                               label="Phone number"
-                              append-icon="mdi-phone"
                               clearable
                 ></v-text-field>
               </validation-provider>
@@ -171,9 +169,9 @@
             >
               <v-icon
                 left
-              >mdi-account-plus
+              >mdi-account-plus-outline
               </v-icon>
-              Register
+              Create new account
             </v-btn>
           </v-row>
         </form>

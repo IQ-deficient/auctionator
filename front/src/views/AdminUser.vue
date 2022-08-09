@@ -179,13 +179,11 @@
                                           v-model="phoneNumber"
                                           :error-messages="errors"
                                           label="Phone number"
-                                          append-icon="mdi-phone"
                             ></v-text-field>
                             <v-text-field v-else
                                           v-model="phoneNumber"
                                           :error-messages="errors"
                                           label="Phone number"
-                                          append-icon="mdi-phone"
                             ></v-text-field>
                           </validation-provider>
                         </v-col>
@@ -201,7 +199,6 @@
                               v-model="email"
                               :error-messages="errors"
                               hint="example@mail.com"
-                              append-icon="mdi-email"
                               label="Email"
                               clearable
                             ></v-text-field>
