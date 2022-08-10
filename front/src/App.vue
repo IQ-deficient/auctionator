@@ -43,6 +43,29 @@ export default {
 </script>
 
 <style lang="scss">
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap');
+
+//$body-font-family: 'Source Sans Pro';
+$body-font-family: 'Roboto Light';
+$title-font: 'Roboto Light';
+
+.v-application {
+  font-family: $body-font-family, "Roboto Light", sans-serif !important;
+
+  // To pin point specific classes of some components
+  .main-font,
+  .headline,
+  .td,
+  .text-sm-body-1 {
+    font-family: $body-font-family, "Roboto Light", sans-serif !important;
+  }
+
+  .title {
+    font-family: $title-font, "Roboto Light", sans-serif !important;
+  }
+
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

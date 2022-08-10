@@ -74,6 +74,7 @@ export default {
     dialogDelete: false,
     headers: [
       {text: 'Auction title', align: 'start', sortable: false, value: 'auction.title'},
+      {text: 'ID', value: 'auction.id'},
       {text: 'Sold for (€)', value: 'final_price'},
       {text: 'Won at', value: 'updated_at'},
       {text: 'Details', value: 'actions', sortable: false},

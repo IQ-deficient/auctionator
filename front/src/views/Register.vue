@@ -183,7 +183,7 @@
           <td>
             <hr/>
           </td>
-          <td style="width:1px; padding: 0 10px; white-space: nowrap;">Already have an account?</td>
+          <td style="width:1px; padding: 0 10px; white-space: nowrap" class="main-font">Already have an account?</td>
           <td>
             <hr/>
           </td>
