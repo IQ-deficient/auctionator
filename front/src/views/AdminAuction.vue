@@ -111,6 +111,7 @@
                             rules="required|min:3|max:64"
                           >
                             <v-text-field
+                              prepend-icon="mdi-tag-text-outline"
                               v-model="addItemTitle"
                               :error-messages="errors"
                               label="Item title"
@@ -124,6 +125,7 @@
                             rules="required|min:3|max:500"
                           >
                             <v-textarea
+                              prepend-icon="mdi-format-list-text"
                               v-model="addItemDescription"
                               :error-messages="errors"
                               :counter="500"
@@ -142,6 +144,7 @@
                                 rules="required"
                               >
                                 <v-select
+                                  prepend-icon="mdi-warehouse"
                                   v-model="addItemWarehouse"
                                   :error-messages="errors"
                                   label="Warehouse"
@@ -159,6 +162,7 @@
                                 rules="required"
                               >
                                 <v-select
+                                  prepend-icon="mdi-format-list-bulleted-square"
                                   v-model="addItemCategory"
                                   :error-messages="errors"
                                   label="Category"
@@ -178,6 +182,7 @@
                                 rules="required"
                               >
                                 <v-select
+                                  prepend-icon="mdi-shape-outline"
                                   v-model="addItemSubCategory"
                                   :error-messages="errors"
                                   label="Subcategory"
@@ -195,6 +200,7 @@
                                 rules="required"
                               >
                                 <v-select
+                                  prepend-icon="mdi-star-check-outline"
                                   v-model="addItemCondition"
                                   :error-messages="errors"
                                   label="Condition"

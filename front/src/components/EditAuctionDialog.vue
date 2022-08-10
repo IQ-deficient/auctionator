@@ -41,6 +41,7 @@
                       rules="required|min:3|max:64"
                     >
                       <v-text-field
+                        prepend-icon="mdi-tag-text-outline"
                         v-model="addItemTitle"
                         :loading="dataLoading"
                         :error-messages="errors"
@@ -55,6 +56,7 @@
                       rules="required|min:3|max:500"
                     >
                       <v-textarea
+                        prepend-icon="mdi-format-list-text"
                         v-model="addItemDescription"
                         :loading="dataLoading"
                         :error-messages="errors"
@@ -74,6 +76,7 @@
                           rules="required"
                         >
                           <v-select
+                            prepend-icon="mdi-warehouse"
                             v-model="addItemWarehouse"
                             :loading="dataLoading"
                             :error-messages="errors"
@@ -92,6 +95,7 @@
                           rules="required"
                         >
                           <v-select
+                            prepend-icon="mdi-format-list-bulleted-square"
                             v-model="addItemCategory"
                             :loading="categoryLoading"
                             :error-messages="errors"
@@ -112,6 +116,7 @@
                           rules="required"
                         >
                           <v-select
+                            prepend-icon="mdi-shape-outline"
                             v-model="addItemSubCategory"
                             :loading="categoryLoading"
                             :error-messages="errors"
@@ -130,6 +135,7 @@
                           rules="required"
                         >
                           <v-select
+                            prepend-icon="mdi-star-check-outline"
                             v-model="addItemCondition"
                             :loading="categoryLoading"
                             :error-messages="errors"

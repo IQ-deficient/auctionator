@@ -6,7 +6,7 @@
       style="margin: 0 auto"
     >
       <v-row class="justify-center">
-        <v-card-title>Create a new account</v-card-title>
+        <v-card-title>Register</v-card-title>
       </v-row>
       <validation-observer ref="form">
         <form @submit.prevent="register">

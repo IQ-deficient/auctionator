@@ -43,7 +43,6 @@
                       :key="i"
                   >
                     <v-img
-                        style="background-color: #1a202c"
                         max-height="100%"
                         min-height="100%"
                         contain

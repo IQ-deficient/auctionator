@@ -159,9 +159,9 @@
                         <v-col cols="5" class="pt-8">
                           <v-carousel
                             v-if="auction.images.length != 0"
-                            hide-delimiters style="height: 100%">
+                            hide-delimiters
+                            style="height: 100%">
                             <v-carousel-item
-                              style="background-color: #0d111a"
                               contain
                               v-for="(item,i) in auction.images"
                               :key="i"

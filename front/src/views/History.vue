@@ -14,13 +14,13 @@
             flat
             class="mb-8"
         >
-          <v-toolbar-title><h2>History</h2></v-toolbar-title>
+          <v-toolbar-title><h2>Your owned auctions</h2></v-toolbar-title>
           <v-divider
               class="mx-4"
               inset
               vertical
           ></v-divider>
-          <v-icon large>mdi-folder-account-outline</v-icon>
+          <v-icon large>mdi-history</v-icon>
           <v-spacer></v-spacer>
           <v-col cols="12" md="3">
             <v-text-field

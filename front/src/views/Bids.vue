@@ -20,7 +20,7 @@
               inset
               vertical
           ></v-divider>
-          <v-icon large>mdi-cash-multiple</v-icon>
+          <v-icon large>mdi-hand-coin-outline</v-icon>
           <v-spacer></v-spacer>
           <v-col cols="12" md="3">
             <v-text-field
