@@ -18,12 +18,13 @@
       <v-row class="justify-center">
         <v-col cols="12">
           <div style="position: relative; width: 145px; height: 0; margin: 0 auto">
-            <div style="position: absolute; top: -120px">
-              <v-avatar size="145">
-                <v-img v-if="userImage"
-                       :loading="pageLoading"
-                       :lazy-src="'/api/user/'+ userImage"
-                       :src="'/api/user/'+ userImage">
+            <div style="position: absolute; top: -110px">
+              <v-avatar size="145" color="info">
+                <v-img
+                  v-if="userImage"
+                  :loading="pageLoading"
+                  :lazy-src="'/api/user/'+ userImage"
+                  :src="'/api/user/'+ userImage">
                   <template v-slot:placeholder>
                     <v-row
                       class="fill-height ma-0"
@@ -57,7 +58,7 @@
                     v-bind="attrs"
                     v-on="on"
                   >
-                    <v-icon large class="pl-1 pt-2">
+                    <v-icon large left class="pl-0 pt-3">
                       mdi-image-edit-outline
                     </v-icon>
                   </a>
@@ -143,7 +144,7 @@
               :loading="pageLoading"
               v-model="username"
               label="Username"
-              append-icon="mdi-account-edit-outline"
+              append-icon="mdi-account-outline"
               disabled
             ></v-text-field>
           </v-col>
@@ -152,7 +153,7 @@
               v-model="email"
               :loading="pageLoading"
               label="Email"
-              append-icon="mdi-email-edit-outline"
+              append-icon="mdi-email-outline"
               disabled
             ></v-text-field>
           </v-col>

@@ -401,7 +401,7 @@
                              :loading="loading"
                       >
                         <v-icon left class="mr-1">mdi-pencil-plus-outline</v-icon>
-                        Post
+                        Post new auction
                       </v-btn>
                     </v-card-text>
                   </v-card>

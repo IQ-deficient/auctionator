@@ -248,7 +248,7 @@
                        :disabled="invalid"
                 >
                   <v-icon left class="mr-1">mdi-pencil-plus-outline</v-icon>
-                  Post
+                  Finalize changes
                 </v-btn>
               </v-card-text>
             </v-card>
