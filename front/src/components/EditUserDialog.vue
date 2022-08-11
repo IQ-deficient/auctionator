@@ -1,9 +1,9 @@
 <template>
   <v-container>
     <v-dialog
-        v-model="showDialog"
-        max-width="60%"
-        persistent
+      v-model="showDialog"
+      max-width="60%"
+      persistent
     >
       <template>
         <validation-observer ref="form">
@@ -12,8 +12,8 @@
               <v-card-title>
                 <v-row class="justify-end">
                   <v-btn
-                      @click="$emit('close')"
-                      color="secondary"
+                    @click="$emit('close')"
+                    color="secondary"
                   >
                     <v-icon>mdi-close</v-icon>
                   </v-btn>
@@ -39,29 +39,29 @@
                 <v-row>
                   <v-col cols="6">
                     <validation-provider
-                        v-slot="{ errors }"
-                        name="first name"
-                        rules="required|alpha_spaces|min:1|max:32"
+                      v-slot="{ errors }"
+                      name="first name"
+                      rules="required|min:1|max:32"
                     >
                       <v-text-field
-                          :loading="dataLoading"
-                          v-model="firstName"
-                          :error-messages="errors"
-                          label="First name"
+                        :loading="dataLoading"
+                        v-model="firstName"
+                        :error-messages="errors"
+                        label="First name"
                       ></v-text-field>
                     </validation-provider>
                   </v-col>
                   <v-col cols="6">
                     <validation-provider
-                        v-slot="{ errors }"
-                        name="last name"
-                        rules="required|alpha_spaces|min:1|max:32"
+                      v-slot="{ errors }"
+                      name="last name"
+                      rules="required|alpha_spaces|min:1|max:32"
                     >
                       <v-text-field
-                          :loading="dataLoading"
-                          v-model="lastName"
-                          :error-messages="errors"
-                          label="Last name"
+                        :loading="dataLoading"
+                        v-model="lastName"
+                        :error-messages="errors"
+                        label="Last name"
                       ></v-text-field>
                     </validation-provider>
                   </v-col>
@@ -69,27 +69,27 @@
                 <v-row>
                   <v-col cols="6">
                     <validation-provider
-                        v-slot="{ errors }"
-                        name="country"
-                        rules="required"
+                      v-slot="{ errors }"
+                      name="country"
+                      rules="required"
                     >
                       <v-select
-                          v-model="selectCountry"
-                          :loading="dataLoading"
-                          :items="countries"
-                          item-text="name"
-                          :error-messages="errors"
-                          label="Country"
-                          return-object
-                          @change="updateCountryCode()"
+                        v-model="selectCountry"
+                        :loading="dataLoading"
+                        :items="countries"
+                        item-text="name"
+                        :error-messages="errors"
+                        label="Country"
+                        return-object
+                        @change="updateCountryCode()"
                       ></v-select>
                     </validation-provider>
                   </v-col>
                   <v-col cols="6">
                     <validation-provider
-                        v-slot="{ errors }"
-                        name="phone number"
-                        rules="required|numeric|min:6|max:15"
+                      v-slot="{ errors }"
+                      name="phone number"
+                      rules="required|numeric|min:6|max:15"
                     >
                       <v-text-field v-if="phoneCode != null"
                                     :loading="dataLoading"
@@ -112,47 +112,47 @@
                 <v-row>
                   <v-col cols="6">
                     <v-select
-                        :loading="dataLoading"
-                        v-model="selectGender"
-                        :items="genders"
-                        item-text="name"
-                        label="Gender"
+                      :loading="dataLoading"
+                      v-model="selectGender"
+                      :items="genders"
+                      item-text="name"
+                      label="Gender"
                     ></v-select>
                   </v-col>
                   <v-col cols="6">
                     <v-dialog
-                        ref="dialog"
-                        v-model="dateDialog"
-                        :return-value.sync="date"
-                        persistent
-                        width="290px"
+                      ref="dialog"
+                      v-model="dateDialog"
+                      :return-value.sync="date"
+                      persistent
+                      width="290px"
                     >
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
-                            :loading="dataLoading"
-                            v-model="birthdate"
-                            label="Pick a date"
-                            append-icon="mdi-cake-variant-outline"
-                            v-bind="attrs"
-                            v-on="on"
+                          :loading="dataLoading"
+                          v-model="birthdate"
+                          label="Pick a date"
+                          append-icon="mdi-cake-variant-outline"
+                          v-bind="attrs"
+                          v-on="on"
                         ></v-text-field>
                       </template>
                       <v-date-picker
-                          v-model="birthdate"
-                          scrollable
+                        v-model="birthdate"
+                        scrollable
                       >
                         <v-spacer></v-spacer>
                         <v-btn
-                            text
-                            color="primary"
-                            @click="dateDialog = false"
+                          text
+                          color="primary"
+                          @click="dateDialog = false"
                         >
                           Cancel
                         </v-btn>
                         <v-btn
-                            text
-                            color="primary"
-                            @click="$refs.dialog.save(date)"
+                          text
+                          color="primary"
+                          @click="$refs.dialog.save(date)"
                         >
                           OK
                         </v-btn>
@@ -163,18 +163,18 @@
                 <v-row v-if="editType == 'Employees'">
                   <v-col>
                     <validation-provider
-                        v-slot="{ errors }"
-                        name="user roles"
-                        rules="required"
+                      v-slot="{ errors }"
+                      name="user roles"
+                      rules="required"
                     >
                       <v-select
-                          :loading="dataLoading"
-                          :error-messages="errors"
-                          v-model="checkedRoles"
-                          label="Select user roles"
-                          multiple
-                          :items="employeeRoles"
-                          item-text="name"
+                        :loading="dataLoading"
+                        :error-messages="errors"
+                        v-model="checkedRoles"
+                        label="Select user roles"
+                        multiple
+                        :items="employeeRoles"
+                        item-text="name"
                       >
                       </v-select>
                     </validation-provider>
@@ -290,52 +290,52 @@ export default {
     getGenders() {
       this.dataLoading = true;
       axios.get('/genders')
-          .then(response => {
-            if (response.data) {
-              this.genders = response.data
-              this.dataLoading = false;
-            }
-          })
-          .catch(error => {
+        .then(response => {
+          if (response.data) {
+            this.genders = response.data
             this.dataLoading = false;
-            console.log(error)
-          })
+          }
+        })
+        .catch(error => {
+          this.dataLoading = false;
+          console.log(error)
+        })
     },
 
     getUserRoles() {
       this.dataLoading = true;
       axios.get('/user_roles/' + this.user.id)
-          .then(response => {
-            if (response.data) {
-              this.checkedRoles = response.data
-              this.dataLoading = false;
-            }
-          })
-          .catch(error => {
+        .then(response => {
+          if (response.data) {
+            this.checkedRoles = response.data
             this.dataLoading = false;
-            console.log(error)
-          })
+          }
+        })
+        .catch(error => {
+          this.dataLoading = false;
+          console.log(error)
+        })
     },
 
     getCountries() {
       this.dataLoading = true;
       axios.get('/active_countries')
-          .then(response => {
-            if (response.data) {
-              this.countries = response.data
-              this.dataLoading = false
-            }
-            for (let i = 0; i < this.countries.length; i++) {
-              if (this.countries[i].name == this.selectCountry) {
-                this.selectCountry = this.countries[i]
-              }
-            }
-            this.phoneCode = this.selectCountry.phone_code
-          })
-          .catch(error => {
+        .then(response => {
+          if (response.data) {
+            this.countries = response.data
             this.dataLoading = false
-            console.log(error)
-          })
+          }
+          for (let i = 0; i < this.countries.length; i++) {
+            if (this.countries[i].name == this.selectCountry) {
+              this.selectCountry = this.countries[i]
+            }
+          }
+          this.phoneCode = this.selectCountry.phone_code
+        })
+        .catch(error => {
+          this.dataLoading = false
+          console.log(error)
+        })
     },
 
     updateCountryCode() {
@@ -368,7 +368,7 @@ export default {
             }
           }).catch(error => {
             if (error.response.status == 409 || error.response.status == 405 ||
-                error.response.status == 403) {
+              error.response.status == 403) {
               Swal.fire({
                 icon: 'error',
                 text: error.response.data.message,
@@ -376,8 +376,17 @@ export default {
               console.log(error)
               this.loading = false
             }
+            // Backend validation case where a first error message is shown
+            if (error.response.status == 422) {
+              Swal.fire({
+                icon: 'error',
+                text: error.response.data[Object.keys(error.response.data)[0]],
+              })
+              console.log(error)
+              this.loading = false
+            }
             console.log(error)
-            this.dataLoading = false
+            this.loading = false
           })
         }
       })
