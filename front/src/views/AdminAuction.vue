@@ -327,7 +327,7 @@
                             <v-col cols="6" sm="6">
                               <v-datetime-picker
                                 v-model="addStartDate"
-                                label="Pick start date and time"
+                                label="Pick START date and time"
                                 prepend-icon="mdi-calendar"
                                 :text-field-props="textFieldProps"
                                 :time-picker-props="timeProps"
@@ -343,7 +343,7 @@
                             <v-col cols="6" sm="6">
                               <v-datetime-picker
                                 v-model="addEndDate"
-                                label="Pick start date and time"
+                                label="Pick END date and time"
                                 prepend-icon="mdi-calendar"
                                 :text-field-props="textFieldProps"
                                 :time-picker-props="timeProps"
