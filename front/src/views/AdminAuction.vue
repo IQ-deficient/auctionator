@@ -361,7 +361,7 @@
                             <v-col cols="6" sm="6">
                               <validation-provider
                                 v-slot="{ errors }"
-                                name="minimum bid value"
+                                name="minBidValue"
                                 rules="required|double|min_value:0"
                               >
                                 <v-text-field
@@ -565,7 +565,7 @@ setInteractionMode('eager')
 
 extend('greater', {
   params: ['target'],
-  validate(value, { target }) {
+  validate(value, {target}) {
     return value > target;
   },
   message: 'The {_field_} must have a greater value than minimum required bid value.'
@@ -714,7 +714,7 @@ export default {
   methods: {
 
     minBuyoutValueRules() {
-      return "required|greater:@minimum bid value|double|min_value_buyout:" + process.env.VUE_APP_MIN_BUYOUT + ""
+      return "required|greater:@minBidValue|double|min_value_buyout:" + process.env.VUE_APP_MIN_BUYOUT + ""
     },
 
     updateTableData() {
@@ -825,6 +825,15 @@ export default {
                 Swal.fire({
                   icon: 'error',
                   text: error.response.data['start_datetime'],
+                })
+                console.log(error)
+                this.loading = false
+              }
+              let check = 'The min bid value must be less than ' + this.addAuctionBuyout + '.'
+              if (error.response.data['min_bid_value'][0] == check) {
+                Swal.fire({
+                  icon: 'error',
+                  text: 'The min bid value must be lesser than the buyout.',
                 })
                 console.log(error)
                 this.loading = false
